@@ -3,7 +3,7 @@
 一款像素风 Roguelike 卡牌对战游戏，使用 Godot 4 + C# 开发，目标平台 Steam。
 
 > **当前阶段**: Phase 1 — 单机原型开发  
-> **引擎**: Godot 4.4 Mono (C#)  
+> **引擎**: Godot 4.7.2 .NET (C#)  
 > **渲染**: 像素风 (640×360 Viewport + Integer Scaling)
 
 ---

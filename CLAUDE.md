@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 项目概述
 
-像素风 Roguelike 卡牌对战游戏，Godot 4.4 Mono (C#) 开发，目标平台 Steam。当前处于 **Phase 1（单机原型）**阶段——本仓库是脚手架，`src/` 下尚无实际代码，README 中的目录结构描述的是**预期布局**，不是现状。
+像素风 Roguelike 卡牌对战游戏，Godot 4.7.2 .NET (C#) 开发，目标平台 Steam。当前处于 **Phase 1（单机原型）**阶段——本仓库是脚手架，`src/` 下尚无实际代码，README 中的目录结构描述的是**预期布局**，不是现状。
 
 ## 常用命令
 
@@ -12,7 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # 构建 C# 项目（根目录执行，生成 MyGame.sln 后也可用 IDE 构建）
 dotnet build
 
-# 运行游戏：用 Godot 4.4 Mono 编辑器打开 project.godot，按 F5
+# 运行游戏：用 Godot 4.7.2 .NET 编辑器打开 project.godot，按 F5
 # （必须构建成功后编辑器才能加载 C# 脚本）
 
 # 从原项目同步设计稿到 docs/（只读参考，不在本项目修改）
