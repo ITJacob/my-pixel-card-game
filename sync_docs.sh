@@ -1,50 +1,42 @@
 #!/bin/bash
 # sync_docs.sh
-# 从原项目同步设计稿到本项目的 docs/ 目录
-# 用法: ./sync_docs.sh [原项目路径]
+# 从 GitHub 原项目同步设计稿到本项目的 docs/ 目录
+# 用法: ./sync_docs.sh [owner/repo] [branch]
 
 set -e
 
-SOURCE_PROJECT="${1:-../your-old-project}"  # 默认上级目录的原项目
-TARGET_DIR="./docs"
-SOURCE_DOCS="$SOURCE_PROJECT/docs"
+REPO="${1:-ITJacob/CardGame}"
+BRANCH="${2:-main}"
+SUBDIR="docs"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+TARGET_DIR="$SCRIPT_DIR/docs"
+TEMP_DIR="$(mktemp -d)"
 
 echo "========================================"
-echo "  设计稿同步工具"
+echo "  设计稿同步工具 (GitHub)"
 echo "========================================"
 echo ""
-
-# 检查源项目是否存在
-if [ ! -d "$SOURCE_PROJECT" ]; then
-    echo "❌ 错误: 找不到原项目目录: $SOURCE_PROJECT"
-    echo "   请修改脚本中的 SOURCE_PROJECT 变量，或传入路径参数"
-    echo "   用法: ./sync_docs.sh /path/to/your-old-project"
-    exit 1
-fi
-
-# 检查源项目的 docs 目录
-if [ ! -d "$SOURCE_DOCS" ]; then
-    echo "⚠️  警告: 原项目中未找到 docs/ 目录: $SOURCE_DOCS"
-    echo "   请确认原项目的文档存放位置"
-    exit 1
-fi
-
-# 创建目标目录
-mkdir -p "$TARGET_DIR"
-
-echo "📁 源项目: $SOURCE_PROJECT"
+echo "📁 源仓库: https://github.com/$REPO ($BRANCH/$SUBDIR)"
 echo "📂 同步目标: $TARGET_DIR"
 echo ""
 
-# 使用 rsync 或 cp 进行同步
-if command -v rsync &> /dev/null; then
-    echo "🔄 使用 rsync 同步..."
-    rsync -av --delete "$SOURCE_DOCS/" "$TARGET_DIR/"
-else
-    echo "🔄 使用 cp 同步..."
-    rm -rf "$TARGET_DIR"/*
-    cp -r "$SOURCE_DOCS"/* "$TARGET_DIR/"
+cleanup() { rm -rf "$TEMP_DIR"; }
+trap cleanup EXIT
+
+# 稀疏克隆，只拉取 docs 目录
+echo "🔄 正在从 GitHub 拉取..."
+git clone --depth 1 --filter=blob:none --sparse --branch "$BRANCH" "https://github.com/$REPO.git" "$TEMP_DIR" 2>&1 | grep -v "^Cloning" || true
+git -C "$TEMP_DIR" sparse-checkout set "$SUBDIR"
+
+if [ ! -d "$TEMP_DIR/$SUBDIR" ]; then
+    echo "❌ 仓库中未找到 $SUBDIR 目录"
+    exit 1
 fi
+
+# 清空并复制（docs 为只读镜像，与源保持一致）
+mkdir -p "$TARGET_DIR"
+find "$TARGET_DIR" -mindepth 1 -not -name ".gitkeep" -delete
+cp -r "$TEMP_DIR/$SUBDIR/." "$TARGET_DIR/"
 
 echo ""
 echo "✅ 同步完成!"
