@@ -16,8 +16,9 @@ dotnet build
 # （必须构建成功后编辑器才能加载 C# 脚本）
 
 # 从原项目同步设计稿到 docs/（只读参考，不在本项目修改）
-./sync_docs.ps1 <原项目路径>   # Windows
-./sync_docs.sh <原项目路径>    # macOS/Linux
+./sync_docs.ps1 -LocalPath <原项目docs路径>   # Windows：从本地目录同步
+./sync_docs.ps1                               # 默认从 GitHub ITJacob/CardGame 拉取
+./sync_docs.sh --local <原项目docs路径>       # macOS/Linux：从本地目录同步
 ```
 
 测试框架尚未搭建。Core 层设计要求可单元测试，添加测试时应建独立的 .NET 测试项目（如 `MyGame.Tests`）引用 `src/Core`，不依赖 Godot 运行时。
