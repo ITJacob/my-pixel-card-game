@@ -69,13 +69,13 @@
       "id": "faction_08",
       "name": "派系·捌",
       "file": "faction_08.skills.json",
-      "cardCount": 0
+      "cardCount": 30
     },
     {
       "id": "faction_09",
       "name": "派系·玖",
       "file": "faction_09.skills.json",
-      "cardCount": 0
+      "cardCount": 29
     }
   ]
 }

@@ -232,6 +232,53 @@
           "value": 0
         }
       ]
+    },
+    {
+      "id": "thorns",
+      "name": "反伤",
+      "category": [
+        "reactive"
+      ],
+      "dispelable": true,
+      "duration": 40,
+      "maxStacks": 1,
+      "source_filter": "melee",
+      "modifiers": {
+        "thornsDamage": 1
+      },
+      "note": "§2.2 已裁定：defaultDuration 8 / source_filter melee；实例 value 1。"
+    },
+    {
+      "id": "guard",
+      "name": "坚守",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": 20,
+      "maxStacks": 1,
+      "modifiers": {
+        "damage_taken_mul": 0.7
+      },
+      "note": "§2.2 已裁定：mul 0.7 / duration 4。 乘区审批：0.7=标准减伤母版档（H3 已裁定）/0.75=轻减档"
+    },
+    {
+      "id": "charm",
+      "name": "魅惑",
+      "category": [
+        "control"
+      ],
+      "dispelable": true,
+      "duration": 10,
+      "modifiers": {},
+      "note": "F15 已登记（罪犯+药师途径合并登记，机制=反向嘲讽），权威定义见状态表，此处为引用副本，不新立状态；与 corrupted 同持时 corrupted 优先（贪婪压过好感，裁定见腐蚀条）",
+      "behaviorModifiers": [
+        {
+          "anchor": "self_faction_hp_desc",
+          "op": "target_override",
+          "note": "反向嘲讽：被魅惑单位攻击其己方队友"
+        }
+      ]
     }
   ]
 }

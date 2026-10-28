@@ -1,18 +1,2360 @@
 {
   "factionId": "faction_09",
-  "factionName": "派系·玖",
-  "sharedSkillIds": [],
+  "factionName": "派系·柒",
+  "sharedSkillIds": [
+    "f09_strong_body",
+    "f09_keen_intuition",
+    "f09_crime_abilities",
+    "f09_weapon_mastery",
+    "f09_slow",
+    "f09_malice_sense"
+  ],
   "heroes": [
     {
       "heroId": "hero_09",
       "heroName": "英雄·玖",
-      "playstyle": "污秽/恶欲通道",
-      "skillTree": [],
-      "uniqueSkillIds": []
+      "playstyle": "污秽/恶欲通道（lust 量表产消，污秽压环境让对手体系失效）",
+      "skillTree": [
+        "h09_magma_sword",
+        "h09_sulfur_orb",
+        "h09_foul_words",
+        "h09_desire_control",
+        "h09_desire_blast",
+        "h09_mind_shock",
+        "h09_desire_avatar",
+        "h09_mental_duelist",
+        "h09_hallucinate",
+        "h09_acid_marsh",
+        "h09_hellfire",
+        "h09_whispers",
+        "h09_pollution_authority",
+        "h09_distant_voice",
+        "h09_body_authority",
+        "h09_filth_king",
+        "h09_erosion",
+        "h09_fallen",
+        "h09_abyss_curse",
+        "h09_lust_resonance",
+        "h09_blight_erode"
+      ],
+      "uniqueSkillIds": [
+        "h09_lost_conscience",
+        "h09_demon_rite",
+        "h09_magma_sword",
+        "h09_sulfur_orb",
+        "h09_foul_words",
+        "h09_desire_control",
+        "h09_desire_blast",
+        "h09_mind_shock",
+        "h09_desire_avatar",
+        "h09_mental_duelist",
+        "h09_hallucinate",
+        "h09_acid_marsh",
+        "h09_hellfire",
+        "h09_whispers",
+        "h09_pollution_authority",
+        "h09_distant_voice",
+        "h09_body_authority",
+        "h09_filth_king",
+        "h09_erosion",
+        "h09_fallen",
+        "h09_abyss_curse",
+        "h09_lust_resonance",
+        "h09_blight_erode"
+      ]
     }
   ],
-  "cards": [],
-  "statusDefs": [],
+  "cards": [
+    {
+      "id": "f09_strong_body",
+      "name": "强壮身体",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "demon",
+      "flagship": false,
+      "describe": "战斗开始时，自身生命上限 +15、护甲 +2，持续整场。；放纵自身：欲壑 +1，身体被欲望推着往前扑。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "hp_max",
+          "value": 15,
+          "mode": "delta",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "armor",
+          "value": 2,
+          "mode": "delta",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "self",
+          "note": "放纵自身：欲壑 +1"
+        },
+        {
+          "type": "move",
+          "op": "charge_forward",
+          "target": "self",
+          "note": "扑食：欲望驱动身体前压"
+        }
+      ],
+      "tentative": false,
+      "scope": "faction"
+    },
+    {
+      "id": "f09_keen_intuition",
+      "name": "敏锐直觉",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "demon",
+      "flagship": false,
+      "describe": "战斗开始时，自身行动条速率 +6、精神抗性 +10%，持续整场。；放纵自身：欲壑 +1，身体被欲望推着往前扑。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "gauge.rate",
+          "value": 6,
+          "mode": "delta",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "resist:mental",
+          "value": 10,
+          "mode": "delta",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "self"
+        },
+        {
+          "type": "move",
+          "op": "charge_forward",
+          "target": "self"
+        }
+      ],
+      "tentative": false,
+      "scope": "faction"
+    },
+    {
+      "id": "f09_crime_abilities",
+      "name": "犯罪能力",
+      "kind": "active",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "vice",
+      "flagship": false,
+      "describe": "对一名近战敌人造成 2 点物理伤害，并有 30% 概率使其易伤 10tick。；伤口浇灌欲望，深渊顺势把人往下拽。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 10,
+        "castTime": 0
+      },
+      "reach": "melee",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "hp_desc"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "physical",
+          "value": 2
+        },
+        {
+          "type": "mount_status",
+          "statusId": "vulnerable",
+          "duration": 10,
+          "condition": {
+            "kind": "chance",
+            "p": 0.3
+          },
+          "note": "概率只作用于是否附加状态（非伤害维度，R5 合规），需登记 RandomUsageRegistry（R3）、单次抽样（R4）"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "note": "产能方身份：推高目标恶欲值"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "target",
+          "note": "放纵：受伤也在浇灌欲望"
+        },
+        {
+          "type": "move",
+          "op": "pull_forward",
+          "target": "target",
+          "note": "深渊拖拽（向下的力）"
+        }
+      ],
+      "tentative": false,
+      "scope": "faction"
+    },
+    {
+      "id": "f09_weapon_mastery",
+      "name": "武器上手",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "elements",
+      "flagship": false,
+      "describe": "每次你受到伤害时获得「武器上手」：自身造成的物理伤害 ×1.15，持续整场。；放纵自身：欲壑 +1，身体被欲望推着往前扑。",
+      "hook": [
+        "on_take_damage"
+      ],
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "weapon_mastery",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "self"
+        },
+        {
+          "type": "move",
+          "op": "charge_forward",
+          "target": "self"
+        }
+      ],
+      "tentative": false,
+      "scope": "faction"
+    },
+    {
+      "id": "h09_lost_conscience",
+      "name": "失去良知",
+      "kind": "passive",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "vice",
+      "flagship": false,
+      "describe": "首次受到伤害时获得「失去良知」：精神抗性 +20%，对带有减益或持续伤害状态的目标造成的伤害 ×1.15，持续整场。；放纵自身：欲壑 +1，身体被欲望推着往前扑。",
+      "hook": [
+        "on_take_damage"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "not",
+            "condition": {
+              "kind": "has_status",
+              "side": "self",
+              "id": "lost_conscience",
+              "cmp": ">=",
+              "n": 1
+            }
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "lost_conscience",
+              "duration": null,
+              "target": "self"
+            }
+          ],
+          "else": []
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "self"
+        },
+        {
+          "type": "move",
+          "op": "charge_forward",
+          "target": "self"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_09"
+    },
+    {
+      "id": "f09_slow",
+      "name": "迟缓",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "filth",
+      "flagship": false,
+      "describe": "对一名远程敌人造成 2 点物理伤害，并使其迟缓 15tick：行动条速率 ×0.75。；伤口浇灌欲望，深渊顺势把人往下拽。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "diamond_1",
+          "pickCount": 1
+        },
+        "fallbackSort": "gauge_desc"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "physical",
+          "value": 2
+        },
+        {
+          "type": "mount_status",
+          "statusId": "slow",
+          "duration": 15,
+          "value": 0.75
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "target"
+        },
+        {
+          "type": "move",
+          "op": "pull_forward",
+          "target": "target"
+        }
+      ],
+      "tentative": false,
+      "scope": "faction"
+    },
+    {
+      "id": "h09_demon_rite",
+      "name": "恶魔仪式",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "demon",
+      "flagship": false,
+      "describe": "自身失去 6 点生命、获得 8 点能量，并叠加 1 层「仪式刻印」（最多 3 层，整场），刻印是深渊召唤的强化材料。；放纵自身：欲壑 +1，身体被欲望推着往前扑。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        }
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "modify_resource",
+              "resource": "hp",
+              "value": -6,
+              "mode": "delta",
+              "target": "self"
+            },
+            {
+              "type": "modify_resource",
+              "resource": "energy",
+              "value": 8,
+              "mode": "delta",
+              "target": "self"
+            },
+            {
+              "type": "mount_status",
+              "statusId": "rite_mark",
+              "stacks": 1,
+              "stackMode": "add",
+              "duration": null,
+              "target": "self"
+            }
+          ]
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "self"
+        },
+        {
+          "type": "move",
+          "op": "charge_forward",
+          "target": "self"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_09"
+    },
+    {
+      "id": "f09_malice_sense",
+      "name": "恶意感知",
+      "kind": "passive",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "demon",
+      "flagship": false,
+      "describe": "战斗开始时，自身行动条速率 +5（整场），并获得反伤 2（整场）：攻击你的人受到 2 点反弹伤害。；放纵自身：欲壑 +1，身体被欲望推着往前扑。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "gauge.rate",
+          "value": 5,
+          "mode": "delta",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "thorns",
+          "value": 2,
+          "duration": null,
+          "target": "self",
+          "note": "复用既有「反伤」状态（H42 常驻模板 + 数值参数化）"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "self"
+        },
+        {
+          "type": "move",
+          "op": "charge_forward",
+          "target": "self"
+        }
+      ],
+      "tentative": false,
+      "scope": "faction"
+    },
+    {
+      "id": "h09_magma_sword",
+      "name": "岩浆之剑",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "elements",
+      "flagship": false,
+      "describe": "对一名近战敌人造成 5 点火焰伤害，并使其灼烧 15tick（每 tick 0.4 点伤害）。；伤口浇灌欲望，深渊顺势把人往下拽。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "melee",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "whole_lane",
+          "pickCount": 1
+        },
+        "fallbackSort": "hp_desc"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "fire",
+          "value": 5
+        },
+        {
+          "type": "mount_status",
+          "statusId": "burn",
+          "duration": 15
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "target"
+        },
+        {
+          "type": "move",
+          "op": "pull_forward",
+          "target": "target"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_09"
+    },
+    {
+      "id": "h09_sulfur_orb",
+      "name": "硫磺火球",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "elements",
+      "flagship": false,
+      "describe": "对一名远程敌人造成 4 点火焰伤害、相邻敌人 2 点火焰伤害，并使主目标硫磺剧毒 10tick。；伤口浇灌欲望，深渊顺势把人往下拽。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "thrown",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "whole_lane",
+          "pickCount": 1
+        },
+        "fallbackSort": "hp_desc"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "fire",
+          "value": 4
+        },
+        {
+          "type": "damage",
+          "element": "fire",
+          "value": 2,
+          "spread": "splash_adjacent"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "sulfur_toxin",
+          "duration": 10
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "target"
+        },
+        {
+          "type": "move",
+          "op": "pull_forward",
+          "target": "target"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_09"
+    },
+    {
+      "id": "h09_foul_words",
+      "name": "污秽之语",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "filth",
+      "flagship": false,
+      "describe": "三选一：缓慢使目标行动条速率 ×0.6（15tick）并造成 1 点毒素伤害；死使目标硫磺剧毒 20tick，若其生命 ≤25% 再造成 6 点毒素伤害；堕落重击并使其陷入欲望 15tick；恶语出口即成污秽：目标污秽 +1（20tick）。；伤口浇灌欲望，深渊顺势把人往下拽。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "diamond_1",
+          "pickCount": 1
+        },
+        "fallbackSort": "hp_desc"
+      },
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "gauge.rate",
+          "mode": "mul",
+          "value": 0.6,
+          "duration": 15,
+          "note": "默认分支：缓慢"
+        },
+        {
+          "type": "damage",
+          "element": "poison",
+          "value": 1,
+          "note": "缓慢分支"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "filth",
+          "duration": 20,
+          "note": "恶语成秽：目标污秽 +1（环节⑤ 2026-09-29 补产层段）本卡 describe 三选一但 AST 仅缓慢分支，死/堕落分支缺失，缺口登记遗留"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "target"
+        },
+        {
+          "type": "move",
+          "op": "pull_forward",
+          "target": "target"
+        }
+      ],
+      "tentative": false,
+      "tags": [
+        "污秽"
+      ],
+      "scope": "hero",
+      "heroId": "hero_09"
+    },
+    {
+      "id": "h09_desire_control",
+      "name": "掌控欲望",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "vice",
+      "flagship": false,
+      "describe": "对一名敌人造成 2 点精神伤害并使其恶欲值 +2；若其恶欲值因此进入躁动档（≥4），转而魅惑 10tick（攻击其己方队友）。；伤口浇灌欲望，深渊顺势把人往下拽。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "atk_desc"
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "damage",
+              "element": "mental",
+              "value": 2
+            },
+            {
+              "type": "modify_resource",
+              "resource": "lust",
+              "value": 2,
+              "note": "推高恶欲值（产能）"
+            },
+            {
+              "op": "if",
+              "condition": {
+                "kind": "resource_compare",
+                "side": "target",
+                "key": "lust",
+                "cmp": ">=",
+                "n": 4
+              },
+              "then": [
+                {
+                  "type": "mount_status",
+                  "statusId": "obsession",
+                  "duration": 10,
+                  "note": "欲望爆炸前的情绪失控：攻击其己方队友"
+                }
+              ],
+              "else": []
+            }
+          ]
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "target"
+        },
+        {
+          "type": "move",
+          "op": "pull_forward",
+          "target": "target"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_09"
+    },
+    {
+      "id": "h09_desire_blast",
+      "name": "欲望爆炸",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "vice",
+      "flagship": false,
+      "describe": "使一名敌人成为「欲望炸弹」15tick：到期时其受到 8 点精神伤害，相邻敌人受到 4 点精神伤害；被驱散则不爆炸；若其恶欲值 ≥6（失控档），失控即爆，追加 3 点精神伤害。；若目标已被腐蚀，腐蚀助燃，追加 2 点精神伤害。；伤口浇灌欲望，深渊顺势把人往下拽。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "atk_desc"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "desire_bomb",
+          "duration": 15
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "resource_compare",
+            "side": "target",
+            "key": "lust",
+            "cmp": ">=",
+            "n": 6
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "mental",
+              "value": 3,
+              "note": "失控即爆：目标恶欲值 ≥6（失控档）则炸弹提前引爆追加 3 点精神伤害（环节⑤ 2026-09-29 补读层段：lust 池 payoff 升 landed）"
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "corrupted",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "mental",
+              "value": 2,
+              "note": "腐蚀助燃：目标已被腐蚀（友方律师所挂）则欲火更烈，追加 2 点（环节⑤ 2026-09-29 二轮跨系读层段：vice→lawyer corrupted）"
+            }
+          ],
+          "else": []
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "target"
+        },
+        {
+          "type": "move",
+          "op": "pull_forward",
+          "target": "target"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_09"
+    },
+    {
+      "id": "h09_mind_shock",
+      "name": "精神冲击",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "vice",
+      "flagship": false,
+      "describe": "对一名近战敌人造成 5 点精神伤害并眩晕 5tick；若自身处于恶魔化，再追加 3 点精神伤害。；伤口浇灌欲望，深渊顺势把人往下拽。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "melee",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "atk_desc"
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "damage",
+              "element": "mental",
+              "value": 5
+            },
+            {
+              "type": "mount_status",
+              "statusId": "stun",
+              "duration": 5
+            },
+            {
+              "op": "if",
+              "condition": {
+                "kind": "caster_status_exists",
+                "id": "demonize"
+              },
+              "then": [
+                {
+                  "type": "damage",
+                  "element": "mental",
+                  "value": 3,
+                  "note": "燃烧的恶魔角（途径内协同：恶魔化是充能器）"
+                }
+              ],
+              "else": []
+            }
+          ]
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "target"
+        },
+        {
+          "type": "move",
+          "op": "pull_forward",
+          "target": "target"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_09"
+    },
+    {
+      "id": "h09_desire_avatar",
+      "name": "欲望化身",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "vice",
+      "flagship": false,
+      "describe": "化作黑色液体并滑回己方最后位，持续 15tick：不可被单体技能选中、受伤 ×0.75；造成伤害时使目标恶欲值 +1，但首次造成伤害后失去不可选中。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self"
+        }
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "move",
+              "op": "push_back",
+              "distance": 99,
+              "target": "self",
+              "note": "摊开滑回己方最后位，G8 合规（锁定己方半场）"
+            },
+            {
+              "type": "mount_status",
+              "statusId": "desire_avatar",
+              "duration": 15,
+              "target": "self"
+            }
+          ]
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_09"
+    },
+    {
+      "id": "h09_mental_duelist",
+      "name": "精神交锋",
+      "kind": "passive",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "vice",
+      "flagship": false,
+      "describe": "首次受到伤害时获得「精神交锋」：精神抗性 +20%，对持有欲望/魅惑/呓语的目标造成的伤害 ×1.25，持续整场。；放纵自身：欲壑 +1，身体被欲望推着往前扑。",
+      "hook": [
+        "on_take_damage"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "not",
+            "condition": {
+              "kind": "has_status",
+              "side": "self",
+              "id": "mental_duelist",
+              "cmp": ">=",
+              "n": 1
+            }
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "mental_duelist",
+              "duration": null,
+              "target": "self"
+            }
+          ],
+          "else": []
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "self"
+        },
+        {
+          "type": "move",
+          "op": "charge_forward",
+          "target": "self"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_09"
+    },
+    {
+      "id": "h09_hallucinate",
+      "name": "迷幻",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "vice",
+      "flagship": false,
+      "describe": "使一名敌人迷幻 20tick：接下来 2 次攻击挥向空处；并使其恶欲值 +1。；欲望随伤害上涨，对方被拖近一步。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "atk_desc"
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "mount_status",
+              "statusId": "hallucination",
+              "charges": 2,
+              "duration": 20
+            },
+            {
+              "type": "modify_resource",
+              "resource": "lust",
+              "value": 1,
+              "note": "欲望膨胀=推高恶欲值（产能）"
+            }
+          ]
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "target",
+          "note": "放纵：欲望随腐朽上涨"
+        },
+        {
+          "type": "move",
+          "op": "pull_forward",
+          "target": "target",
+          "note": "深渊拖拽"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_09"
+    },
+    {
+      "id": "h09_acid_marsh",
+      "name": "强酸沼泽",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "elements",
+      "flagship": false,
+      "describe": "使目标及其相邻敌人的护甲 -3（20tick），并各受到 2 点毒素伤害；酸凝为毒：主目标硫磺剧毒 15tick。；伤口浇灌欲望，深渊顺势把人往下拽。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "area",
+          "faction": "enemy",
+          "scope": "whole_lane",
+          "pickCount": "all"
+        },
+        "fallbackSort": "armor_desc"
+      },
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "armor",
+          "value": -3,
+          "mode": "delta",
+          "duration": 20,
+          "spread": "splash_adjacent"
+        },
+        {
+          "type": "damage",
+          "element": "poison",
+          "value": 2,
+          "spread": "splash_adjacent"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "sulfur_toxin",
+          "duration": 15,
+          "note": "酸凝为毒：主目标硫磺剧毒 15tick（环节⑤ 2026-09-29 补产层段）"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "target"
+        },
+        {
+          "type": "move",
+          "op": "pull_forward",
+          "target": "target"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_09"
+    },
+    {
+      "id": "h09_hellfire",
+      "name": "地狱之火",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "elements",
+      "flagship": false,
+      "describe": "对一名远程敌人造成 6 点暗焰伤害，并使其灼烧 15tick（每 tick 0.4 点伤害）；若目标带硫磺剧毒，硫磺助燃，伤害 +2。；伤口浇灌欲望，深渊顺势把人往下拽。",
+      "cost": {
+        "energy": 5,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "whole_lane",
+          "pickCount": 1
+        },
+        "fallbackSort": "hp_desc"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "dark",
+          "value": 6
+        },
+        {
+          "type": "mount_status",
+          "statusId": "burn",
+          "duration": 15
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "sulfur_toxin",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "dark",
+              "value": 2,
+              "note": "硫磺助燃：目标带硫磺剧毒则伤害 +2（环节⑤ 2026-09-29 补读层段：sulfur_toxin payoff 升 landed）"
+            }
+          ],
+          "else": []
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "target"
+        },
+        {
+          "type": "move",
+          "op": "pull_forward",
+          "target": "target"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_09"
+    },
+    {
+      "id": "h09_whispers",
+      "name": "呓语",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "filth",
+      "flagship": false,
+      "describe": "四选一：失控使目标魅惑 10tick（攻击自己人）；重创造成 8 点伤害；混乱叠加 2 层呓语（15tick）并使其行动条速率 ×0.7；诅咒使其易伤 20tick 并硫磺剧毒 15tick。；放纵自身：欲壑 +1，身体被欲望推着往前扑。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 30,
+        "castTime": 1
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "diamond_1",
+          "pickCount": 1
+        },
+        "fallbackSort": "atk_desc"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "charm",
+          "duration": 10,
+          "note": "默认分支：失控"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "self"
+        },
+        {
+          "type": "move",
+          "op": "charge_forward",
+          "target": "self"
+        }
+      ],
+      "tentative": false,
+      "tags": [
+        "污秽"
+      ],
+      "scope": "hero",
+      "heroId": "hero_09"
+    },
+    {
+      "id": "h09_pollution_authority",
+      "name": "污染权柄",
+      "kind": "passive",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "filth",
+      "flagship": false,
+      "describe": "战斗开始时获得「污染权柄」：自身施加的减益与持续伤害状态时长 +5tick；自身施加的呓语不可被驱散。；放纵自身：欲壑 +1，身体被欲望推着往前扑。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "pollution_authority",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "self"
+        },
+        {
+          "type": "move",
+          "op": "charge_forward",
+          "target": "self"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_09"
+    },
+    {
+      "id": "h09_distant_voice",
+      "name": "远距离传声",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "filth",
+      "flagship": false,
+      "describe": "无视距离对一名敌人造成 6 点精神伤害；若其生命 ≤25%，再追加 8 点精神伤害。；伤口浇灌欲望，深渊顺势把人往下拽。",
+      "cost": {
+        "energy": 5,
+        "cooldown": 35,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "diamond_1",
+          "pickCount": 1
+        },
+        "fallbackSort": "hp_asc"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "mental",
+          "value": 6
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "hp_percent",
+            "side": "target",
+            "cmp": "<=",
+            "n": 25
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "mental",
+              "value": 8
+            }
+          ],
+          "else": []
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "target"
+        },
+        {
+          "type": "move",
+          "op": "pull_forward",
+          "target": "target"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_09"
+    },
+    {
+      "id": "h09_body_authority",
+      "name": "身体权柄",
+      "kind": "passive",
+      "sequence": 2,
+      "rarity": "epic",
+      "axis": "demon",
+      "flagship": false,
+      "describe": "战斗开始时，自身生命上限 +15、物理抗性 +15%（整场），且生命上限与护甲不会被削减（整场）。；放纵自身：欲壑 +1，身体被欲望推着往前扑。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "hp_max",
+          "value": 15,
+          "mode": "delta",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "resist:physical",
+          "value": 15,
+          "mode": "delta",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "body_authority",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "self"
+        },
+        {
+          "type": "move",
+          "op": "charge_forward",
+          "target": "self"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_09"
+    },
+    {
+      "id": "h09_filth_king",
+      "name": "污秽之王",
+      "kind": "active",
+      "sequence": 1,
+      "rarity": "legendary",
+      "axis": "filth",
+      "flagship": false,
+      "describe": "全体敌人受到 3 点毒素伤害；已带硫磺剧毒/灼烧/呓语的敌人各叠 1 层并刷新至 15tick；每命中一个带持续伤害状态的敌人，自身回复 2 点生命。；伤口浇灌欲望，深渊顺势把人往下拽。",
+      "cost": {
+        "energy": 6,
+        "cooldown": 40,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "area",
+          "faction": "enemy",
+          "scope": "diamond_1",
+          "pickCount": "all"
+        }
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "damage",
+              "element": "poison",
+              "value": 3,
+              "target": "all_enemies"
+            },
+            {
+              "op": "if",
+              "condition": {
+                "kind": "has_status",
+                "side": "target",
+                "id": "sulfur_toxin",
+                "cmp": ">=",
+                "n": 1
+              },
+              "then": [
+                {
+                  "type": "mount_status",
+                  "statusId": "sulfur_toxin",
+                  "stacks": 1,
+                  "stackMode": "add",
+                  "duration": 15,
+                  "target": "all_enemies",
+                  "note": "重复挂载刷新 duration + 叠层（编队上下文 §六，F51）"
+                }
+              ],
+              "else": []
+            },
+            {
+              "op": "if",
+              "condition": {
+                "kind": "has_status",
+                "side": "target",
+                "id": "burn",
+                "cmp": ">=",
+                "n": 1
+              },
+              "then": [
+                {
+                  "type": "mount_status",
+                  "statusId": "burn",
+                  "stacks": 1,
+                  "stackMode": "add",
+                  "duration": 15,
+                  "target": "all_enemies"
+                }
+              ],
+              "else": []
+            },
+            {
+              "op": "if",
+              "condition": {
+                "kind": "has_status",
+                "side": "target",
+                "id": "whisper",
+                "cmp": ">=",
+                "n": 1
+              },
+              "then": [
+                {
+                  "type": "mount_status",
+                  "statusId": "whisper",
+                  "stacks": 1,
+                  "stackMode": "add",
+                  "duration": 15,
+                  "target": "all_enemies"
+                }
+              ],
+              "else": []
+            },
+            {
+              "op": "if",
+              "condition": {
+                "kind": "has_category",
+                "side": "target",
+                "categories": [
+                  "debuff"
+                ]
+              },
+              "then": [
+                {
+                  "type": "heal",
+                  "value": 2,
+                  "target": "self",
+                  "note": "A22：每命中一个带 dot 的敌方单位回 2（逐目标结算）"
+                }
+              ],
+              "else": []
+            }
+          ]
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "target"
+        },
+        {
+          "type": "move",
+          "op": "pull_forward",
+          "target": "target"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_09"
+    },
+    {
+      "id": "h09_erosion",
+      "name": "侵蚀者",
+      "kind": "active",
+      "sequence": 1,
+      "rarity": "legendary",
+      "axis": "filth",
+      "flagship": true,
+      "describe": "使一名敌人被侵蚀 25tick：每 tick 受到 0.6 点无视护甲、护盾与抗性的毒素伤害，护甲 -2（25tick）。可被驱散。上一张施放的技能同为污秽系（连锁≥2）时，额外叠加 1 层污秽。；欲望随伤害上涨，对方被拖近一步。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "diamond_1",
+          "pickCount": 1
+        },
+        "fallbackSort": "armor_desc"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "erosion",
+          "duration": 25
+        },
+        {
+          "type": "mount_status",
+          "statusId": "filth",
+          "duration": 25,
+          "note": "ddd §九.2：侵蚀为 filth 三种施加来源之一（污秽记账，供耕种者秽土净化与怪物读取）"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "tag_chain",
+            "tag": "污秽",
+            "cmp": ">=",
+            "n": 2
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "filth",
+              "stacks": 1,
+              "stackMode": "add",
+              "duration": 25,
+              "note": "污秽连锁：连施污秽技≥2，侵蚀额外积 1 层污——连击正主读层 payoff"
+            }
+          ],
+          "else": []
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "target"
+        },
+        {
+          "type": "move",
+          "op": "pull_forward",
+          "target": "target"
+        }
+      ],
+      "tentative": false,
+      "tags": [
+        "污秽"
+      ],
+      "scope": "hero",
+      "heroId": "hero_09"
+    },
+    {
+      "id": "h09_fallen",
+      "name": "堕落",
+      "kind": "active",
+      "sequence": 0,
+      "rarity": "legendary",
+      "axis": "vice",
+      "flagship": true,
+      "describe": "使一名近战敌人堕落 30tick（不可驱散）：每次攻击落在自己身上，每 tick 受到 0.4 点无视一切防护的毒素伤害，受到的治疗减半。；放纵自身：欲壑 +1，身体被欲望推着往前扑。",
+      "cost": {
+        "energy": 6,
+        "cooldown": 40,
+        "castTime": 0
+      },
+      "reach": "melee",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "atk_desc"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "fallen",
+          "duration": 30
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "self"
+        },
+        {
+          "type": "move",
+          "op": "charge_forward",
+          "target": "self"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_09"
+    },
+    {
+      "id": "h09_abyss_curse",
+      "name": "深渊之咒",
+      "kind": "active",
+      "sequence": 0,
+      "rarity": "legendary",
+      "axis": "filth",
+      "flagship": false,
+      "describe": "使一名敌人被诅咒 25tick：每 tick 受到 0.4 点暗黑伤害，攻击 -2、防御 -2，期间无法获得任何增益状态。；欲望随伤害上涨，对方被拖近一步。",
+      "cost": {
+        "energy": 5,
+        "cooldown": 35,
+        "castTime": 3
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "diamond_1",
+          "pickCount": 1
+        },
+        "fallbackSort": "atk_desc"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "abyss_curse",
+          "duration": 25
+        },
+        {
+          "type": "mount_status",
+          "statusId": "filth",
+          "duration": 25,
+          "note": "ddd §九.2：深渊之咒为 filth 三种施加来源之一（污秽记账，供耕种者秽土净化与怪物读取）"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "target"
+        },
+        {
+          "type": "move",
+          "op": "pull_forward",
+          "target": "target"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_09"
+    },
+    {
+      "id": "h09_lust_resonance",
+      "name": "恶欲共鸣",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "vice",
+      "flagship": false,
+      "describe": "使一名敌人恶欲值 +2；若其带腐蚀（贪婪）（友方律师挂的），升级为恶欲值 +3，且友方全体 +2 能量。；放纵：欲壑 +1。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "atk_desc"
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "modify_resource",
+              "resource": "lust",
+              "value": 2,
+              "note": "推高恶欲值（产能）"
+            },
+            {
+              "op": "if",
+              "condition": {
+                "kind": "has_status",
+                "side": "target",
+                "id": "corrupted",
+                "stacksAtLeast": 1
+              },
+              "then": [
+                {
+                  "type": "modify_resource",
+                  "resource": "lust",
+                  "value": 1,
+                  "note": "升级：腐蚀共鸣，恶欲再 +1"
+                },
+                {
+                  "type": "modify_resource",
+                  "resource": "energy",
+                  "value": 2,
+                  "target": "all_allies",
+                  "note": "律师分润能量"
+                }
+              ],
+              "else": []
+            }
+          ]
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "self",
+          "note": "放纵：欲壑 +1"
+        },
+        {
+          "type": "move",
+          "op": "charge_forward",
+          "target": "self",
+          "note": "扑食前压"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_09"
+    },
+    {
+      "id": "h09_blight_erode",
+      "name": "荒芜侵蚀·改",
+      "kind": "active",
+      "sequence": 1,
+      "rarity": "legendary",
+      "axis": "filth",
+      "flagship": false,
+      "describe": "使全体敌人被侵蚀 25tick；若友方耕种者的丰饶在场，升级为荒芜侵蚀：每 tick 剥丰饶持有者 1 层丰饶；对已被污秽的目标秽土深耕，追加 2 点毒素伤害。；伤口浇灌欲望，深渊顺势把人往下拽。；双刃：读取丰饶时自身被污秽沾染 20tick。",
+      "cost": {
+        "energy": 6,
+        "cooldown": 40,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "area",
+          "faction": "enemy",
+          "scope": "diamond_1",
+          "pickCount": "all"
+        },
+        "fallbackSort": "hp_desc"
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "mount_status",
+              "statusId": "erosion",
+              "duration": 25,
+              "target": "all_enemies"
+            },
+            {
+              "op": "if",
+              "condition": {
+                "kind": "has_status",
+                "side": "ally",
+                "id": "abundance",
+                "stacksAtLeast": 1
+              },
+              "then": [
+                {
+                  "type": "mount_status",
+                  "statusId": "blight_erode",
+                  "duration": 25,
+                  "target": "all_enemies",
+                  "note": "升级：荒芜侵蚀场——每 tick 剥丰饶 1 层"
+                },
+                {
+                  "type": "mount_status",
+                  "statusId": "filth",
+                  "duration": 20,
+                  "target": "self",
+                  "note": "双刃：侵蚀丰饶反被污秽沾身（自挂 filth 20tick）"
+                }
+              ],
+              "else": []
+            },
+            {
+              "op": "if",
+              "condition": {
+                "kind": "has_status",
+                "side": "target",
+                "id": "filth",
+                "cmp": ">=",
+                "n": 1
+              },
+              "then": [
+                {
+                  "type": "damage",
+                  "element": "poison",
+                  "value": 2,
+                  "note": "秽土深耕：目标已污秽则追加 2 点毒素伤害（环节⑤ 2026-09-29 补读层段：filth payoff 升 landed）"
+                }
+              ],
+              "else": []
+            }
+          ]
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "target"
+        },
+        {
+          "type": "move",
+          "op": "pull_forward",
+          "target": "target"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "ally",
+            "id": "abundance"
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "dark",
+              "value": 1,
+              "note": "跨源读取：丰饶越盛，侵蚀越狠，追加 1"
+            }
+          ],
+          "else": [],
+          "note": "跨系接线（2026-10-23）：读取枢纽 abundance"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_09"
+    }
+  ],
+  "statusDefs": [
+    {
+      "id": "weapon_mastery",
+      "name": "武器上手",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "modifiers": {
+        "damage_mul": {
+          "value": 1.15,
+          "filter": {
+            "element": [
+              "physical"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "lost_conscience",
+      "name": "失去良知",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "resist:mental",
+              "value": 20,
+              "mode": "delta",
+              "duration": null,
+              "target": "self"
+            }
+          ]
+        }
+      ],
+      "modifiers": {
+        "damage_mul": {
+          "value": 1.15,
+          "filter": {
+            "targetHasCategory": [
+              "debuff"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "rite_mark",
+      "name": "仪式刻印",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "maxStacks": 3,
+      "stackPolicy": "stack",
+      "note": "H11 计数型母版；由深渊召唤经 status.consume（F48）消耗，每层使恶魔 attack +2（F54 companionBuff） ｜ 仪式刻印→深渊召唤映射表（编队参数 §2.4 H1 召唤物基线 + spawn.companionBuff）：层数 N → 强度/数量 f(N)，数值按当前档。",
+      "summonMapping": [
+        {
+          "stacks": 1,
+          "count": 1,
+          "atkRatio": 0.5,
+          "hpRatio": 0.4,
+          "note": "占位：1 层刻印 → 弱恶魔"
+        },
+        {
+          "stacks": 3,
+          "count": 1,
+          "atkRatio": 0.8,
+          "hpRatio": 0.6,
+          "note": "占位：3 层 → 中阶恶魔"
+        },
+        {
+          "stacks": 5,
+          "count": 2,
+          "atkRatio": 1.0,
+          "hpRatio": 0.8,
+          "note": "占位：5 层 → 双恶魔 / 换高阶模板"
+        }
+      ]
+    },
+    {
+      "id": "filth",
+      "name": "污秽",
+      "category": [
+        "debuff"
+      ],
+      "dispelable": true,
+      "duration": null,
+      "maxStacks": 1,
+      "stackPolicy": "stack",
+      "note": "ddd §九.2 显式登记：罪犯侧登记并标 crossPathway；耕种者『秽土净化』、怪物读取。侵蚀/中毒/深渊之咒降级为『施加本状态的三种来源』。",
+      "crossPathway": true,
+      "participants": [
+        "criminal",
+        "planter",
+        "monster"
+      ]
+    },
+    {
+      "id": "obsession",
+      "name": "迷恋",
+      "category": [
+        "control"
+      ],
+      "dispelable": true,
+      "modifiers": {},
+      "note": "F15 最小副本（H12 target_override 族）：反向嘲讽，攻击其己方队友；权威定义见 F15 登记",
+      "behaviorModifiers": [
+        {
+          "op": "target_override",
+          "anchor": "self"
+        }
+      ]
+    },
+    {
+      "id": "desire_bomb",
+      "name": "欲望炸弹",
+      "category": [
+        "debuff"
+      ],
+      "dispelable": true,
+      "duration": 15,
+      "triggers": [
+        {
+          "event": "on_remove",
+          "reason": [
+            "expired"
+          ],
+          "effects": [
+            {
+              "type": "damage",
+              "element": "mental",
+              "value": 8,
+              "target": "self",
+              "note": "作用于原持有者"
+            },
+            {
+              "type": "damage",
+              "element": "mental",
+              "value": 4,
+              "spread": "splash_adjacent"
+            }
+          ],
+          "note": "H29 on_remove reason 过滤：仅自然到期爆炸，被驱散不炸"
+        }
+      ]
+    },
+    {
+      "id": "desire_avatar",
+      "name": "欲望化身",
+      "category": [
+        "conceal"
+      ],
+      "dispelable": true,
+      "duration": 15,
+      "modifiers": {
+        "damage_taken_mul": 0.75,
+        "untargetableByTargeted": {
+          "direction": "both",
+          "scope": "single"
+        }
+      },
+      "triggers": [
+        {
+          "event": "on_deal_damage",
+          "effects": [
+            {
+              "type": "modify_resource",
+              "resource": "lust",
+              "value": 1,
+              "note": "影响：被黑液沾到，推高目标恶欲值（产能）"
+            }
+          ],
+          "note": "on_break：首次造成伤害后失去 untargetable（液体溅出去藏不住了），减伤与感染保留"
+        }
+      ],
+      "note": "H5 潜行/虚化母版（与 F4/F11/囚犯灵体化同族） 乘区审批：0.7=标准减伤母版档（H3 已裁定）/0.75=轻减档"
+    },
+    {
+      "id": "mental_duelist",
+      "name": "精神交锋",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "resist:mental",
+              "value": 20,
+              "mode": "delta",
+              "duration": null,
+              "target": "self"
+            }
+          ]
+        }
+      ],
+      "modifiers": {
+        "damage_mul": {
+          "value": 1.25,
+          "filter": {
+            "targetHasStatus": [
+              "desire",
+              "charm",
+              "whisper"
+            ]
+          }
+        }
+      },
+      "note": "与【失去良知】分界：本条定向（本途径三污染状态，+25%），那条广谱（任何 debuff/dot，+15%）"
+    },
+    {
+      "id": "whisper",
+      "name": "呓语",
+      "category": [
+        "debuff"
+      ],
+      "dispelable": true,
+      "maxStacks": 3,
+      "stackPolicy": "stack",
+      "note": "F16 通用状态最小副本：精神污染叠层（F51 stacks）；污染权柄（序列3）可将其运行时覆写为不可驱散。权威定义见 F16 登记"
+    },
+    {
+      "id": "pollution_authority",
+      "name": "污染权柄",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "modifiers": {
+        "durationModifier": {
+          "scope": "outgoing",
+          "mode": "add",
+          "value": 5,
+          "filter": {
+            "category": [
+              "debuff"
+            ]
+          }
+        },
+        "dispelableOverride": {
+          "statusIds": [
+            "whisper"
+          ],
+          "value": false
+        }
+      },
+      "note": "H14 durationModifier（outgoing）+ H8 运行时覆写 dispelable"
+    },
+    {
+      "id": "body_authority",
+      "name": "身体权柄",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "modifiers": {
+        "immune_stat_reduction": [
+          "hp_max",
+          "armor"
+        ]
+      },
+      "note": "编队参数 §1.1b immune_stat_reduction（原文标注罪犯）；与【侵蚀者】的正反对照"
+    },
+    {
+      "id": "erosion",
+      "name": "侵蚀",
+      "category": [
+        "debuff"
+      ],
+      "dispelable": true,
+      "duration": 25,
+      "triggers": [
+        {
+          "event": "on_tick",
+          "effects": [
+            {
+              "type": "damage",
+              "element": "poison",
+              "value": 0.6,
+              "pierce": [
+                "armor",
+                "shield",
+                "resist"
+              ],
+              "target": "self"
+            }
+          ]
+        },
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "armor",
+              "value": -2,
+              "mode": "delta",
+              "duration": 25,
+              "target": "self"
+            }
+          ]
+        }
+      ],
+      "note": "H2 + H16；可被驱散是刻意弱点（「持续腐蚀会穿透」的前提是腐蚀持续下去）"
+    },
+    {
+      "id": "fallen",
+      "name": "堕落",
+      "category": [
+        "control",
+        "debuff"
+      ],
+      "dispelable": false,
+      "duration": 30,
+      "modifiers": {
+        "heal_received_mul": 0.5
+      },
+      "triggers": [
+        {
+          "event": "on_tick",
+          "effects": [
+            {
+              "type": "damage",
+              "element": "poison",
+              "value": 0.4,
+              "pierce": [
+                "armor",
+                "shield",
+                "resist"
+              ],
+              "target": "self"
+            }
+          ]
+        }
+      ],
+      "note": "H12 anchor self（新增项 4）+ H2 + H16 + H21；与【迷幻】分界：迷幻打向空处（charges 可驱散短），堕落打向自己（duration 不可驱散 30t） 乘区审批：0.4–0.5=深度减免档（重控/代价/位格压制态），单列登记",
+      "behaviorModifiers": [
+        {
+          "op": "target_override",
+          "anchor": "self"
+        }
+      ]
+    },
+    {
+      "id": "abyss_curse",
+      "name": "深渊之咒",
+      "category": [
+        "debuff"
+      ],
+      "dispelable": true,
+      "duration": 25,
+      "triggers": [
+        {
+          "event": "on_tick",
+          "effects": [
+            {
+              "type": "damage",
+              "element": "dark",
+              "value": 0.4,
+              "target": "self"
+            }
+          ]
+        },
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "attack",
+              "value": -2,
+              "mode": "delta",
+              "duration": 25,
+              "target": "self"
+            },
+            {
+              "type": "modify_stat",
+              "stat": "defense",
+              "value": -2,
+              "mode": "delta",
+              "duration": 25,
+              "target": "self"
+            }
+          ]
+        }
+      ],
+      "modifiers": {
+        "buffBlocked": true
+      },
+      "note": "H2 + H38 buffBlocked（与 F17 desire 禁护盾同族，粒度由 categories 参数控制）"
+    },
+    {
+      "id": "blight_erode",
+      "name": "荒芜侵蚀",
+      "category": [
+        "debuff"
+      ],
+      "dispelable": true,
+      "duration": 25,
+      "triggers": [
+        {
+          "event": "on_tick",
+          "minIntervalTicks": 5,
+          "note": "2026-10-09 节流：每 5tick 一次（1 回合=5tick，执行参数 §2.2 权宜规避）",
+          "effects": [
+            {
+              "type": "modify_status",
+              "statusId": "abundance",
+              "stacksDelta": -1,
+              "target": "all_units",
+              "note": "每 5tick 对全体单位剥丰饶 1 层（无丰饶者无操作；污染侵蚀丰饶）"
+            }
+          ]
+        }
+      ],
+      "note": "荒芜侵蚀·改升级载荷（2026-09-26 重建）：挂友方耕种者丰饶在场时由卡面条件启用"
+    },
+    {
+      "id": "sulfur_toxin",
+      "name": "硫磺剧毒",
+      "category": [
+        "debuff"
+      ],
+      "dispelable": true,
+      "duration": 25,
+      "maxStacks": 3,
+      "stackPolicy": "refresh",
+      "modifiers": {
+        "dotOnTick": 0.2,
+        "armor_pierce_ratio": {
+          "ratio": 1
+        }
+      },
+      "note": "领域轴身份状态（2026-09-29 自 common poison 分叉私有化，数值蓝本同源：0.2/tick 穿透护甲 DoT（2026-10-09 回合→tick 换算残留校正，原 1/tick），叠层 refresh）；罪犯全途径（领域/污秽轴产层 + 污秽之王读层 + 恶魔化触发）统一改指此 id；common poison（中毒）保留为收尸人/囚犯/耕种者通用毒。⚠️ 副作用登记：污秽之王不再放大敌方的通用中毒（跨途径涌现 combo 断开），平衡期再裁定是否走 crossPathway 接回。"
+    }
+  ],
   "unitDefs": [],
   "zoneDefs": [],
   "domainDefs": []
