@@ -1,18 +1,2805 @@
 {
   "factionId": "faction_06",
   "factionName": "派系·陆",
-  "sharedSkillIds": [],
+  "sharedSkillIds": [
+    "f06_inspiration_sense",
+    "f06_danger_sense",
+    "f06_precise_shot",
+    "f06_machine_mind",
+    "f06_enhanced_physique",
+    "f06_calamity_foresight"
+  ],
   "heroes": [
     {
       "heroId": "hero_06",
       "heroName": "英雄·陆",
-      "playstyle": "灵感层/命运双极押注",
-      "skillTree": [],
-      "uniqueSkillIds": []
+      "playstyle": "灵感层/命运双极押注（灵感产层，命运赐福与灾祸对赌，循环重启改命）",
+      "skillTree": [
+        "h06_cause_calamity",
+        "h06_mind_storm",
+        "h06_winner",
+        "h06_fate_sight",
+        "h06_give_misfortune",
+        "h06_absolute_inspiration",
+        "h06_doom_field",
+        "h06_misfortune_curse",
+        "h06_blessing_gift",
+        "h06_mercury_body",
+        "h06_fate_chaos",
+        "h06_fate_warden",
+        "h06_mind_baptism",
+        "h06_fortune_words",
+        "h06_prophecy",
+        "h06_fate_revelation",
+        "h06_mercury_form",
+        "h06_fate_loop",
+        "h06_reboot_cycle",
+        "h06_reboot",
+        "h06_preserve",
+        "h06_choice_branch",
+        "h06_wheel_of_fate",
+        "h06_probability_authority"
+      ],
+      "uniqueSkillIds": [
+        "h06_future_sight",
+        "h06_anti_divination",
+        "h06_lucky_streak",
+        "h06_fate_tide",
+        "h06_windfall",
+        "h06_cause_calamity",
+        "h06_mind_storm",
+        "h06_winner",
+        "h06_fate_sight",
+        "h06_give_misfortune",
+        "h06_absolute_inspiration",
+        "h06_doom_field",
+        "h06_misfortune_curse",
+        "h06_blessing_gift",
+        "h06_mercury_body",
+        "h06_fate_chaos",
+        "h06_fate_warden",
+        "h06_mind_baptism",
+        "h06_fortune_words",
+        "h06_prophecy",
+        "h06_fate_revelation",
+        "h06_mercury_form",
+        "h06_fate_loop",
+        "h06_reboot_cycle",
+        "h06_reboot",
+        "h06_preserve",
+        "h06_choice_branch",
+        "h06_wheel_of_fate",
+        "h06_probability_authority"
+      ]
     }
   ],
-  "cards": [],
-  "statusDefs": [],
+  "cards": [
+    {
+      "id": "f06_inspiration_sense",
+      "name": "灵感超高",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "inspiration",
+      "flagship": false,
+      "describe": "战斗开始时能量 +3，并获得「灵感超高」（整场）：敌方隐匿类状态对你无效，你对隐匿目标造成的伤害 ×1.2。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "modify_resource",
+          "resource": "energy",
+          "value": 3,
+          "mode": "delta",
+          "target": "self",
+          "note": "超前感知 = 开局能量（稿面）"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "inspiration_sense",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "restore_snapshot",
+          "fields": [
+            "gauge"
+          ],
+          "target": "self",
+          "note": "命运轮盘：行动条回到先前的位置"
+        }
+      ],
+      "tentative": false,
+      "scope": "faction"
+    },
+    {
+      "id": "f06_danger_sense",
+      "name": "危险预感",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "inspiration",
+      "flagship": false,
+      "describe": "战斗开始时获得「危险预感」：受到的下一次伤害 ×0.6，约每 10 tick 自动补充 1 次，持续整场。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "danger_sense",
+          "charges": 1,
+          "duration": 50,
+          "target": "self"
+        }
+      ],
+      "tentative": false,
+      "scope": "faction"
+    },
+    {
+      "id": "h06_future_sight",
+      "name": "未来画面",
+      "kind": "active",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "inspiration",
+      "flagship": false,
+      "describe": "使一名友军行动条 +25（抢在敌人之前出手）；若自身已有灵感，额外 +10 行动条；自身能量 ≥8 时再 +10 行动条。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "ally"
+        },
+        "fallbackSort": "gauge_asc"
+      },
+      "effects": [
+        {
+          "type": "modify_resource",
+          "resource": "gauge.current",
+          "value": 25,
+          "mode": "delta",
+          "target": "target",
+          "note": "G5 铁律：受益者必须是友军，禁 SELF 自推条"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "self",
+            "id": "inspiration_sense",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "modify_resource",
+              "resource": "gauge.current",
+              "value": 10,
+              "mode": "delta",
+              "target": "target",
+              "note": "预感兑现：未来画面多推一格"
+            }
+          ],
+          "else": [],
+          "note": "灵感轴收束：读 inspiration_sense"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "resource_compare",
+            "side": "self",
+            "key": "energy",
+            "cmp": ">=",
+            "n": 8
+          },
+          "then": [
+            {
+              "type": "modify_resource",
+              "resource": "gauge.current",
+              "value": 10,
+              "mode": "delta",
+              "target": "target",
+              "note": "能量富余，画面看得更远"
+            }
+          ],
+          "else": [],
+          "note": "资源读数：能量富余时预知加深"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_06"
+    },
+    {
+      "id": "f06_precise_shot",
+      "name": "精准射击",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "inspiration",
+      "flagship": false,
+      "describe": "对一名敌人造成 2 点物理伤害（本途径的输出地基）；目标生命不高于 50% 时追加 1 点物理伤害。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 10,
+        "castTime": 0
+      },
+      "reach": "thrown",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy"
+        },
+        "fallbackSort": "hp_desc"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "physical",
+          "value": 2
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "hp_percent",
+            "side": "target",
+            "cmp": "<=",
+            "n": 50
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "physical",
+              "value": 1,
+              "note": "残命者一枪收尾"
+            }
+          ],
+          "else": [],
+          "note": "命运押注：低血目标处决加成（确定性，不掷骰）"
+        }
+      ],
+      "tentative": false,
+      "scope": "faction"
+    },
+    {
+      "id": "f06_machine_mind",
+      "name": "恐怖计算",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "inspiration",
+      "flagship": false,
+      "describe": "获得「恐怖计算」20tick：自身行动条速率 +8，免疫目标改写类状态。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "machine_mind",
+          "duration": 20,
+          "target": "self",
+          "note": "恐怖计算：20tick 内推演全局"
+        }
+      ],
+      "tentative": false,
+      "cost": {
+        "energy": 2,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "anchor": "caster",
+          "pickCount": 1
+        }
+      },
+      "scope": "faction"
+    },
+    {
+      "id": "f06_enhanced_physique",
+      "name": "素质增强",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "inspiration",
+      "flagship": false,
+      "describe": "获得「素质增强」20tick：自身攻击 +2、防御 +1、护甲 +2。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "attack",
+          "value": 2,
+          "mode": "delta",
+          "duration": 20,
+          "target": "self"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "defense",
+          "value": 1,
+          "mode": "delta",
+          "duration": 20,
+          "target": "self"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "armor",
+          "value": 2,
+          "mode": "delta",
+          "target": "self"
+        }
+      ],
+      "tentative": false,
+      "cost": {
+        "energy": 1,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "anchor": "caster",
+          "pickCount": 1
+        }
+      },
+      "scope": "faction"
+    },
+    {
+      "id": "h06_anti_divination",
+      "name": "反占卜",
+      "kind": "passive",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "inspiration",
+      "flagship": false,
+      "describe": "开战后获得「反占卜」（整场，仅自身）：免疫一切行动条减少（击退/拖慢/厄运侵蚀无效）；敌方的识破/隐匿忽略/必定命中类状态对你无效。",
+      "hook": [
+        "on_tick"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "not",
+            "condition": {
+              "kind": "has_status",
+              "side": "self",
+              "id": "anti_divination",
+              "cmp": ">=",
+              "n": 1
+            }
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "anti_divination",
+              "duration": null,
+              "target": "self"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_06"
+    },
+    {
+      "id": "h06_lucky_streak",
+      "name": "幸运者",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "fortune",
+      "flagship": false,
+      "describe": "战斗开始时获得「幸运 streak」：约每 5 tick 自动获得 1 层幸运（整场循环），幸运最多 3 层；开局获得 1 层幸运。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "lucky_streak",
+          "duration": 25,
+          "target": "self"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "fortune",
+          "stacks": 1,
+          "target": "self",
+          "note": "开局先手一层幸运（fortune 产层实证）"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_06"
+    },
+    {
+      "id": "h06_fate_tide",
+      "name": "命运潮汐",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "fortune",
+      "flagship": false,
+      "describe": "开战后进入 30tick 双相位循环：低潮期每次挨打 +1 层幸运；高潮期幸运获取 ×1.5。",
+      "hook": [
+        "on_tick"
+      ],
+      "effects": [],
+      "tentative": false,
+      "dimHooks": [
+        {
+          "dim": "fate_value",
+          "comparator": ">=",
+          "threshold": 5,
+          "mul": 1.3,
+          "target": "damage",
+          "note": "维度乘区挂钩：board.fate_value≥+5 赐福×1.3"
+        }
+      ],
+      "triggers": [
+        {
+          "event": "on_tick",
+          "minIntervalTicks": 9999,
+          "effects": [
+            {
+              "type": "mount_status",
+              "statusId": "tide_low",
+              "duration": 30,
+              "target": "self"
+            }
+          ],
+          "note": "2026-10-25 开局生效回补：一次性激活（原 hook 载荷）"
+        }
+      ],
+      "scope": "hero",
+      "heroId": "hero_06"
+    },
+    {
+      "id": "h06_windfall",
+      "name": "意外之财",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "fortune",
+      "flagship": false,
+      "describe": "每当你击杀一个单位时获得「意外之财」（整场）：每获得 1 层幸运，能量 +1。",
+      "hook": [
+        "on_kill"
+      ],
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "windfall",
+          "duration": null,
+          "target": "self"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_06"
+    },
+    {
+      "id": "h06_cause_calamity",
+      "name": "引发灾祸",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "calamity",
+      "flagship": false,
+      "describe": "对一名敌人造成 4 点物理伤害并溅射相邻单位 2 点物理伤害，自身获得 1 层幸运。目标带厄运标记则灾祸叠厄，追加 2 点精神伤害；自身防御 -1（10tick）。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "thrown",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "atk_desc"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "physical",
+          "value": 4
+        },
+        {
+          "type": "damage",
+          "element": "physical",
+          "value": 2,
+          "spread": "splash_adjacent",
+          "note": "波及相邻（共享内核 §一 spread 枚举，傀儡系飞牌同款写法）"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "fortune",
+          "stacks": 1,
+          "target": "self",
+          "note": "自身靠幸运规避"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "doom",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "mental",
+              "value": 2,
+              "note": "灾祸叠厄：目标带厄运标记则祸不单行 2 点"
+            }
+          ],
+          "else": [],
+          "note": "跨系读层段：monster→assassin doom（2026-09-29 跨系批二）"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "defense",
+          "value": -1,
+          "mode": "delta",
+          "duration": 10,
+          "target": "self",
+          "note": "命运要价：自曝破绽，防御 -1（10tick）"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_06"
+    },
+    {
+      "id": "f06_calamity_foresight",
+      "name": "预见灾祸",
+      "kind": "passive",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "calamity",
+      "flagship": false,
+      "describe": "开战后获得「预见灾祸」（整场）：每次受到伤害立即架起减伤（受伤 ×0.85，10tick），并给攻击者叠 1 层厄运。",
+      "hook": [
+        "on_tick"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "not",
+            "condition": {
+              "kind": "has_status",
+              "side": "self",
+              "id": "calamity_foresight",
+              "cmp": ">=",
+              "n": 1
+            }
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "calamity_foresight",
+              "duration": null,
+              "target": "self"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false,
+      "scope": "faction"
+    },
+    {
+      "id": "h06_mind_storm",
+      "name": "精神风暴",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "calamity",
+      "flagship": false,
+      "describe": "对一名敌人造成 3 点精神伤害，并使其下一击挥空（打向最近空坐标）；目标已在混乱中则追加 1 点精神伤害，否则使其陷入混乱 10tick。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "atk_desc"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "mental",
+          "value": 3
+        },
+        {
+          "type": "mount_status",
+          "statusId": "mind_storm",
+          "charges": 1,
+          "duration": 15
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "fate_chaos",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "mental",
+              "value": 1,
+              "note": "混乱者心神更易击穿"
+            }
+          ],
+          "else": [
+            {
+              "type": "mount_status",
+              "statusId": "fate_chaos",
+              "charges": 1,
+              "duration": 10,
+              "note": "风暴余波：目标短暂陷入混乱"
+            }
+          ],
+          "note": "混乱集火读取 + 第二写入方（2026-10-24 ⑤）"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_06"
+    },
+    {
+      "id": "h06_winner",
+      "name": "赢家",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "fortune",
+      "flagship": false,
+      "describe": "消耗 4 层幸运，获得一次免死（30tick 内下次致死伤害被化解、保留 1 血）；整场幸运上限提升至 6 层；幸运不足 4 层时赔掉 3 点生命。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self"
+        }
+      },
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "self",
+            "id": "fortune",
+            "cmp": ">=",
+            "n": 4
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "fortune",
+              "stacks": -4,
+              "stackMode": "consume"
+            },
+            {
+              "type": "mount_status",
+              "statusId": "near_death_save",
+              "charges": 1,
+              "duration": 30,
+              "target": "self"
+            }
+          ],
+          "else": [
+            {
+              "type": "modify_resource",
+              "resource": "hp",
+              "value": -3,
+              "mode": "delta",
+              "target": "self",
+              "note": "空手通收：幸运不足 4 层时赔掉 3 点生命"
+            }
+          ]
+        },
+        {
+          "type": "mount_status",
+          "statusId": "fortune_mastery",
+          "duration": null,
+          "target": "self"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_06"
+    },
+    {
+      "id": "h06_fate_sight",
+      "name": "超强预感",
+      "kind": "passive",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "inspiration",
+      "flagship": false,
+      "describe": "战斗开始时获得「超强预感」（整场）：己方全体免疫行动条减少、敌方识破类状态对己方全体无效；自身行动条速率 +5；获得 2 层灵感。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "fate_sight",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "inspiration_sense",
+          "stacks": 2,
+          "target": "self",
+          "note": "超强预感落地为灵感层：预感越强，灵感越厚"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_06"
+    },
+    {
+      "id": "h06_give_misfortune",
+      "name": "给予厄运",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "calamity",
+      "flagship": false,
+      "describe": "使一名敌人叠 2 层厄运（20tick），不触发厄运爆发（原著「有限度」）。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "atk_desc"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "misfortune",
+          "stacks": 2,
+          "duration": 20,
+          "note": "上限内直接给 2 层，够不到 3 层爆发线；权威定义见预见灾祸（s6 首登记）"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_06"
+    },
+    {
+      "id": "h06_absolute_inspiration",
+      "name": "绝对灵感",
+      "kind": "passive",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "inspiration",
+      "flagship": false,
+      "describe": "战斗开始时获得「绝对灵感」（整场）：能量恢复 +0.3，约每 5 tick +1 层幸运，幸运上限 +1；对带厄运的目标伤害 ×1.2；获得 1 层灵感。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "absolute_inspiration",
+          "duration": 25,
+          "target": "self"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "inspiration_sense",
+          "stacks": 1,
+          "target": "self",
+          "note": "绝对灵感产 1 层灵感"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_06"
+    },
+    {
+      "id": "h06_doom_field",
+      "name": "厄运领域",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "calamity",
+      "flagship": true,
+      "describe": "在敌方半场生成「厄运领域」，持续 40tick：区域内敌方单位每 2 tick 叠 1 层厄运（叠满 3 层即打空并清空）。",
+      "cost": {
+        "energy": 5,
+        "cooldown": 30,
+        "castTime": 1
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "area",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": "all"
+        },
+        "consumption": "zone",
+        "fallbackSort": "atk_desc"
+      },
+      "effects": [
+        {
+          "type": "spawn",
+          "duration": 40,
+          "note": "界域回迁批次 8 拍板：厄运领域保持 Zone（ZoneDef 登记），不走 domain 界域牌",
+          "consumption": "zone",
+          "zone": "zone_doom_field"
+        }
+      ],
+      "zone": {
+        "def": "zone_doom_field",
+        "duration": 40,
+        "durationUnit": "tick",
+        "placement": "enemy_half",
+        "envRulesText": "区域内敌方单位每 2 tick 叠 1 层 misfortune（受 3 层上限约束；叠满即触发 target_override → first_empty 打空并清空）"
+      },
+      "tentative": false,
+      "dimHooks": [
+        {
+          "dim": "death_tally",
+          "comparator": ">=",
+          "threshold": 6,
+          "mul": 0.75,
+          "target": "cost",
+          "note": "死亡簿折费（2026-10-02 矩阵复审）：board.death_tally≥6 时，本卡能量费 ×0.75——崩坏中的世界处处是厄运"
+        }
+      ],
+      "scope": "hero",
+      "heroId": "hero_06"
+    },
+    {
+      "id": "h06_misfortune_curse",
+      "name": "厄运诅咒",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "calamity",
+      "flagship": false,
+      "describe": "使一名敌人当场叠满 3 层厄运（20tick，立即触发打空），并造成 3 点精神伤害；自身生命 -1。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 25,
+        "castTime": 1
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "atk_desc"
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "mount_status",
+              "statusId": "misfortune",
+              "stacks": 3,
+              "duration": 20,
+              "note": "一次塞满 3 层，当场触发厄运爆发（打空并清空）"
+            },
+            {
+              "type": "damage",
+              "element": "mental",
+              "value": 3
+            }
+          ]
+        },
+        {
+          "type": "modify_resource",
+          "resource": "hp",
+          "value": -1,
+          "mode": "delta",
+          "target": "self",
+          "note": "命运要价：强制叠满厄运，自割 1 点生命"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_06"
+    },
+    {
+      "id": "h06_blessing_gift",
+      "name": "赐福",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "fortune",
+      "flagship": false,
+      "describe": "消耗自身 2 层幸运，祝福一名友军 20tick：其造成伤害 ×1.2、受伤 ×0.9。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "ally",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "atk_desc"
+      },
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "self",
+            "id": "fortune",
+            "cmp": ">=",
+            "n": 2
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "fortune",
+              "stacks": -2,
+              "stackMode": "consume"
+            },
+            {
+              "type": "mount_status",
+              "statusId": "blessing_gift",
+              "duration": 20,
+              "target": "target"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_06"
+    },
+    {
+      "id": "h06_mercury_body",
+      "name": "水银之躯",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "cycle",
+      "flagship": false,
+      "describe": "15tick 内打向你的前 2 次攻击被改写为落空（每次消耗 1 层）。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point",
+          "pickCount": "all"
+        }
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "mercury_body",
+          "charges": 2,
+          "duration": 15,
+          "target": "self"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_06"
+    },
+    {
+      "id": "h06_fate_chaos",
+      "name": "混乱",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "cycle",
+      "flagship": false,
+      "describe": "使一名敌人混乱 25tick（前 2 次攻击打向不分阵营的最近单位），并抹掉其 30 点行动条进度；自身生命 -1；目标生命不高于 40% 时混乱延长，否则自身幸运 +1。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "gauge_desc"
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "mount_status",
+              "statusId": "fate_chaos",
+              "charges": 2,
+              "duration": 25
+            },
+            {
+              "type": "modify_resource",
+              "resource": "gauge.current",
+              "value": -30,
+              "mode": "delta",
+              "note": "既定进度被抹掉，「既定命运」字面落地"
+            }
+          ]
+        },
+        {
+          "type": "modify_resource",
+          "resource": "hp",
+          "value": -1,
+          "mode": "delta",
+          "target": "self",
+          "note": "命运要价：搅乱既定命运，自割 1 点生命"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "hp_percent",
+            "side": "target",
+            "cmp": "<=",
+            "n": 40
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "fate_chaos",
+              "charges": 1,
+              "duration": 25,
+              "note": "残命者再陷一轮混乱"
+            }
+          ],
+          "else": [
+            {
+              "type": "mount_status",
+              "statusId": "fortune",
+              "stacks": 1,
+              "target": "self",
+              "note": "既定命运被搅乱，自身得一线幸运"
+            }
+          ],
+          "note": "残命判定（hp_percent）"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_06"
+    },
+    {
+      "id": "h06_fate_warden",
+      "name": "命运看守者",
+      "kind": "passive",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "calamity",
+      "flagship": false,
+      "describe": "被动：你对处于混乱或厄运状态的敌人造成伤害时，自身 +1 层幸运；且战场死亡越多（死亡簿 ≥3），你对这些弃运者的伤害越高（×1.5）。",
+      "hook": [
+        "on_deal_damage"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "fate_chaos",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "fortune",
+              "stacks": 1,
+              "target": "self"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "has_status",
+                "side": "target",
+                "id": "misfortune",
+                "cmp": ">=",
+                "n": 1
+              },
+              "then": [
+                {
+                  "type": "mount_status",
+                  "statusId": "fortune",
+                  "stacks": 1,
+                  "target": "self"
+                }
+              ],
+              "else": []
+            }
+          ],
+          "note": "F52 target_has_status 已泛化为共享内核 §三 has_status(side,id,cmp,n)（新增项 2）；嵌套 If 表达「混乱或厄运」，避开未落地的 any_of 组合子"
+        }
+      ],
+      "tentative": false,
+      "dimHooks": [
+        {
+          "dim": "fate_value",
+          "comparator": ">=",
+          "threshold": 5,
+          "mul": 1.3,
+          "target": "damage"
+        },
+        {
+          "dim": "death_tally",
+          "comparator": ">=",
+          "threshold": 3,
+          "mul": 1.5,
+          "target": "damage",
+          "note": "死亡簿读层（2026-10-02 矩阵复审）：board.death_tally≥3 时，看守者对混乱/厄运敌人的伤害 ×1.5——死者的命运归于看守者"
+        }
+      ],
+      "scope": "hero",
+      "heroId": "hero_06"
+    },
+    {
+      "id": "h06_mind_baptism",
+      "name": "精神洗礼",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "cycle",
+      "flagship": false,
+      "describe": "双分支（任一单位）：对友军——驱散其全部减益与持续伤害并治疗 4 点；对敌人——驱散其全部增益并造成 2 点精神伤害。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "any",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "hp_asc"
+      },
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "faction_is",
+            "side": "target",
+            "value": "ally",
+            "note": "伪谓词归并：target_faction_is → faction_is"
+          },
+          "then": [
+            {
+              "type": "dispel",
+              "target": "target",
+              "dispelTarget": "unit",
+              "filter": {
+                "category": [
+                  "debuff"
+                ]
+              },
+              "note": "C2 数组 + count 省略 = 全部清除"
+            },
+            {
+              "type": "heal",
+              "value": 4,
+              "target": "target"
+            }
+          ],
+          "else": [
+            {
+              "type": "dispel",
+              "target": "target",
+              "dispelTarget": "unit",
+              "filter": {
+                "category": [
+                  "buff"
+                ]
+              }
+            },
+            {
+              "type": "damage",
+              "element": "mental",
+              "value": 2
+            }
+          ]
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_06"
+    },
+    {
+      "id": "h06_fortune_words",
+      "name": "福祸之言",
+      "kind": "active",
+      "sequence": 2,
+      "rarity": "epic",
+      "axis": "fortune",
+      "flagship": true,
+      "describe": "全体敌方叠 1 层厄运（20tick），全体友军各 +1 层幸运；战场命运值 +1；自身生命 -1。",
+      "cost": {
+        "energy": 5,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "area",
+          "faction": "enemy",
+          "scope": "whole_lane",
+          "pickCount": "all"
+        }
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "mount_status",
+              "statusId": "misfortune",
+              "stacks": 1,
+              "duration": 20,
+              "target": "all_enemies"
+            },
+            {
+              "type": "mount_status",
+              "statusId": "fortune",
+              "stacks": 1,
+              "target": "all_allies"
+            }
+          ]
+        },
+        {
+          "type": "modify_resource",
+          "resource": "fate_value",
+          "value": 1,
+          "mode": "delta",
+          "target": "board",
+          "note": "福祸之言拨动命运值（可操作变量写入方）"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "hp",
+          "value": -1,
+          "mode": "delta",
+          "target": "self",
+          "note": "命运要价：自割 1 点生命"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_06"
+    },
+    {
+      "id": "h06_prophecy",
+      "name": "预言术",
+      "kind": "active",
+      "sequence": 2,
+      "rarity": "epic",
+      "axis": "inspiration",
+      "flagship": false,
+      "describe": "使一名友军行动条 +30，自身 +1 层幸运（预言应验）。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "ally"
+        },
+        "fallbackSort": "gauge_asc"
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "modify_resource",
+              "resource": "gauge.current",
+              "value": 30,
+              "mode": "delta",
+              "target": "target",
+              "note": "G5 铁律：受益者必须为友军；与未来画面（+25/2 能）构成阶梯"
+            },
+            {
+              "type": "mount_status",
+              "statusId": "fortune",
+              "stacks": 1,
+              "target": "self"
+            }
+          ]
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_06"
+    },
+    {
+      "id": "h06_fate_revelation",
+      "name": "命运启示",
+      "kind": "passive",
+      "sequence": 2,
+      "rarity": "epic",
+      "axis": "fortune",
+      "flagship": false,
+      "describe": "战斗开始时（一次性）：己方全体行动条 +10。启示乍现：战场命运值 +1。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "modify_resource",
+          "resource": "gauge.current",
+          "value": 10,
+          "mode": "delta",
+          "target": "all_allies",
+          "note": "F59 ALL_ALLIES scope（共享内核 §一 scope: all + faction 过滤，H18）"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "fate_value",
+          "value": 1,
+          "mode": "delta",
+          "target": "board",
+          "note": "命运值写入（2026-10-01 量表写入批）：战斗开始时一次性 +1。"
+        }
+      ],
+      "tentative": false,
+      "dimHooks": [
+        {
+          "dim": "fate_value",
+          "comparator": ">=",
+          "threshold": 5,
+          "mul": 1.3,
+          "target": "damage"
+        }
+      ],
+      "scope": "hero",
+      "heroId": "hero_06"
+    },
+    {
+      "id": "h06_mercury_form",
+      "name": "水银之躯·完整",
+      "kind": "passive",
+      "sequence": 2,
+      "rarity": "epic",
+      "axis": "cycle",
+      "flagship": false,
+      "describe": "开战后获得循环（整场）：约每 10 tick 自动进入 50tick「水银之躯」窗口（前 2 次打向你的攻击落空）；与主动水银之躯共用状态，层数可叠至 4。",
+      "hook": [
+        "on_tick"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "not",
+            "condition": {
+              "kind": "has_status",
+              "side": "self",
+              "id": "mercury_form",
+              "cmp": ">=",
+              "n": 1
+            }
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "mercury_form",
+              "duration": null,
+              "target": "self"
+            },
+            {
+              "type": "mount_status",
+              "statusId": "mercury_cycle",
+              "duration": 50,
+              "target": "self"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_06"
+    },
+    {
+      "id": "h06_fate_loop",
+      "name": "命运循环",
+      "kind": "active",
+      "sequence": 1,
+      "rarity": "legendary",
+      "axis": "cycle",
+      "flagship": false,
+      "describe": "使一名敌人陷入循环 25tick：行动条阈值 +60（近乎永远攒不满，等效原地打转），循环往复间战场时钟照常推进 5 tick；厄运闭环：战场命运值 -1（厄运侧）；战场命运值 ≤−3 时追加 2 点精神伤害。",
+      "cost": {
+        "energy": 5,
+        "cooldown": 35,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "gauge_desc"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "fate_loop",
+          "duration": 25
+        },
+        {
+          "type": "modify_resource",
+          "resource": "fate_value",
+          "value": -1,
+          "mode": "delta",
+          "target": "board",
+          "note": "命运值写入（2026-10-01 量表写入批）：-1 推向 ≤−5 反噬档（怪物自身承担反噬风险，R5 合规语义）。"
+        },
+        {
+          "type": "advance_clock",
+          "ticks": 5,
+          "note": "循环往复 25tick：被困者原地打转，世界照走 25tick；相位流转与昼夜系挂钩"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "fate_value",
+            "cmp": "<=",
+            "n": -3
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "mental",
+              "value": 2,
+              "note": "命运值跌入厄运档，循环闭合处再受 2 点精神伤害"
+            }
+          ],
+          "else": [],
+          "note": "命运值读层（meter_compare）"
+        }
+      ],
+      "tentative": false,
+      "dimHooks": [
+        {
+          "dim": "fate_value",
+          "comparator": ">=",
+          "threshold": 5,
+          "mul": 1.3,
+          "target": "damage"
+        }
+      ],
+      "scope": "hero",
+      "heroId": "hero_06"
+    },
+    {
+      "id": "h06_reboot_cycle",
+      "name": "重启循环",
+      "kind": "passive",
+      "sequence": 1,
+      "rarity": "legendary",
+      "axis": "cycle",
+      "flagship": false,
+      "describe": "战斗开始时封存胚胎态快照（生命/状态/资源池）并获得「重启循环」（每场 1 次）：自身致死时阻止死亡、回滚状态至胚胎快照并回复至 30% 生命；若持有 3 层以上幸运，消耗 3 层再装填 1 次。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "snapshot",
+          "fields": [
+            "hp",
+            "statuses",
+            "pools"
+          ],
+          "target": "self",
+          "note": "胚胎态存档：开战即封存初始生命/状态/资源池，供致死时回滚"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "rebirth_cycle",
+          "charges": 1,
+          "duration": null,
+          "target": "self"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_06"
+    },
+    {
+      "id": "h06_reboot",
+      "name": "重启",
+      "kind": "active",
+      "sequence": 1,
+      "rarity": "legendary",
+      "axis": "cycle",
+      "flagship": false,
+      "describe": "重启全场回到最近的保存点（6 能量）：所有单位（含己方）的行动条与状态回滚至各自最近一张快照（须先以「保存」建档；无保存点则此卡无效）。不回血、不复活、不返还已消耗能量；场上有目标在循环/混乱中时分别返还 2/1 能量。",
+      "cost": {
+        "energy": 6,
+        "cooldown": 40,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "area",
+          "faction": "any",
+          "scope": "board",
+          "pickCount": "all"
+        },
+        "consumption": "zone"
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "restore_snapshot",
+              "fields": [
+                "gauge",
+                "statuses"
+              ],
+              "target": "all_units",
+              "note": "全场回到各自最近保存点：行动条与状态回滚至最近一张快照（由『保存』建立）；无快照单位不受影响——重启必须可回溯，不做无条件重置（命运族红线）"
+            }
+          ]
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "field_status_count",
+            "id": "fate_loop",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "modify_resource",
+              "resource": "energy",
+              "value": 2,
+              "mode": "delta",
+              "target": "self",
+              "note": "循环者越多，重启越省（回滚顺带省 2 能量）"
+            }
+          ],
+          "else": [],
+          "note": "循环轴收束（读 fate_loop 数量）"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "field_status_count",
+            "id": "fate_chaos",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "modify_resource",
+              "resource": "energy",
+              "value": 1,
+              "mode": "delta",
+              "target": "self",
+              "note": "混乱者众，重启省 1 能量"
+            }
+          ],
+          "else": [],
+          "note": "混乱集火读取"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_06"
+    },
+    {
+      "id": "h06_preserve",
+      "name": "保存",
+      "kind": "active",
+      "sequence": 1,
+      "rarity": "legendary",
+      "axis": "cycle",
+      "flagship": false,
+      "describe": "保存一名友军的命运片段（4 能量，每场 1 次）：存档其当前生命/资源池/状态/行动条；其死亡时以 40% 生命在原坐标复生（复刻片段替换死亡）。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 35,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "ally",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "hp_asc"
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "snapshot",
+              "fields": [
+                "hp",
+                "pools",
+                "statuses",
+                "gauge"
+              ],
+              "target": "target",
+              "note": "复刻命运片段：存档目标单位的生命/资源池/状态/行动条（主方案升格，新增项 8 已落 ddd）"
+            },
+            {
+              "type": "mount_status",
+              "statusId": "saved_fate",
+              "charges": 1,
+              "duration": null,
+              "target": "target"
+            }
+          ]
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_06"
+    },
+    {
+      "id": "h06_choice_branch",
+      "name": "选择",
+      "kind": "active",
+      "sequence": 1,
+      "rarity": "legendary",
+      "axis": "cycle",
+      "flagship": false,
+      "describe": "双目标：指定一名敌方施动者与它下一次攻击的目标（20tick 内其首次攻击打向你指定的单位）；目标在循环或混乱中时额外 -20 行动条；自身生命 -1。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "atk_desc"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "chosen_branch",
+          "charges": 1,
+          "duration": 20
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "any_of",
+            "conditions": [
+              {
+                "kind": "has_status",
+                "side": "target",
+                "id": "fate_loop",
+                "cmp": ">=",
+                "n": 1
+              },
+              {
+                "kind": "has_status",
+                "side": "target",
+                "id": "fate_chaos",
+                "cmp": ">=",
+                "n": 1
+              }
+            ]
+          },
+          "then": [
+            {
+              "type": "modify_resource",
+              "resource": "gauge.current",
+              "value": -20,
+              "mode": "delta",
+              "target": "target",
+              "note": "既定分支收束：循环/混乱中的目标再被压 20 行动条"
+            }
+          ],
+          "else": [
+            {
+              "type": "mount_status",
+              "statusId": "fortune",
+              "stacks": 1,
+              "target": "self",
+              "note": "未中者亦得一线启示：幸运 +1"
+            }
+          ],
+          "note": "循环轴收束（读 fate_loop）+ 混乱集火读取"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "hp",
+          "value": -1,
+          "mode": "delta",
+          "target": "self",
+          "note": "命运要价：自割 1 点生命"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_06"
+    },
+    {
+      "id": "h06_wheel_of_fate",
+      "name": "命运之轮",
+      "kind": "active",
+      "sequence": 0,
+      "rarity": "legendary",
+      "axis": "cycle",
+      "flagship": true,
+      "describe": "双目标：互换一名敌人与一名友军的行动条进度，自身 +3 层幸运（既是好运也是厄运）；命运之轮转动：战场时钟推进 6 tick；命运流转：战场命运值 +1（好运侧）；被轮转者陷入命运循环；自身生命 -2。",
+      "cost": {
+        "energy": 6,
+        "cooldown": 40,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy"
+        },
+        "fallbackSort": "gauge_desc"
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "modify_resource",
+              "resource": "gauge.current",
+              "between": [
+                "target",
+                "secondary_target"
+              ],
+              "note": "swap_resource（新增项 14，已落 ddd：效果上下文 §2.1；gauge.current 在可交换资源列）",
+              "mode": "swap"
+            },
+            {
+              "type": "mount_status",
+              "statusId": "fortune",
+              "stacks": 3,
+              "target": "self",
+              "note": "「更擅长预知」的体现"
+            },
+            {
+              "type": "advance_clock",
+              "ticks": 6,
+              "note": "命运之轮转动一格：战场时钟推进 6 tick（半天），相位随之流转"
+            },
+            {
+              "type": "mount_status",
+              "statusId": "fate_loop",
+              "duration": 15,
+              "note": "被轮转者困在循环里（cycle 第二写入方）"
+            }
+          ]
+        },
+        {
+          "type": "modify_resource",
+          "resource": "fate_value",
+          "value": 1,
+          "mode": "delta",
+          "target": "board",
+          "note": "命运值写入（2026-10-01 量表写入批）：怪物为 fate_value 唯一登记写入方；+1 推向 ≥+5 好运档。"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "hp",
+          "value": -2,
+          "mode": "delta",
+          "target": "self",
+          "note": "命运要价：拨轮者自割 2 点生命"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_06"
+    },
+    {
+      "id": "h06_probability_authority",
+      "name": "概率权柄",
+      "kind": "passive",
+      "sequence": 0,
+      "rarity": "legendary",
+      "axis": "cycle",
+      "flagship": true,
+      "describe": "开战后获得「概率权柄」（整场）：每 tick 对当前行动条最高的敌方单位判定一次——50% 概率使其行动条 -8（期望 -4/tick）。",
+      "hook": [
+        "on_tick"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "not",
+            "condition": {
+              "kind": "has_status",
+              "side": "self",
+              "id": "probability_authority",
+              "cmp": ">=",
+              "n": 1
+            }
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "probability_authority",
+              "duration": null,
+              "target": "self"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_06"
+    }
+  ],
+  "statusDefs": [
+    {
+      "id": "inspiration_sense",
+      "name": "灵感超高",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "modifiers": {
+        "damage_mul": {
+          "value": 1.2,
+          "filter": {
+            "targetHasStatus": [
+              "concealed",
+              "stealth",
+              "ambush_shroud"
+            ]
+          },
+          "note": "对隐匿目标伤害 ×1.2（同出口）"
+        },
+        "see_through": {
+          "value": true,
+          "note": "识破分支（共享内核 §四）：敌方隐匿/不可锁定/潜行类状态对持有者无效"
+        }
+      },
+      "maxStacks": 3,
+      "stackPolicy": "stack",
+      "note": "灵感层（2026-10-24 ⑤：maxStacks 3 / stack）——预感越强层数越厚；消耗出口=未来画面/危险预感/反占卜的兑现段。"
+    },
+    {
+      "id": "danger_sense",
+      "name": "危险预感",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": 50,
+      "modifiers": {
+        "damage_taken_mul": {
+          "value": 0.6,
+          "charges": 1,
+          "note": "次数型减伤（C6）：on_take_damage 响应式派发 -1，归零卸载"
+        }
+      },
+      "triggers": [
+        {
+          "event": "on_remove",
+          "effects": [
+            {
+              "type": "mount_status",
+              "statusId": "danger_sense",
+              "charges": 1,
+              "duration": 50,
+              "target": "self",
+              "note": "自续链：预感一次次重新浮现（新增项 5，on_remove 合法化）"
+            }
+          ]
+        },
+        {
+          "event": "on_take_damage",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "has_status",
+                "side": "self",
+                "id": "inspiration_sense",
+                "cmp": ">=",
+                "n": 1
+              },
+              "then": [
+                {
+                  "type": "heal",
+                  "value": 1,
+                  "target": "self",
+                  "note": "预感兑现：灵感在，痛感先一步"
+                }
+              ],
+              "else": [],
+              "note": "灵感轴收束（读 inspiration_sense）"
+            }
+          ]
+        }
+      ],
+      "note": "乘区审批：0.6=深度减免档（石化/集群/直觉类重态）"
+    },
+    {
+      "id": "machine_mind",
+      "name": "恐怖计算",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "gauge.rate",
+              "value": 8,
+              "mode": "delta",
+              "duration": null,
+              "target": "self",
+              "note": "INV-S5 合规：改速率不改派生行动周期"
+            }
+          ]
+        }
+      ],
+      "immune": {
+        "categories": [
+          "retarget"
+        ],
+        "note": "精准控制：自身攻击目标不会被改写（新 StatusCategory retarget，新增项 19）"
+      }
+    },
+    {
+      "id": "anti_divination",
+      "name": "反占卜",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "modifiers": {
+        "gaugeReductionImmune": {
+          "value": true,
+          "scope": "self",
+          "note": "免疫 gauge.current 减少（新增项 18，H27/H31）"
+        },
+        "concealRevealBlock": {
+          "value": true,
+          "scope": "self",
+          "note": "敌方识破/隐匿忽略/必定命中类状态对持有者无效（C8 反向，共享内核 §四 识破分支）"
+        }
+      },
+      "triggers": [
+        {
+          "event": "on_phase_change",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "has_status",
+                "side": "self",
+                "id": "inspiration_sense",
+                "cmp": ">=",
+                "n": 2
+              },
+              "then": [
+                {
+                  "type": "mount_status",
+                  "statusId": "fortune",
+                  "stacks": 1,
+                  "target": "self",
+                  "note": "星象翻页，先觉者得运"
+                }
+              ],
+              "else": [],
+              "note": "灵感轴收束（读 inspiration_sense ≥2）"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lucky_streak",
+      "name": "幸运者",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": 25,
+      "triggers": [
+        {
+          "event": "on_remove",
+          "effects": [
+            {
+              "type": "mount_status",
+              "statusId": "fortune",
+              "stacks": 1,
+              "target": "self"
+            },
+            {
+              "type": "mount_status",
+              "statusId": "lucky_streak",
+              "duration": 25,
+              "target": "self",
+              "note": "自续链：约每 5 tick +1 层幸运（高潮期 ×2 由命运潮汐调制）"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fortune",
+      "name": "幸运",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": null,
+      "maxStacks": 3,
+      "stackPolicy": "stack",
+      "note": "H11 计数型资源状态（新增项 1 主体已落：F51 stacks + F48 consume；唯「监听自身获得指定状态」触发面未落）。maxStacks 基础 3，可被绝对灵感 +1（→4）、赢家 +3（→6）提升。消耗出口：赢家 4 层换免死 / 赐福 2 层换祝福 / 重启循环 3 层续接"
+    },
+    {
+      "id": "tide_low",
+      "name": "命运潮汐·低潮",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": 30,
+      "triggers": [
+        {
+          "event": "on_take_damage",
+          "effects": [
+            {
+              "type": "mount_status",
+              "statusId": "fortune",
+              "stacks": 1,
+              "target": "self",
+              "note": "低潮期挨打攒运气"
+            }
+          ]
+        },
+        {
+          "event": "on_remove",
+          "effects": [
+            {
+              "type": "mount_status",
+              "statusId": "tide_high",
+              "duration": 30,
+              "target": "self",
+              "note": "双相位交替（H50 形态组，零新机制）"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tide_high",
+      "name": "命运潮汐·高潮",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": 30,
+      "modifiers": {
+        "fortuneGainMul": {
+          "value": 1.5,
+          "note": "高潮期幸运层数获取 ×2（幸运者等来源）；2026-10-01 乘区审批：超 1.5 上限，2→1.5（封顶，语义保留）"
+        }
+      },
+      "triggers": [
+        {
+          "event": "on_remove",
+          "effects": [
+            {
+              "type": "mount_status",
+              "statusId": "tide_low",
+              "duration": 30,
+              "target": "self"
+            }
+          ]
+        },
+        {
+          "event": "on_turn_start",
+          "effects": [
+            {
+              "type": "mount_status",
+              "statusId": "fortune",
+              "stacks": 1,
+              "stackMode": "add",
+              "duration": null,
+              "target": "self",
+              "note": "回合轮转：高潮期每个回合开始幸运 +1——命运轮转状态面（矩阵 on_turn_start 正主落地，补漏批① 2026-10-02）"
+            }
+          ]
+        }
+      ],
+      "note": " ｜ 2026-10-02 补漏批①：on_turn_start 回合轮转（命运轮转状态面——矩阵触发点正主落地）"
+    },
+    {
+      "id": "windfall",
+      "name": "意外之财",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "triggers": [
+        {
+          "event": "on_status_gain",
+          "filter": {
+            "statusId": "fortune"
+          },
+          "effects": [
+            {
+              "type": "modify_resource",
+              "resource": "energy",
+              "value": 1,
+              "mode": "delta",
+              "target": "self",
+              "note": "每次获得幸运层数 +1 能量，单次 2 层则 +2"
+            }
+          ],
+          "note": "「监听自身获得指定状态」触发面（伪事件，见 frameworkFlags）"
+        }
+      ]
+    },
+    {
+      "id": "calamity_foresight",
+      "name": "预见灾祸",
+      "category": [
+        "buff",
+        "reactive"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "triggers": [
+        {
+          "event": "on_take_damage",
+          "effects": [
+            {
+              "type": "mount_status",
+              "statusId": "guard",
+              "duration": 10,
+              "target": "self",
+              "note": "可预见并准备：10t 内刷新不叠层",
+              "value": 0.85
+            },
+            {
+              "type": "mount_status",
+              "statusId": "misfortune",
+              "stacks": 1,
+              "duration": 20,
+              "target": "attacker",
+              "note": "灾祸反噬攻击者（F61 RedirectRule.to attacker）"
+            }
+          ]
+        }
+      ],
+      "note": " ｜ 2026-10-02 补漏批①：reactive 类别追认（命运反噬——受击时反噬攻击者的载荷本就在，补类别认领正主）"
+    },
+    {
+      "id": "misfortune",
+      "name": "厄运",
+      "category": [
+        "debuff",
+        "fear"
+      ],
+      "dispelable": true,
+      "duration": 20,
+      "maxStacks": 3,
+      "stackPolicy": "refresh",
+      "modifiers": {
+        "gaugeRateMul": {
+          "value": 0.9,
+          "perStack": true,
+          "note": "每层行动条速率 ×0.9 乘算（H24），3 层 = ×0.729，INV-S5 合规"
+        },
+        "clockwork_tick": {
+          "payload": "on_advance_clock",
+          "note": "机芯联动（2026-10-02 新键首发·批次九附项）：每次 advance_clock 推进时对持态者结算一次状态载荷——命运循环状态面（怪物签名）"
+        }
+      },
+      "stackThreshold": {
+        "stacks": 3,
+        "effects": [
+          {
+            "type": "target_override",
+            "anchor": "first_empty",
+            "note": "厄运爆发：立即打空一次并清空层数（H2 stackThreshold，R5 确定性写法，C7 锚点）"
+          }
+        ]
+      },
+      "note": "H2 参数化复合 debuff 母版（新增项 10）；挂载刷新不叠层，避免乘区指数化 ｜ 2026-10-02 批次五：水手天灾降临读取（天灾乘厄运跨系段） ｜ 2026-10-02 批次九附项：clockwork_tick 修饰键首发（命运循环状态面） ｜ 2026-10-02 补漏批①：fear 类别认领（厄运惊惧——共享 fear 语义：不眠者 dread 是恐惧回击正主，怪物是厄运缠身的心惊胆战，语义分叉不冲突）",
+      "crossPathway": true,
+      "participants": [
+        "sleepless",
+        "monster",
+        "sailor"
+      ]
+    },
+    {
+      "id": "mind_storm",
+      "name": "精神风暴",
+      "category": [
+        "retarget"
+      ],
+      "dispelable": true,
+      "duration": 15,
+      "behaviorModifiers": [
+        {
+          "op": "target_override",
+          "anchor": "first_empty",
+          "note": "持有者打出的攻击被改写为最近空坐标（C7 ✅，每次生效消耗 1 charges）"
+        }
+      ]
+    },
+    {
+      "id": "near_death_save",
+      "name": "免死",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": 30,
+      "lethalProtect": true,
+      "note": "H7 致死保护母版（新增项 3，与傀儡系同源同一母版）：化解下次致死伤害、保留 1 血；注意不是复活；hpFloor=1"
+    },
+    {
+      "id": "fortune_mastery",
+      "name": "赢家·掌控幸运",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "modifiers": {
+        "fortuneMaxStacksBonus": {
+          "value": 3,
+          "note": "fortune.maxStacks 3 → 6"
+        }
+      }
+    },
+    {
+      "id": "fate_sight",
+      "name": "超强预感",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "gauge.rate",
+              "value": 5,
+              "mode": "delta",
+              "duration": null,
+              "target": "self"
+            }
+          ]
+        }
+      ],
+      "modifiers": {
+        "gaugeReductionImmune": {
+          "value": true,
+          "scope": "all_allies",
+          "note": "新增项 18：免疫推条布尔 + scope 参数（自身/全队两档），序列8 反占卜的全队版"
+        },
+        "concealRevealBlock": {
+          "value": true,
+          "scope": "all_allies",
+          "note": "敌方识破/隐匿忽略类状态对己方全体无效（C8 反向）"
+        }
+      }
+    },
+    {
+      "id": "absolute_inspiration",
+      "name": "绝对灵感",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": 25,
+      "triggers": [
+        {
+          "event": "on_remove",
+          "effects": [
+            {
+              "type": "mount_status",
+              "statusId": "fortune",
+              "stacks": 1,
+              "target": "self",
+              "note": "灵感产出幸运：约每 5 tick +1 层（自续链同幸运者）"
+            },
+            {
+              "type": "mount_status",
+              "statusId": "absolute_inspiration",
+              "duration": 25,
+              "target": "self"
+            }
+          ]
+        },
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "energy_regen",
+              "value": 0.3,
+              "mode": "delta",
+              "duration": null,
+              "target": "self"
+            }
+          ]
+        }
+      ],
+      "modifiers": {
+        "fortuneMaxStacksBonus": {
+          "value": 1,
+          "note": "fortune.maxStacks 3 → 4"
+        },
+        "damage_mul": {
+          "value": 1.2,
+          "filter": {
+            "targetHasStatus": [
+              "misfortune"
+            ]
+          },
+          "note": "H4 按状态过滤的伤害乘区（新增项 17 口径），💡⚡ 咬合"
+        }
+      }
+    },
+    {
+      "id": "blessing_gift",
+      "name": "赐福",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": 20,
+      "modifiers": {
+        "damage_mul": 1.2,
+        "damage_taken_mul": 0.9
+      },
+      "note": "H10 参数化增益母版（新增项 11，与 F14 tutelage 同源）"
+    },
+    {
+      "id": "mercury_body",
+      "name": "水银之躯",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": 15,
+      "modifiers": {
+        "incomingMiss": {
+          "to": "first_empty",
+          "charges": 2,
+          "note": "入射侧闪避型转向（新增项 4，执行参数 §一 RedirectRule.to first_empty，ddd 明示怪物·水银之躯即此承载）：打向持有者的攻击改写为空坐标，每次实际生效消耗 1 层；与 C7 出射侧目标改写共用锚点"
+        }
+      },
+      "note": "退化方案（damage_taken_mul: 0 的 charges 型状态）仍备，建议先上退化版验证强度"
+    },
+    {
+      "id": "fate_chaos",
+      "name": "混乱",
+      "category": [
+        "retarget"
+      ],
+      "dispelable": true,
+      "duration": 25,
+      "behaviorModifiers": [
+        {
+          "op": "target_override",
+          "anchor": "nearest_any",
+          "note": "打向不分阵营的最近单位（新增项 13 锚点 nearest_any，已并入 H12 状态族母版）；状态 ID 按命名冲突提醒取 fate_chaos，避开律师途径 chaos 撞车"
+        }
+      ],
+      "note": "charges 2：前 2 次攻击生效，每次消耗 1 层",
+      "crossPathway": true,
+      "participants": [
+        "lawyer",
+        "monster",
+        "arbiter"
+      ]
+    },
+    {
+      "id": "mercury_form",
+      "name": "水银之躯·完整",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "note": "完整神话生物形态承载；mercury_body 实例由 mercury_cycle 周期发放，与主动技能共用同一状态（层数可叠加到 4）：保底窗口 + 主动补窗"
+    },
+    {
+      "id": "mercury_cycle",
+      "name": "水银之躯·循环",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": 50,
+      "triggers": [
+        {
+          "event": "on_remove",
+          "effects": [
+            {
+              "type": "mount_status",
+              "statusId": "mercury_body",
+              "charges": 2,
+              "duration": 50,
+              "target": "self",
+              "note": "约每 10 tick 自动进入一次「不被命中」窗口（原著「十秒」「被动」逐字对应）"
+            },
+            {
+              "type": "mount_status",
+              "statusId": "mercury_cycle",
+              "duration": 50,
+              "target": "self",
+              "note": "自续链（新增项 5）"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fate_loop",
+      "name": "命运循环",
+      "category": [
+        "debuff"
+      ],
+      "dispelable": true,
+      "duration": 25,
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "gauge.threshold",
+              "value": 60,
+              "mode": "delta",
+              "duration": 25,
+              "target": "self",
+              "note": "退化方案（新增项 7 拍板采用）：抬高行动条阈值延后填满时机，等效「循环往复」；INV-S5 合规（改源属性 threshold，原稿 modify_stat 写法不可用）"
+            }
+          ]
+        }
+      ],
+      "note": "主方案「行动条填满即清零」需 on_gauge_full 事件，已不立项（不开第 13 触发点）"
+    },
+    {
+      "id": "rebirth_cycle",
+      "name": "重启循环",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "triggers": [
+        {
+          "event": "on_death",
+          "effects": [
+            {
+              "type": "heal",
+              "healToRatio": 0.3,
+              "target": "self",
+              "note": "A22：回复至 30% 最大生命"
+            },
+            {
+              "type": "restore_snapshot",
+              "fields": [
+                "statuses"
+              ],
+              "target": "self",
+              "note": "逆转为胚胎：状态回滚至开战快照（胚胎态存档由【重启循环】卡面建立）；比 dispel 更彻底——战后获得的一切状态一并还原"
+            },
+            {
+              "op": "if",
+              "condition": {
+                "kind": "has_status",
+                "side": "self",
+                "id": "fortune",
+                "cmp": ">=",
+                "n": 3
+              },
+              "then": [
+                {
+                  "type": "mount_status",
+                  "statusId": "fortune",
+                  "stacks": -3,
+                  "stackMode": "consume"
+                },
+                {
+                  "type": "mount_status",
+                  "statusId": "rebirth_cycle",
+                  "charges": 1,
+                  "duration": null,
+                  "target": "self",
+                  "note": "循环不是无限的，得用运气去买：重新装填 1 次 charges（原实例已消耗归零卸载，此处重挂）"
+                }
+              ],
+              "else": []
+            }
+          ]
+        }
+      ],
+      "note": "主方案升格（2026-10-02 差异化风格迭代）：致死回滚 = restore_snapshot(statuses) 胚胎态还原 + 回复至 30% 生命；依赖卡面开战 snapshot 建档；「洗掉疯狂」从 dispel 升格为状态回滚；H7 致死保护母版（新增项 3，傀儡系/耕种者/不眠者/歌颂者/秘祈人同源统一）：逆转为胚胎 = 回到初始态保住一命，非死后召回",
+      "lethalProtect": true
+    },
+    {
+      "id": "saved_fate",
+      "name": "保存",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": null,
+      "triggers": [
+        {
+          "event": "on_death",
+          "effects": [
+            {
+              "type": "spawn",
+              "reviveOf": "self",
+              "hpRatio": 0.4,
+              "position": "original",
+              "note": "退化方案（C4 miracle 式死后召回）：把「死」替换为「以 40% 血归来」；G4 reviveOf + C5 hpRatio/position 已登记。与重启循环（自身致死保护）不同：本条是他人死后召回"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chosen_branch",
+      "name": "选择",
+      "category": [
+        "retarget"
+      ],
+      "dispelable": true,
+      "duration": 20,
+      "behaviorModifiers": [
+        {
+          "op": "target_override",
+          "anchor": "manual",
+          "manualTarget": "secondary_target",
+          "note": "新增项 12：锚点 manual 已落 ddd（共享内核 §一 anchor 枚举 + 执行参数 §2.2）；本途径唯一由玩家决定改写方向的 target_override（H12 状态族多注册锚点，不新增机制）"
+        }
+      ]
+    },
+    {
+      "id": "probability_authority",
+      "name": "概率权柄",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "triggers": [
+        {
+          "event": "on_tick",
+          "minIntervalTicks": 5,
+          "note": "2026-10-09 节流：每 5tick 一次（1 回合=5tick，执行参数 §2.2 权宜规避）",
+          "target": {
+            "faction": "enemy",
+            "scope": "single",
+            "sort": "gauge_desc",
+            "note": "确定性选取当前行动条最高的敌方单位（新增项 21：sort gauge_desc + faction enemy，H13 排序键族），目标选择零随机（R1）"
+          },
+          "effects": [
+            {
+              "type": "modify_resource",
+              "resource": "gauge.current",
+              "value": -8,
+              "mode": "delta",
+              "condition": {
+                "kind": "chance",
+                "p": 0.5
+              },
+              "note": "全稿唯一概率（G1 口径：condition 挂在 EffectRef 上，无 Chance 算子）；只作用行动条这一非伤害维度（R5），单次抽样（R4），R3 登记可筛出"
+            },
+            {
+              "op": "if",
+              "condition": {
+                "kind": "meter_compare",
+                "key": "fate_value",
+                "cmp": ">=",
+                "n": 3
+              },
+              "then": [
+                {
+                  "type": "modify_resource",
+                  "resource": "gauge.current",
+                  "value": -4,
+                  "mode": "delta",
+                  "note": "命运值≥+3：权柄判定加码 -4"
+                }
+              ],
+              "else": [],
+              "note": "fate_value 读取方（可操作变量）"
+            },
+            {
+              "op": "if",
+              "condition": {
+                "kind": "has_status",
+                "side": "target",
+                "id": "fate_loop",
+                "cmp": ">=",
+                "n": 1
+              },
+              "then": [
+                {
+                  "type": "modify_resource",
+                  "resource": "gauge.current",
+                  "value": -4,
+                  "mode": "delta",
+                  "note": "循环者被权柄额外压制 -4"
+                }
+              ],
+              "else": [],
+              "note": "循环轴收束（读 fate_loop）"
+            },
+            {
+              "op": "if",
+              "condition": {
+                "kind": "has_status",
+                "side": "target",
+                "id": "fate_chaos",
+                "cmp": ">=",
+                "n": 1
+              },
+              "then": [
+                {
+                  "type": "modify_resource",
+                  "resource": "gauge.current",
+                  "value": -4,
+                  "mode": "delta",
+                  "note": "混乱者被权柄额外压制 -4"
+                }
+              ],
+              "else": [],
+              "note": "混乱集火读取"
+            }
+          ]
+        }
+      ],
+      "note": "R3 登记 / R4 单次抽样 / R5 非伤害维度，三条纪律全守"
+    }
+  ],
   "unitDefs": [],
   "zoneDefs": [],
   "domainDefs": []
