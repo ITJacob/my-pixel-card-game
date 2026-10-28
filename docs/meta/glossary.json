@@ -1,0 +1,2612 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-10-02",
+  "purpose": "技能池展示站点的术语词典：英文枚举 key → 中文名 + 解释。权威来源为 docs/meta/SCHEMA.md 与 docs/ddd/params/ 各篇；新增枚举值须先按编辑纪律登记 schema/SCHEMA.md，再回本文件补词条。",
+  "categories": {
+    "primitive": {
+      "label": "效果原语",
+      "desc": "效果的最小执行单元——卡面效果与状态载荷都由原语搭出来。原语集封闭，权威源是 skills.schema.json 的 effect.oneOf；新增原语必须先登记 SCHEMA.md §5.2，否则枚举对账脚本报漂移。",
+      "source": "SCHEMA.md §5.2",
+      "terms": {
+        "damage": {
+          "zh": "伤害",
+          "brief": "对目标造成指定元素的伤害",
+          "detail": "关键字段 value/element/mul/spread/pierce/lethal/neverMiss。伤害数值零随机（R1）。"
+        },
+        "heal": {
+          "zh": "治疗",
+          "brief": "恢复目标生命",
+          "detail": "治疗一律走 heal，不混 modify_resource（A22）。mode: setHp/hpMaxRatio/to_ratio。"
+        },
+        "mount_status": {
+          "zh": "挂载状态",
+          "brief": "给目标施加一个状态实例",
+          "detail": "字段 statusId/duration/stacks/stackMode/charges。落空/阻挡语义一律用 charges 次数型确定性写法（R5）。"
+        },
+        "modify_stat": {
+          "zh": "修正属性",
+          "brief": "直接修改单位属性值",
+          "detail": "无宿主、不可驱散；要可见/可驱散的修正用 mount_status。mode: delta/set/mul/to_at_least/to_at_most。"
+        },
+        "modify_resource": {
+          "zh": "修正资源",
+          "brief": "增减资源池数值",
+          "detail": "resource ∈ hp/energy/shield/armor/lost/gauge.current；mode: delta/set/swap。"
+        },
+        "move": {
+          "zh": "位移",
+          "brief": "改变单位在场上的位置",
+          "detail": "7 种 op：push_back/pull_forward/swap_ally/swap_neighbor/insert_tail_cross_lane/param/charge_forward。"
+        },
+        "spawn": {
+          "zh": "召唤",
+          "brief": "在场上生成单位",
+          "detail": "复活走 reviveOf 字段，不新增原语（G4）。position: tail/at_unit/original。"
+        },
+        "dispel": {
+          "zh": "驱散",
+          "brief": "移除目标身上的状态实例",
+          "detail": "只作用于 StatusInstance（INV-P7）。dispelTarget: unit/domain；尊重 dispelable，不拆装备槽武器。"
+        },
+        "disarm": {
+          "zh": "缴械",
+          "brief": "卸下并摧毁目标指定装备槽的装备",
+          "detail": "装备是 EquipmentInstance（武器/护具两槽），不是状态；dispel 不作用于装备。无背包，卸下即下线并触发同槽公用 CD。"
+        },
+        "modify_weapon": {
+          "zh": "改写武器",
+          "brief": "补满/增减耐久、增减攻击加值",
+          "detail": "weapon 槽专用；目标无武器时为空操作；攻击加值走装备期 provenance（sourceId = EquipmentInstance）。"
+        },
+        "recover_equipment": {
+          "zh": "回收装备",
+          "brief": "主动下线当前装备，同槽公用 CD 按 cooldownMul（缺省 0.3）缩减",
+          "detail": "不占行动机会由卡面 cost.opportunity:0 表达；下线那一刻同槽公用 CD 才开始计。"
+        },
+        "drain": {
+          "zh": "汲取",
+          "brief": "从目标吸取资源并按比例回复自身",
+          "detail": "resource ∈ hp/energy，healRatio 控制回复比例。"
+        },
+        "domain": {
+          "zh": "界域",
+          "brief": "展开/替换战场界域",
+          "detail": "界域三件套 DomainDef→Grant→Instance。op: overlay(叠加)/swap(置换)/hero(英雄级)。"
+        },
+        "translocate": {
+          "zh": "跨层位移",
+          "brief": "目标暂时离场，到期回归",
+          "detail": "op: pull_into(拉入)/banish(放逐)。离场期间 detached：不持坐标、计时冻结，到期于己方队尾回归；banish 可带回归载荷。"
+        },
+        "modify_damage": {
+          "zh": "修正伤害",
+          "brief": "修改一次伤害结算的系数",
+          "detail": "scope: taken(承伤)/dealt(造成伤害)，配合 mul。"
+        },
+        "target_override": {
+          "zh": "目标改写",
+          "brief": "改写本次效果的目标选择",
+          "detail": "字段 faction/anchor/sort，覆盖原选靶请求。"
+        },
+        "transfer_status": {
+          "zh": "转移状态",
+          "brief": "把状态从一个单位转移到另一个单位",
+          "detail": "mode: copy(复制)/rewrite(改写)；可带 mapping 与 fallback。"
+        },
+        "write_rule_slot": {
+          "zh": "写入规则槽",
+          "brief": "把一条规则写进战场级 Rules[3] 指定槽位",
+          "detail": "slot(0–2) × field(trigger/punish/exemptions/scope)。服务仲裁人律令轴。"
+        },
+        "modify_rule_slot": {
+          "zh": "修改规则槽",
+          "brief": "改写/追加/移除既有槽位规则",
+          "detail": "mode: replace/append/remove。服务律师与通识者的僭越轴。"
+        },
+        "snapshot": {
+          "zh": "快照",
+          "brief": "记录当前状态供后续读取",
+          "detail": "与 restore_snapshot 成对使用。"
+        },
+        "restore_snapshot": {
+          "zh": "恢复快照",
+          "brief": "读取此前快照的状态",
+          "detail": "与 snapshot 成对使用。"
+        },
+        "echo_last_skill": {
+          "zh": "回响上一技能",
+          "brief": "按比例重放上一个技能的效果",
+          "detail": "potency × rounding(ceil/floor/round)。权柄技能不可被重放。"
+        },
+        "gauge_shuffle": {
+          "zh": "行动条重排",
+          "brief": "重排场上单位的行动条进度",
+          "detail": "resource 固定 gauge.current。"
+        },
+        "status_shuffle": {
+          "zh": "状态重排",
+          "brief": "重排/轮换单位身上的状态",
+          "detail": "mode/sort 控制重排方式。"
+        },
+        "modify_skill": {
+          "zh": "修改技能",
+          "brief": "改写技能实例的运行时属性",
+          "detail": "行为层修改：清 CD / 改施法消耗 / 吟唱转瞬发 / 完整改写 TargetSpec（targetSpecOverride 对象：selectionMode+request 全字段，对齐 DDD 可改技能全部选靶属性，而非仅范围）。"
+        },
+        "modify_status": {
+          "zh": "修改状态",
+          "brief": "改写已存在状态实例的属性",
+          "detail": "改持续/最大叠加层数/可驱散性；区别于 mount_status（施加新状态）。"
+        },
+        "modify_targetability": {
+          "zh": "修改可选性",
+          "brief": "改变单位「可被选为目标」的属性",
+          "detail": "direction: all/enemy_targeted/enemy_aoe/ally；pierce 控制穿透。"
+        },
+        "reveal": {
+          "zh": "揭示",
+          "brief": "使隐匿单位显形",
+          "detail": "scope: to_source/to_all。纯驱散隐匿仍用 dispel(category=conceal)，本原语用于「显形但不驱散」。"
+        },
+        "grant_immunity": {
+          "zh": "授予免疫",
+          "brief": "授予临时/条件性免疫",
+          "detail": "against(statusCategory[]) × element × charges × duration。"
+        },
+        "take_control": {
+          "zh": "夺取控制",
+          "brief": "持续期内目标视为己方行动",
+          "detail": "onExpire: revert(还原)/die(死亡)/keep(保留)；actionPolicy: full/attack_only/move_only。"
+        },
+        "advance_clock": {
+          "zh": "时钟推进",
+          "brief": "board.clock += N（mod 72，1 tick = 20 分钟）；触发 on_phase_change。不提供回拨算子"
+        },
+        "set_luminance": {
+          "zh": "光照度覆写",
+          "brief": "写入战场覆写层 board.lumOverride（0–10，带 duration，压栈顶），到期回落派生值；服务「黑夜降临」「白昼」等权柄卡"
+        }
+      }
+    },
+    "operator": {
+      "label": "效果算子",
+      "desc": "把多个原语组合成复合效果的三个结构算子（顺序 / 重复 / 条件分支）。算子自身不含结算语义，只决定原语在什么条件下、执行几次。",
+      "source": "SCHEMA.md §5.1",
+      "terms": {
+        "sequence": {
+          "zh": "顺序执行",
+          "brief": "steps 依次执行，编目期展开为扁平 EffectRef"
+        },
+        "repeat": {
+          "zh": "重复",
+          "brief": "steps 重复 count 次；count 可用 {valueFrom, filter, cap} 运行期计算"
+        },
+        "if": {
+          "zh": "条件分支",
+          "brief": "condition 成立走 then，否则走 else（可选）"
+        }
+      }
+    },
+    "cardKind": {
+      "label": "卡牌类型",
+      "desc": "一张卡进入结算的路径。主动技能由单位在行动中施放，因此必填能量、攻击性质与选靶；被动常驻生效、由触发钩子唤起，没有施放期参数；装备牌打出即装备（武器/护具两槽）、召唤牌打出即落场，均占用主动槽。",
+      "source": "SCHEMA.md §3.2",
+      "terms": {
+        "active": {
+          "zh": "主动",
+          "brief": "需消耗能量主动施放；必须有 cost/reach/target"
+        },
+        "passive": {
+          "zh": "被动",
+          "brief": "挂在触发点上自动生效；必须有 hook"
+        },
+        "equipment": {
+          "zh": "装备",
+          "brief": "打出即装备（武器/护具两槽，同槽顶替）；必须有 cost/equipment；effects 为可选战吼"
+        },
+        "summon": {
+          "zh": "召唤",
+          "brief": "打出即落场；必须有 cost/summon；effects 为可选战吼（禁含 spawn 段）"
+        }
+      }
+    },
+    "rarity": {
+      "label": "稀有度",
+      "desc": "投放强度档位，决定单卡预算上限与可出位次范围。强度按稀有度给基线，不靠单卡手调数值。",
+      "source": "manifest.rarityMap / SCHEMA.md §3.1",
+      "terms": {
+        "common": {
+          "zh": "普通",
+          "brief": "档 9–8"
+        },
+        "uncommon": {
+          "zh": "精良",
+          "brief": "档 7–6"
+        },
+        "rare": {
+          "zh": "稀有",
+          "brief": "档 5–4"
+        },
+        "epic": {
+          "zh": "史诗",
+          "brief": "档 3–2"
+        },
+        "legendary": {
+          "zh": "传说",
+          "brief": "档 1–0"
+        }
+      }
+    },
+    "reach": {
+      "label": "攻击性质",
+      "desc": "攻击的作用形态。它与站位、与选靶方式正交——只作为守卫姿态等来源过滤的判据，非攻击类行为填 none。",
+      "source": "skills.schema.json",
+      "terms": {
+        "none": {
+          "zh": "非攻击",
+          "brief": "非攻击类行为（治疗/增益/位移/召唤等），不触发对撞、不可被拦截"
+        },
+        "melee": {
+          "zh": "近战",
+          "brief": "近身对抗的攻击性质（贴身，可为物理或法术）；受击方挂决斗姿态时触发同步对撞"
+        },
+        "thrown": {
+          "zh": "投掷",
+          "brief": "有形投射物发射的攻击性质（弓箭/投矛/火球等抛射，可为物理或法术），与双方站位无关"
+        },
+        "spell": {
+          "zh": "法术",
+          "brief": "无形作用的攻击性质（诅咒/祝福/精神影响等，无投射物），与双方站位无关"
+        }
+      }
+    },
+    "gender": {
+      "label": "性别限制",
+      "desc": "单位性别及其获取期约束。战斗内不可变，只以条件谓词与候选过滤的形式参与结算，不进核心伤害/资源逻辑。",
+      "source": "SCHEMA.md §3.1/§7",
+      "terms": {
+        "any": {
+          "zh": "不限",
+          "brief": "无性别要求"
+        },
+        "male": {
+          "zh": "男",
+          "brief": "仅男性单位可用"
+        },
+        "female": {
+          "zh": "女",
+          "brief": "仅女性单位可用（高位谱系限定）"
+        }
+      }
+    },
+    "selectionMode": {
+      "label": "选靶方式",
+      "desc": "目标交给玩家挑还是系统按规则自动落。候选数不超过取数时不触发玩家选择；自动分支必须给出兜底排序键，保证 AI 与状态触发也能确定性地取到目标。",
+      "source": "SCHEMA.md §4",
+      "note": "desc 中「候选数不超过取数」的取数 = `cardTarget.pickCount`（DDD I 节点 CandidatePool.pickCount，2026-09-20 回补，此前 schema 完全未建模）：manual 且候选数 > pickCount 才等待玩家选择，候选数 ≤ pickCount 直接全取不打断。",
+      "terms": {
+        "manual": {
+          "zh": "手动选择",
+          "brief": "系统按 request（锚点+区域+过滤）圈出候选池，玩家从中选取；玩家未指定时按 fallbackSort 兜底"
+        },
+        "auto": {
+          "zh": "自动选择",
+          "brief": "在 manual 候选池基础上直接按 fallbackSort 取优先级最高者，无需玩家操作"
+        }
+      }
+    },
+    "mode": {
+      "label": "目标形态",
+      "desc": "选靶的第一级分流：候选池的元素是「单位实体」还是「坐标区块」。原 DDD TargetSpec.mode——此前只在 ddd 占一行、schema 摆错层、数据与引擎均未接通，现已归位到 request 层并接通。",
+      "source": "共享内核参数 §一 / skills.schema.json unitRequest.mode",
+      "note": "⚠️ 与 selectionMode（manual/auto，**谁拍板最终目标**）是两个独立维度，不可混用——selectionMode 管「手动还是自动」，mode 管「池子里装什么」。**AoE 的判据是 mode=area，不是 pickCount**：unit 模式下 pickCount 定命中数（1/all/N），area 模式下 pickCount 不参与。mode=unit 时 consumption 强制 instant 或 translocate。",
+      "terms": {
+        "unit": {
+          "zh": "点目标",
+          "brief": "以单位实体为池：指定具体单位，命中数由 pickCount 定；「不可被选中」类排除在此生效"
+        },
+        "area": {
+          "zh": "区域目标",
+          "brief": "以坐标区块为池：区域内全部在位单位命中（AoE），pickCount 不参与"
+        }
+      }
+    },
+    "faction": {
+      "label": "阵营",
+      "desc": "选靶的第一层过滤：以施法者为参照决定「找谁」——自己、友军、敌军或任意。它决定候选池，不决定取几个。",
+      "source": "SCHEMA.md §4 / 共享内核参数 §一",
+      "note": "⚠️ `any` 与 `none` **语义不同，不可互换**：`any` = **不限阵营**，跨敌我双方都纳入候选池（**有目标**，只是阵营随便）；`none` = **无目标对象**，配合 `scope: none`，候选池为空、I 节点直接跳过。二者原为 DDD 取值域缺失项（schema 有且数据在用），2026-09-20 已回补登记进 DDD，三源现已一致。",
+      "terms": {
+        "self": {
+          "zh": "自身",
+          "brief": "仅施法者自己"
+        },
+        "ally": {
+          "zh": "友军",
+          "brief": "己方其他单位"
+        },
+        "enemy": {
+          "zh": "敌军",
+          "brief": "对方单位"
+        },
+        "any": {
+          "zh": "任意",
+          "brief": "不限阵营，敌我双方都纳入候选池（有目标、阵营随便）"
+        },
+        "none": {
+          "zh": "无",
+          "brief": "无目标对象，配合 scope:none 使候选池为空、I 节点跳过"
+        },
+        "self_or_ally": {
+          "zh": "自身或友军",
+          "brief": "己方任一单位（含自己）"
+        }
+      }
+    },
+    "scope": {
+      "label": "几何范围",
+      "desc": "选靶的几何层：anchor（原点）确定后，scope 以锚点为中心划定「取哪片区域」。与选数 pickCount 正交——scope 管区域形态、pickCount 管从区域里取几个。缺省 whole_lane（被施法侧半场 4 格）。",
+      "source": "SCHEMA.md §4 / ddd/params/共享内核参数.md §一",
+      "note": "2026-10-03 §10 几何化重构：scope 由 single/all/none 翻案回归几何枚举（推翻 2026-09-20 裁定）。laneRef 维度已并入 scope——「整路/全场/跨路」是 scope 的枚举值，不再靠 scope×laneRef 组合表达。front_/behind_/diamond_ 带数字后缀（1–3 / 1–2），用 patterns 收录。",
+      "terms": {
+        "point": {
+          "zh": "单体点",
+          "brief": "围绕锚点 1 格"
+        },
+        "cross_lane": {
+          "zh": "跨路",
+          "brief": "与锚点同 index 的敌我两路对应格"
+        },
+        "whole_lane": {
+          "zh": "整路",
+          "brief": "被施法侧半场整路 4 格"
+        },
+        "board": {
+          "zh": "全场",
+          "brief": "全场 16 格"
+        },
+        "none": {
+          "zh": "无",
+          "brief": "无作用对象（目标完全由 effectTarget 二级寻址）"
+        },
+        "cross_lane_row": {
+          "zh": "另一路整条",
+          "brief": "另一条路的整条半场 4 格（跨路 AoE；提案F）"
+        }
+      },
+      "patterns": [
+        {
+          "match": "front_",
+          "zh": "前方{1}格",
+          "brief": "锚点朝中线方向前 n 格（敌锚点=最前 n 敌）"
+        },
+        {
+          "match": "behind_",
+          "zh": "后方{1}格",
+          "brief": "锚点朝己方后排方向后 n 格（敌锚点=前 n 敌之后）"
+        },
+        {
+          "match": "diamond_",
+          "zh": "菱形{1}格",
+          "brief": "锚点周围菱形外延 n 圈"
+        },
+        {
+          "match": "chain_",
+          "zh": "连锁{1}跳",
+          "brief": "沿相邻/链接跳跃 n 次（传染/连锁闪电/诅咒链接；提案E）"
+        }
+      ]
+    },
+    "laneRef": {
+      "label": "扫描路线",
+      "desc": "选靶的列维度：只扫本列、扫其它列、扫全部列。auto 在进入流水线之前由施法者上下文预处理成具体值，以免把上下文塞进纯函数。",
+      "source": "共享内核参数 / skills.schema.json unitRequest.laneRef（DDD 原设计有、schema 曾丢失，本轮回补）",
+      "note": "选靶扫描的路线/列维度。auto 在 I 节点之前由施法者上下文预处理为具体值，保持流水线纯函数。",
+      "terms": {
+        "same_lane": {
+          "zh": "同列",
+          "brief": "仅扫描施法者所在列"
+        },
+        "cross_lane": {
+          "zh": "跨列",
+          "brief": "扫描其它列"
+        },
+        "all_lanes": {
+          "zh": "全列",
+          "brief": "扫描所有列"
+        },
+        "auto": {
+          "zh": "自动",
+          "brief": "由施法者上下文预处理为具体值"
+        }
+      }
+    },
+    "anchor": {
+      "label": "位置锚点",
+      "desc": "候选池的几何原点。只回答「从哪开始量几何」，不承载阵营/排序/位置（§10.1 净化）。敌方目标默认锚敌方排首 enemy_front，己方目标默认锚 self（按 faction 推导，§10.3）。也可写具体单位 id 做动态寻址（DDD「<指定单位>」）。",
+      "source": "SCHEMA.md §4 / 共享内核参数 §一",
+      "note": "✅ 2026-10-03 几何化重构：anchor 净化为 7 个原点值（self/caster/enemy_front/specific_unit/spawned_unit/last_dead_ally/fixed_cell），原 front_line/first_empty 等 16 值已迁出——front_line→默认 sort 最前排，first_empty/empty_ally_slot→filter.emptySlot，taunt_source→filter.hasStatus，几何由 scope 承载（§10.1）。enemy_front 为本次新增（敌 spell 默认原点，纠正此前 anchor:self 误写）。specific_unit(<id>)/fixed_cell(<index>) 经 anyOf 放宽为任意字符串，拼写校验弱化。",
+      "terms": {
+        "front_line": {
+          "zh": "前排",
+          "brief": "锚定前排位置"
+        },
+        "spawned_unit": {
+          "zh": "召唤物",
+          "brief": "锚定刚生成的召唤物（本次登场的新单位，spawn 链专属）"
+        },
+        "first_empty": {
+          "zh": "首个空位",
+          "brief": "第一个空着的格子（任意半场；召唤/空坐标攻击用）"
+        },
+        "empty_ally_slot": {
+          "zh": "己方空位",
+          "brief": "己方半场空格（自身位移落点用，区别于 first_empty 的任意空格）"
+        },
+        "self": {
+          "zh": "自身",
+          "brief": "锚定施法者自身位置（我方目标默认原点）"
+        },
+        "caster": {
+          "zh": "释放者",
+          "brief": "锚定释放者（被动/链接/转移场景中作用者≠触发者时）"
+        },
+        "enemy_front": {
+          "zh": "敌方排首",
+          "brief": "锚定敌方同路排首（敌 i=0，隔中线与己排首面对面）；敌 spell 默认原点（§10.0 拓扑订正）"
+        },
+        "specific_unit": {
+          "zh": "指定单位",
+          "brief": "锚定指定单位 id（DDD「<指定单位>」动态寻址，anyOf 放宽为字符串）"
+        },
+        "fixed_cell": {
+          "zh": "固定格",
+          "brief": "锚定绝对站位坐标，需配 fixedIndex"
+        },
+        "front_of_self": {
+          "zh": "自身前方",
+          "brief": "锚定施法者正前方的位置"
+        },
+        "behind_self": {
+          "zh": "自身后方",
+          "brief": "锚定施法者正后方的位置"
+        },
+        "cross_same_index": {
+          "zh": "跨列同位",
+          "brief": "锚定其它列的相同站位序号"
+        },
+        "absolute": {
+          "zh": "绝对站位",
+          "brief": "锚定绝对站位序号，需配 fixedIndex"
+        },
+        "taunt_source": {
+          "zh": "嘲讽来源",
+          "brief": "锚定发起嘲讽的单位"
+        },
+        "manual": {
+          "zh": "手动指定",
+          "brief": "由玩家手动指定坐标"
+        },
+        "nearest_any": {
+          "zh": "最近任意",
+          "brief": "距施法者最近的任意单位"
+        },
+        "any_lowest_hp": {
+          "zh": "全场最低血",
+          "brief": "任意阵营中生命最低者"
+        },
+        "self_faction_hp_desc": {
+          "zh": "己方最低血",
+          "brief": "己方阵营中生命最低者"
+        },
+        "last_dead_ally": {
+          "zh": "最近阵亡友军",
+          "brief": "最近死亡的己方单位（死者寻址，配合 spawn.reviveOf 实现复活）"
+        },
+        "index_asc_same_faction": {
+          "zh": "同阵营首位",
+          "brief": "同阵营内按站位升序取第一个"
+        },
+        "ally_front": {
+          "zh": "我方排首",
+          "brief": "我方同路最靠中线的单位（守护/替承/前排增益的原点；提案A）"
+        },
+        "enemy_back": {
+          "zh": "敌方后排",
+          "brief": "敌方同路最远离中线的单位（暗杀/狙击后排的原点；提案B）"
+        }
+      }
+    },
+    "filter": {
+      "label": "候选池过滤器",
+      "desc": "候选池的最后一层筛选：按单位类型、标签、持有状态等排除。开放结构——不约束就不写，缺省即不参与过滤。",
+      "source": "skills.schema.json unitRequest.filter / unitFilter / 共享内核参数 §一",
+      "note": "request 的过滤维度（DDD 选靶范围三件套「锚点+区域+过滤」之过滤）。开放结构：属性缺省即不约束。**DDD 标准 9 维**（2026-09-20 已在 schema 全部声明）：unitType / tags / hasStatus / hasCategory / hpPercent / casterHasSummon / isSummon / casterOwned / adjacency。**项目扩展（数据已用）**：unitId / isAllyOrMirror / isPuppet / isOwnSummon / element / tier / count / dispelable / anyOf。⚠️ 旧名 `statusId`→`hasStatus`、`category`→`hasCategory` 已于 2026-09-20 统一为 DDD 命名（旧名在 request.filter 中实际从未被数据使用）。",
+      "terms": {
+        "unitType": {
+          "zh": "单位类型",
+          "brief": "DDD 维度：按 unitType 过滤（如 UNDEAD）"
+        },
+        "tags": {
+          "zh": "标签",
+          "brief": "DDD 维度：按标签过滤"
+        },
+        "hasStatus": {
+          "zh": "持有状态",
+          "brief": "DDD 维度：要求目标持有指定状态（原 statusId）"
+        },
+        "hasCategory": {
+          "zh": "持有状态类别",
+          "brief": "DDD 维度：要求目标持有指定类别的状态（原 category）"
+        },
+        "hpPercent": {
+          "zh": "生命百分比",
+          "brief": "DDD 维度：按生命百分比过滤"
+        },
+        "casterHasSummon": {
+          "zh": "施法者有召唤物",
+          "brief": "DDD 维度：要求施法者拥有召唤物"
+        },
+        "isSummon": {
+          "zh": "是召唤物",
+          "brief": "DDD 维度：目标是否为召唤物"
+        },
+        "casterOwned": {
+          "zh": "施法者所有",
+          "brief": "DDD 维度：目标是否归属施法者"
+        },
+        "adjacency": {
+          "zh": "相邻性",
+          "brief": "DDD 维度：相邻性过滤，配合 spread 表达相邻 / 溅射目标域"
+        },
+        "unitId": {
+          "zh": "单位ID",
+          "brief": "扩展维度：按具体单位 id 过滤"
+        },
+        "isAllyOrMirror": {
+          "zh": "友军或镜像",
+          "brief": "扩展维度：目标为友军或镜像分身"
+        },
+        "isPuppet": {
+          "zh": "是秘偶",
+          "brief": "扩展维度：目标是否为秘偶（占卜家途径）"
+        },
+        "isOwnSummon": {
+          "zh": "己方召唤物",
+          "brief": "扩展维度：是否为施法者自己的召唤物"
+        },
+        "excludeSelf": {
+          "zh": "排除自身",
+          "brief": "布尔；从候选池剔除施法者自己（位于 unitRequest 层，不在 filter 内）"
+        },
+        "rankBelowCaster": {
+          "zh": "位格低于我",
+          "brief": "仅位格低于施法者者可入选（高位格压制；提案C）"
+        },
+        "rankAboveCaster": {
+          "zh": "位格高于我",
+          "brief": "仅位格高于施法者者可入选（提案C）"
+        },
+        "rankMax": {
+          "zh": "位格上限",
+          "brief": "位格 ≤ N 者可入选（提案C）"
+        },
+        "rankMin": {
+          "zh": "位格下限",
+          "brief": "位格 ≥ N 者可入选（提案C）"
+        },
+        "gender": {
+          "zh": "性别",
+          "brief": "按性别筛选（取值域 any/male/female，与 card.gender 同源；提案D）"
+        }
+      }
+    },
+    "spread": {
+      "label": "溅射方式",
+      "desc": "主目标被命中之后波及谁。与范围分工：范围决定取几个目标，溅射决定命中之后向邻近扩散。",
+      "source": "SCHEMA.md §4 / 共享内核参数 §一（2026-09-20 由 1 值对齐补齐为 DDD 5 值）",
+      "note": "承载原 DDD 旧拟几何 scope（single_point/whole_lane/adjacent）的语义——2026-09-20 裁定该 scope 废弃，几何范围改由 laneRef（扫描路线）+ spread（本类）+ mode（unit/area）共同表达。",
+      "terms": {
+        "none": {
+          "zh": "不扩散",
+          "brief": "仅作用于选定目标本身，不向邻近或路线扩散"
+        },
+        "lane_line": {
+          "zh": "整条路线",
+          "brief": "沿路线向前扩散覆盖整条"
+        },
+        "splash_adjacent": {
+          "zh": "溅射相邻",
+          "brief": "主目标之外的相邻单位也受影响"
+        },
+        "splash_behind": {
+          "zh": "溅射身后",
+          "brief": "主目标身后的单位受影响"
+        },
+        "cross_same_index": {
+          "zh": "跨列同位",
+          "brief": "扩散到其它列的相同站位序号"
+        }
+      }
+    },
+    "sortKey": {
+      "label": "排序键",
+      "desc": "候选多于取数时的确定性取法。每个键末尾都带站位升序破平，保证同一战场状态永远得到同样的目标；参数化的状态键族用于按「是否持有某状态」加权。",
+      "source": "SCHEMA.md §4",
+      "terms": {
+        "none": {
+          "zh": "不排序",
+          "brief": "保持原顺序"
+        },
+        "hp_asc": {
+          "zh": "生命升序",
+          "brief": "生命最低者优先"
+        },
+        "hp_desc": {
+          "zh": "生命降序",
+          "brief": "生命最高者优先"
+        },
+        "atk_asc": {
+          "zh": "攻击升序",
+          "brief": "攻击最低者优先"
+        },
+        "atk_desc": {
+          "zh": "攻击降序",
+          "brief": "攻击最高者优先"
+        },
+        "index_asc": {
+          "zh": "站位升序",
+          "brief": "按场上站位从前到后"
+        },
+        "index_desc": {
+          "zh": "站位降序",
+          "brief": "按场上站位从后到前"
+        },
+        "energy_desc": {
+          "zh": "能量降序",
+          "brief": "能量最高者优先"
+        },
+        "armor_desc": {
+          "zh": "护甲降序",
+          "brief": "护甲最高者优先"
+        },
+        "buff_count_desc": {
+          "zh": "增益数降序",
+          "brief": "增益最多者优先"
+        },
+        "debuff_count_desc": {
+          "zh": "减益数降序",
+          "brief": "减益最多者优先"
+        },
+        "gauge_asc": {
+          "zh": "行动条升序",
+          "brief": "行动条进度最低者优先"
+        },
+        "gauge_desc": {
+          "zh": "行动条降序",
+          "brief": "行动条进度最高者优先"
+        },
+        "stat_max_desc": {
+          "zh": "最高属性降序",
+          "brief": "指定属性最高者优先"
+        },
+        "attack": {
+          "zh": "按攻击排序",
+          "brief": "官方逃逸口：sortKey 自由字符串字段直写属性名（如 attack/atk）绕开封闭枚举；等价于 atk_asc/atk_desc 时优先用枚举。新增固定排序键须先登记共享内核参数"
+        }
+      }
+    },
+    "sourceRef": {
+      "label": "属性参照来源",
+      "desc": "取不低于 / 置值这类相对修正的参照对象：施法者、次目标或全场均值。用于「拉平」「取不低于某人」一类语义。",
+      "source": "skills.schema.json modify_stat.sourceRef",
+      "terms": {
+        "caster": {
+          "zh": "施法者",
+          "brief": "以施法者的属性为参照"
+        },
+        "secondary_target": {
+          "zh": "副目标",
+          "brief": "以副目标的属性为参照"
+        },
+        "field_average": {
+          "zh": "全场均值",
+          "brief": "以全场单位该属性的均值为参照"
+        }
+      }
+    },
+    "shuffleMode": {
+      "label": "重排方式",
+      "desc": "状态重排的执行方式（现仅轮转一种）：把一组状态实例在若干单位之间循环搬移，搬的是实例本身而非复制。",
+      "source": "skills.schema.json status_shuffle",
+      "terms": {
+        "rotate": {
+          "zh": "轮换",
+          "brief": "状态按序轮转换位"
+        }
+      }
+    },
+    "dispelMode": {
+      "label": "驱散方式",
+      "desc": "驱散的粒度（现仅范围型一种）：在选定范围内对全部目标生效，而非逐个点名。",
+      "source": "skills.schema.json dispel",
+      "terms": {
+        "area": {
+          "zh": "范围驱散",
+          "brief": "对范围内全部目标驱散"
+        }
+      }
+    },
+    "effectTarget": {
+      "label": "效果目标锚点",
+      "desc": "效果段内部承接者的锚点，与技能级选靶是两层：技能级选靶决定这一次打向谁，效果锚点决定这一段落在谁身上（自己 / 施法者 / 主目标 / 状态持有者 / 被击杀者…）。同一张卡的不同段可以指向不同锚点。",
+      "source": "SCHEMA.md §4",
+      "note": "效果级二次寻址（区别于 cardTarget.request 的选靶）。三组：①运行期角色 self/caster/target/primary_target/secondary_target/same_target/attacker/holder/status_holder/killed_unit/rule_breaker（不可替代）；②全体集合 all_allies/allies_except_self/all_enemies/all_other_enemies/all_units/all（all=所有相关对象、all_units=场上所有单位）；③相对坐标 adjacent_enemy/occupant_ally/occupant_enemy/splash_adjacent/splash_behind（与 request 的 anchor/spread 是两套体系，前者相对主目标、后者相对锚点）。self≠caster（被动/链接场景作用者≠触发者）；target≠primary_target（多目标/二次寻址时不同）。",
+      "terms": {
+        "self": {
+          "zh": "自身",
+          "brief": "效果作用者自己"
+        },
+        "caster": {
+          "zh": "施法者",
+          "brief": "释放该技能的单位"
+        },
+        "target": {
+          "zh": "目标",
+          "brief": "当前效果指向的目标"
+        },
+        "primary_target": {
+          "zh": "主目标",
+          "brief": "技能的主选目标"
+        },
+        "same_target": {
+          "zh": "同一目标",
+          "brief": "沿用上一效果的目标"
+        },
+        "secondary_target": {
+          "zh": "副目标",
+          "brief": "secondaryTargets 选出的附属目标"
+        },
+        "attacker": {
+          "zh": "攻击者",
+          "brief": "发起攻击的单位"
+        },
+        "holder": {
+          "zh": "持有者",
+          "brief": "持有该对象的单位"
+        },
+        "status_holder": {
+          "zh": "状态持有者",
+          "brief": "携带该状态的单位"
+        },
+        "killed_unit": {
+          "zh": "被击杀单位",
+          "brief": "本次结算中死亡的单位"
+        },
+        "all_allies": {
+          "zh": "全体友军",
+          "brief": "己方全部单位"
+        },
+        "allies_except_self": {
+          "zh": "除自身外友军",
+          "brief": "己方其他单位"
+        },
+        "all_enemies": {
+          "zh": "全体敌军",
+          "brief": "对方全部单位"
+        },
+        "all_other_enemies": {
+          "zh": "其余敌军",
+          "brief": "除主目标外的对方单位"
+        },
+        "all_units": {
+          "zh": "全体单位",
+          "brief": "场上所有单位"
+        },
+        "all": {
+          "zh": "全部",
+          "brief": "所有相关对象"
+        },
+        "adjacent_enemy": {
+          "zh": "相邻敌人",
+          "brief": "与目标相邻的敌方单位"
+        },
+        "enemy": {
+          "zh": "敌人",
+          "brief": "敌方单位"
+        },
+        "occupant_ally": {
+          "zh": "所在格友军",
+          "brief": "占据该格的友方单位"
+        },
+        "occupant_enemy": {
+          "zh": "所在格敌军",
+          "brief": "占据该格的敌方单位"
+        },
+        "splash_adjacent": {
+          "zh": "溅射相邻",
+          "brief": "目标相邻单位"
+        },
+        "splash_behind": {
+          "zh": "溅射身后",
+          "brief": "目标身后的单位"
+        },
+        "one_own_snare_trap": {
+          "zh": "己方一个陷阱",
+          "brief": "自己布置的一个陷阱单位"
+        },
+        "rule_breaker": {
+          "zh": "违约者",
+          "brief": "规则槽 punish 载荷语境下的违约单位（2026-10-16 登记，见 write_rule_slot.value.punish[].target）"
+        },
+        "board": {
+          "zh": "战场",
+          "brief": "战场级锚点（2026-10-01 量表批）：不寻址单位，承载 board 量表写入（modify_resource 的 secrecy/order/fate_value）"
+        }
+      }
+    },
+    "consumption": {
+      "label": "目标消耗资源",
+      "desc": "这条效果占用哪一类目标通道：单位、区域、召唤、界域或跨层位移。它约束的是目标兼容性（单位型只能落在瞬发或跨层位移上），不是能量花费。",
+      "source": "SCHEMA.md §4 / 共享内核参数",
+      "note": "选靶时一并消耗的资源对象（summon/domain/zone/instant/translocate），对齐 DDD 共享内核 consumption。与 effectTarget 区别：effectTarget=效果作用到谁；consumption=选靶时消耗哪个资源。",
+      "terms": {
+        "summon": {
+          "zh": "召唤物",
+          "brief": "消耗一个召唤物（如引爆/转化）"
+        },
+        "domain": {
+          "zh": "界域",
+          "brief": "消耗已展开的界域"
+        },
+        "zone": {
+          "zh": "区域",
+          "brief": "消耗一个区域"
+        },
+        "instant": {
+          "zh": "瞬时",
+          "brief": "即时消耗，无资源对象残留（mode=unit 时强制）"
+        },
+        "translocate": {
+          "zh": "跨层",
+          "brief": "消耗跨层位移（单位离场为 detached，mode=unit 时强制）"
+        }
+      }
+    },
+    "element": {
+      "label": "元素",
+      "desc": "效果的元素标签，封闭为八元素加 none。纯标签、无内建数值语义——元素本身不产生伤害差异，差异来自逐元素抗性槽与状态触发表。伤害类必填，其余填 none。",
+      "source": "SCHEMA.md §5.4",
+      "terms": {
+        "fire": {
+          "zh": "火焰",
+          "brief": "火元素伤害"
+        },
+        "ice": {
+          "zh": "冰霜",
+          "brief": "冰元素伤害"
+        },
+        "poison": {
+          "zh": "剧毒",
+          "brief": "毒元素伤害"
+        },
+        "lightning": {
+          "zh": "闪电",
+          "brief": "雷元素伤害"
+        },
+        "mental": {
+          "zh": "精神",
+          "brief": "精神伤害"
+        },
+        "physical": {
+          "zh": "物理",
+          "brief": "物理伤害"
+        },
+        "holy": {
+          "zh": "神圣",
+          "brief": "神圣伤害"
+        },
+        "dark": {
+          "zh": "暗黑",
+          "brief": "暗元素伤害"
+        },
+        "none": {
+          "zh": "无属性",
+          "brief": "不带元素属性"
+        }
+      },
+      "note": "`$` 前缀表示运行期变量（如 `$recorded.element`），展示时原样呈现。"
+    },
+    "stat": {
+      "label": "属性",
+      "desc": "可被直接修正的属性键，覆盖战斗属性、资源上限、行动条的源属性（速率与阈值）以及逐元素抗性槽。行动周期是派生值，禁止直接改——要改周期就改速率或阈值。",
+      "source": "效果参数.md §一 / skills.schema.json",
+      "terms": {
+        "attack": {
+          "zh": "攻击力",
+          "brief": "基础攻击"
+        },
+        "defense": {
+          "zh": "防御力",
+          "brief": "伤害减免"
+        },
+        "armor": {
+          "zh": "护甲",
+          "brief": "可消耗的伤害吸收层"
+        },
+        "hp_max": {
+          "zh": "生命上限",
+          "brief": "最大生命值"
+        },
+        "energy_max": {
+          "zh": "能量上限",
+          "brief": "最大能量"
+        },
+        "energy_regen": {
+          "zh": "能量回复",
+          "brief": "每周期回复的能量"
+        },
+        "gauge.rate": {
+          "zh": "行动条速率",
+          "brief": "行动条积累速度"
+        },
+        "gauge.threshold": {
+          "zh": "行动条阈值",
+          "brief": "行动条充满所需值"
+        },
+        "summon_cap": {
+          "zh": "召唤上限",
+          "brief": "同时在场召唤物数量上限"
+        },
+        "rank": {
+          "zh": "位格",
+          "brief": "位格档，stat_compare 零新谓词"
+        },
+        "damage": {
+          "zh": "伤害",
+          "brief": "伤害输出修正"
+        },
+        "heal": {
+          "zh": "治疗",
+          "brief": "治疗输出修正"
+        },
+        "damage_taken_mul": {
+          "zh": "承伤系数",
+          "brief": "受到伤害的乘区（非常规直改，一般用状态 modifiers）"
+        }
+      },
+      "patterns": [
+        {
+          "match": "resist:*",
+          "zh": "{1}抗性",
+          "brief": "对应元素的抗性；resist:* 表示全元素抗性"
+        }
+      ]
+    },
+    "statMode": {
+      "label": "属性修正方式",
+      "desc": "属性改动的方式：加减、置值、乘性缩放、取不低于、取不高于。缩放与加减互斥；取上/下限承载「封顶」类语义。",
+      "source": "SCHEMA.md §5.2 modify_stat",
+      "terms": {
+        "delta": {
+          "zh": "增减",
+          "brief": "在现值上加减"
+        },
+        "set": {
+          "zh": "设为",
+          "brief": "直接设为指定值"
+        },
+        "mul": {
+          "zh": "乘算",
+          "brief": "按比例乘算"
+        },
+        "to_at_least": {
+          "zh": "至少提到",
+          "brief": "低于该值则提升到该值"
+        },
+        "to_at_most": {
+          "zh": "至多压到",
+          "brief": "高于该值则压到该值"
+        }
+      }
+    },
+    "resource": {
+      "label": "资源",
+      "desc": "可被直接增减的资源池与行动条现值。补血不走这里（走治疗），这里只做直接扣除，下限截断为 0 不进负值。",
+      "source": "SCHEMA.md §5.2 modify_resource / 编队参数.md §2.5",
+      "terms": {
+        "hp": {
+          "zh": "生命",
+          "brief": "当前生命值"
+        },
+        "energy": {
+          "zh": "能量",
+          "brief": "施放技能的资源"
+        },
+        "shield": {
+          "zh": "护盾",
+          "brief": "先于生命消耗的吸收层"
+        },
+        "armor": {
+          "zh": "护甲",
+          "brief": "伤害吸收层"
+        },
+        "lost": {
+          "zh": "迷失值",
+          "brief": "每英雄独立的 Pool，达阈值档位触发迷失"
+        },
+        "lust": {
+          "zh": "恶欲值",
+          "brief": "单位级 Pool（0–10），罪犯产/囚犯消/律师拧，达阈值档位触发躁动/失控/欲望爆炸"
+        },
+        "gauge.current": {
+          "zh": "行动条进度",
+          "brief": "当前行动条积累值"
+        },
+        "secrecy": {
+          "zh": "隐秘值",
+          "brief": "战场级量表（0–10），愚弄/隐秘/conceal 类效果结算 +1；≥7 隐秘类乘区 ×1.5（dimHook）"
+        },
+        "order": {
+          "zh": "秩序度",
+          "brief": "战场级量表（0–10），仲裁人推高/律师压低；≥7 律令惩戒类 ×1.5（dimHook）"
+        },
+        "fate_value": {
+          "zh": "命运值",
+          "brief": "战场双极量表（−10–+10），仅怪物写入；±5 阈值档触发好运放大/厄运反噬（dimHook）"
+        }
+      }
+    },
+    "resourceMode": {
+      "label": "资源修正方式",
+      "desc": "资源改动的方式：增减、置值、互换。置值配合参照对象实现「拉平 / 等于」语义。",
+      "source": "skills.schema.json modify_resource",
+      "terms": {
+        "delta": {
+          "zh": "增减",
+          "brief": "在现值上加减"
+        },
+        "set": {
+          "zh": "设为",
+          "brief": "直接设为指定值"
+        },
+        "swap": {
+          "zh": "交换",
+          "brief": "两个单位的该资源互换"
+        }
+      }
+    },
+    "healMode": {
+      "label": "治疗方式",
+      "desc": "治疗的四种口径：按数值回复、直接置血、按最大生命比例置血、回复到某个比例。后三种承载复活与「血肉不灭」这类普通回复表达不了的语义。",
+      "source": "skills.schema.json heal",
+      "terms": {
+        "setHp": {
+          "zh": "直接设值",
+          "brief": "生命设为指定值"
+        },
+        "hpMaxRatio": {
+          "zh": "按生命上限比例",
+          "brief": "按最大生命百分比治疗"
+        },
+        "to_ratio": {
+          "zh": "恢复到比例",
+          "brief": "生命恢复到指定比例"
+        }
+      }
+    },
+    "stackMode": {
+      "label": "叠层方式",
+      "desc": "重复施加同一状态时如何对待已有层数：追加、消耗还是覆盖。",
+      "source": "skills.schema.json mount_status",
+      "terms": {
+        "add": {
+          "zh": "叠加",
+          "brief": "在现有层数上累加"
+        },
+        "consume": {
+          "zh": "消耗",
+          "brief": "消耗现有层数"
+        },
+        "override": {
+          "zh": "覆盖",
+          "brief": "层数直接设为指定值"
+        }
+      }
+    },
+    "moveOp": {
+      "label": "位移方式",
+      "desc": "占位变更的写法族：推、拉、换位、插队、冲锋。位移在「双路各 4 格 + 坍缩」的结构里本身即硬资源，定价时不可与纯伤害同价。",
+      "source": "SCHEMA.md §5.2 move",
+      "terms": {
+        "push_back": {
+          "zh": "击退",
+          "brief": "向后推开"
+        },
+        "pull_forward": {
+          "zh": "拉近",
+          "brief": "向前拉拽"
+        },
+        "swap_ally": {
+          "zh": "与友军换位",
+          "brief": "和己方单位交换位置"
+        },
+        "swap_neighbor": {
+          "zh": "与邻位换位",
+          "brief": "和相邻单位交换位置"
+        },
+        "insert_tail_cross_lane": {
+          "zh": "跨列插入队尾",
+          "brief": "插入到另一列的队尾"
+        },
+        "param": {
+          "zh": "按参数",
+          "brief": "按 distance 参数移动"
+        },
+        "charge_forward": {
+          "zh": "冲锋",
+          "brief": "向前冲锋"
+        }
+      }
+    },
+    "spawnPosition": {
+      "label": "生成位置",
+      "desc": "召唤物与重生体的落点：路尾、指定单位所在处、或原坐标。跨阵营转化一律走路尾。",
+      "source": "skills.schema.json spawn",
+      "terms": {
+        "tail": {
+          "zh": "队尾",
+          "brief": "在己方队尾生成"
+        },
+        "at_unit": {
+          "zh": "单位所在位置",
+          "brief": "在指定单位的位置生成"
+        },
+        "original": {
+          "zh": "原位",
+          "brief": "在原位置生成（复活语义）"
+        }
+      }
+    },
+    "reviveOf": {
+      "label": "复活对象",
+      "desc": "复活语义复用召唤承载：指向谁死，就复用谁的模板与坐标。寻址死者走锚点，不为复活另开原语。",
+      "source": "SCHEMA.md §5.2 spawn（G4）",
+      "terms": {
+        "self": {
+          "zh": "自身",
+          "brief": "复活自己"
+        },
+        "status_holder": {
+          "zh": "状态持有者",
+          "brief": "复活持有该状态的单位"
+        },
+        "last_dead_ally": {
+          "zh": "最近阵亡友军",
+          "brief": "复活最近死亡的己方单位"
+        }
+      }
+    },
+    "dispelTarget": {
+      "label": "驱散对象",
+      "desc": "驱散打在什么上：单位身上的状态，还是上层界域。基底层界域不可驱散；拆陷阱属于坐标侧驱散。",
+      "source": "skills.schema.json dispel",
+      "terms": {
+        "unit": {
+          "zh": "单位",
+          "brief": "驱散单位身上的状态"
+        },
+        "coordinate": {
+          "zh": "坐标",
+          "brief": "移除该坐标上的 Zone（拆陷阱）"
+        },
+        "domain": {
+          "zh": "界域",
+          "brief": "驱散场上界域"
+        }
+      }
+    },
+    "equipSlot": {
+      "label": "装备槽",
+      "desc": "装备牌挂载的槽位；同槽互斥，后装备者替换前者。武器/护具两槽互相独立，均不可驱散，卸下走缴械或回收。",
+      "source": "skills.schema.json disarm / recover_equipment / statusDef.equipSlot",
+      "terms": {
+        "weapon": {
+          "zh": "武器",
+          "brief": "武器槽：攻击加值 + 耐久，按普攻次数消耗、归零下线"
+        },
+        "armor": {
+          "zh": "护具",
+          "brief": "护具槽：创建护甲池（容量=初始值），池空下线、卸下清零"
+        }
+      }
+    },
+    "domainOp": {
+      "label": "界域操作",
+      "desc": "界域能做的三件事：降临压栈、与底层置换、挂载英雄域。置换是改写底层的唯一出口。",
+      "source": "GENERATION_BRIEF.md §10.3 / SCHEMA.md §5.2",
+      "terms": {
+        "overlay": {
+          "zh": "投影·叠加",
+          "brief": "在现有界域上叠加一层（压制栈）"
+        },
+        "swap": {
+          "zh": "置换",
+          "brief": "替换当前界域"
+        },
+        "hero": {
+          "zh": "降临",
+          "brief": "英雄级界域，覆盖全场"
+        }
+      }
+    },
+    "domainTier": {
+      "label": "界域层级",
+      "desc": "界域所在的层：英雄域被动常驻、压制优先级最高；上层域按打出顺序压栈，被压制期间计时暂停。",
+      "source": "SCHEMA.md §7",
+      "terms": {
+        "overlay": {
+          "zh": "叠加层",
+          "brief": "压制栈中的叠加层"
+        },
+        "hero": {
+          "zh": "英雄层",
+          "brief": "英雄级界域层"
+        }
+      }
+    },
+    "translocateOp": {
+      "label": "跨层位移方式",
+      "desc": "把单位从战场上整体抽走而不是挪格：拉入（拖进某处）与放逐（离场若干 tick 后从己方队尾回归，可带回归载荷）。",
+      "source": "SCHEMA.md §5.2 translocate",
+      "terms": {
+        "pull_into": {
+          "zh": "拉入",
+          "brief": "把目标拉入另一层（离场）"
+        },
+        "banish": {
+          "zh": "放逐",
+          "brief": "放逐目标，可带回归载荷"
+        }
+      }
+    },
+    "modifyDamageScope": {
+      "label": "伤害修正方向",
+      "desc": "一次性伤害修正作用在哪一侧：我方打出的伤害，还是我方承受的伤害。区别于状态上的持续乘区——它只改写单次伤害事件。",
+      "source": "skills.schema.json modify_damage",
+      "terms": {
+        "taken": {
+          "zh": "受到的伤害",
+          "brief": "修正承伤"
+        },
+        "dealt": {
+          "zh": "造成的伤害",
+          "brief": "修正输出"
+        }
+      }
+    },
+    "transferMode": {
+      "label": "状态转移方式",
+      "desc": "搬运状态时是搬走、复制一份留在原处，还是改写（搬走并改写归属）。",
+      "source": "skills.schema.json transfer_status",
+      "terms": {
+        "move": {
+          "zh": "搬运",
+          "brief": "状态从来源移除并转移到目标"
+        },
+        "copy": {
+          "zh": "复制",
+          "brief": "复制状态到目标"
+        },
+        "rewrite": {
+          "zh": "改写",
+          "brief": "转移并改写状态"
+        }
+      }
+    },
+    "rounding": {
+      "label": "取整方式",
+      "desc": "按比例取值时的取整规则，决定「回响上一个技能」这类效果的可预期落点。",
+      "source": "skills.schema.json echo_last_skill",
+      "terms": {
+        "ceil": {
+          "zh": "向上取整",
+          "brief": "回响载荷折算后向上取整"
+        },
+        "floor": {
+          "zh": "向下取整",
+          "brief": "回响载荷折算后向下取整"
+        },
+        "round": {
+          "zh": "四舍五入",
+          "brief": "回响载荷折算后四舍五入"
+        }
+      }
+    },
+    "skillSelector": {
+      "label": "技能选择器",
+      "desc": "要改的是哪个技能：自己上一个用过的、自己持有的、目标的，还是按 id 点名。",
+      "source": "skills.schema.json modify_skill",
+      "terms": {
+        "self_last": {
+          "zh": "自身上一技能",
+          "brief": "自己上一次用的技能"
+        },
+        "self": {
+          "zh": "自身",
+          "brief": "本技能"
+        },
+        "target": {
+          "zh": "目标",
+          "brief": "目标的技能"
+        },
+        "by_id": {
+          "zh": "按 ID",
+          "brief": "按技能 ID 指定"
+        }
+      }
+    },
+    "targetSpecOverride": {
+      "label": "TargetSpec 完整改写",
+      "desc": "改写技能的选靶属性：给出选靶方式与请求全字段，未给出的沿用原值。区别于效果级的目标改写——那个只改写本次结算的目标，不改变技能本身。",
+      "source": "skills.schema.json modify_skill（对齐 DDD：modify_skill 可改技能全部选靶属性）",
+      "note": "modify_skill 对技能 TargetSpec 的完整补丁（对象）：给出 selectionMode 与 request 全字段，未给出的沿用原值。区别于 target_override 原语（effect 级一次性覆盖）。",
+      "terms": {
+        "selectionMode": {
+          "zh": "选靶方式",
+          "brief": "改写 manual/auto"
+        },
+        "request": {
+          "zh": "选靶请求",
+          "brief": "改写 faction/scope/anchor/sort/filter/spread/laneRef/excludeSelf 全字段（同 unitRequest）"
+        }
+      }
+    },
+    "targetabilityDirection": {
+      "label": "可选性方向",
+      "desc": "「不可被选中」朝哪个方向生效：敌方单体、敌方范围、友方或全部。它是候选池的排除，不是命中判定。",
+      "source": "SCHEMA.md §5.2 modify_targetability",
+      "note": "定义「单位对哪些来源不可被选为目标」（持久/状态级资格）。区别于 target_override 原语（单次效果级覆盖选靶结果）：前者改资格、后者改结果。pierce 控制穿透。",
+      "terms": {
+        "all": {
+          "zh": "全部",
+          "brief": "对所有来源不可选"
+        },
+        "enemy_targeted": {
+          "zh": "敌方单体指定",
+          "brief": "对敌方单体技能不可选"
+        },
+        "enemy_aoe": {
+          "zh": "敌方范围",
+          "brief": "对敌方范围效果不可选"
+        },
+        "ally": {
+          "zh": "友方",
+          "brief": "对友方不可选"
+        }
+      }
+    },
+    "damagePierce": {
+      "label": "伤害穿透",
+      "desc": "这次伤害跳过哪一层防护：护甲、护盾还是抗性。按比例破甲是另一档强度，与整层跳过并存。",
+      "source": "skills.schema.json damage.pierce",
+      "terms": {
+        "armor": {
+          "zh": "穿透护甲",
+          "brief": "忽略护甲"
+        },
+        "shield": {
+          "zh": "穿透护盾",
+          "brief": "忽略护盾"
+        },
+        "resist": {
+          "zh": "穿透抗性",
+          "brief": "忽略元素抗性"
+        }
+      }
+    },
+    "revealScope": {
+      "label": "揭示范围",
+      "desc": "显形之后给谁看：只有效果来源，还是全场。纯驱散隐匿走驱散原语，这里只负责「看见」。",
+      "source": "skills.schema.json reveal",
+      "terms": {
+        "to_source": {
+          "zh": "仅对来源",
+          "brief": "只对效果来源方显形"
+        },
+        "to_all": {
+          "zh": "对全体",
+          "brief": "对所有人显形"
+        }
+      }
+    },
+    "onExpire": {
+      "label": "控制到期处理",
+      "desc": "被夺取控制权的单位在控制结束时归谁：交还原主、就地处死，还是留给控制者。",
+      "source": "skills.schema.json take_control",
+      "terms": {
+        "revert": {
+          "zh": "还原",
+          "brief": "控制结束归还控制权"
+        },
+        "die": {
+          "zh": "死亡",
+          "brief": "控制结束目标死亡"
+        },
+        "keep": {
+          "zh": "保留",
+          "brief": "控制结束保留当前状态"
+        }
+      }
+    },
+    "actionPolicy": {
+      "label": "控制行为策略",
+      "desc": "被控制期间还允许做什么：全部行动、只能攻击，还是只能移动。",
+      "source": "skills.schema.json take_control",
+      "terms": {
+        "full": {
+          "zh": "完全控制",
+          "brief": "可执行全部行动"
+        },
+        "attack_only": {
+          "zh": "仅攻击",
+          "brief": "只能攻击"
+        },
+        "move_only": {
+          "zh": "仅移动",
+          "brief": "只能移动"
+        }
+      }
+    },
+    "ruleSlotField": {
+      "label": "规则槽字段",
+      "desc": "规则槽上可写可改的字段：触发条件、违令惩罚、豁免名单、适用范围。规则槽是写在战场上的规矩，读写都经既定流水线节点。",
+      "source": "SCHEMA.md §5.2 write_rule_slot/modify_rule_slot",
+      "terms": {
+        "trigger": {
+          "zh": "触发条件",
+          "brief": "规则何时生效"
+        },
+        "punish": {
+          "zh": "惩罚",
+          "brief": "违反规则的惩罚"
+        },
+        "exemptions": {
+          "zh": "豁免",
+          "brief": "不受规则约束的对象"
+        },
+        "scope": {
+          "zh": "作用域",
+          "brief": "规则影响范围"
+        }
+      }
+    },
+    "ruleSlotMode": {
+      "label": "规则槽修改方式",
+      "desc": "对规则槽字段是替换、追加还是移除。",
+      "source": "skills.schema.json modify_rule_slot",
+      "terms": {
+        "replace": {
+          "zh": "替换",
+          "brief": "整体替换字段值"
+        },
+        "append": {
+          "zh": "追加",
+          "brief": "在字段值上追加"
+        },
+        "remove": {
+          "zh": "移除",
+          "brief": "移除字段值"
+        }
+      }
+    },
+    "rulePatchKind": {
+      "label": "规则补丁类型",
+      "desc": "界域改写规则补丁族：封印效果类型、按阵营/标签禁用、费用增减、按阵营/标签增强。补丁是纯声明，必须绑定既有流水线节点，不得新增节点。",
+      "source": "SCHEMA.md §7 rulePatches",
+      "terms": {
+        "empower": {
+          "zh": "增强",
+          "brief": "对匹配 tag 的效果乘算加强"
+        },
+        "disable_effect": {
+          "zh": "禁用效果",
+          "brief": "禁用匹配 tag 的效果"
+        },
+        "seal_effect": {
+          "zh": "封印效果",
+          "brief": "禁用指定效果类型（全场敌我同禁，如封印界域操作/位移），I 节点候选池读取"
+        },
+        "cost_mod": {
+          "zh": "费用改写",
+          "brief": "指定类型/标签技能的能量成本增减（delta），commit 成本校验读取"
+        }
+      }
+    },
+    "conditionKind": {
+      "label": "条件谓词",
+      "desc": "条件判定统一为带参谓词族：状态、属性比较、计数、元素、标签等共用同一批谓词，不为每种比较新开一个 id；复合条件只用任一 / 全部 / 取反三个组合子。",
+      "source": "SCHEMA.md §5.3",
+      "terms": {
+        "all_of": {
+          "zh": "全部满足",
+          "brief": "子条件全部成立才为真（AND 组合子）"
+        },
+        "any_of": {
+          "zh": "任一满足",
+          "brief": "子条件任一成立即真"
+        },
+        "caster_has_summon": {
+          "zh": "施法者有召唤物",
+          "brief": "施法者场上有召唤物"
+        },
+        "caster_status_exists": {
+          "zh": "施法者持有状态",
+          "brief": "施法者身上有指定状态"
+        },
+        "chance": {
+          "zh": "概率",
+          "brief": "按 p 概率成立；受随机性治理 R1–R6 约束，只用于非伤害维度、单次抽样"
+        },
+        "consumed_count": {
+          "zh": "已消耗计数",
+          "brief": "已消耗资源/状态数达阈值"
+        },
+        "damage_source_is": {
+          "zh": "伤害来源判定",
+          "brief": "本次伤害来源类别属于集合之一：behavior=行为伤害（攻击/技能/对撞，进乘区）、status=状态来源伤害（DoT，不进乘区）"
+        },
+        "dead_count": {
+          "zh": "死亡计数",
+          "brief": "死亡单位数达阈值"
+        },
+        "dispelled_count": {
+          "zh": "被驱散计数",
+          "brief": "被驱散状态数达阈值"
+        },
+        "element_is": {
+          "zh": "元素判定",
+          "brief": "伤害/效果元素等于指定元素"
+        },
+        "faction_is": {
+          "zh": "阵营判定",
+          "brief": "指定方阵营等于指定值（相对施法者：ally/enemy）"
+        },
+        "field_status_count": {
+          "zh": "场上状态计数",
+          "brief": "场上指定状态总数达阈值"
+        },
+        "gauge_above": {
+          "zh": "行动条高于阈值",
+          "brief": "行动条进度高于 n"
+        },
+        "gauge_rank": {
+          "zh": "行动条位次",
+          "brief": "按行动条排序的位次判定"
+        },
+        "gender_is": {
+          "zh": "性别判定",
+          "brief": "指定方性别等于 male/female"
+        },
+        "has_category": {
+          "zh": "持有类别状态",
+          "brief": "持有指定 category 的状态"
+        },
+        "has_equipped": {
+          "zh": "已装备",
+          "brief": "持有 equipSlot 装备实例（可按槽过滤）",
+          "detail": "按 statusDef.equipSlot 判定，不点名具体装备；新武器与他途径具现/转移来的武器自动纳入（2026-10-19 落地）。"
+        },
+        "has_status": {
+          "zh": "持有状态",
+          "brief": "持有指定状态"
+        },
+        "hp_percent": {
+          "zh": "生命百分比",
+          "brief": "生命百分比满足比较"
+        },
+        "hp_percent_compare": {
+          "zh": "生命百分比比较",
+          "brief": "两个单位生命百分比比较"
+        },
+        "not": {
+          "zh": "取反",
+          "brief": "子条件不成立时为真（NOT 组合子）"
+        },
+        "resource_compare": {
+          "zh": "资源池比较",
+          "brief": "指定方单位 Pool 现值与常数比较（恶欲值/迷失值档位判定）"
+        },
+        "stat_compare": {
+          "zh": "属性比较",
+          "brief": "两个属性值比较（位格 rank 也走它）"
+        },
+        "target_dead": {
+          "zh": "目标已死亡",
+          "brief": "目标处于死亡状态"
+        },
+        "target_has_tag": {
+          "zh": "目标带标签",
+          "brief": "目标携带指定 tag"
+        },
+        "target_is_summoned": {
+          "zh": "目标是召唤物",
+          "brief": "目标为召唤单位"
+        },
+        "target_unit_type": {
+          "zh": "目标单位类型",
+          "brief": "目标 unitType 匹配（如 UNDEAD）"
+        },
+        "variant_is": {
+          "zh": "变体判定",
+          "brief": "当前生效变体匹配"
+        },
+        "zone_active": {
+          "zh": "区域激活",
+          "brief": "指定区域在场上激活"
+        },
+        "luminance_compare": {
+          "zh": "光照度比较",
+          "brief": "board.luminance 与阈值比较；暗夜档 cmp<=/n=2，白昼档 cmp>=/n=8"
+        },
+        "meter_compare": {
+          "zh": "战场量表比较",
+          "brief": "board 量表（secrecy/order/fate_value/luminance）与阈值比较；无 side，量表为战场级共享量"
+        },
+        "phase_is": {
+          "zh": "相位判定",
+          "brief": "board.phase 属于 phases 集合之一即成立；月夜=[night,midnight]+月相条件"
+        },
+        "rank_gap": {
+          "zh": "位格差比较",
+          "brief": "两名单位位格之差（a−b）与 n 比较——观众位格压制前提/差值缩放的条件面（2026-10-02 落地）"
+        },
+        "recorded_has": {
+          "zh": "数据槽键存在",
+          "brief": "指定方持有的 statusId 状态实例 slots/params 中含键 id（H33 slots 存在性读法）",
+          "detail": "$recorded.<key> 取值语法的条件面；阅读者「已读」三维 d_energy/d_skill/d_tempo 的兑现门（2026-10-23 落地）。"
+        },
+        "tag_chain": {
+          "zh": "连击计数比较",
+          "brief": "施法者同标签连击计数比较：连续施放同 tag 技能计数+1、断链归零（执行参数 §2.3，2026-10-02 落地）"
+        },
+        "has_status_tag": {
+          "zh": "持有标签状态",
+          "brief": "按状态 tag 统计持有数量（标签联动）"
+        }
+      }
+    },
+    "cmp": {
+      "label": "比较符",
+      "desc": "条件与阈值判定共用的比较符号。",
+      "source": "skills.schema.json condition",
+      "terms": {
+        ">": {
+          "zh": "大于",
+          "brief": "条件数值比较：左值严格大于右值"
+        },
+        ">=": {
+          "zh": "大于等于",
+          "brief": "条件数值比较：左值不小于右值"
+        },
+        "<": {
+          "zh": "小于",
+          "brief": "条件数值比较：左值严格小于右值"
+        },
+        "<=": {
+          "zh": "小于等于",
+          "brief": "条件数值比较：左值不大于右值"
+        },
+        "==": {
+          "zh": "等于",
+          "brief": "条件数值比较：左右相等"
+        }
+      }
+    },
+    "side": {
+      "label": "作用方",
+      "desc": "条件作用在谁身上（自己 / 目标 / 友军 / 敌军 / 双方 / 全体 / 攻击者）。与选靶的阵营字段是两套语境，勿混用。",
+      "source": "skills.schema.json condition / zoneDef",
+      "terms": {
+        "self": {
+          "zh": "己方",
+          "brief": "施放方"
+        },
+        "target": {
+          "zh": "目标方",
+          "brief": "被指的一方"
+        },
+        "ally": {
+          "zh": "友方",
+          "brief": "己方阵营"
+        },
+        "enemy": {
+          "zh": "敌方",
+          "brief": "对方阵营"
+        },
+        "both": {
+          "zh": "双方",
+          "brief": "敌我双方"
+        },
+        "all": {
+          "zh": "全场",
+          "brief": "场上全部单位"
+        },
+        "attacker": {
+          "zh": "攻击方",
+          "brief": "发起攻击的一方"
+        }
+      }
+    },
+    "triggerEvent": {
+      "label": "触发点",
+      "desc": "状态与被动挂载的触发时机，封闭 15 个。它决定效果能在结算的哪个时刻插入；注意 tick、行动机会（on_turn_start / on_turn_end 这一对括弧）与主动出手（on_attack / on_active_skill）是三个不同尺度。",
+      "source": "执行参数.md §2.1（15 个封闭集）",
+      "terms": {
+        "on_apply": {
+          "zh": "状态施加时",
+          "brief": "状态被挂载到单位时 fire"
+        },
+        "on_remove": {
+          "zh": "状态移除时",
+          "brief": "状态从单位移除时 fire"
+        },
+        "on_tick": {
+          "zh": "每 tick",
+          "brief": "每个 tick 对全体持状态单位 fire；持续伤害/回复的承载点"
+        },
+        "on_turn_start": {
+          "zh": "行动机会授予时",
+          "brief": "该单位获得行动机会时 fire（自身回合开始语义，机会括弧左端；随后判 wasted 也 fire）"
+        },
+        "on_turn_end": {
+          "zh": "行动机会闭合时",
+          "brief": "机会闭合时 fire（行动走完结算、或判为 wasted），与 on_turn_start 一一配对；载荷带 consumedBy 区分出手与空过"
+        },
+        "on_battle_start": {
+          "zh": "战斗开始时",
+          "brief": "开局一次性 fire；不能用 on_spawn 表达"
+        },
+        "on_spawn": {
+          "zh": "登场时",
+          "brief": "单位登场时 fire；召唤物/增援会重复 fire"
+        },
+        "on_death": {
+          "zh": "死亡时",
+          "brief": "单位死亡时 fire 给死者自身"
+        },
+        "on_kill": {
+          "zh": "击杀时",
+          "brief": "击杀其他单位时 fire 给击杀者"
+        },
+        "on_attack": {
+          "zh": "普攻时",
+          "brief": "普通攻击时 fire；攻击类主动技同时 fire on_active_skill"
+        },
+        "on_take_damage": {
+          "zh": "受伤时",
+          "brief": "受到伤害时 fire"
+        },
+        "on_deal_damage": {
+          "zh": "造成伤害时",
+          "brief": "造成伤害时 fire"
+        },
+        "on_active_skill": {
+          "zh": "释放主动技时",
+          "brief": "非攻击主动技能 fire；攻击类主动技两者都 fire"
+        },
+        "on_status_gain": {
+          "zh": "获得状态时",
+          "brief": "获得状态时 fire"
+        },
+        "on_equipment_equip": {
+          "zh": "装备武器时",
+          "brief": "武器实例建立后、战吼结算前 fire；替换旧武器也 fire"
+        },
+        "on_phase_change": {
+          "zh": "相位跃迁",
+          "brief": "战场相位跨越边界、或 set_luminance 写入覆写层时 fire；战场级监听，载荷含 fromPhase/toPhase/cause(advance/override)。时钟只进不退"
+        }
+      }
+    },
+    "statusCategory": {
+      "label": "状态类别",
+      "desc": "状态的机制归类，供免疫、驱散、硬控清除等按类别批量处理（如「硬控清除全部姿态类」）。分类法是正向增益与负向减益两大类加机制子类，dot/hot 并入其中不再单列。",
+      "source": "编队参数.md §1.1 / SCHEMA.md §6",
+      "terms": {
+        "buff": {
+          "zh": "增益",
+          "brief": "正面状态"
+        },
+        "debuff": {
+          "zh": "减益",
+          "brief": "负面状态"
+        },
+        "control": {
+          "zh": "控制",
+          "brief": "限制行动的状态"
+        },
+        "reactive": {
+          "zh": "反应",
+          "brief": "响应触发而发动的状态"
+        },
+        "aura": {
+          "zh": "光环",
+          "brief": "持续影响周围的状态"
+        },
+        "stance": {
+          "zh": "姿态",
+          "brief": "切换型的持续状态"
+        },
+        "fear": {
+          "zh": "恐惧",
+          "brief": "恐惧类状态"
+        },
+        "retarget": {
+          "zh": "改目标",
+          "brief": "改变目标选择的状态"
+        },
+        "link": {
+          "zh": "链接",
+          "brief": "把多个单位关联起来的状态"
+        },
+        "contract": {
+          "zh": "契约",
+          "brief": "契约类状态"
+        },
+        "conceal": {
+          "zh": "隐匿",
+          "brief": "隐藏/不可被选相关的状态"
+        },
+        "seal": {
+          "zh": "封印",
+          "brief": "封印类状态"
+        }
+      }
+    },
+    "actionLock": {
+      "label": "行为封锁",
+      "desc": "可被禁止的行为种类。封锁按行为种类枚举，不由每个控制类状态各写一套。",
+      "source": "SCHEMA.md §6 disallowActions",
+      "terms": {
+        "move": {
+          "zh": "禁止移动",
+          "brief": "statusDef.disallowActions 取值：该单位无法位移"
+        },
+        "basic_attack": {
+          "zh": "禁止普攻",
+          "brief": "statusDef.disallowActions 取值：无法发动普通攻击"
+        },
+        "skill": {
+          "zh": "禁止主动技能",
+          "brief": "statusDef.disallowActions 取值：无法施放主动技能"
+        },
+        "skip": {
+          "zh": "禁止跳过行动",
+          "brief": "statusDef.disallowActions 取值：不能主动跳过自己的行动"
+        },
+        "react": {
+          "zh": "禁止反应·反击",
+          "brief": "statusDef.disallowActions 取值：无法触发反应与反击"
+        },
+        "channel": {
+          "zh": "禁止吟唱",
+          "brief": "statusDef.disallowActions 取值：无法进行吟唱"
+        }
+      }
+    },
+    "zoneKind": {
+      "label": "区域类型",
+      "desc": "区域的两种性质：危害型对占据者不利，祝福型对占据者有利。区域是坐标版的状态——占格、有载荷、可被拆除。",
+      "source": "SCHEMA.md §7 zoneDef",
+      "terms": {
+        "hazard": {
+          "zh": "危害区域",
+          "brief": "对占据者不利的区域"
+        },
+        "blessing": {
+          "zh": "祝福区域",
+          "brief": "对占据者有利的区域"
+        }
+      }
+    },
+    "zoneTrigger": {
+      "label": "区域触发",
+      "desc": "区域在什么时机结算载荷：占据者每 tick、占据者攻击时，或召唤它的技能触发时。",
+      "source": "skills.schema.json zoneDef",
+      "terms": {
+        "on_occupy_tick": {
+          "zh": "占据每 tick",
+          "brief": "占据该区域的单位每 tick 触发"
+        },
+        "on_attack": {
+          "zh": "攻击时",
+          "brief": "占据者攻击时触发"
+        },
+        "summon_skill": {
+          "zh": "召唤技能",
+          "brief": "召唤类技能触发"
+        }
+      }
+    },
+    "zoneAffects": {
+      "label": "区域作用面",
+      "desc": "区域对谁生效：以区域拥有者为参照的友方、敌方，或任意单位。",
+      "source": "ddd/params/战场参数.md ZoneGrant.affects / SCHEMA.md §7 zoneDef",
+      "terms": {
+        "ally_of_owner": {
+          "zh": "己方单位",
+          "brief": "仅对 Zone 归属者一方生效"
+        },
+        "enemy_of_owner": {
+          "zh": "敌方单位",
+          "brief": "仅对 Zone 归属者的敌方生效"
+        },
+        "any": {
+          "zh": "不限阵营",
+          "brief": "对进入区域的任何单位生效"
+        }
+      }
+    },
+    "durationUnit": {
+      "label": "时长单位",
+      "desc": "持续时间的计时单位：tick（最小时间刻度）、回合（固定 1 回合 = 5 tick，仅界域/区域系）、自身回合（按持有者自己的行动机会数递减，挂单位的状态与 modify_stat 用）。三者不可混用——换错会把「每回合」变成「每 tick」。",
+      "source": "skills.schema.json / 调度参数.md §〇点五",
+      "terms": {
+        "turn": {
+          "zh": "回合",
+          "brief": "固定 5 tick 口径，仅界域/区域/放逐系"
+        },
+        "tick": {
+          "zh": "tick",
+          "brief": "最小时间刻度；tick ≠ 回合"
+        },
+        "self_turn": {
+          "zh": "自身回合",
+          "brief": "持有者每获得一次行动机会扣 1（随敏捷变密），用于「持续 N 个自身回合」"
+        }
+      }
+    },
+    "dim": {
+      "label": "战场维度",
+      "desc": "战场级全局标量维度，全队共享、随 tick 或事件累积、达阈值即兑现。它是跨途径的公共资源与流派枢纽，不是某个单位的属性。",
+      "source": "skills.schema.json dimHook",
+      "terms": {
+        "secrecy": {
+          "zh": "隐秘值",
+          "brief": "战场全局维度；阈值档 4/7/10"
+        },
+        "order": {
+          "zh": "秩序度",
+          "brief": "战场全局维度；阈值档 3/7/10"
+        },
+        "fate_value": {
+          "zh": "命运值",
+          "brief": "战场全局维度；阈值档 ±5/±8/±10"
+        },
+        "luminance": {
+          "zh": "光照度",
+          "brief": "战场全局维度（战场公共）；由战场时钟 clock 派生，取值域 0–10，官方档位 2/5/8（暗夜/晨昏/白昼）。见 战场参数.md §1.3b"
+        },
+        "death_tally": {
+          "zh": "死亡簿",
+          "brief": "战场死亡计数：单位走完死亡结算链 +1、cap 10；收尸人/战士/怪物读层放大（2026-10-02 量表族第 6 员）"
+        }
+      }
+    },
+    "dimTarget": {
+      "label": "维度乘区对象",
+      "desc": "维度达阈值时作用于哪一项结算：伤害、承伤、治疗、资源或规则强度。维度只通过这个挂钩影响数值，不得直接给位格。",
+      "source": "SCHEMA.md §7 dimHook",
+      "terms": {
+        "damage": {
+          "zh": "伤害",
+          "brief": "对伤害结算乘区"
+        },
+        "damage_taken": {
+          "zh": "承伤",
+          "brief": "对承伤结算乘区"
+        },
+        "heal": {
+          "zh": "治疗",
+          "brief": "对治疗结算乘区"
+        },
+        "resource": {
+          "zh": "资源",
+          "brief": "对资源结算乘区"
+        },
+        "rule_strength": {
+          "zh": "规则强度",
+          "brief": "对规则强度乘区"
+        },
+        "cost": {
+          "zh": "费用",
+          "brief": "折费：支付阶段读取 board 维度，本卡能量费乘 mul（<1 为折扣；2026-10-01 时空迷宫批开通）"
+        },
+        "all": {
+          "zh": "全部",
+          "brief": "对所有相关结算乘区"
+        }
+      }
+    },
+    "unitType": {
+      "label": "单位类型",
+      "desc": "单位的主分类标签，供定向检索与克制类技能使用；细分的风味标签走开放的 tags，不塞进主分类。12 值封闭枚举（2026-10-01 定稿），单位归属权威见 ddd/params/召唤物参数.md §一",
+      "source": "skills.schema.json unitDef",
+      "terms": {
+        "UNDEAD": {
+          "zh": "不死",
+          "brief": "不死族单位（尸骸唤起，死灵系产物）"
+        },
+        "SPIRIT": {
+          "zh": "灵体",
+          "brief": "灵体单位（无实体之灵、被放牧/外放的灵魂）"
+        },
+        "BEAST": {
+          "zh": "兽",
+          "brief": "活体驯化或召来的动物"
+        },
+        "VERMIN": {
+          "zh": "虫豸",
+          "brief": "低血快攻小体群"
+        },
+        "PLANT": {
+          "zh": "植株",
+          "brief": "催化/催生的植物"
+        },
+        "CONSTRUCT": {
+          "zh": "构装体",
+          "brief": "人工造物（人手工坊造物、材质/阶梯体系）"
+        },
+        "MACHINE": {
+          "zh": "机械",
+          "brief": "精密机械结构单位"
+        },
+        "FLESH": {
+          "zh": "血肉",
+          "brief": "血肉拼/育成的仆役"
+        },
+        "DEMON": {
+          "zh": "恶魔",
+          "brief": "深渊/仪式投影"
+        },
+        "ABERRATION": {
+          "zh": "异怪",
+          "brief": "灵界生物、不可名状之异变"
+        },
+        "ILLUSION": {
+          "zh": "幻象",
+          "brief": "影、镜像、空想/历史/身份之影，非真存"
+        },
+        "ITEM": {
+          "zh": "物品",
+          "brief": "物而非战力（攻击恒 0 或近 0）"
+        }
+      }
+    },
+    "stackPolicy": {
+      "label": "叠层策略",
+      "desc": "重复施加时的层数策略：刷新时长、拒绝叠加，还是继续叠层。",
+      "source": "SCHEMA.md §6",
+      "terms": {
+        "stack": {
+          "zh": "叠层",
+          "brief": "重复施加叠层数"
+        },
+        "refresh": {
+          "zh": "刷新",
+          "brief": "重复施加刷新持续"
+        }
+      }
+    },
+    "countMode": {
+      "label": "计数口径",
+      "desc": "计数型机制的统计口径：累计产出（只增不减）还是当前在场（离场即减）。两种口径对「攒够阈值就兑现」的激励方向相反。",
+      "source": "SCHEMA.md §6",
+      "terms": {
+        "cumulative": {
+          "zh": "累计",
+          "brief": "累计产出，只增不减"
+        },
+        "on_field": {
+          "zh": "在场",
+          "brief": "当前在场数，离场即减"
+        }
+      }
+    },
+    "transferDirection": {
+      "label": "转嫁方向",
+      "desc": "伤害转嫁的承接方：转给施法者、友军、目标或第三方。",
+      "source": "SCHEMA.md §6 damageTransfer",
+      "terms": {
+        "to_caster": {
+          "zh": "转给施法者",
+          "brief": "damageTransfer 方向：承伤转嫁给伤害来源"
+        },
+        "to_allies": {
+          "zh": "转给友军",
+          "brief": "damageTransfer 方向：承伤分摊给友方单位"
+        },
+        "to_target": {
+          "zh": "转给目标",
+          "brief": "damageTransfer 方向：承伤转嫁给被攻击的目标"
+        },
+        "to_third": {
+          "zh": "转给第三方",
+          "brief": "damageTransfer 方向：承伤转嫁给场上的第三方单位"
+        },
+        "both": {
+          "zh": "互相分担",
+          "brief": "damageTransfer 方向：链接双方互分——你挨的打对方分一半，对方挨的打你也分一半（shared_burden）"
+        },
+        "to_self": {
+          "zh": "收归己身",
+          "brief": "damageTransfer 方向：承伤收归持有者——linkedFrom 选中的单位受伤时按比例转给持有者（defined_substitute）"
+        }
+      }
+    },
+    "split": {
+      "label": "分摊方式",
+      "desc": "转嫁与链接的伤害由一人承受还是多人均摊。",
+      "source": "SCHEMA.md §6 damageTransfer",
+      "terms": {
+        "single": {
+          "zh": "单体承担",
+          "brief": "由一个单位承担"
+        },
+        "even": {
+          "zh": "均摊",
+          "brief": "均摊到多个单位"
+        }
+      }
+    },
+    "phase": {
+      "label": "战场相位",
+      "desc": "战场时钟 board.clock 的派生枚举视图（1 tick = 20 分钟，一天 72 tick）。与连续量「光照度 luminance」互补：光照度表达明暗强弱，相位表达时段身份；两者不严格同构，精确判定必须用相位。",
+      "source": "战场参数.md §1.3 / SCHEMA.md §7.1",
+      "terms": {
+        "midnight": {
+          "zh": "午夜",
+          "brief": "tick 0–11（00:00–04:00）；光照度 0–1，一夜最暗"
+        },
+        "dawn": {
+          "zh": "黎明",
+          "brief": "tick 12–23（04:00–08:00）；光照度 0→7，黎明前最暗"
+        },
+        "day": {
+          "zh": "白昼",
+          "brief": "tick 24–47（08:00–16:00）；光照度 7–10，正午 tick 30–40 峰值 10"
+        },
+        "dusk": {
+          "zh": "黄昏",
+          "brief": "tick 48–59（16:00–20:00）；光照度 6→2"
+        },
+        "night": {
+          "zh": "夜",
+          "brief": "tick 60–71（20:00–24:00）；光照度 2→1，月色微光"
+        }
+      }
+    },
+    "modifierKey": {
+      "label": "修饰键",
+      "desc": "状态修正集合（statusDef.modifiers）的修正名取值域。开放结构（谓词与修正维度持续扩展，封闭会阻碍内容生产），但新键须先在本栏目登记——validate.py 对未登记键给非阻断告警。命名取向：乘区/加算族 snake_case，机制名存量 camel 保留。2026-10-02 治理批：117 键收敛至 89（同义合并 27 处、顶层错位回迁 69 处）。",
+      "source": "SCHEMA.md §5 / STATUS_TAXONOMY",
+      "terms": {
+        "damage_taken_mul": {
+          "zh": "受伤乘区",
+          "brief": "持有者受到伤害 ×mul（0.7=标准减伤母版档 / 0.85=轻减档）"
+        },
+        "damage_mul": {
+          "zh": "增伤乘区",
+          "brief": "持有者造成伤害 ×mul"
+        },
+        "damage_taken_add": {
+          "zh": "受伤加算",
+          "brief": "受到伤害 +N，加算面不走乘区"
+        },
+        "damageBonus": {
+          "zh": "定向增伤",
+          "brief": "对满足 filter 的目标伤害 +N（固定加算，evil_sense 对 debuff/control 目标）"
+        },
+        "damageDealtMulPerStack": {
+          "zh": "叠层增伤",
+          "brief": "每层 ×mul，随本状态层数递增（观察 母版）"
+        },
+        "damageDealtMulVsConcealed": {
+          "zh": "反隐匿增伤",
+          "brief": "对隐匿目标伤害 ×mul（灵视线）"
+        },
+        "damage_cap": {
+          "zh": "伤害封顶",
+          "brief": "单次受到伤害上限 N（血肉不灭档）"
+        },
+        "dot_cannot_kill": {
+          "zh": "DoT 免死",
+          "brief": "持续伤害不致死，最低留 1 血（摆渡人罩）"
+        },
+        "thornsDamage": {
+          "zh": "反伤",
+          "brief": "受击反弹 N 点伤害（荆棘）"
+        },
+        "lifesteal": {
+          "zh": "吸血",
+          "brief": "造成伤害按比率回复生命"
+        },
+        "damageElementOverride": {
+          "zh": "伤害元素覆写",
+          "brief": "持有者的伤害元素改为指定值（魂体/知识精类）"
+        },
+        "dot_element": {
+          "zh": "DoT 元素",
+          "brief": "dotOnTick 持续伤害的元素（fire/poison 等）"
+        },
+        "armor_pierce_ratio": {
+          "zh": "护甲穿透",
+          "brief": "无视目标 ratio 比例的护甲（含完全穿透档 ratio=1）"
+        },
+        "pierce_shield": {
+          "zh": "护盾穿透",
+          "brief": "伤害跳过指定护盾层（law_breach 穿透 shield）"
+        },
+        "pierceScope": {
+          "zh": "选靶穿透",
+          "brief": "指定方向的不可选中可被穿透（incoming_from_caster）"
+        },
+        "heal_received_mul": {
+          "zh": "受疗乘区",
+          "brief": "持有者受到治疗 ×mul（1.3=月光档正向）"
+        },
+        "heal_output_mul": {
+          "zh": "治疗输出乘区",
+          "brief": "持有者施加治疗 ×mul（施法者侧，handleHeal 读取）"
+        },
+        "heal_invert": {
+          "zh": "治疗反转",
+          "brief": "受疗变等量伤害"
+        },
+        "drainHealBonus": {
+          "zh": "吸血加成",
+          "brief": "drain 原语的回复加成"
+        },
+        "healOnTick": {
+          "zh": "每拍回复",
+          "brief": "on_tick 回复 N 点（再生）"
+        },
+        "untargetableByTargeted": {
+          "zh": "单体不可选中",
+          "brief": "不可被单体技能选中，direction 分 inbound/outbound"
+        },
+        "targetOverrideImmune": {
+          "zh": "反选靶覆写",
+          "brief": "免疫他人施加的选靶覆写（不动如山）"
+        },
+        "taunt": {
+          "zh": "嘲讽",
+          "brief": "入站攻击强制改向持有者（守护反向 anchor 承载）"
+        },
+        "guardTarget": {
+          "zh": "守护",
+          "brief": "替锚定友军挡刀"
+        },
+        "ignore_guard": {
+          "zh": "无视守护",
+          "brief": "攻击无视前排站位/守护/嘲讽拦截（ignore_guard 母版，新增项 10）"
+        },
+        "ignoreRangeRestriction": {
+          "zh": "无视射程",
+          "brief": "选靶不受 reach 限制（梦行者）"
+        },
+        "targetPriority": {
+          "zh": "选靶加权",
+          "brief": "被选取优先级加权（hunted/marked 排序键）"
+        },
+        "targetPriorityLowest": {
+          "zh": "最低优先",
+          "brief": "被选取时永远最后考虑（亲灵）"
+        },
+        "targetPriorityToSummons": {
+          "zh": "指向召唤物",
+          "brief": "敌方选靶优先指向召唤物（身份混淆）"
+        },
+        "excludeCasterTargeting": {
+          "zh": "排除施法者",
+          "brief": "全体效果不波及施法者自身（惧影）"
+        },
+        "excludeFromActionOrder": {
+          "zh": "退出行动序",
+          "brief": "不计入行动条排序（镜像/纸人替身类）"
+        },
+        "redirect_attack": {
+          "zh": "攻击改向",
+          "brief": "入站攻击改向指定落点（to:first_empty，占卜面纱）"
+        },
+        "lethalRedirect": {
+          "zh": "致死转嫁",
+          "brief": "致死判定改由指定对象承担（可触发其致死保护，替罪羊）"
+        },
+        "candidateWeight": {
+          "zh": "候选加权",
+          "brief": "选靶候选池权重调整（C8 排序分支，secrecy）"
+        },
+        "fallback_sort": {
+          "zh": "决选排序覆写",
+          "brief": "并列候选的决选排序键覆写（猎手直觉）"
+        },
+        "target_filter_override": {
+          "zh": "选靶过滤覆写",
+          "brief": "目标 filter 覆写（streamlined_cast 精简施法族）"
+        },
+        "neverMiss": {
+          "zh": "必中",
+          "brief": "攻击不会落空"
+        },
+        "incomingMiss": {
+          "zh": "受击落空",
+          "brief": "对持有者的攻击落空（汞身，与必中对冲）"
+        },
+        "see_through": {
+          "zh": "识破隐匿",
+          "brief": "敌方隐匿/不可选中类状态对持有者无效（C8 识破分支母版；吸收 pierceConceal/detect/concealReveal/reveal 旧拼写）"
+        },
+        "detectMirrored": {
+          "zh": "识破镜像",
+          "brief": "可辨识镜像/复制体（鹰眼镜像分支）"
+        },
+        "revealConcealment": {
+          "zh": "群体显隐",
+          "brief": "照出场上隐匿（昼光）"
+        },
+        "revealToSource": {
+          "zh": "向来源可见",
+          "brief": "持有者对施加者可见（hunted/marked）"
+        },
+        "concealRevealBlock": {
+          "zh": "反识破",
+          "brief": "隐匿不被识破类效果穿透（反占卜/命运视）"
+        },
+        "concealPiercedForCaster": {
+          "zh": "被施法者穿透",
+          "brief": "持有者隐匿可被施加者穿透（全知印记）"
+        },
+        "moveImmune": {
+          "zh": "位移免疫",
+          "brief": "不可被位移效果移动"
+        },
+        "movePierceImmune": {
+          "zh": "防穿透位移",
+          "brief": "免疫带穿透的位移（breach 反向）"
+        },
+        "buffBlocked": {
+          "zh": "增益封锁",
+          "brief": "无法获得 buff（门关）"
+        },
+        "buffUndispellable": {
+          "zh": "增益不可驱散",
+          "brief": "已持有的 buff 不可被敌方驱散（secrecy H8）"
+        },
+        "gaugeReductionImmune": {
+          "zh": "推条免疫",
+          "brief": "行动条不被推后/削减（反占卜/命运视）"
+        },
+        "immune_stat_reduction": {
+          "zh": "属性减益免疫",
+          "brief": "免疫属性降低（身体权威）"
+        },
+        "control_undispellable": {
+          "zh": "控制不可驱散",
+          "brief": "控制类状态不可被驱散（灵体之主）"
+        },
+        "gaugeRateMul": {
+          "zh": "行动条速率乘区",
+          "brief": "行动条累积速率 ×mul（H24 减速/加速母版）"
+        },
+        "energyCostMin": {
+          "zh": "能耗下限",
+          "brief": "技能能量消耗最低为 N（streamlined_cast 族）"
+        },
+        "dispelableOverride": {
+          "zh": "可驱散性覆写",
+          "brief": "运行时覆写 dispelable（H8，运行时驱散覆写）"
+        },
+        "outgoingDispelOverride": {
+          "zh": "出向驱散覆写",
+          "brief": "持有者施加的驱散效果被覆写（不可转移诅咒/女巫形态）"
+        },
+        "dispelParams": {
+          "zh": "驱散参数",
+          "brief": "驱散行为参数（范围/目标，占卜权威）"
+        },
+        "runtimeDispelLock": {
+          "zh": "运行时驱散锁",
+          "brief": "自身所有增益运行时不可驱散（scope:self_buffs，H8）"
+        },
+        "contractDispelLock": {
+          "zh": "契约驱散锁",
+          "brief": "由持有者施加的契约/誓约类状态不可被驱散（排它名单，秩序权威）"
+        },
+        "debuffSpread": {
+          "zh": "减益扩散",
+          "brief": "减益传播给链接/相邻目标（独裁者）"
+        },
+        "durationModifier": {
+          "zh": "时长覆写",
+          "brief": "改写其他状态挂载的时长（月红/权威）"
+        },
+        "stackCapOverride": {
+          "zh": "叠层上限覆写",
+          "brief": "指定状态叠层上限改写为 N（魂场/三头）"
+        },
+        "maxStacksOverride": {
+          "zh": "叠层上限按维覆写",
+          "brief": "按维度（insight 等）覆盖叠层上限（洞见权威）"
+        },
+        "stackCount": {
+          "zh": "层数引用",
+          "brief": "读取本状态层数的运行时钩子（frantic）"
+        },
+        "modify_stat_dynamic": {
+          "zh": "动态属性修正",
+          "brief": "按运行时条件动态改属性（集众/集众升腾）"
+        },
+        "attackMod": {
+          "zh": "攻击修正",
+          "brief": "攻击 ±N 固定加算（敬畏/藤蔓缠绕）"
+        },
+        "override_priority": {
+          "zh": "覆写优先级",
+          "brief": "同键覆写冲突时的优先级裁决（精准）"
+        },
+        "regionValueBoost": {
+          "zh": "区域数值增益",
+          "brief": "区域内效果数值加成（权威区域值）"
+        },
+        "dotOnTick": {
+          "zh": "每拍伤害",
+          "brief": "on_tick 造成 N 点持续伤害（burn/poison 母版）"
+        },
+        "summon_cap_override": {
+          "zh": "召唤上限覆写",
+          "brief": "召唤上限改写为 N（绝对上限；与「基数 + 加成」取高，不叠加）"
+        },
+        "allySummonAttackBonus": {
+          "zh": "友召唤加成",
+          "brief": "友方召唤物攻击加成（影主）"
+        },
+        "extraSpawn": {
+          "zh": "额外召唤",
+          "brief": "召唤数量 +N（H8 扩展表达，美人召唤）"
+        },
+        "ally_damage_mul": {
+          "zh": "友军伤害乘区",
+          "brief": "友方单位伤害 ×mul，filter 条件化（昼光/心灵链接）"
+        },
+        "outgoingDamageParams": {
+          "zh": "出伤参数覆写",
+          "brief": "持有者造成伤害的参数覆写（死者真言/真龙形态）"
+        },
+        "shieldDelta": {
+          "zh": "护盾增量",
+          "brief": "获得/调整 N 点护盾（护盾状态）"
+        },
+        "fortuneGainMul": {
+          "zh": "幸运获取乘区",
+          "brief": "幸运值获取 ×mul（潮起）"
+        },
+        "fortuneMaxStacksBonus": {
+          "zh": "幸运叠层加成",
+          "brief": "幸运状态叠层上限 +N（绝对灵感/幸运精通）"
+        },
+        "action_nullify": {
+          "zh": "行动落空",
+          "brief": "下一次行动/攻击落空（混沌漩涡/茧）"
+        },
+        "chant_echo": {
+          "zh": "圣咏回响",
+          "brief": "持态者下一圣咏 tag 技能能量费 ×0.85（cast_chain 连击正主的状态面兑现，歌颂者签名；2026-10-02 登记）"
+        },
+        "rage_overflow": {
+          "zh": "怒溢成冰",
+          "brief": "rage 满层后每溢出 1 点转为 1 点冰霜附伤（元素轮转状态面，水手签名；2026-10-02 登记）"
+        },
+        "dose_stack": {
+          "zh": "药剂叠量",
+          "brief": "同目标药剂状态每 2 层药效 +25%（药剂学签名，药师；2026-10-02 登记）"
+        },
+        "clockwork_tick": {
+          "zh": "机芯联动",
+          "brief": "每次 advance_clock 推进时对持态者结算一次状态载荷（命运循环状态面，怪物签名；2026-10-02 登记）"
+        },
+        "civilization_scale": {
+          "zh": "文明量尺",
+          "brief": "效果随己方 CONSTRUCT/MACHINE 造物在场数缩放（文明兴衰沉淀为力，通识者签名；2026-10-02 登记）"
+        },
+        "damageShare": {
+          "zh": "伤害分摊",
+          "brief": "持有者受到伤害的一部分按比例分摊给链接对象（H28 伤害转嫁族；权威承载=shared_burden 顶层 damageTransfer 字段，律师签名；2026-10-02 登记）"
+        },
+        "summon_cap_bonus": {
+          "zh": "召唤位加成",
+          "brief": "召唤位上限 +N（按层数累加，与基数 3 相加；军团号令 / 兽群号令等维持费型特权）"
+        }
+      }
+    },
+    "opportunityCost": {
+      "label": "行动机会成本",
+      "desc": "技能的本次 Action 是否消耗行动机会。0=不闭合机会，同一机会可继续行动；1=正常消耗（缺省）。",
+      "source": "调度参数.md §〇 / skills.schema.json",
+      "terms": {
+        "0": {
+          "zh": "不消耗机会",
+          "brief": "执行后机会不闭合，可继续执行下一个 Action；仍扣 energy/cooldown，不扣行动条"
+        },
+        "1": {
+          "zh": "正常消耗",
+          "brief": "执行后机会闭合（缺省）"
+        }
+      }
+    },
+    "anchorKind": {
+      "label": "轴身份锚点类型",
+      "desc": "构筑轴用以锚定「代表玩法/机制」的载体类型；状态只是其中一种。见 SCORING.md §二·零。",
+      "source": "SCORING.md §二·零",
+      "terms": {
+        "status": {
+          "zh": "状态",
+          "brief": "以单个状态为轴身份（挂载+读层+层数/触发机制）"
+        },
+        "status_family": {
+          "zh": "状态族",
+          "brief": "以一组相关状态为轴身份（共同闭环）"
+        },
+        "resource": {
+          "zh": "资源池",
+          "brief": "以 Pool/资源为轴身份（读写+阈值档位）"
+        },
+        "channel": {
+          "zh": "全局通道",
+          "brief": "以 board 级通道为轴身份（写入+下游读取）"
+        },
+        "equipment": {
+          "zh": "装备槽",
+          "brief": "以装备槽机制为轴身份（装备/换装/耐久）"
+        },
+        "primitive": {
+          "zh": "原语机制",
+          "brief": "以特定效果原语为轴身份（使用+读层联动）"
+        },
+        "trigger": {
+          "zh": "触发点",
+          "brief": "以事件触发点为轴身份（挂载+载荷闭环）"
+        },
+        "geometry": {
+          "zh": "选靶几何",
+          "brief": "以选靶几何签名为轴身份"
+        },
+        "zone": {
+          "zh": "区域/界域",
+          "brief": "以区域/界域放置为轴身份"
+        },
+        "rule_slot": {
+          "zh": "规则槽",
+          "brief": "以规则改写槽为轴身份"
+        },
+        "action_economy": {
+          "zh": "行动经济",
+          "brief": "以行动机会/行动条机制为轴身份"
+        },
+        "dimension": {
+          "zh": "维度签名",
+          "brief": "以位格/性别/单位类型等维度为轴身份"
+        },
+        "element": {
+          "zh": "元素",
+          "brief": "以元素伤害/反应为轴身份"
+        },
+        "form_cycle": {
+          "zh": "形态轮转",
+          "brief": "以形态组/相位轮转为轴身份"
+        }
+      }
+    }
+  }
+}
