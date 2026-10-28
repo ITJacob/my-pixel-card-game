@@ -1,19 +1,2019 @@
 {
   "factionId": "faction_07",
   "factionName": "派系·柒",
-  "sharedSkillIds": [],
+  "sharedSkillIds": [
+    "f07_brew",
+    "f07_herbal_dressing",
+    "f07_toxin_resist",
+    "f07_health_sight",
+    "f07_beast_sense",
+    "f07_wild_instinct"
+  ],
   "heroes": [
     {
       "heroId": "hero_07",
       "heroName": "英雄·柒",
-      "playstyle": "预服调度（药剂×兽群）",
-      "skillTree": [],
-      "uniqueSkillIds": []
+      "playstyle": "预服调度（药剂预挂调度 × 兽群召唤咬合）",
+      "skillTree": [
+        "h07_invisibility_potion",
+        "h07_scentless",
+        "h07_prepared_draught",
+        "h07_spirit_material",
+        "h07_full_moon",
+        "h07_blink",
+        "h07_moonlight_form",
+        "h07_moon_paper",
+        "h07_summon_gate",
+        "h07_spirit_pact",
+        "h07_creation",
+        "h07_self_mend",
+        "h07_pure_land",
+        "h07_moon_cycle",
+        "h07_pack_maul",
+        "h07_beast_rush",
+        "h07_frenzy_rush",
+        "h07_beast_tide",
+        "h07_beast_legion"
+      ],
+      "uniqueSkillIds": [
+        "h07_beast_whistle",
+        "h07_invisibility_potion",
+        "h07_scentless",
+        "h07_prepared_draught",
+        "h07_spirit_material",
+        "h07_full_moon",
+        "h07_blink",
+        "h07_moonlight_form",
+        "h07_moon_paper",
+        "h07_summon_gate",
+        "h07_spirit_pact",
+        "h07_creation",
+        "h07_self_mend",
+        "h07_pure_land",
+        "h07_moon_cycle",
+        "h07_beast_call",
+        "h07_pack_maul",
+        "h07_beast_rush",
+        "h07_frenzy_rush",
+        "h07_beast_tide",
+        "h07_beast_legion"
+      ]
     }
   ],
-  "cards": [],
-  "statusDefs": [],
-  "unitDefs": [],
+  "cards": [
+    {
+      "id": "f07_brew",
+      "name": "药剂调配",
+      "kind": "active",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "brew",
+      "flagship": false,
+      "describe": "治疗一名友军 4 点生命，并交给其一瓶预服药水（攻击/防御提升，50tick，可叠 3 层）；月相 ≥2 层时治疗 +1；自身生命 -1（以身试药）。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 10,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "ally",
+          "scope": "board"
+        },
+        "fallbackSort": "hp_asc"
+      },
+      "effects": [
+        {
+          "type": "heal",
+          "value": 4
+        },
+        {
+          "type": "mount_status",
+          "statusId": "prepared_draught",
+          "stacks": 1,
+          "stackMode": "add",
+          "duration": 50,
+          "target": "target",
+          "note": "调配出一瓶备用药水交予友军（环节⑤ 2026-09-29 补产层段）"
+        },
+        {
+          "type": "grant_immunity",
+          "target": "self",
+          "charges": 1,
+          "duration": 5,
+          "note": "预服在前：抗性已经铺好"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "self",
+            "id": "moon_cycle",
+            "cmp": ">=",
+            "n": 2
+          },
+          "then": [
+            {
+              "type": "heal",
+              "value": 1,
+              "target": "target",
+              "note": "月相催药：月力足时药效更盛"
+            }
+          ],
+          "else": [],
+          "note": "brew 读 moon（跨轴）"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "hp",
+          "value": -1,
+          "mode": "delta",
+          "target": "self",
+          "note": "以身试药：调配前先自尝一口"
+        }
+      ],
+      "tentative": false,
+      "scope": "faction"
+    },
+    {
+      "id": "f07_herbal_dressing",
+      "name": "草药敷贴",
+      "kind": "active",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "brew",
+      "flagship": false,
+      "describe": "治疗一名友军 3 点生命，并使其再生 15tick（每 tick 0.4 点），备好一剂预服药水；若其已带预服药水，药效激发，额外治疗 2 点；自身带药记时治疗 +2。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "ally",
+          "scope": "board"
+        },
+        "fallbackSort": "hp_asc"
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "heal",
+              "value": 3
+            },
+            {
+              "type": "mount_status",
+              "statusId": "regen",
+              "duration": 15
+            },
+            {
+              "type": "mount_status",
+              "statusId": "prepared_draught",
+              "stacks": 1,
+              "stackMode": "add",
+              "duration": 50,
+              "target": "target",
+              "note": "敷贴时备好一剂药水"
+            }
+          ]
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "prepared_draught",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "heal",
+              "value": 2,
+              "note": "药水激效：带预服药水者治疗 +2（环节⑤ 2026-09-29 补读层段：brew payoff 落地）"
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "self",
+            "id": "remedy_mark",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "heal",
+              "value": 2,
+              "note": "药记在册：剂量拿捏更准，治疗 +2"
+            }
+          ],
+          "else": [],
+          "note": "药记集火读取（remedy_mark）"
+        }
+      ],
+      "tentative": false,
+      "scope": "faction"
+    },
+    {
+      "id": "f07_toxin_resist",
+      "name": "毒素抗性",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "brew",
+      "flagship": false,
+      "describe": "战斗开始时，自身毒素抗性 +20（整场）；受到毒素伤害时自行化解 1 点（回复 1 点生命）。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "resist:poison",
+          "value": 20,
+          "mode": "delta",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "antivenom",
+          "duration": null,
+          "target": "self"
+        }
+      ],
+      "tentative": false,
+      "scope": "faction"
+    },
+    {
+      "id": "f07_health_sight",
+      "name": "健康灵视",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "brew",
+      "flagship": false,
+      "describe": "开战后获得「健康灵视」：你施放的治疗对当前生命低于 50% 的目标治疗量 ×1.5。",
+      "hook": [
+        "on_tick"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "not",
+            "condition": {
+              "kind": "has_status",
+              "side": "self",
+              "id": "health_sight",
+              "cmp": ">=",
+              "n": 1
+            }
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "health_sight",
+              "duration": null,
+              "target": "self"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false,
+      "scope": "faction"
+    },
+    {
+      "id": "h07_beast_whistle",
+      "name": "驯兽哨",
+      "kind": "summon",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "beasts",
+      "flagship": false,
+      "describe": "在己方队尾召唤一只野性野兽为你作战，兽群的开端。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "effects": [],
+      "tentative": false,
+      "summon": {
+        "unitId": "unit_beast",
+        "position": "tail"
+      },
+      "scope": "hero",
+      "heroId": "hero_07"
+    },
+    {
+      "id": "f07_beast_sense",
+      "name": "动物感官",
+      "kind": "passive",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "beasts",
+      "flagship": false,
+      "describe": "开战后：己方动物类/召唤物攻击 +1、行动条速率 +5（整场）；你受到伤害时，己方全体召唤物行动条 +10。",
+      "hook": [
+        "on_tick"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "not",
+            "condition": {
+              "kind": "has_status",
+              "side": "self",
+              "id": "beast_sense",
+              "cmp": ">=",
+              "n": 1
+            }
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "beast_sense",
+              "duration": null,
+              "target": "self"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false,
+      "scope": "faction"
+    },
+    {
+      "id": "h07_invisibility_potion",
+      "name": "隐身药剂",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "brew",
+      "flagship": false,
+      "describe": "自身隐身 10tick：不可被单体技能选中（攻击或受击后现身）——当场服用只发挥半数；若自身带有预服药水，耗 1 层兑现全效：隐身 20tick；自身带药记时隐身延长 5tick。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self"
+        }
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "stealth",
+          "duration": 10,
+          "target": "self",
+          "note": "当场摔瓶只发挥半数：隐身 10tick（半效档）——药剂必须预服/延迟的身份红线的卡面化（批次十一 2026-10-02）"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "self",
+            "id": "prepared_draught",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "prepared_draught",
+              "stacks": 1,
+              "stackMode": "consume",
+              "target": "self",
+              "note": "耗 1 层预服药水兑现全效"
+            },
+            {
+              "type": "mount_status",
+              "statusId": "stealth",
+              "duration": 20,
+              "target": "self",
+              "note": "预服全效：战前调服的药剂发挥完全隐身 20tick——预服延迟兑现结构化（红线：当场喝半数以下，批次十一 2026-10-02）"
+            }
+          ],
+          "else": []
+        },
+        {
+          "type": "transfer_status",
+          "mode": "copy",
+          "from": {
+            "side": "self"
+          },
+          "to": "all_allies",
+          "count": 1,
+          "durationMul": 0.5,
+          "note": "分药：药剂也能给别人来一口，只是剂量减半"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "self",
+            "id": "remedy_mark",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "stealth",
+              "duration": 5,
+              "target": "self",
+              "note": "药记在册：隐身延长 5tick"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_07"
+    },
+    {
+      "id": "h07_scentless",
+      "name": "无味香水",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "brew",
+      "flagship": false,
+      "describe": "驱散自身全部减益与持续伤害状态，并获得无味 10tick：免疫减益与持续伤害状态。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self"
+        }
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "dispel",
+              "target": "self",
+              "dispelTarget": "unit",
+              "filter": {
+                "category": [
+                  "debuff"
+                ]
+              }
+            },
+            {
+              "type": "mount_status",
+              "statusId": "scentless",
+              "duration": 10,
+              "target": "self"
+            }
+          ]
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_07"
+    },
+    {
+      "id": "h07_prepared_draught",
+      "name": "预服药水",
+      "kind": "passive",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "brew",
+      "flagship": false,
+      "describe": "战斗开始时获得「预服药水」50tick：攻击 +2、防御 +2、行动条速率 +8。并获得「药记」20tick（己方伤害 ×1.1，跨系枢纽）。目标已被腐蚀则以毒攻蚀，追加 2 点毒素伤害。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "prepared_draught",
+          "duration": 50,
+          "target": "self",
+          "note": "绝不能写成 on_spawn（A2：召唤物登场重复触发）"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "remedy_mark",
+          "duration": 20,
+          "target": "self",
+          "note": "跨系枢纽挂载（2026-09-29 跨系批，产层兼枢纽计数）"
+        },
+        {
+          "type": "grant_immunity",
+          "target": "self",
+          "charges": 1,
+          "duration": 5,
+          "note": "药剂残渣护体：当场只喝半剂，余量留给下一次"
+        }
+      ],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_deal_damage",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "has_status",
+                "side": "target",
+                "id": "corrupted",
+                "cmp": ">=",
+                "n": 1
+              },
+              "then": [
+                {
+                  "type": "damage",
+                  "element": "poison",
+                  "value": 2,
+                  "note": "以毒攻蚀：目标已被腐蚀则药剂蚀穿 2 点",
+                  "target": "target"
+                }
+              ],
+              "else": [],
+              "note": "跨系读层段：apothecary→lawyer corrupted（2026-09-29 跨系批）"
+            }
+          ],
+          "note": "跨系读层：打中带腐蚀的目标追加毒伤（迁自开局快照）"
+        }
+      ],
+      "scope": "hero",
+      "heroId": "hero_07"
+    },
+    {
+      "id": "h07_spirit_material",
+      "name": "灵性材料辨识",
+      "kind": "passive",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "brew",
+      "flagship": false,
+      "describe": "你击杀单位时回复能量：击杀召唤物/灵界生物回复 4 点，否则回复 2 点。",
+      "hook": [
+        "on_kill"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "target_is_summoned"
+          },
+          "then": [
+            {
+              "type": "modify_resource",
+              "resource": "energy",
+              "value": 4,
+              "mode": "delta",
+              "target": "self"
+            }
+          ],
+          "else": [
+            {
+              "type": "modify_resource",
+              "resource": "energy",
+              "value": 2,
+              "mode": "delta",
+              "target": "self"
+            }
+          ]
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_07"
+    },
+    {
+      "id": "h07_full_moon",
+      "name": "满月",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "moon",
+      "flagship": false,
+      "describe": "自身月相强制切换至满月（经月相轮转形式组顶相并重置计数）；全体友军沐浴月光 15tick：受到的治疗 ×1.3。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "area",
+          "faction": "ally",
+          "scope": "board",
+          "pickCount": "all"
+        }
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "mount_status",
+              "statusId": "moon_full",
+              "duration": 30,
+              "target": "self",
+              "note": "形态组互斥：顶掉当前月相并重置 moon_cycle 计数（切换规则②）；未持有 moon_cycle 时仍可单卡成立"
+            },
+            {
+              "type": "mount_status",
+              "statusId": "moonlit",
+              "duration": 15,
+              "target": "all_allies"
+            },
+            {
+              "type": "mount_status",
+              "statusId": "moon_cycle",
+              "duration": null,
+              "target": "self",
+              "note": "强制切相经月相轮转形式组承载（同组新相顶旧相，环节⑤ 2026-09-29 补产层实证）"
+            }
+          ]
+        }
+      ],
+      "tentative": false,
+      "phaseHooks": [
+        {
+          "phases": [
+            "night",
+            "midnight"
+          ],
+          "mul": 1.2,
+          "target": "all"
+        }
+      ],
+      "scope": "hero",
+      "heroId": "hero_07"
+    },
+    {
+      "id": "h07_blink",
+      "name": "闪现",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "moon",
+      "flagship": false,
+      "describe": "与一名指定友军换位（友军所在即月光笼罩处），并对敌方前排造成 3 点无元素伤害。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "ally",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "hp_asc"
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "move",
+              "op": "swap_ally",
+              "target": "target",
+              "note": "「月光范围」绑定友军所在（原著未定义，稿面处置见遗留 3）"
+            },
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 3,
+              "target": "secondary_target",
+              "note": "近战进程伤害"
+            }
+          ]
+        }
+      ],
+      "tentative": false,
+      "phaseHooks": [
+        {
+          "phases": [
+            "night",
+            "midnight"
+          ],
+          "mul": 1.2,
+          "target": "damage"
+        }
+      ],
+      "scope": "hero",
+      "heroId": "hero_07"
+    },
+    {
+      "id": "h07_moonlight_form",
+      "name": "月光化",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "moon",
+      "flagship": false,
+      "describe": "月光化 25tick：受伤 ×0.85；期间死亡时以 25% 生命重组（每场一次）。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point",
+          "pickCount": "all"
+        }
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "moonlight_form",
+          "duration": 25,
+          "target": "self"
+        }
+      ],
+      "tentative": false,
+      "phaseHooks": [
+        {
+          "phases": [
+            "night",
+            "midnight"
+          ],
+          "mul": 1.2,
+          "target": "all"
+        }
+      ],
+      "scope": "hero",
+      "heroId": "hero_07"
+    },
+    {
+      "id": "h07_moon_paper",
+      "name": "月亮纸人",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "moon",
+      "flagship": false,
+      "describe": "月亮纸人替身 30tick：期间死亡时以 20% 生命免死（每场一次），并对致死来源造成 3 点无元素伤害。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point",
+          "pickCount": "all"
+        }
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "moon_paper_substitute",
+          "duration": 30,
+          "target": "self"
+        }
+      ],
+      "tentative": false,
+      "phaseHooks": [
+        {
+          "phases": [
+            "night",
+            "midnight"
+          ],
+          "mul": 1.2,
+          "target": "all"
+        }
+      ],
+      "scope": "hero",
+      "heroId": "hero_07"
+    },
+    {
+      "id": "h07_summon_gate",
+      "name": "召唤之门",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "beasts",
+      "flagship": true,
+      "describe": "撕开召唤之门：在己方队尾召唤 1 只强大灵界生物 + 2 只野兽。",
+      "cost": {
+        "energy": 5,
+        "cooldown": 35,
+        "castTime": 1
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self"
+        },
+        "consumption": "summon"
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "spawn",
+              "unitId": "unit_elder_thing",
+              "position": "tail",
+              "note": "F39（H1）"
+            },
+            {
+              "type": "spawn",
+              "unitId": "unit_beast",
+              "count": 2,
+              "position": "tail",
+              "note": "F38；多次 spawn 亦可走 count（H17）"
+            }
+          ]
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_07"
+    },
+    {
+      "id": "h07_spirit_pact",
+      "name": "灵界契印",
+      "kind": "passive",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "beasts",
+      "flagship": false,
+      "describe": "开战后获得「灵界契印」：你召唤的单位登场时自带 3 点护盾；由你召唤的单位死亡时你回复 2 点能量。",
+      "hook": [
+        "on_tick"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "not",
+            "condition": {
+              "kind": "has_status",
+              "side": "self",
+              "id": "spirit_pact",
+              "cmp": ">=",
+              "n": 1
+            }
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "spirit_pact",
+              "duration": null,
+              "target": "self"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_07"
+    },
+    {
+      "id": "h07_creation",
+      "name": "创生",
+      "kind": "active",
+      "sequence": 2,
+      "rarity": "epic",
+      "axis": "brew",
+      "flagship": true,
+      "describe": "双目标：治疗生命最低的一名友军 8 点并使其再生 15tick；同时使主目标敌人生命上限 -8（30tick，到期不回补截断）。",
+      "cost": {
+        "energy": 5,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy"
+        },
+        "fallbackSort": "hp_desc"
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "heal",
+              "value": 8,
+              "target": "secondary_target",
+              "note": "生命爆发"
+            },
+            {
+              "type": "mount_status",
+              "statusId": "regen",
+              "duration": 15,
+              "target": "secondary_target",
+              "note": "生命延长"
+            },
+            {
+              "type": "modify_stat",
+              "stat": "hp_max",
+              "value": -8,
+              "mode": "delta",
+              "duration": 30,
+              "note": "生命缩短：生效即截断当前生命，到期回滚不回补（效果参数 §1.1 hp_max 削减截断行，2026-09-04 确认）"
+            }
+          ]
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_07"
+    },
+    {
+      "id": "h07_self_mend",
+      "name": "自我治愈",
+      "kind": "passive",
+      "sequence": 2,
+      "rarity": "epic",
+      "axis": "brew",
+      "flagship": false,
+      "describe": "开战后获得「自我治愈」：每 tick 回复 0.2 点生命；生命低于 50% 时受到伤害会急速愈合 2 点。",
+      "hook": [
+        "on_tick"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "not",
+            "condition": {
+              "kind": "has_status",
+              "side": "self",
+              "id": "self_mend",
+              "cmp": ">=",
+              "n": 1
+            }
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "self_mend",
+              "duration": null,
+              "target": "self"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_07"
+    },
+    {
+      "id": "h07_pure_land",
+      "name": "净土净化",
+      "kind": "active",
+      "sequence": 2,
+      "rarity": "epic",
+      "axis": "brew",
+      "flagship": false,
+      "describe": "全体友军驱散全部减益与持续伤害状态，并各回复 3 点生命。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "ally",
+          "scope": "board"
+        }
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "dispel",
+              "target": "all_allies",
+              "dispelTarget": "unit",
+              "filter": {
+                "category": [
+                  "debuff"
+                ]
+              },
+              "note": "C2 数组；count 省略 = 全部"
+            },
+            {
+              "type": "heal",
+              "value": 3,
+              "target": "all_allies"
+            }
+          ]
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_07"
+    },
+    {
+      "id": "h07_moon_cycle",
+      "name": "月相·轮转",
+      "kind": "passive",
+      "sequence": 0,
+      "rarity": "legendary",
+      "axis": "moon",
+      "flagship": true,
+      "describe": "开战后获得「月相轮转」：月相按 血月→红月→银月→满月→缺月 每 6 tick 自发轮转（开局为血月）；生命首次低于 30% 时立即切至满月；【满月】卡可强制切相；自身深红活力 ≥2 层时月相 +1 层。",
+      "hook": [
+        "on_tick"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "not",
+            "condition": {
+              "kind": "has_status",
+              "side": "self",
+              "id": "moon_cycle",
+              "cmp": ">=",
+              "n": 1
+            }
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "moon_cycle",
+              "duration": null,
+              "target": "self"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_07"
+    },
+    {
+      "id": "h07_beast_call",
+      "name": "兽群呼唤",
+      "kind": "summon",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "beasts",
+      "flagship": false,
+      "describe": "吹响号角，召来一只野兽与现有兽群汇合到队尾。",
+      "effects": [],
+      "tentative": false,
+      "cost": {
+        "energy": 2,
+        "cooldown": 0,
+        "castTime": 0
+      },
+      "summon": {
+        "unitId": "unit_beast",
+        "count": 1,
+        "position": "tail"
+      },
+      "scope": "hero",
+      "heroId": "hero_07"
+    },
+    {
+      "id": "f07_wild_instinct",
+      "name": "野性直觉",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "beasts",
+      "flagship": false,
+      "describe": "战斗开始时永久获得兽觉：识破与兽群感应先行一步——首次负面状态被免疫（5tick），潜伏者无处藏身。",
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "beast_sense",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "grant_immunity",
+          "target": "self",
+          "charges": 1,
+          "duration": 5,
+          "note": "野性直觉：先手警觉，首次负面状态被免疫（5tick）"
+        }
+      ],
+      "tentative": false,
+      "hook": [
+        "on_battle_start"
+      ],
+      "scope": "faction"
+    },
+    {
+      "id": "h07_pack_maul",
+      "name": "群兽撕咬",
+      "kind": "summon",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "beasts",
+      "flagship": false,
+      "describe": "在己方队尾召唤两只野兽群起撕咬；场上有野兽时自身行动条 +5。",
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "caster_has_summon",
+            "unitId": "unit_beast"
+          },
+          "then": [
+            {
+              "type": "modify_resource",
+              "resource": "gauge.current",
+              "value": 5,
+              "mode": "delta",
+              "target": "self",
+              "note": "群兽已成，趁势压上：自身行动条 +5"
+            }
+          ],
+          "else": [],
+          "note": "兽群咬合（caster_has_summon，2026-10-24 ⑤）"
+        }
+      ],
+      "tentative": false,
+      "cost": {
+        "energy": 3,
+        "cooldown": 5,
+        "castTime": 0
+      },
+      "summon": {
+        "unitId": "unit_beast",
+        "count": 2,
+        "position": "tail"
+      },
+      "scope": "hero",
+      "heroId": "hero_07"
+    },
+    {
+      "id": "h07_beast_rush",
+      "name": "兽群奔袭",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "beasts",
+      "flagship": false,
+      "describe": "召唤 2 只野兽，并造成 3 点物理伤害；自身带预服药水时追加 1 点伤害；场上有野兽召唤物时自身行动条 +10。",
+      "effects": [
+        {
+          "type": "spawn",
+          "unitId": "unit_beast",
+          "position": "tail",
+          "count": 2
+        },
+        {
+          "type": "damage",
+          "element": "physical",
+          "value": 3,
+          "target": "target"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "ally",
+            "id": "beast_swarm"
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "physical",
+              "value": 1,
+              "target": "all_enemies",
+              "note": "跨源读取：兽群在场，奔袭追加 1"
+            }
+          ],
+          "else": [],
+          "note": "跨系接线（2026-10-23）：读取枢纽 beast_swarm"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "self",
+            "id": "prepared_draught",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "physical",
+              "value": 1,
+              "target": "target",
+              "note": "兽群灌了药，奔袭更狠 +1"
+            }
+          ],
+          "else": [],
+          "note": "beasts 读 brew（跨轴）"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "caster_has_summon",
+            "unitId": "unit_beast"
+          },
+          "then": [
+            {
+              "type": "modify_resource",
+              "resource": "gauge.current",
+              "value": 10,
+              "mode": "delta",
+              "target": "self",
+              "note": "兽群在场，奔袭后顺势再走一格"
+            }
+          ],
+          "else": [],
+          "note": "兽群用药：召唤体系咬合（caster_has_summon）"
+        }
+      ],
+      "tentative": false,
+      "cost": {
+        "energy": 4,
+        "cooldown": 5,
+        "castTime": 0
+      },
+      "reach": "melee",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy"
+        },
+        "fallbackSort": null
+      },
+      "scope": "hero",
+      "heroId": "hero_07"
+    },
+    {
+      "id": "h07_frenzy_rush",
+      "name": "狂兽突袭",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "beasts",
+      "flagship": false,
+      "describe": "召唤 2 只野兽，并造成 4 点物理伤害；若自身兽群感应 ≥1 层，兽觉指引伤害 +2；若自身带有预服药水，药剂激发兽性，伤害再 +1。",
+      "effects": [
+        {
+          "type": "spawn",
+          "unitId": "unit_beast",
+          "position": "tail",
+          "count": 2
+        },
+        {
+          "type": "damage",
+          "element": "physical",
+          "value": 4,
+          "target": "target"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "self",
+            "id": "beast_sense",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "physical",
+              "value": 2,
+              "note": "兽觉指引：伤害 +2（环节⑤ 2026-09-29 补读层段：beasts payoff 落地）"
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "self",
+            "id": "prepared_draught",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "physical",
+              "value": 1,
+              "note": "药剂激发兽性：自身带预服药水伤害 +1（环节⑤ 2026-09-29 跨轴读层段：beasts→brew）"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false,
+      "cost": {
+        "energy": 4,
+        "cooldown": 5,
+        "castTime": 1
+      },
+      "reach": "melee",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy"
+        },
+        "fallbackSort": null
+      },
+      "scope": "hero",
+      "heroId": "hero_07"
+    },
+    {
+      "id": "h07_beast_tide",
+      "name": "万兽奔腾",
+      "kind": "summon",
+      "sequence": 2,
+      "rarity": "epic",
+      "axis": "beasts",
+      "flagship": false,
+      "describe": "在己方队尾召来三只野兽同时冲阵，瞬间铺满前场。",
+      "effects": [],
+      "tentative": false,
+      "cost": {
+        "energy": 5,
+        "cooldown": 10,
+        "castTime": 2
+      },
+      "summon": {
+        "unitId": "unit_beast",
+        "count": 3,
+        "position": "tail"
+      },
+      "scope": "hero",
+      "heroId": "hero_07"
+    },
+    {
+      "id": "h07_beast_legion",
+      "name": "兽群号令",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "beasts",
+      "flagship": false,
+      "describe": "获得「兽群号令」25tick：自身召唤位上限 +2；维持期间每 tick 以自身生命 -0.4 供养兽群，生命不足时号令折断，超出上限的召唤物随即消散（最老优先）。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "anchor": "caster",
+          "pickCount": 1
+        }
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "beast_legion",
+          "duration": 25,
+          "target": "self"
+        }
+      ],
+      "tentative": false,
+      "scope": "hero",
+      "heroId": "hero_07"
+    }
+  ],
+  "statusDefs": [
+    {
+      "id": "antivenom",
+      "name": "抗毒体质",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "triggers": [
+        {
+          "event": "on_take_damage",
+          "condition": {
+            "kind": "element_is",
+            "element": "poison"
+          },
+          "effects": [
+            {
+              "type": "heal",
+              "value": 1,
+              "target": "self",
+              "note": "自行化解：小额回血，避免抗性堆到免疫"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "health_sight",
+      "name": "健康灵视",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "modifiers": {
+        "heal_output_mul": {
+          "value": 1.5,
+          "filter": {
+            "targetHpPercentBelow": 50
+          }
+        }
+      },
+      "note": "heal_output_mul（施法者侧，handleHeal 读取）+ 目标血量过滤"
+    },
+    {
+      "id": "beast_sense",
+      "name": "动物感官",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "triggers": [
+        {
+          "event": "on_take_damage",
+          "effects": [
+            {
+              "type": "modify_resource",
+              "resource": "gauge.current",
+              "value": 10,
+              "mode": "delta",
+              "target": "all_allies",
+              "filter": {
+                "isSummon": true
+              },
+              "note": "分享感官：推友军不推自己（G5/G6 合规）"
+            }
+          ]
+        },
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "attack",
+              "value": 1,
+              "mode": "delta",
+              "duration": null,
+              "target": "all_allies",
+              "filter": {
+                "anyOf": [
+                  {
+                    "tags": [
+                      "beast"
+                    ]
+                  },
+                  {
+                    "isSummon": true
+                  }
+                ]
+              },
+              "note": "驱使"
+            },
+            {
+              "type": "modify_stat",
+              "stat": "gauge.rate",
+              "value": 5,
+              "mode": "delta",
+              "duration": null,
+              "target": "all_allies",
+              "filter": {
+                "anyOf": [
+                  {
+                    "tags": [
+                      "beast"
+                    ]
+                  },
+                  {
+                    "isSummon": true
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "note": "§1.2b unitType/tags + §一 filter.isSummon（新增项 10）；「读懂想法」（信息）未做 层数引擎 2026-09-29 环节⑤补（maxStacks 3 / refresh，兽群感应随兽群规模叠层）层数档已定（2026-10-01 标定批）：maxStacks 3 + refresh 基准档——层数=强度/资源深度档，产层-读层闭环见轴元数据。。",
+      "maxStacks": 3,
+      "stackPolicy": "refresh"
+    },
+    {
+      "id": "stealth",
+      "name": "潜行",
+      "category": [
+        "conceal"
+      ],
+      "dispelable": true,
+      "duration": 10,
+      "modifiers": {
+        "untargetableByTargeted": {
+          "direction": "inbound",
+          "scope": "single"
+        }
+      },
+      "triggers": [
+        {
+          "event": "on_deal_damage",
+          "effects": [],
+          "note": "破除"
+        },
+        {
+          "event": "on_take_damage",
+          "effects": [],
+          "note": "破除"
+        }
+      ],
+      "note": "F11 引用副本（H5 潜行母版 + C8 候选池过滤）｜2026-09-18 与 sleepless 潜行统一签名：direction both→inbound（敌方不可选中，正典潜行语义）"
+    },
+    {
+      "id": "scentless",
+      "name": "无味",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": 10,
+      "modifiers": {},
+      "note": "G12 immune 字段（事前阻断，非事后清洗）；退化方案（on_tick 驱散）仍备",
+      "immune": {
+        "categories": [
+          "debuff"
+        ]
+      }
+    },
+    {
+      "id": "prepared_draught",
+      "name": "预服药水",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": 50,
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "attack",
+              "value": 2,
+              "mode": "delta",
+              "duration": 50,
+              "target": "self"
+            },
+            {
+              "type": "modify_stat",
+              "stat": "defense",
+              "value": 2,
+              "mode": "delta",
+              "duration": 50,
+              "target": "self"
+            },
+            {
+              "type": "modify_stat",
+              "stat": "gauge.rate",
+              "value": 8,
+              "mode": "delta",
+              "duration": 50,
+              "target": "self"
+            }
+          ]
+        }
+      ],
+      "note": "带 duration 的回滚走账本条目 remaining / revertBySource 层数引擎 2026-09-29 环节⑤补（maxStacks 3 / refresh，药剂可叠 3 层（多重药效））层数档已定（2026-10-01 标定批）：maxStacks 3 + refresh 基准档——层数=强度/资源深度档，产层-读层闭环见轴元数据。。 ｜ 2026-10-02 批次十一：modifiers.dose_stack 药剂叠量（矩阵义务兑现——原排期标「批次九」勘误，此批落地）",
+      "maxStacks": 3,
+      "stackPolicy": "refresh",
+      "modifiers": {
+        "dose_stack": {
+          "everyStacks": 2,
+          "potencyMul": 1.25,
+          "note": "药剂叠量（2026-10-02 登记键落地）：同目标预服药水每 2 层药效 +25%——多重药效结构化（批次十一）"
+        }
+      }
+    },
+    {
+      "id": "moon_full",
+      "name": "满月",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "formGroup": "moon_phase",
+      "nextPhase": "moon_waning",
+      "cycleTicks": 6,
+      "modifiers": {
+        "heal_output_mul": 1.4
+      },
+      "note": "🌕 满月，圆满/治愈（对应「难以想象的恢复能力」）"
+    },
+    {
+      "id": "moonlit",
+      "name": "月光",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": 15,
+      "modifiers": {
+        "heal_received_mul": 1.3
+      },
+      "note": "heal_received_mul 正向档 1.3（H21，与 F20 同字段复用）"
+    },
+    {
+      "id": "moonlight_form",
+      "name": "月光化",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": 25,
+      "charges": 1,
+      "modifiers": {
+        "damage_taken_mul": 0.85
+      },
+      "triggers": [
+        {
+          "event": "on_death",
+          "effects": [
+            {
+              "type": "heal",
+              "value": 0,
+              "target": "self",
+              "note": "H7 lethalProtect：阻止死亡、保留 1 血并 heal 至 25% 最大生命（重组），消耗该层"
+            }
+          ]
+        }
+      ],
+      "lethalProtect": true,
+      "hpRatio": 0.25,
+      "note": "H5 + H7 + C6；duration 5 满足 G15-b"
+    },
+    {
+      "id": "crimson_vitality",
+      "name": "深红活力",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "triggers": [
+        {
+          "event": "on_tick",
+          "effects": [
+            {
+              "type": "heal",
+              "value": 0.2,
+              "target": "self"
+            }
+          ]
+        }
+      ],
+      "note": "H42 常驻模板（duration:null + on_tick） 层数引擎 2026-09-29 环节⑤补（maxStacks 3 / refresh，血族活力叠层）层数档已定（2026-10-01 标定批）：maxStacks 3 + refresh 基准档——层数=强度/资源深度档，产层-读层闭环见轴元数据。。",
+      "maxStacks": 3,
+      "stackPolicy": "refresh",
+      "stackThreshold": {
+        "stacks": 2,
+        "effects": [
+          {
+            "type": "mount_status",
+            "statusId": "moon_cycle",
+            "stacks": 1,
+            "target": "self",
+            "note": "血月共鸣：深红活力达 2 层 → 月相 +1"
+          }
+        ],
+        "note": "月相轮转卡读层（原开局快照）"
+      }
+    },
+    {
+      "id": "moon_paper_substitute",
+      "name": "月亮纸人",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": 30,
+      "charges": 1,
+      "triggers": [
+        {
+          "event": "on_death",
+          "effects": [
+            {
+              "type": "heal",
+              "value": 0,
+              "target": "self",
+              "note": "H7：阻止死亡、保留 1 血并 heal 至 20% 最大生命"
+            },
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 3,
+              "target": "attacker",
+              "note": "纸屑反噬致死来源"
+            }
+          ]
+        }
+      ],
+      "lethalProtect": true,
+      "hpRatio": 0.2,
+      "note": "与傀儡系【纸人替身】同源（H7），本条多一层反噬"
+    },
+    {
+      "id": "spirit_pact",
+      "name": "灵界契印",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "triggers": [
+        {
+          "event": "on_spawn",
+          "effects": [
+            {
+              "type": "mount_status",
+              "statusId": "shield",
+              "value": 3,
+              "target": "target",
+              "note": "契印护佑（spawn.companionBuff F54）"
+            }
+          ],
+          "note": "仅由你召唤的单位（casterOwned 过滤）"
+        },
+        {
+          "event": "on_death",
+          "effects": [
+            {
+              "type": "modify_resource",
+              "resource": "energy",
+              "value": 2,
+              "mode": "delta",
+              "target": "self",
+              "note": "契约回流"
+            }
+          ],
+          "note": "全局 on_death 第三方监听（执行参数 §2.1，与 A4 on_kill 不冲突）"
+        }
+      ]
+    },
+    {
+      "id": "self_mend",
+      "name": "自我治愈",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "triggers": [
+        {
+          "event": "on_tick",
+          "effects": [
+            {
+              "type": "heal",
+              "value": 0.2,
+              "target": "self"
+            }
+          ]
+        },
+        {
+          "event": "on_take_damage",
+          "condition": {
+            "kind": "hp_percent",
+            "side": "self",
+            "cmp": "<",
+            "n": 50
+          },
+          "effects": [
+            {
+              "type": "heal",
+              "value": 2,
+              "target": "self"
+            }
+          ]
+        }
+      ],
+      "note": "H42 常驻模板"
+    },
+    {
+      "id": "moon_cycle",
+      "name": "月相轮转",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "formGroup": "moon_phase",
+      "cycleTicks": 6,
+      "phases": [
+        "moon_blood",
+        "moon_red",
+        "moon_silver",
+        "moon_full",
+        "moon_waning"
+      ],
+      "triggers": [
+        {
+          "event": "on_tick",
+          "effects": [],
+          "note": "① 自发周期：每 6 tick 沿 phases 顺序进一相——语义由 H50 声明式字段（formGroup/nextPhase/cycleTicks，见五相 StatusDef 登记）承载，无效果原语，见 frameworkFlags"
+        },
+        {
+          "event": "on_tick",
+          "condition": {
+            "kind": "hp_percent",
+            "side": "self",
+            "cmp": "<",
+            "n": 30
+          },
+          "effects": [
+            {
+              "type": "mount_status",
+              "statusId": "moon_full",
+              "target": "self",
+              "note": "③ 条件触发：首次低于 30% 切至满月并保持到下一次自发轮转"
+            }
+          ],
+          "note": "首次：需 once 标记，语义待引擎确认"
+        }
+      ],
+      "note": "五相 StatusDef 登记在【满月】卡（序列最低首个登记点，H50 formGroup/nextPhase/cycleTicks/phases）；未持有本条时【满月】仍可单卡使用 层数引擎 2026-09-29 环节⑤补（maxStacks 5 / refresh，五相轮转计数 5 层）。",
+      "maxStacks": 5,
+      "stackPolicy": "refresh",
+      "stackThreshold": {
+        "stacks": 3,
+        "effects": [
+          {
+            "type": "mount_status",
+            "statusId": "crimson_vitality",
+            "stacks": 1,
+            "target": "self",
+            "note": "月相越深血越沸：月相达 3 层 → 深红活力 +1"
+          }
+        ],
+        "note": "血族魅力卡读层（原开局快照）"
+      }
+    },
+    {
+      "id": "remedy_mark",
+      "name": "药记",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": null,
+      "maxStacks": 3,
+      "stackPolicy": "refresh",
+      "modifiers": {
+        "damage_mul": {
+          "value": 1.1
+        }
+      },
+      "crossPathway": true,
+      "participants": [
+        "apothecary",
+        "warrior",
+        "prisoner"
+      ],
+      "note": "药剂师留痕：疗愈之人带药香（2026-09-29 跨系枢纽批建）层数档已定（2026-10-01 标定批）：maxStacks 3 + refresh 枢纽标准档（跨系共享，层数读档上限）。。"
+    },
+    {
+      "id": "beast_legion",
+      "name": "兽群号令",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": 25,
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "modifiers": {
+        "summon_cap_bonus": 2
+      },
+      "triggers": [
+        {
+          "event": "on_tick",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "resource_compare",
+                "side": "self",
+                "key": "hp",
+                "cmp": ">",
+                "n": 2
+              },
+              "then": [
+                {
+                  "type": "modify_resource",
+                  "resource": "hp",
+                  "value": -0.4,
+                  "mode": "delta",
+                  "target": "self",
+                  "note": "以血肉供养兽群：每 tick 生命 -0.4（不致死）"
+                }
+              ],
+              "else": [
+                {
+                  "type": "dispel",
+                  "statusId": "beast_legion",
+                  "target": "self",
+                  "note": "血肉不足：号令折断，超限召唤物在 tick 边界按最老优先消散"
+                }
+              ],
+              "note": "维持费型 cap 特权（2026-10-23 拍板）：生命阈值止于 2"
+            }
+          ]
+        }
+      ],
+      "note": "召唤位上限 +2（modifiers.summon_cap_bonus）；维持费 0.4 生命/tick，断供或到期后超限部分按 H39 最老消散。"
+    }
+  ],
+  "unitDefs": [
+    {
+      "id": "unit_beast",
+      "name": "驯化野兽",
+      "unitType": "BEAST",
+      "note": "兽群体系基本盘，多卡共用走基线默认；2026-10-23 召唤牌化补登（种类归属权威：召唤物参数.md §一）；数值/技能组待平衡期",
+      "base": {
+        "hp": 10,
+        "atk": 4,
+        "reach": "melee"
+      }
+    },
+    {
+      "id": "unit_elder_thing",
+      "name": "灵界生物",
+      "unitType": "ABERRATION",
+      "note": "召唤之门上位个体；2026-10-23 召唤牌化补登（种类归属权威：召唤物参数.md §一）；数值/技能组待平衡期",
+      "base": {
+        "hp": 18,
+        "atk": 4,
+        "reach": "melee"
+      }
+    }
+  ],
   "zoneDefs": [],
   "domainDefs": []
 }
