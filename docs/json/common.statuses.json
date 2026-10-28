@@ -200,6 +200,38 @@
       "tags": [
         "fire"
       ]
+    },
+    {
+      "id": "silence",
+      "name": "沉默",
+      "category": [
+        "control"
+      ],
+      "dispelable": true,
+      "duration": 40,
+      "maxStacks": 1,
+      "modifiers": {},
+      "note": "§2.2 已裁定：defaultDuration 8；禁用使用技能。",
+      "disallowActions": [
+        "skill"
+      ]
+    },
+    {
+      "id": "free_cast",
+      "name": "免吟唱",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": 25,
+      "maxStacks": 1,
+      "note": "§2.2 已裁定：defaultDuration 5；cast_time_set 0。",
+      "behaviorModifiers": [
+        {
+          "op": "cast_time_set",
+          "value": 0
+        }
+      ]
     }
   ]
 }
