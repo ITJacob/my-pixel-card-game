@@ -1,0 +1,739 @@
+# -*- coding: utf-8 -*-
+"""技能池 JSON 全库校验器。用法: python docs/tools/validate.py
+
+封闭取值域以 docs/json/schema/skills.schema.json 为机器正源（运行时加载，不另抄一份）；
+ddd 参数篇文本侧与机器正源的漂移由 check_enum_sync.py 对账。
+
+v2 适配（派系制）：
+  - 顶层 pathwayId/pathwayName/axes/sampleBuilds/designNote 等 → factionId/factionName/heroes[]
+  - 卡 id 形态 f<NN>_<slug>（派系公共）/ h<NN>_<slug>（英雄独自，带 heroId），无 s<seq> 段
+  - scope 字段：faction / hero（hero 必带 heroId）
+  - 派系私有状态在文件顶层 statusDefs[]（不再走 <pathway>.statuses.json）
+  - crossPathway/participants（旧跨途径枢纽）v2 首版不继承，相关检查已删
+"""
+import json, io, sys, glob, os, re
+
+HERE = os.path.dirname(os.path.abspath(__file__))          # docs/tools/
+JSON_DIR = os.path.join(os.path.dirname(HERE), "json")      # docs/json/
+DEFS = json.load(io.open(os.path.join(JSON_DIR, "schema", "skills.schema.json"),
+                         encoding="utf-8"))["$defs"]
+
+try:
+    from status_loader import iter_status_defs
+except ImportError:
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from status_loader import iter_status_defs
+
+def _pat_literals(defn):
+    """从 ^(a|b|动态段)$ 提取字面量分支；含正则语法的分支属动态段（$ 变量、resist 族），跳过。"""
+    pat = defn["pattern"]
+    assert pat.startswith("^(") and pat.endswith(")$"), pat
+    body, alts, depth, cur, i = pat[2:-2], [], 0, "", 0
+    while i < len(body):
+        ch = body[i]
+        if ch == "\\" and i + 1 < len(body):
+            cur += body[i + 1]; i += 2; continue
+        if ch == "(": depth += 1
+        elif ch == ")": depth -= 1
+        if ch == "|" and depth == 0: alts.append(cur); cur = ""
+        else: cur += ch
+        i += 1
+    alts.append(cur)
+    return {a for a in alts if not re.search(r"[\[\]()$*+?]", a)}
+
+def _enum(*path):
+    node = DEFS
+    for k in path: node = node[k]
+    return set(node["enum"])
+
+ELEMENTS = _pat_literals(DEFS["element"])
+STATS = _pat_literals(DEFS["effModifyStat"]["properties"]["stat"]) | {"resist:*"} | {"resist:" + e for e in ELEMENTS - {"none"}}
+SORTS = _enum("sortKey")
+REACH = _enum("card", "properties", "reach")
+ACTION_LOCKS = _enum("actionLock")
+CATS = _enum("statusCategory")
+EFFECT_TARGETS = _enum("effectTarget")
+RESOURCES = _enum("effModifyResource", "properties", "resource")
+MOVE_OPS = _enum("effMove", "properties", "op")
+DOMAIN_OPS = _enum("effDomain", "properties", "op")
+TRANS_OPS = _enum("effTranslocate", "properties", "op")
+SKILL_SELECTORS = _enum("effModifySkill", "properties", "skillRef", "properties", "selector")
+TARGET_DIRECTIONS = _enum("effModifyTargetability", "properties", "direction")
+TARGET_PIERCE = _enum("effModifyTargetability", "properties", "pierce")
+REVEAL_SCOPES = _enum("effReveal", "properties", "scope")
+CONTROL_EXPIRE = _enum("effTakeControl", "properties", "onExpire")
+CONTROL_POLICY = _enum("effTakeControl", "properties", "actionPolicy")
+SCOPES = _enum("card", "properties", "scope")
+EQUIP_SLOTS = {"weapon", "armor"}
+PRIMS, OPS = set(), set()
+for _r in DEFS["effect"]["oneOf"]:
+    _props = DEFS[_r["$ref"].split("/")[-1]].get("properties", {})
+    if "const" in _props.get("type", {}): PRIMS.add(_props["type"]["const"])
+    if "const" in _props.get("op", {}): OPS.add(_props["op"]["const"])
+
+# 维度乘区挂钩（dimHook）的维度值域：与 ddd 参数篇对齐
+DIM_RANGES = {
+    "secrecy": (0, 10),
+    "order": (0, 10),
+    "fate_value": (-10, 10),
+    "luminance": (0, 10),
+    "death_tally": (0, 10),
+}
+
+# 触发点：语义封闭集 16 个（ddd 执行参数 §触发点，INV-18）。本集合与 ddd 表格、schema triggerEvent
+# 枚举三方一致，由 check_enum_sync.py 对账。
+PHASES = {"midnight","dawn","day","dusk","night"}
+EVENTS = {"on_apply","on_remove","on_tick","on_turn_start","on_turn_end","on_battle_start","on_spawn","on_death","on_kill","on_attack","on_equipment_equip","on_take_damage","on_deal_damage","on_active_skill","on_phase_change","on_status_gain"}
+
+# 命名治理：modifiers 为开放结构，同义异写严重。别名 -> 规范拼写（非阻断，仅告警引导收敛）
+MODIFIER_ALIASES = {
+    "damageTakenMul": "damage_taken_mul",
+    "damageMul": "damage_mul",
+    "damageDealtMul": "damage_mul",
+    "damageDealtMulFilter": "damage_mul",
+    "damage_mul_2": "damage_mul",
+    "healReceivedMul": "heal_received_mul",
+    "healInvert": "heal_invert",
+    "untargetable": "untargetableByTargeted",
+    "untargetableByAll": "untargetableByTargeted",
+    "dispelOverride": "dispelableOverride",
+    "dispelableOverwrite": "dispelableOverride",
+    "runtimeDispelOverride": "dispelableOverride",
+}
+# 修饰键正典集：词典 modifierKey 栏目。开放结构不变，新键须先登记词条。
+def _load_modifier_canon():
+    p = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'meta', 'glossary.json')
+    try:
+        g = json.load(io.open(p, encoding='utf-8'))
+        return set(((g.get('categories') or {}).get('modifierKey') or {}).get('terms') or {})
+    except Exception:
+        return set()
+MODIFIER_CANON = _load_modifier_canon()
+
+def check_mod_keys(mods, cid, warns):
+    if isinstance(mods, dict):
+        mkeys = list(mods.keys())
+    elif isinstance(mods, list):
+        mkeys = [it if isinstance(it, str) else it.get('kind') for it in mods if isinstance(it, (str, dict))]
+    else:
+        return
+    for k in mkeys:
+        if not k:
+            continue
+        if k in MODIFIER_ALIASES:
+            warns.append("%s: modifier '%s' 建议收敛为 '%s'" % (cid, k, MODIFIER_ALIASES[k]))
+        elif MODIFIER_CANON and k not in MODIFIER_CANON:
+            warns.append("%s: modifier '%s' 未登记（先补词典 modifierKey 词条）" % (cid, k))
+# ---- 描述↔元素一致性 Gate ----
+# 规则：describe 内「N 点<中文元素>伤害」（以及界域 prose 的 damage(<element>, N)）声称的每个
+#   元素，都必须出现在该卡能造成的伤害元素集合里——集合含经 statusId / unitId / template /
+#   def / zone 引用解析到的定义（unitDef/zoneDef/domainDef/statusDef，递归至 3 层）。
+_ELEM_ZH = {
+    "fire": ("火焰", "烈焰"),
+    "ice": ("冰霜", "冰冻", "寒冰"),
+    "poison": ("剧毒", "毒素", "中毒"),
+    "lightning": ("闪电", "雷电", "雷霆"),
+    "mental": ("精神", "心灵", "意志"),
+    "physical": ("物理",),
+    "holy": ("神圣", "圣光", "光明"),
+    "dark": ("暗黑", "黑暗", "暗影", "暗焰", "暗伤"),
+    "none": ("无属性",),
+}
+_ZH2ELEM = {}
+for _el, _zhs in _ELEM_ZH.items():
+    for _z in _zhs:
+        _ZH2ELEM.setdefault(_z, set()).add(_el)
+_CLAIM_RE = re.compile(r"\d+\s*点\s*([一-龥]{1,3}?)\s*伤害")
+_PROSE_RE = re.compile(r"damage\(\s*([a-z_]+)\s*,")
+_STRICT_FIELDS = ("describe", "envRulesText")
+_NARRATIVE_FIELDS = ("flavor",)
+
+
+def _walk(o):
+    if isinstance(o, dict):
+        yield o
+        for v in o.values(): yield from _walk(v)
+    elif isinstance(o, list):
+        for v in o: yield from _walk(v)
+
+
+def _strings(o, key=None):
+    """产出 (最近的字典键, 字符串值)。用于区分 describe（阻断）与叙事字段（告警）。"""
+    if isinstance(o, dict):
+        for k, v in o.items(): yield from _strings(v, k)
+    elif isinstance(o, list):
+        for v in o: yield from _strings(v, key)
+    elif isinstance(o, str):
+        yield key, o
+
+
+def _damage_elems_of(node, refs, depth=0):
+    """结构内可直接 / 经引用解析到的伤害元素集合；以及是否含 '$' 动态元素（不可完全核验）。"""
+    elems, wild = set(), False
+    for n in _walk(node):
+        if not isinstance(n, dict):
+            continue
+        if n.get("type") == "damage":
+            el = n.get("element")
+            if isinstance(el, str):
+                if el.startswith("$"): wild = True
+                else: elems.add(el)
+        if depth >= 3:
+            continue
+        for key in ("statusId", "unitId", "template", "def", "zone"):
+            v = n.get(key)
+            if isinstance(v, dict): v = v.get("def")
+            if not isinstance(v, str): continue
+            table = refs["status"] if key == "statusId" else refs["defs"]
+            if v in table:
+                e2, w2 = _damage_elems_of(table[v], refs, depth + 1)
+                elems |= e2; wild = wild or w2
+    return elems, wild
+
+
+def _claim_elems(text):
+    claims = set()
+    for _w in _CLAIM_RE.findall(text or ""):
+        for _el in _ZH2ELEM.get(_w, ()):
+            claims.add((_w, _el))
+    for _el in _PROSE_RE.findall(text or ""):
+        if _el in ELEMENTS: claims.add((_el, _el))
+    return claims
+
+
+def _documented(words, notes):
+    """空结构下，声称的元素能否在卡面注解（note）里找到佐证。"""
+    if not notes:
+        return False
+    for _w in words:
+        if _w in notes:
+            return True
+        for _el in _ZH2ELEM.get(_w, ()):
+            if _el in notes:
+                return True
+    return False
+
+
+def _check_desc_elems(node, cid, refs, errors, warns):
+    elems, wild = _damage_elems_of(node, refs)
+    notes = " ".join(txt for k, txt in _strings(node) if k == "note")
+    for key, txt in _strings(node):
+        if key not in _STRICT_FIELDS and key not in _NARRATIVE_FIELDS:
+            continue
+        claims = _claim_elems(txt)
+        if not claims: continue
+        bad = sorted({w for w, el in claims if el not in elems})
+        if not bad: continue
+        msg = "%s: %s 声称「%s」伤害，结构可解析元素为 %s" % (
+            cid, key, "/".join(bad), ",".join(sorted(elems)) or "空")
+        if key in _NARRATIVE_FIELDS:
+            warns.append(msg); continue
+        if wild:
+            warns.append(msg + "（含 $ 动态元素，暂不可核验）")
+        elif not elems:
+            if not _documented(bad, notes):
+                warns.append(msg + "（结构内无可核验 damage，暂不可核验）")
+        else:
+            errors.append(msg)
+
+def check_equipment_card(c, cid, errors):
+    """装备牌硬约束：kind=equipment 必须有 cost + equipment 载荷；按槽分必填。"""
+    if "cost" not in c:
+        errors.append("%s: equipment 缺 cost" % cid)
+    eq = c.get("equipment")
+    if not isinstance(eq, dict):
+        errors.append("%s: equipment 缺 equipment 载荷" % cid)
+        return
+    slot = eq.get("slot")
+    if slot not in EQUIP_SLOTS:
+        errors.append("%s: equipment.slot 必须为 %s（当前 %s）" % (cid, sorted(EQUIP_SLOTS), slot))
+    if slot == "weapon":
+        if not isinstance(eq.get("attack"), (int, float)) or isinstance(eq.get("attack"), bool):
+            errors.append("%s: weapon.attack 必须为数值" % cid)
+        dur = eq.get("durability")
+        if not isinstance(dur, int) or isinstance(dur, bool) or dur < 1:
+            errors.append("%s: weapon.durability 必须为 >=1 的整数" % cid)
+    if slot == "armor":
+        armor = eq.get("armor")
+        if not isinstance(armor, (int, float)) or isinstance(armor, bool) or armor < 1:
+            errors.append("%s: armor.armor 必须为 >=1 的数值" % cid)
+    tags = eq.get("tags")
+    if tags is not None and (not isinstance(tags, list) or any(not isinstance(t, str) for t in tags)):
+        errors.append("%s: equipment.tags 必须为字符串数组" % cid)
+
+
+def _iter_effect_nodes(node):
+    """递归产出效果/载荷 dict（含算子容器与嵌套条件）。"""
+    if isinstance(node, dict):
+        yield node
+        for v in node.values():
+            yield from _iter_effect_nodes(v)
+    elif isinstance(node, list):
+        for v in node:
+            yield from _iter_effect_nodes(v)
+
+
+def _iter_exec_effects(node):
+    """只产出「会实际执行」的效果节点：沿容器（if then/else、sequence/repeat steps、
+    fallback）下行，不进入 condition / filter / modify_rule_slot.value 等参数载荷。"""
+    if isinstance(node, list):
+        for v in node:
+            yield from _iter_exec_effects(v)
+        return
+    if not isinstance(node, dict):
+        return
+    op = node.get("op")
+    if op in ("sequence", "repeat") or ("steps" in node and op is not None):
+        yield from _iter_exec_effects(node.get("steps") or [])
+        return
+    if op == "if" or "then" in node:
+        yield from _iter_exec_effects(node.get("then") or [])
+        yield from _iter_exec_effects(node.get("else") or [])
+        return
+    yield node
+    fb = node.get("fallback")
+    if isinstance(fb, (dict, list)):
+        yield from _iter_exec_effects(fb)
+
+
+def _effect_stack_key(n):
+    t = n.get("type")
+    if t == "modify_stat":
+        base = "stat:%s/%s" % (n.get("stat"), n.get("mode"))
+    elif t == "modify_resource":
+        base = "res:%s/%s" % (n.get("resource"), n.get("mode"))
+    elif t == "mount_status":
+        base = "status:%s" % n.get("statusId")
+    else:
+        return None
+    sig = {k: n.get(k) for k in
+           ("value", "valueFrom", "stacks", "charges", "duration", "target", "stackMode")}
+    return base, json.dumps(sig, sort_keys=True, ensure_ascii=False)
+
+
+def _effect_path_counts(node):
+    """按「单条执行路径」统计同形效果：if 的 then/else 互斥取较大者，
+    sequence/repeat 顺序累加。用于区分「合法分支/递增 payoff」与真正的批量重复。"""
+    if isinstance(node, list):
+        total = {}
+        for v in node:
+            for k, c in _effect_path_counts(v).items():
+                total[k] = total.get(k, 0) + c
+        return total
+    if not isinstance(node, dict):
+        return {}
+    op = node.get("op")
+    if op in ("sequence", "repeat") or ("steps" in node and op is not None):
+        return _effect_path_counts(node.get("steps") or [])
+    if op == "if" or "then" in node:
+        a = _effect_path_counts(node.get("then") or [])
+        b = _effect_path_counts(node.get("else") or [])
+        return {k: max(a.get(k, 0), b.get(k, 0)) for k in set(a) | set(b)}
+    key = _effect_stack_key(node)
+    out = {key: 1} if key else {}
+    fb = node.get("fallback")
+    if isinstance(fb, (dict, list)):
+        for k, c in _effect_path_counts(fb).items():
+            out[k] = out.get(k, 0) + c
+    return out
+
+
+def check_summon_card(c, cid, def_ids, errors):
+    """召唤牌硬约束：kind=summon 必须有 cost + summon 载荷；unitId 必须解析到某派系顶层 unitDefs 池；
+    effects 战吼禁含 spawn 段（一卡一单位；template/reviveOf/zone 留在 spawn 原语）。"""
+    if "cost" not in c:
+        errors.append("%s: summon 缺 cost" % cid)
+    sp = c.get("summon")
+    if not isinstance(sp, dict):
+        errors.append("%s: summon 缺 summon 载荷" % cid)
+        return
+    for k in sp:
+        if k not in ("unitId", "count", "hpRatio", "atkRatio", "position", "lifetime", "note"):
+            errors.append("%s: summon 载荷含白名单外键 %s（template/reviveOf/zone 留在 spawn 原语）" % (cid, k))
+    uid = sp.get("unitId")
+    if not isinstance(uid, str) or not uid:
+        errors.append("%s: summon.unitId 必填" % cid)
+    elif uid not in def_ids:
+        errors.append("%s: summon.unitId %s 未在任何派系顶层 unitDefs 池定义" % (cid, uid))
+    cnt = sp.get("count")
+    if cnt is not None and (not isinstance(cnt, int) or isinstance(cnt, bool) or cnt < 1):
+        errors.append("%s: summon.count 必须为 >=1 的整数" % cid)
+    pos = sp.get("position")
+    if pos is not None and pos not in ("tail", "at_unit", "original"):
+        errors.append("%s: bad summon.position %s" % (cid, pos))
+    for n in _iter_effect_nodes(c.get("effects")):
+        if n.get("type") == "spawn":
+            errors.append("%s: summon 卡 effects 禁含 spawn 段（一卡一单位；多体用 count）" % cid)
+            break
+
+
+def lint_playability(pid, cards, warns):
+    """玩法/文本卫生门禁：
+    10 同形状增益叠加 / 11 触发语境错配 / 12 模板句复制 / 13 被动触发点集中度。"""
+    # 10 单卡「完全同形」效果 ≥3 次（按单条执行路径计）
+    for c in cards:
+        cnt = _effect_path_counts(c.get("effects"))
+        for key, n in cnt.items():
+            if n >= 3:
+                warns.append("%s: 同形状叠加 %s ×%d（单卡同键应 ≤2）" % (c.get("id"), key[0], n))
+
+    # 11 触发语境错配：按执行参数触发点语境表判定
+    victim_prims = {"damage", "reveal", "drain", "take_control", "modify_targetability",
+                    "translocate", "move", "dispel"}
+    no_victim = {"on_battle_start", "on_turn_start", "on_turn_end",
+                 "on_phase_change", "on_equipment_equip", "on_kill", "on_death"}
+    for c in cards:
+        payloads = [(tr.get("event"), tr.get("effects")) for tr in (c.get("triggers") or [])]
+        hk = c.get("hook")
+        if c.get("kind") == "passive" and hk:      # 被动卡：hook 事件 + 卡面 effects 载荷
+            evs = hk if isinstance(hk, list) else [hk]
+            payloads += [(ev, c.get("effects")) for ev in evs]
+        for ev, effects in payloads:
+            if ev not in no_victim:
+                continue
+            for n in _iter_exec_effects(effects):
+                t = n.get("type")
+                if t not in victim_prims or n.get("target") == "self":
+                    continue
+                flt = n.get("filter")
+                if t == "dispel" and isinstance(flt, dict) and flt.get("isOwnSummon"):
+                    continue
+                bad = n.get("target") in (None, "target", "killed_unit")
+                if ev in ("on_kill", "on_death"):
+                    bad = n.get("target") is None
+                if bad:
+                    warns.append("%s: 触发语境错配——%s @ %s 无受害方（target=%s）"
+                                 % (c.get("id"), t, ev, n.get("target")))
+
+    # 12 模板句复制：同派系效果节点 note 完全相同 ≥3 次（≥5 视为疑似批量注入）
+    notes = {}
+    for c in cards:
+        for n in _iter_effect_nodes(c):
+            nt = n.get("note")
+            if isinstance(nt, str) and len(nt.strip()) >= 4:
+                notes.setdefault(nt.strip(), []).append(c.get("id"))
+    for nt, owners in notes.items():
+        if len(owners) >= 3:
+            tag = "（≥5：疑似批量注入）" if len(owners) >= 5 else ""
+            warns.append("%s: 样板 note ×%d%s：%s" % (pid, len(owners), tag, nt[:40]))
+
+    # 13 被动触发点集中度：同事件被动卡 ≥8 张
+    ev_cards = {}
+    for c in cards:
+        if c.get("kind") != "passive":
+            continue
+        hk = c.get("hook")
+        evs = set(hk) if isinstance(hk, list) else ({hk} if hk else set())
+        evs |= {t.get("event") for t in (c.get("triggers") or []) if isinstance(t, dict)}
+        for ev in evs:
+            ev_cards.setdefault(ev, set()).add(c.get("id"))
+    for ev, ids in ev_cards.items():
+        if len(ids) >= 8:
+            warns.append("%s: 被动触发点 %s 集中 %d 张（应 <8）" % (pid, ev, len(ids)))
+
+
+def check_status_def(sd, cid, errors, warns):
+    """statusDef 通用校验（派系顶层 statusDefs[] 与 common.statuses.json 共用）。"""
+    for cat in sd.get("category", []) or []:
+        if cat not in CATS: errors.append("%s sd %s: bad category %s" % (cid, sd.get("id"), cat))
+    if sd.get("equipSlot") is not None or sd.get("initialEquip") is not None:
+        errors.append("%s sd %s: equipSlot/initialEquip 已退役，装备请改用 kind=equipment 卡" % (cid, sd.get("id")))
+    for a in sd.get("disallowActions") or []:
+        if a not in ACTION_LOCKS: errors.append("%s sd %s: bad disallowActions %s" % (cid, sd.get("id"), a))
+    check_mod_keys(sd.get("modifiers"), "%s sd %s" % (cid, sd.get("id")), warns)
+
+
+def main():
+    m = json.load(io.open(os.path.join(JSON_DIR,'manifest.json'), encoding='utf-8'))
+    expect = {p["id"]: p["cardCount"] for p in m["factions"]}
+    # rarity↔sequence 唯一机器可读基准为 manifest.rarityMap，不再硬编码
+    _rev = {}
+    for _rar, _seqs in m["rarityMap"].items():
+        for _s in _seqs: _rev[_s] = _rar
+    RARITY_BY_SEQ = _rev.get
+
+    globs = set()
+    files = sorted(glob.glob(os.path.join(JSON_DIR,'*.skills.json')))
+    for f in files:
+        d = json.load(io.open(f, encoding='utf-8'))
+        # v2：派系私有状态在文件顶层 statusDefs[]；卡内联 statusDefs 仅作兼容扫描
+        for sd in d.get("statusDefs") or []: globs.add(sd["id"])
+        for c in d.get("cards",[]):
+            for sd in c.get("statusDefs") or []: globs.add(sd["id"])
+    # 公共状态注册表 common.statuses.json
+    for f in sorted(glob.glob(os.path.join(JSON_DIR,'*.statuses.json'))):
+        try:
+            d = json.load(io.open(f, encoding='utf-8'))
+            for sd in d.get("statusDefs") or []: globs.add(sd["id"])
+        except Exception:
+            pass
+    ALLSTATUS = globs
+
+    # 描述↔元素一致性 Gate 的引用索引（statusId / def / zone / unitId 解析用）
+    _refs = {"status": {}, "defs": {}}
+    for _pid, _lbl, _sd in iter_status_defs():
+        if isinstance(_sd, dict) and _sd.get("id"):
+            _refs["status"][_sd["id"]] = _sd
+    for _f in files:
+        try: _dd = json.load(io.open(_f, encoding="utf-8"))
+        except Exception: continue
+        for _sd in _dd.get("statusDefs") or []:
+            if isinstance(_sd, dict) and _sd.get("id"):
+                _refs["status"][_sd["id"]] = _sd
+        for _pool in ("unitDefs", "zoneDefs", "domainDefs"):
+            for _x in _dd.get(_pool) or []:
+                if isinstance(_x, dict) and _x.get("id"):
+                    _refs["defs"].setdefault(_x["id"], _x)
+    pre_errors, pre_warns = [], []
+
+    # 状态定义层校验：派系顶层 statusDefs[] + common.statuses.json
+    for f in sorted(glob.glob(os.path.join(JSON_DIR,'*.statuses.json'))):
+        pid = os.path.basename(f).replace('.statuses.json','')
+        try:
+            d = json.load(io.open(f, encoding='utf-8'))
+        except Exception:
+            pre_errors.append("%s: 解析失败" % os.path.basename(f)); continue
+        for sd in d.get("statusDefs") or []:
+            check_status_def(sd, pid, pre_errors, pre_warns)
+    for f in files:
+        fid = os.path.basename(f).replace('.skills.json', '')
+        try:
+            d = json.load(io.open(f, encoding='utf-8'))
+        except Exception:
+            continue
+        for sd in d.get("statusDefs") or []:
+            check_status_def(sd, fid, pre_errors, pre_warns)
+
+    errors_all, warns_all = [], []
+    errors_all += pre_errors
+    warns_all += pre_warns
+    total_cards = 0
+
+    def walk(effs, cid, path, errors, warns, passive=False):
+        for i, e in enumerate(effs or []):
+            p = "%s.%d" % (path, i)
+            t = e.get("type")
+            if t is None:
+                op = e.get("op")
+                if op not in OPS: errors.append("%s %s: bad operator %s" % (cid,p,op)); continue
+                if op in ("sequence","repeat"): walk(e.get("steps"), cid, p, errors, warns, passive)
+                else:
+                    walk(e.get("then"), cid, p+".then", errors, warns, passive)
+                    walk(e.get("else"), cid, p+".else", errors, warns, passive)
+                continue
+            if t not in PRIMS: errors.append("%s %s: bad primitive %s" % (cid,p,t)); continue
+            if t=="modify_skill":
+                sr = e.get("skillRef") or {}
+                if sr.get("selector") not in SKILL_SELECTORS:
+                    errors.append("%s %s: bad modify_skill.skillRef.selector %s" % (cid,p,sr.get("selector")))
+            if t=="modify_status":
+                if not e.get("statusId"):
+                    errors.append("%s %s: modify_status missing statusId" % (cid,p))
+                if e.get("slot") is not None:
+                    errors.append("%s %s: modify_status.slot 已退役，武器请用 modify_weapon" % (cid,p))
+                if e.get("target") not in EFFECT_TARGETS: errors.append("%s %s: bad modify_status.target %s" % (cid,p,e.get("target")))
+            if t=="modify_weapon":
+                if e.get("slot") is not None and e.get("slot") not in EQUIP_SLOTS:
+                    errors.append("%s %s: bad modify_weapon.slot %s" % (cid,p,e.get("slot")))
+                if e.get("target") not in EFFECT_TARGETS: errors.append("%s %s: bad modify_weapon.target %s" % (cid,p,e.get("target")))
+                if not any(k in e for k in ("restoreDurability","durabilityDelta","attackDelta")):
+                    errors.append("%s %s: modify_weapon 缺 restoreDurability/durabilityDelta/attackDelta" % (cid,p))
+            if t=="modify_targetability":
+                if e.get("target") not in EFFECT_TARGETS: errors.append("%s %s: bad modify_targetability.target %s" % (cid,p,e.get("target")))
+                if e.get("direction") is not None and e["direction"] not in TARGET_DIRECTIONS:
+                    errors.append("%s %s: bad modify_targetability.direction %s" % (cid,p,e["direction"]))
+                if e.get("pierce") is not None and e["pierce"] not in TARGET_PIERCE:
+                    errors.append("%s %s: bad modify_targetability.pierce %s" % (cid,p,e["pierce"]))
+            if t=="reveal":
+                if e.get("target") not in EFFECT_TARGETS: errors.append("%s %s: bad reveal.target %s" % (cid,p,e.get("target")))
+                if e.get("scope") is not None and e["scope"] not in REVEAL_SCOPES:
+                    errors.append("%s %s: bad reveal.scope %s" % (cid,p,e["scope"]))
+            if t=="grant_immunity":
+                if e.get("target") not in EFFECT_TARGETS: errors.append("%s %s: bad grant_immunity.target %s" % (cid,p,e.get("target")))
+                for cat in e.get("against") or []:
+                    if cat not in CATS: errors.append("%s %s: bad grant_immunity.against %s" % (cid,p,cat))
+                el = e.get("element")
+                if el is not None and el not in ELEMENTS and not str(el).startswith("$"):
+                    errors.append("%s %s: bad grant_immunity.element %s" % (cid,p,el))
+            if t=="take_control":
+                if e.get("target") not in EFFECT_TARGETS: errors.append("%s %s: bad take_control.target %s" % (cid,p,e.get("target")))
+                if e.get("onExpire") is not None and e["onExpire"] not in CONTROL_EXPIRE:
+                    errors.append("%s %s: bad take_control.onExpire %s" % (cid,p,e["onExpire"]))
+                if e.get("actionPolicy") is not None and e["actionPolicy"] not in CONTROL_POLICY:
+                    errors.append("%s %s: bad take_control.actionPolicy %s" % (cid,p,e["actionPolicy"]))
+            el = e.get("element")
+            if el is not None and el not in ELEMENTS and not str(el).startswith("$"):
+                errors.append("%s %s: bad element %s"%(cid,p,el))
+            if t=="modify_stat":
+                st = e.get("stat")
+                if st not in STATS and not str(st).startswith("resist:$"):
+                    errors.append("%s %s: bad stat %s"%(cid,p,st))
+            if t=="modify_resource" and e.get("resource") not in RESOURCES:
+                errors.append("%s %s: bad resource %s"%(cid,p,e.get("resource")))
+            if t=="mount_status":
+                sid = e.get("statusId")
+                if not sid: errors.append("%s %s: mount_status missing statusId"%(cid,p))
+                elif sid != "$self" and sid not in ALLSTATUS:
+                    errors.append("%s %s: unknown statusId %s"%(cid,p,sid))
+            if t=="move" and e.get("op") not in MOVE_OPS: errors.append("%s %s: bad move.op %s"%(cid,p,e.get("op")))
+            if t=="domain" and e.get("op") not in DOMAIN_OPS: errors.append("%s %s: bad domain.op %s"%(cid,p,e.get("op")))
+            if t=="translocate" and e.get("op") not in TRANS_OPS: errors.append("%s %s: bad translocate.op %s"%(cid,p,e.get("op")))
+            if t=="dispel":
+                for cat in e.get("filter",{}).get("category",[]) or []:
+                    if cat not in CATS: errors.append("%s %s: bad dispel category %s"%(cid,p,cat))
+
+    def trigs(trs, cid, path, errors, warns, passive=False):
+        for i,tr in enumerate(trs or []):
+            ev = tr.get("event")
+            if ev not in EVENTS:
+                errors.append("%s %s.%d: bad event %s"%(cid,path,i,ev))
+            walk(tr.get("effects"), cid, "%s.t%d"%(path,i), errors, warns, passive)
+
+    # Def 编目池：顶层 unitDefs/zoneDefs/domainDefs 的触发器与 id 唯一性
+    for f in files:
+        pid = os.path.basename(f).replace('.skills.json', '')
+        try:
+            _pd = json.load(io.open(f, encoding='utf-8'))
+        except Exception:
+            continue
+        seen = {}
+        for pool_key, ref in (('unitDefs','unitDef'), ('zoneDefs','zoneDef'), ('domainDefs','domainDef')):
+            for _d in _pd.get(pool_key) or []:
+                _id = _d.get('id')
+                if not _id:
+                    pre_errors.append('%s pool %s: 缺 id' % (pid, pool_key)); continue
+                if _id in seen:
+                    pre_errors.append('%s pool %s: id %s 与 %s 重复' % (pid, pool_key, _id, seen[_id]))
+                seen[_id] = ref
+                trigs(_d.get('triggers'), pid+' '+pool_key+':'+_id, pool_key+':'+_id, pre_errors, pre_warns)
+                for _e in _d.get('effects') or []:
+                    _pl = _e.get('payload') if isinstance(_e, dict) and 'payload' in _e else _e
+                    walk(_pl if isinstance(_pl, list) else [_pl], pid+' '+pool_key+':'+_id, pool_key+':'+_id, pre_errors, pre_warns)
+
+    for f in files:
+        d = json.load(io.open(f, encoding='utf-8'))
+        pid = d.get("factionId", os.path.basename(f))
+        errors, warns = [], []
+        # 编目三池的 modifiers 与状态池同一治理闸
+        for _pool in ('unitDefs', 'zoneDefs', 'domainDefs'):
+            for _e in d.get(_pool) or []:
+                check_mod_keys(_e.get('modifiers'), "%s %s:%s" % (pid, _pool, _e.get('id', '?')), warns)
+                _check_desc_elems(_e, "%s %s:%s" % (pid, _pool, _e.get('id', '?')), _refs, errors, warns)
+        cards = d.get("cards", [])
+        total_cards += len(cards)
+        if pid in expect and len(cards) != expect[pid]:
+            errors.append("card count %d != manifest %d" % (len(cards), expect[pid]))
+        ids = set()
+        by_id = {c.get("id"): c for c in cards}
+        hero_ids = {h.get("heroId") for h in (d.get("heroes") or [])}
+        for c in cards:
+            cid = c.get("id","?")
+            if cid in ids: errors.append("dup id %s"%cid)
+            ids.add(cid)
+            for fld in ("id","name","kind","sequence","rarity","axis","flagship","describe","effects","tentative","scope"):
+                if fld not in c: errors.append("%s: missing %s"%(cid,fld))
+            if "rarity" in c and "sequence" in c and c["rarity"] != RARITY_BY_SEQ(c["sequence"]):
+                errors.append("%s: rarity mismatch (seq %s, %s)"%(cid,c["sequence"],c["rarity"]))
+            _scope = c.get("scope")
+            if _scope is not None and _scope not in SCOPES:
+                errors.append("%s: bad scope %s"%(cid,_scope))
+            if _scope == "hero" and c.get("heroId") not in hero_ids:
+                errors.append("%s: scope=hero 但 heroId '%s' 不在本文件 heroes[]"%(cid,c.get("heroId")))
+            _kind = c.get("kind")
+            if _kind=="active":
+                if "cost" not in c or "reach" not in c or "target" not in c:
+                    errors.append("%s: active incomplete"%cid)
+                elif c["reach"] not in REACH: errors.append("%s: bad reach"%cid)
+                fs = (c.get("target") or {}).get("fallbackSort")
+                if fs and fs not in SORTS:
+                    errors.append("%s: bad fallbackSort %s"%(cid,fs))
+                if (c.get("target") or {}).get("selectionMode")=="manual" and not fs:
+                    errors.append("%s: 违反 INV-E6：selectionMode=manual 必须定义 fallbackSort（当前为 null/缺失）"%cid)
+            elif _kind=="equipment":
+                check_equipment_card(c, cid, errors)
+                if c.get("reach") is not None and c["reach"] not in REACH:
+                    errors.append("%s: bad reach"%cid)
+                if (c.get("target") or {}).get("selectionMode")=="manual" and not (c.get("target") or {}).get("fallbackSort"):
+                    errors.append("%s: 违反 INV-E6：selectionMode=manual 必须定义 fallbackSort（当前为 null/缺失）"%cid)
+            elif _kind=="passive":
+                hk = c.get("hook")
+                hk_list = [hk] if isinstance(hk, str) else (hk or [])
+                if not hk_list: errors.append("%s: passive 缺 hook"%cid)
+                for _h in hk_list:
+                    if _h not in EVENTS: errors.append("%s: bad hook %s"%(cid,_h))
+            elif _kind=="summon":
+                check_summon_card(c, cid, _refs["defs"], errors)
+            else: errors.append("%s: bad kind"%cid)
+            # ally 单目标不得用 point：point=仅锚点格，而 ally 缺省锚点=施法者格，候选只剩自己
+            _req = (c.get("target") or {}).get("request") or {}
+            if ((_req.get("mode") or "unit") == "unit"
+                    and _req.get("faction") in ("ally", "self_or_ally")
+                    and _req.get("scope") == "point"
+                    and not _req.get("anchor")):
+                errors.append("%s: ally 单目标不得用 scope:point（缺省锚点=施法者；任选友军请用 scope:board）" % cid)
+            _passive = _kind == "passive"
+            _init_eq = c.get("initialEquip")
+            if _init_eq is not None:
+                if _kind != "passive":
+                    errors.append("%s: initialEquip 只能写在 passive 卡上" % cid)
+                _tgt = by_id.get(_init_eq)
+                if not _tgt or _tgt.get("kind") != "equipment":
+                    errors.append("%s: initialEquip 必须引用同文件 kind=equipment 的卡（%s）" % (cid, _init_eq))
+            walk(c.get("effects"), cid, "eff", errors, warns, _passive)
+            trigs(c.get("triggers"), cid, "card", errors, warns, _passive)
+            if _kind == "equipment":
+                trigs((c.get("equipment") or {}).get("triggers"), cid, "equipment", errors, warns, False)
+            for sd in c.get("statusDefs") or []:
+                check_status_def(sd, cid, errors, warns)
+                trigs(sd.get("triggers"), cid, "sd:"+sd.get("id","?"), errors, warns, _passive)
+                for tf in ("thresholdTrigger", "stackThreshold"):
+                    walk((sd.get(tf) or {}).get("effects"), cid, "sd:"+sd.get("id","?")+"."+tf, errors, warns, _passive)
+            flat = json.dumps(c.get("effects",[]), ensure_ascii=False)
+            if ('"domain"' in flat or '"translocate"' in flat) and '"lost"' not in flat:
+                errors.append("%s: domain/translocate without lost rent"%cid)
+            # 维度乘区挂钩 Gate：dim 须为已注册维度、threshold 在值域内、mul>0；mul 越界给非阻断告警
+            for h in (c.get("dimHooks") or []):
+                dim = h.get("dim")
+                if dim not in DIM_RANGES:
+                    errors.append("%s: dimHooks.dim '%s' 非法（须为 secrecy/order/fate_value/luminance/death_tally）"%(cid, dim))
+                    continue
+                lo, hi = DIM_RANGES[dim]
+                th = h.get("threshold")
+                if not isinstance(th, (int, float)) or th < lo or th > hi:
+                    errors.append("%s: dimHooks threshold %s 越出 %s 值域 [%s,%s]"%(cid, th, dim, lo, hi))
+                mu = h.get("mul")
+                if not isinstance(mu, (int, float)) or mu <= 0:
+                    errors.append("%s: dimHooks mul %s 须为正"%(cid, mu))
+                elif mu < 0.8 or mu > 1.5:
+                    if not h.get("note"):
+                        warns.append("%s: dimHooks mul %s 越出建议区间 0.8–1.5（平衡期需 note 说明）"%(cid, mu))
+            # 相位乘区挂钩 Gate：phases 非空且合法、mul>0；mul 越界给非阻断告警
+            for h in (c.get("phaseHooks") or []):
+                ph = h.get("phases")
+                if not isinstance(ph, list) or not ph:
+                    errors.append("%s: phaseHooks.phases 须为非空数组" % cid); continue
+                bad = [x for x in ph if x not in PHASES]
+                if bad:
+                    errors.append("%s: phaseHooks.phases 非法值 %s（须为 %s）" % (cid, bad, "/".join(sorted(PHASES)))); continue
+                mu2 = h.get("mul")
+                if not isinstance(mu2, (int, float)) or mu2 <= 0:
+                    errors.append("%s: phaseHooks mul %s 须为正" % (cid, mu2))
+                elif mu2 < 0.8 or mu2 > 1.5:
+                    if not h.get("note"):
+                        warns.append("%s: phaseHooks mul %s 越出 0.8–1.5 且无 note 说明" % (cid, mu2))
+            # 描述↔元素一致性：describe 声称的元素须与结构可解析的伤害元素一致
+            _check_desc_elems(c, cid, _refs, errors, warns)
+        lint_playability(pid, cards, warns)
+        for e in errors: print("  E:", pid, e)
+        for w in warns: print("  W:", pid, w)
+        errors_all += [pid+": "+e for e in errors]
+        warns_all += warns
+
+    for e in pre_errors: print("  E:", e)
+    for w in pre_warns: print("  W:", w)
+    print("-"*60)
+    print("TOTAL cards:", total_cards, "| errors:", len(errors_all), "| warns:", len(warns_all))
+    return 1 if errors_all else 0
+
+if __name__ == "__main__":
+    sys.exit(main())

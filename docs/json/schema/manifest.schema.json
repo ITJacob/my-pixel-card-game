@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "manifest.schema.json",
+  "title": "MyPixelCardGame 卡池索引（v2）",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "rarityMap",
+    "factions"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "type": "string"
+    },
+    "rarityMap": {
+      "type": "object",
+      "description": "稀有度 ↔ 位次区间唯一映射（机器可读权威源）。"
+    },
+    "factions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "file",
+          "cardCount"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^faction_[0-9]{2}$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "file": {
+            "type": "string",
+            "pattern": "^faction_[0-9]{2}\\.skills\\.json$"
+          },
+          "cardCount": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    }
+  }
+}
