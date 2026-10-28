@@ -103,6 +103,103 @@
       "duration": 15,
       "charges": 2,
       "note": "与决斗姿态对称的远程面（2026-10-02 设计落地）：受投掷 / 法术攻击（reach ∈ {thrown, spell}）时顺序反击——先结算主攻击、再以反作用动作回击攻击者（执行上下文 §六，sourceRef=ranged_counter）；还击的是攻击者本人而非弹道，故法术虽无形、守卫姿态不可拦，照样触发反击。对撞的同步性仍为决斗姿态独有。charges 2：前 2 次远程受击反击，每次生效消耗 1 层（R5 确定性）。姿态生命周期同 INV-P8 跳过维持 / INV-P9 行动退出 / INV-P5 硬控清除。挂载卡：战士·守护状态 / 猎人·挑衅（矩阵 stance 行共享列）。数值按当前档。"
+    },
+    {
+      "id": "regen",
+      "name": "再生",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": 30,
+      "maxStacks": 1,
+      "modifiers": {
+        "healOnTick": 0.4
+      },
+      "note": "§2.2 已裁定：defaultDuration 6；实例 value 0.4/tick（总回复 12）。⚠️ 原平衡结论失效，需重验。"
+    },
+    {
+      "id": "vulnerable",
+      "name": "易伤",
+      "category": [
+        "debuff"
+      ],
+      "dispelable": true,
+      "duration": 20,
+      "maxStacks": 1,
+      "modifiers": {
+        "damage_taken_mul": 1.3
+      },
+      "note": "§2.2 已裁定：defaultDuration 4 / mul 1.3（与抗性同乘区加算）。⚠️ 与 hunter 卡面内联 def（mul 1.2 / duration 3 / maxStacks 3 + 叠层阈值）数值分歧，以本 §2.2 裁定为权威；提取后须删除 hunter 内联副本。"
+    },
+    {
+      "id": "burn",
+      "name": "灼烧",
+      "category": [
+        "debuff"
+      ],
+      "dispelable": true,
+      "duration": 15,
+      "maxStacks": 3,
+      "stackPolicy": "refresh",
+      "modifiers": {
+        "dotOnTick": 0.4,
+        "dot_element": "fire"
+      },
+      "note": "通用火属性 DOT，多处引用但 §2.2 未单列裁定；数值定档：duration 15tick / maxStacks 3 refresh / 0.4 点每 tick（总量 6 点，对齐单卡预算锚）。2026-10-09 全库 DoT 校正：原 2/tick 系回合→tick 换算残留（3 回合 × 2 点/回合 被写成 15 tick × 2 点/tick，总量膨胀 5 倍），与各途径 DoT 状态同批 ÷5。",
+      "element": "fire",
+      "triggers": [
+        {
+          "event": "on_take_damage",
+          "condition": {
+            "kind": "element_is",
+            "element": "fire"
+          },
+          "effects": [
+            {
+              "type": "modify_status",
+              "statusId": "burn",
+              "stacksDelta": 1,
+              "target": "self",
+              "note": "同元素共鸣（增效档）：火伤喂灼烧 +1 层"
+            },
+            {
+              "type": "mount_status",
+              "statusId": "burn_resonance",
+              "stacks": 1,
+              "target": "self",
+              "note": "共鸣计数 +1（3 次火伤触燃尽）"
+            }
+          ],
+          "note": "设计箱① 元素共鸣"
+        }
+      ],
+      "stackThreshold": {
+        "stacks": 3,
+        "effects": [
+          {
+            "type": "mount_status",
+            "statusId": "combustion",
+            "stacks": 1,
+            "target": "self",
+            "note": "升阶：灼烧满层 → 燃焚"
+          },
+          {
+            "type": "dispel",
+            "target": "self",
+            "dispelTarget": "unit",
+            "filter": {
+              "statusId": "burn",
+              "count": 1
+            },
+            "note": "升阶后原灼烧移除"
+          }
+        ],
+        "note": "元素共鸣 4 档（升阶转化）：灼烧→燃焚"
+      },
+      "tags": [
+        "fire"
+      ]
     }
   ]
 }
