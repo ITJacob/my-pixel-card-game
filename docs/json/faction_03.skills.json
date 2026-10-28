@@ -1,0 +1,19 @@
+{
+  "factionId": "faction_03",
+  "factionName": "派系·叁",
+  "sharedSkillIds": [],
+  "heroes": [
+    {
+      "heroId": "hero_03",
+      "heroName": "英雄·叁",
+      "playstyle": "法令规则槽（立规/豁免/反诉）",
+      "skillTree": [],
+      "uniqueSkillIds": []
+    }
+  ],
+  "cards": [],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

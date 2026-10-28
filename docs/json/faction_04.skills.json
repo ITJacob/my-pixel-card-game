@@ -1,0 +1,19 @@
+{
+  "factionId": "faction_04",
+  "factionName": "派系·肆",
+  "sharedSkillIds": [],
+  "heroes": [
+    {
+      "heroId": "hero_04",
+      "heroName": "英雄·肆",
+      "playstyle": "提线傀儡（傀儡操控与换位）",
+      "skillTree": [],
+      "uniqueSkillIds": []
+    }
+  ],
+  "cards": [],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

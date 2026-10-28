@@ -1,0 +1,108 @@
+{
+  "_meta": {
+    "purpose": "跨派系共享状态注册表（中性战斗机制状态）。"
+  },
+  "statusDefs": [
+    {
+      "id": "shield",
+      "name": "护盾",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": 30,
+      "modifiers": {
+        "shieldDelta": 5
+      },
+      "note": "2026-10-02 拍板层叠制（弃 maxStacks:1，层数不设上限）：各层独立 shield 层池，后加持先结算 LIFO；每层时限/次数独立（defaultDuration 6 / delta 5），不融合、不刷新、不顶替——重复加持行为须卡面特殊说明；不抵 DoT；减伤顺序=护盾→护甲→抗性→防御（效果上下文 §三）。"
+    },
+    {
+      "id": "taunt",
+      "name": "嘲讽",
+      "category": [
+        "control"
+      ],
+      "dispelable": true,
+      "duration": 30,
+      "maxStacks": 1,
+      "modifiers": {
+        "taunt": true
+      },
+      "note": "§2.2 已裁定：defaultDuration 6；force 普攻 + target_override。"
+    },
+    {
+      "id": "stun",
+      "name": "眩晕",
+      "category": [
+        "control"
+      ],
+      "dispelable": false,
+      "duration": 25,
+      "maxStacks": 1,
+      "modifiers": {},
+      "note": "§2.2 已裁定：defaultDuration 5；剥夺全部四个行为（INV-P5 硬控清除 stance）。",
+      "disallowActions": [
+        "move",
+        "basic_attack",
+        "skill",
+        "skip",
+        "react",
+        "channel"
+      ]
+    },
+    {
+      "id": "bulwark",
+      "name": "守护",
+      "category": [
+        "stance"
+      ],
+      "dispelable": true,
+      "duration": 30,
+      "maxStacks": 1,
+      "priority": 10,
+      "modifiers": {
+        "guardTarget": true
+      },
+      "note": "§2.2 已裁定：defaultDuration 6 / priority 10；binding.guardTarget 被保护单位。"
+    },
+    {
+      "id": "shackle",
+      "name": "枷锁",
+      "category": [
+        "control"
+      ],
+      "dispelable": true,
+      "duration": 10,
+      "modifiers": {
+        "moveImmune": true,
+        "gaugeRateMul": 0.7
+      },
+      "note": "F7 已登记定义（H24 减速族：禁位移 + gauge_rate ×0.7）。原 6 途径各一份重复 def 已合并为此权威定义（2026-09-19）。 乘区审批：0.7=标准减伤母版档（H3 已裁定）/0.75=轻减档"
+    },
+    {
+      "id": "slow",
+      "name": "减速",
+      "category": [
+        "debuff"
+      ],
+      "dispelable": true,
+      "duration": 15,
+      "maxStacks": 1,
+      "modifiers": {
+        "gaugeRateMul": 0.7
+      },
+      "note": "通用减速：行动速率 ×mul（mul<1）。归并纯减速私有换皮所得机制桩（2026-09-19 降格批次4）。基准 gaugeRateMul 0.7，卡面 mount_status 传 value 覆盖。纯禁位移(moveImmune) 不在此，另见 immobilize（待建）。 乘区审批：0.7=标准减伤母版档（H3 已裁定）/0.75=轻减档"
+    },
+    {
+      "id": "counter_stance",
+      "name": "反击姿态",
+      "category": [
+        "stance"
+      ],
+      "dispelable": true,
+      "duration": 15,
+      "charges": 2,
+      "note": "与决斗姿态对称的远程面（2026-10-02 设计落地）：受投掷 / 法术攻击（reach ∈ {thrown, spell}）时顺序反击——先结算主攻击、再以反作用动作回击攻击者（执行上下文 §六，sourceRef=ranged_counter）；还击的是攻击者本人而非弹道，故法术虽无形、守卫姿态不可拦，照样触发反击。对撞的同步性仍为决斗姿态独有。charges 2：前 2 次远程受击反击，每次生效消耗 1 层（R5 确定性）。姿态生命周期同 INV-P8 跳过维持 / INV-P9 行动退出 / INV-P5 硬控清除。挂载卡：战士·守护状态 / 猎人·挑衅（矩阵 stance 行共享列）。数值按当前档。"
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "1.4.0",
+  "rarityMap": {
+    "common": [
+      9,
+      8
+    ],
+    "uncommon": [
+      7,
+      6
+    ],
+    "rare": [
+      5,
+      4
+    ],
+    "epic": [
+      3,
+      2
+    ],
+    "legendary": [
+      1,
+      0
+    ]
+  },
+  "factions": [
+    {
+      "id": "faction_01",
+      "name": "派系·壹",
+      "file": "faction_01.skills.json",
+      "cardCount": 28
+    },
+    {
+      "id": "faction_02",
+      "name": "派系·贰",
+      "file": "faction_02.skills.json",
+      "cardCount": 0
+    },
+    {
+      "id": "faction_03",
+      "name": "派系·叁",
+      "file": "faction_03.skills.json",
+      "cardCount": 0
+    },
+    {
+      "id": "faction_04",
+      "name": "派系·肆",
+      "file": "faction_04.skills.json",
+      "cardCount": 0
+    },
+    {
+      "id": "faction_05",
+      "name": "派系·伍",
+      "file": "faction_05.skills.json",
+      "cardCount": 0
+    },
+    {
+      "id": "faction_06",
+      "name": "派系·陆",
+      "file": "faction_06.skills.json",
+      "cardCount": 0
+    },
+    {
+      "id": "faction_07",
+      "name": "派系·柒",
+      "file": "faction_07.skills.json",
+      "cardCount": 0
+    },
+    {
+      "id": "faction_08",
+      "name": "派系·捌",
+      "file": "faction_08.skills.json",
+      "cardCount": 0
+    },
+    {
+      "id": "faction_09",
+      "name": "派系·玖",
+      "file": "faction_09.skills.json",
+      "cardCount": 0
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "factionId": "faction_05",
+  "factionName": "派系·伍",
+  "sharedSkillIds": [],
+  "heroes": [
+    {
+      "heroId": "hero_05",
+      "heroName": "英雄·伍",
+      "playstyle": "星象共谋（共享门槛刻规则）",
+      "skillTree": [],
+      "uniqueSkillIds": []
+    }
+  ],
+  "cards": [],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

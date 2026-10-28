@@ -1,0 +1,19 @@
+{
+  "factionId": "faction_06",
+  "factionName": "派系·陆",
+  "sharedSkillIds": [],
+  "heroes": [
+    {
+      "heroId": "hero_06",
+      "heroName": "英雄·陆",
+      "playstyle": "灵感层/命运双极押注",
+      "skillTree": [],
+      "uniqueSkillIds": []
+    }
+  ],
+  "cards": [],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

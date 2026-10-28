@@ -111,7 +111,7 @@
           "type": "integer",
           "minimum": 0,
           "maximum": 9,
-          "description": "序列位阶 9→0。"
+          "description": "位次档 9→0。"
         },
         "rarity": {
           "enum": [
@@ -217,7 +217,7 @@
             "male",
             "female"
           ],
-          "description": "性别限制（部分途径序列有性别要求）。"
+          "description": "性别限制（部分卡有性别要求）。"
         },
         "dimHooks": {
           "type": "array",

@@ -1,0 +1,19 @@
+{
+  "factionId": "faction_07",
+  "factionName": "派系·柒",
+  "sharedSkillIds": [],
+  "heroes": [
+    {
+      "heroId": "hero_07",
+      "heroName": "英雄·柒",
+      "playstyle": "预服调度（药剂×兽群）",
+      "skillTree": [],
+      "uniqueSkillIds": []
+    }
+  ],
+  "cards": [],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

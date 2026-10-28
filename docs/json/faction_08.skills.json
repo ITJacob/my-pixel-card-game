@@ -1,0 +1,19 @@
+{
+  "factionId": "faction_08",
+  "factionName": "派系·捌",
+  "sharedSkillIds": [],
+  "heroes": [
+    {
+      "heroId": "hero_08",
+      "heroName": "英雄·捌",
+      "playstyle": "风暴连锁时序",
+      "skillTree": [],
+      "uniqueSkillIds": []
+    }
+  ],
+  "cards": [],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

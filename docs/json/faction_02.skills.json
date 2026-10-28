@@ -1,0 +1,19 @@
+{
+  "factionId": "faction_02",
+  "factionName": "派系·贰",
+  "sharedSkillIds": [],
+  "heroes": [
+    {
+      "heroId": "hero_02",
+      "heroName": "英雄·贰",
+      "playstyle": "镜映借序（读对手招式并重放）",
+      "skillTree": [],
+      "uniqueSkillIds": []
+    }
+  ],
+  "cards": [],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

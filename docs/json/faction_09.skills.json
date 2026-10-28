@@ -1,0 +1,19 @@
+{
+  "factionId": "faction_09",
+  "factionName": "派系·玖",
+  "sharedSkillIds": [],
+  "heroes": [
+    {
+      "heroId": "hero_09",
+      "heroName": "英雄·玖",
+      "playstyle": "污秽/恶欲通道",
+      "skillTree": [],
+      "uniqueSkillIds": []
+    }
+  ],
+  "cards": [],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}
