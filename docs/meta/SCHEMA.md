@@ -68,7 +68,7 @@ docs/json/
 
 ## 5. 封闭集登记
 
-- 原语 32 个：见 SCHEMA.md 原语表（= schema effect.oneOf）。新增先登记再改 schema。
+- 原语 32 个：封闭集 = schema `effect.oneOf`（35 分支 = 3 算子 + 32 原语叶子）；参数取值域见 `ddd/params/效果参数.md` 原语表。新增先登记再改 schema。
 - 触发点 16 个：on_battle_start / on_turn_start / on_turn_end / on_apply / on_remove / on_tick / on_phase_change / on_spawn / on_death / on_kill / on_attack / on_equipment_equip / on_active_skill / on_take_damage / on_deal_damage / on_status_gain。
 - 元素 / 资源池 / 装备槽 / 状态类别取值域见 ddd params 三篇。
 
