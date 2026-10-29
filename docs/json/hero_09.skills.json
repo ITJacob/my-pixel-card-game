@@ -1056,7 +1056,7 @@
                   "stackMode": "add",
                   "duration": 15,
                   "target": "all_enemies",
-                  "note": "重复挂载刷新 duration + 叠层（编队上下文 §六，F51）"
+                  "note": "重复挂载刷新 duration + 叠层（编队上下文 §六）"
                 }
               ],
               "else": []

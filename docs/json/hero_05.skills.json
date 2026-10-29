@@ -316,7 +316,7 @@
           "type": "damage",
           "element": "none",
           "value": 5,
-          "note": "星象类伤害统一 element:none（星光不是火/电，参照 F63 否决 lightning 的口径）"
+          "note": "星象类伤害统一 element:none（星光不是火/电，参照已否决 lightning 的口径）"
         },
         {
           "type": "modify_resource",
@@ -1321,7 +1321,7 @@
             "bulwark": "vulnerable",
             "gauge_rate_up": "shackle"
           },
-          "note": "SS5 状态改写算子（transfer_status mode:rewrite，H32；与傀儡系稿 / F50 同源并入同一母版，不重复立项）",
+          "note": "SS5 状态改写算子（transfer_status mode:rewrite；与傀儡系稿同源并入同一母版，不重复立项）",
           "fallback": [
             {
               "type": "dispel",

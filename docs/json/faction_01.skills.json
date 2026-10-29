@@ -253,7 +253,7 @@
           "note": "节流：每 5tick 一次（1 回合=5tick，执行参数 §2.2 权宜规避）"
         }
       ],
-      "note": "权柄级 dispelable:false（运行时覆写，H8）。到期后残留 aging 层数不清空——aging 实例各自计 duration，到期独立回滚。「失控」引擎无对应维度，不做"
+      "note": "权柄级 dispelable:false（运行时覆写）。到期后残留 aging 层数不清空——aging 实例各自计 duration，到期独立回滚。「失控」引擎无对应维度，不做"
     },
     {
       "id": "battle_authority",
@@ -411,7 +411,7 @@
               "type": "modify_damage",
               "scope": "taken",
               "mul": 0.4,
-              "note": "巨剑插地：无形墙壁替你挡下一次（H3 参数化减伤母版，格数即 charges）"
+              "note": "巨剑插地：无形墙壁替你挡下一次（参数化减伤母版，格数即 charges）"
             }
           ]
         }

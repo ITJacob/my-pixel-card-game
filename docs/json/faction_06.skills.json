@@ -133,7 +133,7 @@
         "gaugeReductionImmune": {
           "value": true,
           "scope": "self",
-          "note": "免疫 gauge.current 减少（H27/H31）"
+          "note": "免疫 gauge.current 减少（免疫推条）"
         },
         "concealRevealBlock": {
           "value": true,
@@ -209,7 +209,7 @@
       "duration": null,
       "maxStacks": 3,
       "stackPolicy": "stack",
-      "note": "H11 计数型资源状态（F51 stacks + F48 consume）。maxStacks 基础 3，可被绝对灵感 +1（→4）、赢家 +3（→6）提升。消耗出口：赢家 4 层换免死 / 赐福 2 层换祝福 / 重启循环 3 层续接"
+      "note": "计数型资源状态（stacks + consume）。maxStacks 基础 3，可被绝对灵感 +1（→4）、赢家 +3（→6）提升。消耗出口：赢家 4 层换免死 / 赐福 2 层换祝福 / 重启循环 3 层续接"
     },
     {
       "id": "tide_low",
@@ -240,7 +240,7 @@
               "statusId": "tide_high",
               "duration": 30,
               "target": "self",
-              "note": "双相位交替（H50 形态组，零新机制）"
+              "note": "双相位交替（形态组，零新机制）"
             }
           ]
         }
@@ -344,7 +344,7 @@
               "stacks": 1,
               "duration": 20,
               "target": "attacker",
-              "note": "灾祸反噬攻击者（F61 RedirectRule.to attacker）"
+              "note": "灾祸反噬攻击者（RedirectRule.to attacker）"
             }
           ]
         }
@@ -366,7 +366,7 @@
         "gaugeRateMul": {
           "value": 0.9,
           "perStack": true,
-          "note": "每层行动条速率 ×0.9 乘算（H24），3 层 = ×0.729，INV-S5 合规"
+          "note": "每层行动条速率 ×0.9 乘算，3 层 = ×0.729，INV-S5 合规"
         },
         "clockwork_tick": {
           "payload": "on_advance_clock",
@@ -379,11 +379,11 @@
           {
             "type": "target_override",
             "anchor": "first_empty",
-            "note": "厄运爆发：立即打空一次并清空层数（H2 stackThreshold，R5 确定性写法，C7 锚点）"
+            "note": "厄运爆发：立即打空一次并清空层数（stackThreshold，R5 确定性写法，C7 锚点）"
           }
         ]
       },
-      "note": "H2 参数化复合 debuff 母版；挂载刷新不叠层，避免乘区指数化 ｜ 水手天灾降临读取（天灾乘厄运跨系段） ｜ clockwork_tick 修饰键首发（命运循环状态面） ｜ fear 类别认领（厄运惊惧——共享 fear 语义：不眠者 dread 是恐惧回击正主，怪物是厄运缠身的心惊胆战，语义分叉不冲突）",
+      "note": "参数化复合 debuff 母版；挂载刷新不叠层，避免乘区指数化 ｜ 水手天灾降临读取（天灾乘厄运跨系段） ｜ clockwork_tick 修饰键首发（命运循环状态面） ｜ fear 类别认领（厄运惊惧——共享 fear 语义：不眠者 dread 是恐惧回击正主，怪物是厄运缠身的心惊胆战，语义分叉不冲突）",
       "crossPathway": true,
       "participants": [
         "sleepless",
@@ -416,7 +416,7 @@
       "dispelable": true,
       "duration": 30,
       "lethalProtect": true,
-      "note": "H7 致死保护母版（与傀儡系同源同一母版）：化解下次致死伤害、保留 1 血；注意不是复活；hpFloor=1"
+      "note": "致死保护母版（与傀儡系同源）：化解下次致死伤害、保留 1 血；注意不是复活；hpFloor=1"
     },
     {
       "id": "fortune_mastery",
@@ -522,7 +522,7 @@
               "misfortune"
             ]
           },
-          "note": "H4 按状态过滤的伤害乘区（口径），💡⚡ 咬合"
+          "note": "按状态过滤的伤害乘区，💡⚡ 咬合"
         }
       }
     },
@@ -538,7 +538,7 @@
         "damage_mul": 1.2,
         "damage_taken_mul": 0.9
       },
-      "note": "H10 参数化增益母版（与 F14 tutelage 同源）"
+      "note": "参数化增益母版（与 tutelage 同源）"
     },
     {
       "id": "mercury_body",
@@ -568,7 +568,7 @@
         {
           "op": "target_override",
           "anchor": "nearest_any",
-          "note": "打向不分阵营的最近单位（锚点 nearest_any，已并入 H12 状态族母版）；状态 ID 按命名冲突提醒取 fate_chaos，避开律师途径 chaos 撞车"
+          "note": "打向不分阵营的最近单位（锚点 nearest_any，已并入 target_override 状态族母版）；状态 ID 按命名冲突提醒取 fate_chaos，避开律师途径 chaos 撞车"
         }
       ],
       "note": "charges 2：前 2 次攻击生效，每次消耗 1 层",
@@ -702,7 +702,7 @@
           ]
         }
       ],
-      "note": "主方案升格：致死回滚 = restore_snapshot(statuses) 胚胎态还原 + 回复至 30% 生命；依赖卡面开战 snapshot 建档；「洗掉疯狂」从 dispel 升格为状态回滚；H7 致死保护母版（傀儡系/耕种者/不眠者/歌颂者/秘祈人同源统一）：逆转为胚胎 = 回到初始态保住一命，非死后召回",
+      "note": "主方案升格：致死回滚 = restore_snapshot(statuses) 胚胎态还原 + 回复至 30% 生命；依赖卡面开战 snapshot 建档；「洗掉疯狂」从 dispel 升格为状态回滚；致死保护母版（傀儡系/耕种者/不眠者/歌颂者/秘祈人同源统一）：逆转为胚胎 = 回到初始态保住一命，非死后召回",
       "lethalProtect": true
     },
     {
@@ -741,7 +741,7 @@
           "op": "target_override",
           "anchor": "manual",
           "manualTarget": "secondary_target",
-          "note": "锚点 manual 已落 ddd（共享内核 §一 anchor 枚举 + 执行参数 §2.2）；本途径唯一由玩家决定改写方向的 target_override（H12 状态族多注册锚点，不新增机制）"
+          "note": "锚点 manual 已落 ddd（共享内核 §一 anchor 枚举 + 执行参数 §2.2）；本途径唯一由玩家决定改写方向的 target_override（状态族多注册锚点，不新增机制）"
         }
       ]
     },
@@ -762,7 +762,7 @@
             "faction": "enemy",
             "scope": "single",
             "sort": "gauge_desc",
-            "note": "确定性选取当前行动条最高的敌方单位（sort gauge_desc + faction enemy，H13 排序键族），目标选择零随机（R1）"
+            "note": "确定性选取当前行动条最高的敌方单位（sort gauge_desc + faction enemy，排序键族），目标选择零随机（R1）"
           },
           "effects": [
             {
@@ -862,7 +862,7 @@
           "duration": 20
         }
       ],
-      "note": "H9 Zone 母版；Zone 跨半场落敌方半场（战场上下文 §二）"
+      "note": "Zone 母版；Zone 跨半场落敌方半场（战场上下文 §二）"
     }
   ],
   "domainDefs": []

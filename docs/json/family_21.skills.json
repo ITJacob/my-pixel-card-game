@@ -271,7 +271,7 @@
           "value": 2,
           "duration": null,
           "target": "self",
-          "note": "复用既有「反伤」状态（H42 常驻模板 + 数值参数化）"
+          "note": "复用既有「反伤」状态（常驻模板 + 数值参数化）"
         },
         {
           "type": "modify_resource",

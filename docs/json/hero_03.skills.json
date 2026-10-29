@@ -79,7 +79,7 @@
           "consumption": "zone",
           "zone": "zone_jurisdiction",
           "duration": 30,
-          "note": "Zone 注册（consumption: zone + 卡面 zoneDef，H9 Zone 母版），非界域原语；落点：己方半场一块（约 2 格）"
+          "note": "Zone 注册（consumption: zone + 卡面 zoneDef，Zone 母版），非界域原语；落点：己方半场一块（约 2 格）"
         },
         {
           "type": "modify_resource",
@@ -488,7 +488,7 @@
                 "element": "physical",
                 "value": 5,
                 "neverMiss": true,
-                "note": "必定命中（H35）；若目标持有 castigated 则 ×1.4"
+                "note": "必定命中；若目标持有 castigated 则 ×1.4"
               }
             ]
           }

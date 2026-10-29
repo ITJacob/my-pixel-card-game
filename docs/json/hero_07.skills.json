@@ -510,15 +510,14 @@
             {
               "type": "spawn",
               "unitId": "unit_elder_thing",
-              "position": "tail",
-              "note": "F39（H1）"
+              "position": "tail"
             },
             {
               "type": "spawn",
               "unitId": "unit_beast",
               "count": 2,
               "position": "tail",
-              "note": "F38；多次 spawn 亦可走 count（H17）"
+              "note": "多次 spawn 亦可走 count"
             }
           ]
         }

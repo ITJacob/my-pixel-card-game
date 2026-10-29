@@ -764,7 +764,7 @@
               "target": "primary_target",
               "statusesFrom": "transferred_statuses",
               "keepDuration": true,
-              "note": "H32 transferStatus（mode 含 move，编队参数 §1.1b）；贴到敌人身上",
+              "note": "transferStatus（mode 含 move，编队参数 §1.1b）；贴到敌人身上",
               "mode": "move"
             }
           ]
@@ -938,7 +938,7 @@
           "to": "mapped_debuff",
           "count": 1,
           "keepDuration": true,
-          "note": "H32 transferStatus；映射表示例 shield→vulnerable / regen→burn / fortify→vulnerable / gauge_rate+→shackle（数据配置，需人工定义完整）",
+          "note": "transferStatus；映射表示例 shield→vulnerable / regen→burn / fortify→vulnerable / gauge_rate+→shackle（数据配置，需人工定义完整）",
           "mode": "rewrite"
         }
       ],

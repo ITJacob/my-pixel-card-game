@@ -16,7 +16,7 @@
         "moveImmune": true,
         "damage_taken_mul": 0.9
       },
-      "note": "moveImmune 走 H27（与傀儡系 同源并入）；减伤部分建议并入参数化减伤状态母版（F 组合并候选 2）"
+      "note": "moveImmune 走免疫位移母版（与傀儡系同源并入）；减伤部分建议并入参数化减伤状态母版"
     },
     {
       "id": "rage",
@@ -48,7 +48,7 @@
           ]
         }
       ],
-      "note": "H34 statPerStack + F51 stacks；INV-S5 合规（改 gauge.rate 源属性）。｜ rage_overflow 修饰键首发",
+      "note": "statPerStack + stacks；INV-S5 合规（改 gauge.rate 源属性）。｜ rage_overflow 修饰键首发",
       "modifiers": {
         "rage_overflow": {
           "threshold": 5,
@@ -69,7 +69,7 @@
       "modifiers": {
         "gaugeReductionImmune": true
       },
-      "note": "H31（与傀儡系 命运锚点同源并入）"
+      "note": "（与傀儡系命运锚点同源并入）"
     },
     {
       "id": "glide",
@@ -109,7 +109,7 @@
         "damage_taken_mul": 0.85,
         "moveImmune": true
       },
-      "note": "H3 + H27；与 F10 beast_form 同属变身/形态族，建议并入参数化变身母版"
+      "note": "参数化减伤 + 免疫位移；与 beast_form 同属变身/形态族，建议并入参数化变身母版"
     },
     {
       "id": "emc_disorder",

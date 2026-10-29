@@ -94,7 +94,7 @@
         },
         "tentative": {
           "type": "boolean",
-          "description": "数值待。当前全库 829 张均为 true。"
+          "description": "默认 true。"
         },
         "cost": {
           "$ref": "#/$defs/cost"
@@ -1813,13 +1813,13 @@
         },
         "healRatio": {
           "type": "number",
-          "description": "吸血比例（归施法者，F2）。"
+          "description": "吸血比例（归施法者）。"
         },
         "category": {
           "enum": [
             "buff"
           ],
-          "description": "增益转移（F50）。"
+          "description": "增益转移。"
         },
         "count": {
           "$ref": "#/$defs/countValue"
@@ -3086,7 +3086,7 @@
         },
         "damageTransfer": {
           "type": "object",
-          "description": "伤害转嫁族（编队参数 §1.1b / H28）：ratio × direction × split × selfKeep × linkedTo。**必须内置防循环**：由本状态产生的伤害不再触发任何转嫁。囚犯「诅咒链接网络」即本母版的可堆叠网络形态。",
+          "description": "伤害转嫁族（编队参数 §1.1b /）：ratio × direction × split × selfKeep × linkedTo。**必须内置防循环**：由本状态产生的伤害不再触发任何转嫁。囚犯「诅咒链接网络」即本母版的可堆叠网络形态。",
           "additionalProperties": false,
           "properties": {
             "ratio": {
@@ -3217,7 +3217,7 @@
         },
         "summonMapping": {
           "type": "array",
-          "description": "召唤映射表：刻印/计数层数 N → 召唤物强度与数量 f(N)（罪犯「仪式刻印→深渊召唤」，编队参数 §2.4 H1 召唤物基线 + spawn.companionBuff）。",
+          "description": "召唤映射表：刻印/计数层数 N → 召唤物强度与数量 f(N)（罪犯「仪式刻印→深渊召唤」，编队参数 §2.4 召唤物基线 + spawn.companionBuff）。",
           "items": {
             "type": "object",
             "required": [

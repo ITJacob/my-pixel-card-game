@@ -714,7 +714,7 @@
                   "condition": {
                     "kind": "chance",
                     "p": 0.4,
-                    "note": "基础 40%；眩晕/冰冻/虚弱 +35%、狂乱/失控 +20%、Boss −20%（状态修正待参数化）；R3 登记、单次抽样（R4）、非伤害维度（R5）"
+                    "note": "基础 40%；眩晕/冰冻/虚弱 +35%、狂乱/失控 +20%、Boss −20%；R3 登记、单次抽样（R4）、非伤害维度（R5）"
                   },
                   "note": "目标位格 ≥ 施法者：40% 概率拉入镜中"
                 }
@@ -1015,7 +1015,7 @@
               "value": -999,
               "mode": "delta",
               "target": "enemy",
-              "note": "目标 = 行动条最接近满的敌方单位（fallbackSort: gauge_desc）；负 delta 下限截断为 0（F55 同族问题，待一并确认）"
+              "note": "目标 = 行动条最接近满的敌方单位（fallbackSort: gauge_desc）；负 delta 下限截断为 0"
             },
             {
               "type": "modify_stat",

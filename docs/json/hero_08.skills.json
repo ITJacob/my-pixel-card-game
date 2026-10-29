@@ -724,7 +724,7 @@
                       "type": "damage",
                       "element": "lightning",
                       "value": 2,
-                      "note": "导电：水能导电（F52 has_status）"
+                      "note": "导电：水能导电（has_status）"
                     }
                   ],
                   "else": []

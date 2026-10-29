@@ -851,7 +851,7 @@
               "else": []
             }
           ],
-          "note": "F52 target_has_status 已泛化为共享内核 §三 has_status(side,id,cmp,n)；嵌套 If 表达「混乱或厄运」"
+          "note": "target_has_status 已泛化为共享内核 §三 has_status(side,id,cmp,n)；嵌套 If 表达「混乱或厄运」"
         }
       ],
       "tentative": false,
@@ -1073,7 +1073,7 @@
           "value": 10,
           "mode": "delta",
           "target": "all_allies",
-          "note": "F59 ALL_ALLIES scope（共享内核 §一 scope: all + faction 过滤，H18）"
+          "note": "ALL_ALLIES scope（共享内核 §一 scope: all + faction 过滤）"
         },
         {
           "type": "modify_resource",

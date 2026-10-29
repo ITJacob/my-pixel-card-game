@@ -18,7 +18,7 @@
           "filter": {
             "hasAnyStatus": true
           },
-          "note": "对携带任意状态的目标 ×1.15；F52 的 any 语义用 has_category 全枚举承载"
+          "note": "对携带任意状态的目标 ×1.15；任意状态的 any 语义用 has_category 全枚举承载"
         },
         "see_through": {
           "value": true,
@@ -54,7 +54,7 @@
       "duration": null,
       "maxStacks": 3,
       "stackPolicy": "stack",
-      "note": "SS2 计数型状态（H11 母版，与 F1 inscription 同源）；由技能显式 +1，消耗走 F48 status.consume ｜ behaviorModifiers cast_time_set 卷轴技法（省时 不归零）",
+      "note": "SS2 计数型状态（母版，与 inscription 同源）；由技能显式 +1，消耗走 status.consume ｜ behaviorModifiers cast_time_set 卷轴技法（省时 不归零）",
       "stackThreshold": {
         "stacks": 2,
         "effects": [
@@ -99,7 +99,7 @@
               "statusId": "shackle",
               "duration": 10,
               "target": "attacker",
-              "note": "F7：冻住攻击者"
+              "note": "冻住攻击者"
             },
             {
               "type": "damage",
@@ -174,7 +174,7 @@
           "note": "触发后 charges 归零卸载（C6）"
         }
       ],
-      "note": "SS10 参数化减伤状态（H3 母版，与 F 组合并候选 2 同源）；位移仅为己方半场内后退，穿梭本体为减伤 + 反抢节奏 乘区审批：0.4–0.5=深度减免档（重控/代价/位格压制态），单列登记"
+      "note": "SS10 参数化减伤状态（参数化减伤母版）；位移仅为己方半场内后退，穿梭本体为减伤 + 反抢节奏；乘区审批：0.4–0.5=深度减免档（重控/代价/位格压制态），单列登记"
     },
     {
       "id": "ego_constellation",
@@ -237,7 +237,7 @@
       "modifiers": {
         "damage_mul": {
           "dynamic": "1 + 0.1 × 层数",
-          "note": "H4 按层数动态乘区"
+          "note": "按层数动态乘区"
         }
       },
       "triggers": [
@@ -253,7 +253,7 @@
           ]
         }
       ],
-      "note": "SS3 计数型状态（H11 母版，与 F1 inscription 同源）；回充不写在状态上，由各知识类技能效果显式 +1（零新依赖主方案）"
+      "note": "SS3 计数型状态（母版，与 inscription 同源）；回充不写在状态上，由各知识类技能效果显式 +1（零新依赖主方案）"
     },
     {
       "id": "doomsday",
@@ -278,10 +278,10 @@
               "note": "末日降临"
             }
           ],
-          "note": "倒计时爆发；on_remove 是否覆盖自然到期（expired）待实测，若只覆盖主动驱散则改 on_tick 计数"
+          "note": "倒计时爆发（on_remove 载荷）"
         }
       ],
-      "note": "SS12 参数化复合 debuff（H2 含 on_remove 载荷参数，与 F 组合并候选 4 同源）"
+      "note": "SS12 参数化复合 debuff（含 on_remove 载荷参数，与 同族复合减益 同源）"
     },
     {
       "id": "scrying_authority",
@@ -334,7 +334,7 @@
           ]
         }
       ],
-      "note": "SS14：与 F4 shadow_veil 机制完全同族（0.7 减伤 / charges 2 / 攻击破除，此处 0.6），建议并入 F 组合并候选 1 潜行母版，本卡只填参数 ｜ H5 潜行/虚化母版三件套齐备：untargetableByTargeted（不可选中）+ damage_taken_mul（减伤）+ on_deal_damage 破除（攻击即显形）。 乘区审批：0.6=深度减免档（石化/集群/直觉类重态）"
+      "note": "SS14：与 shadow_veil 机制完全同族（0.7 减伤 / charges 2 / 攻击破除，此处 0.6），建议并入潜行母版，本卡只填参数 ｜ 潜行/虚化母版三件套齐备：untargetableByTargeted（不可选中）+ damage_taken_mul（减伤）+ on_deal_damage 破除（攻击即显形）。乘区审批：0.6=深度减免档（石化/集群/直觉类重态）"
     },
     {
       "id": "reforge",
@@ -411,7 +411,7 @@
           ]
         }
       ],
-      "note": "SS17 潜行母版（H5，与 F4 shadow_veil / F11 stealth 同源建议并入）；显形段由伴随状态 concealment_broken 承载"
+      "note": "SS17 潜行母版（与 shadow_veil / stealth 同源，建议并入）；显形段由伴随状态 concealment_broken 承载"
     },
     {
       "id": "concealment_broken",
@@ -421,7 +421,7 @@
       ],
       "dispelable": false,
       "duration": 10,
-      "note": "辅助状态：隐匿权柄的代价段承载；显形期间隐匿权柄的不可选中与减伤失效（H38 suppress 语义）",
+      "note": "辅助状态：隐匿权柄的代价段承载；显形期间隐匿权柄的不可选中与减伤失效（suppress 语义）",
       "suppress": [
         "concealment_authority"
       ]
@@ -480,7 +480,7 @@
               "note": "还原快照中的增益（保留剩余 duration）"
             }
           ],
-          "note": "致死保护（H7/SS7）中断死亡不进死亡结算；触发后 charges 归零（C6，每场一次）"
+          "note": "致死保护（SS7）中断死亡不进死亡结算；触发后 charges 归零（C6，每场一次）"
         }
       ],
       "note": "下位四权柄（备份/复制/删除/修改）里最隐蔽的一条：从备份还原的是状态不是生命；与傀儡系灵之虫（on_death→spawn 死后召回 4 次）不同"
@@ -520,7 +520,7 @@
               "$variant.element"
             ]
           },
-          "note": "仅对变体选定元素生效（H4 dynamic 条件乘区）"
+          "note": "仅对变体选定元素生效（dynamic 条件乘区）"
         }
       },
       "slots": {

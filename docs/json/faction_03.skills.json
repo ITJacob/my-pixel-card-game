@@ -140,7 +140,7 @@
           "mul": 1.5
         }
       },
-      "note": "duration +1 走 H14 durationModifier（✅ 已落）；区域数值倍率 🟡 随 zone_jurisdiction 一并落地",
+      "note": "duration +1 走 durationModifier（✅ 已落）；区域数值倍率 🟡 随 zone_jurisdiction 一并落地",
       "maxStacks": 3,
       "stackPolicy": "refresh"
     },
@@ -160,7 +160,7 @@
           }
         }
       },
-      "note": "按施法者过滤的 ×1.4（H4，✅ 已落）；「全场唯一持有者 + 改判自动卸载」语义 ddd 尚无字段。",
+      "note": "按施法者过滤的 ×1.4（✅ 已落）；「全场唯一持有者 + 改判自动卸载」语义 ddd 尚无字段。",
       "maxStacks": 1
     },
     {
@@ -312,7 +312,7 @@
           "side": "ally"
         }
       },
-      "note": "Ⅰ 档（己方半场）；Ⅱ 大都市=己方全场 attack +3 / ×0.85 / ×0.85；Ⅲ 秩序领域=全场+挂 decree（见升级阶梯）。H9 Zone 母版，保持 Zone 不升格界域"
+      "note": "Ⅰ 档（己方半场）；Ⅱ 大都市=己方全场 attack +3 / ×0.85 / ×0.85；Ⅲ 秩序领域=全场+挂 decree（见升级阶梯）。Zone 母版，保持 Zone 不升格界域"
     }
   ],
   "domainDefs": [

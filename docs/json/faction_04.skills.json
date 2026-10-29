@@ -37,13 +37,13 @@
               "type": "modify_damage",
               "scope": "taken",
               "mul": 0.6,
-              "note": "该次伤害 ×0.6（H3 参数化减伤母版；扩展原语 modify_damage 仅用于状态/触发器内调整本次正在结算的伤害）"
+              "note": "该次伤害 ×0.6（参数化减伤母版；扩展原语 modify_damage 仅用于状态/触发器内调整本次正在结算的伤害）"
             }
           ],
           "consumeCharge": true
         }
       ],
-      "note": "C6 charges 表达一次性预感；F51 mount_status.stacks 表达每回合补层（编队上下文 §六）"
+      "note": "C6 charges 表达一次性预感；mount_status.stacks 表达每回合补层（编队上下文 §六）"
     },
     {
       "id": "poise",
@@ -56,7 +56,7 @@
       "modifiers": {
         "moveImmune": true
       },
-      "note": "G12 immune + moveImmune（编队参数 §1.1b，H27）；与 F7 shackle 是同字段正反两面，建议统一为 move_immune 布尔",
+      "note": "G12 immune + moveImmune（编队参数 §1.1b）；与 shackle 是同字段正反两面，建议统一为 move_immune 布尔",
       "immune": [
         "control"
       ]
@@ -88,7 +88,7 @@
           "consumeCharge": true
         }
       ],
-      "note": "lethalProtect（H7，编队参数 §1.1b）在死亡确认前分支、保留 1 血、不触发 on_death 后续链（编队上下文 §十）；on_death 钩子仅承载驱散时序",
+      "note": "lethalProtect（编队参数 §1.1b）在死亡确认前分支、保留 1 血、不触发 on_death 后续链（编队上下文 §十）；on_death 钩子仅承载驱散时序",
       "crossPathway": true,
       "participants": [
         "assassin",
@@ -115,7 +115,7 @@
               "type": "modify_damage",
               "scope": "taken",
               "mul": 0.5,
-              "note": "把 N 次伤口挪走（H3 参数化减伤母版；扩展原语 modify_damage 仅用于状态/触发器内调整本次正在结算的伤害）"
+              "note": "把 N 次伤口挪走（参数化减伤母版；扩展原语 modify_damage 仅用于状态/触发器内调整本次正在结算的伤害）"
             }
           ],
           "consumeCharge": true
@@ -152,7 +152,7 @@
       "modifiers": {
         "damageDealtMulPerStack": 0.1
       },
-      "note": "伤害 ×(1 + 0.1×层数)；H11 计数型母版（与 F1 inscription 学徒·默记共用，编队参数 §2.4）；F51 stacks 乘区审批：每层增量 0.1（3 层合计 1.3，区间内），非总值"
+      "note": "伤害 ×(1 + 0.1×层数)；计数型母版（与 inscription 学徒·默记共用，编队参数 §2.4）；stacks 乘区审批：每层增量 0.1（3 层合计 1.3，区间内），非总值"
     },
     {
       "id": "power_refine",
@@ -170,7 +170,7 @@
           }
         ]
       },
-      "note": "H4 过滤乘区支持按途径过滤（编队参数 §1.1b）"
+      "note": "过滤乘区支持按途径过滤（编队参数 §1.1b）"
     },
     {
       "id": "puppet_string",
@@ -181,7 +181,7 @@
       ],
       "dispelable": true,
       "duration": 30,
-      "note": "F9 已登记；权威定义见状态表，此处为引用副本",
+      "note": "权威定义见状态表，此处为引用副本",
       "crossPathway": true,
       "participants": [
         "apprentice",
@@ -199,7 +199,7 @@
         {
           "op": "target_override",
           "anchor": "index_asc_same_faction",
-          "note": "H12 target_override 族；优先于嘲讽/守护"
+          "note": "target_override 族；优先于嘲讽/守护"
         }
       ]
     },
@@ -229,7 +229,7 @@
         "attack": 3,
         "gauge.rate": 8
       },
-      "note": "F10 已登记（编队参数 §2.4），此处为引用副本；modify_stat duration 回滚 v1.5 已修"
+      "note": "此处为引用副本（编队参数 §2.4）；modify_stat duration 回滚 v1.5 已修"
     },
     {
       "id": "fooled",
@@ -325,7 +325,7 @@
                   "resource": "hp",
                   "value": 0.4,
                   "target": "self",
-                  "note": "宿主 → 施法者（F56 casterId 寻址）"
+                  "note": "宿主 → 施法者（casterId 寻址）"
                 }
               ]
             }
@@ -342,7 +342,7 @@
               {
                 "op": "target_override",
                 "anchor": "self_faction_hp_desc",
-                "note": "宿主的攻击转向它自己的同伴（H12 target_override 族）"
+                "note": "宿主的攻击转向它自己的同伴（target_override 族）"
               }
             ]
           }
@@ -363,7 +363,7 @@
           ]
         }
       ],
-      "note": "两阶段寄生（H50 formGroup/phases）；层数档 maxStacks 3 + refresh",
+      "note": "两阶段寄生（formGroup/phases）；层数档 maxStacks 3 + refresh",
       "crossPathway": true,
       "participants": [
         "supplicant",
@@ -405,7 +405,7 @@
       "baseOn": "summon_baseline",
       "hpRatio": 0.25,
       "atkRatio": 0.4,
-      "note": "H1 召唤物基线模板（编队参数 §2.4） ｜ unitType 补登对齐权威表（召唤物参数.md §一）",
+      "note": "召唤物基线模板（编队参数 §2.4） ｜ unitType 补登对齐权威表（召唤物参数.md §一）",
       "unitType": "CONSTRUCT"
     }
   ],

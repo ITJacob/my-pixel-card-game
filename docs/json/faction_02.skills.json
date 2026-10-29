@@ -92,7 +92,7 @@
           ]
         }
       ],
-      "note": "与 F4 shadow_veil / F11 stealth 同源，建议并入统一潜行母版"
+      "note": "与 shadow_veil / stealth 同源，建议并入统一潜行母版"
     },
     {
       "id": "invisible",
@@ -115,7 +115,7 @@
           "note": "下一次攻击 ×1.5（爆发层）；不会因出手而自动卸载"
         }
       },
-      "note": "与 F4 shadow_veil 同源，建议并入统一潜行母版 乘区审批：0.7=标准减伤母版档（H3）/0.75=轻减档",
+      "note": "与 shadow_veil 同源，建议并入统一潜行母版；乘区审批：0.7=标准减伤母版档/0.75=轻减档",
       "maxStacks": 3,
       "stackPolicy": "stack",
       "stackThreshold": {
@@ -182,7 +182,7 @@
           "dispelable": false
         }
       },
-      "note": "\"男性变女性\"落在战外晋升事件，故 gender: any；状态级不可驱散标志（H8，与傀儡系 同源）"
+      "note": "\"男性变女性\"落在战外晋升事件，故 gender: any；状态级不可驱散标志（与傀儡系同源）"
     },
     {
       "id": "mirror_substitute",
@@ -223,7 +223,7 @@
                       "value": 1,
                       "target": "self",
                       "mode": "setHp",
-                      "note": "自身保留 1 血（致死保护 H7）"
+                      "note": "自身保留 1 血（致死保护）"
                     }
                   ]
                 }
@@ -253,7 +253,7 @@
           "consumeCharge": 1
         }
       ],
-      "note": "lethal_protect（H7，已落 ddd）+ caster_has_summon 谓词；与傀儡系【纸人替身】同机制不同代价",
+      "note": "lethal_protect + caster_has_summon 谓词；与傀儡系【纸人替身】同机制不同代价",
       "crossPathway": true,
       "participants": [
         "assassin",
@@ -314,7 +314,7 @@
           ]
         }
       ],
-      "note": "与 F7 shackle 同源，建议并入"
+      "note": "与 shackle 同源，建议并入"
     },
     {
       "id": "frost_armor",
@@ -335,7 +335,7 @@
               "mode": "delta",
               "duration": 10,
               "target": "attacker",
-              "note": "寒气反噬（F61 attacker 寻址，🟡 已登记）"
+              "note": "寒气反噬（attacker 寻址，🟡 已登记）"
             }
           ]
         },
@@ -541,7 +541,7 @@
           "note": "持有者接下来 2 次造成的伤害不产生任何效果（被漩涡融化成未发生的可能性），每次消耗一层"
         }
       },
-      "note": "damage_intercept 母版（编队参数 §2.4 H3 乘区=0 档；action_nullify 已落 ddd：编队参数 §1.1b）"
+      "note": "damage_intercept 母版（编队参数 §2.4 乘区=0 档；action_nullify 已落 ddd：编队参数 §1.1b）"
     },
     {
       "id": "form_shadow",
@@ -556,7 +556,7 @@
       "modifiers": {
         "damage_mul": 1.15
       },
-      "note": "形态组登记（H50）：影，进攻向"
+      "note": "形态组登记：影，进攻向"
     },
     {
       "id": "form_mist",
@@ -571,7 +571,7 @@
       "modifiers": {
         "damage_taken_mul": 0.85
       },
-      "note": "形态组登记（H50）：雾，规避向"
+      "note": "形态组登记：雾，规避向"
     },
     {
       "id": "form_blood",
@@ -586,7 +586,7 @@
       "modifiers": {
         "drainHealBonus": 2
       },
-      "note": "形态组登记（H50）：血，续航向；drainHealBonus 沿用药师月相先例"
+      "note": "形态组登记：血，续航向；drainHealBonus 沿用药师月相先例"
     },
     {
       "id": "assassin_form",
@@ -607,10 +607,10 @@
         {
           "event": "on_tick",
           "effects": [],
-          "note": "自发周期：每 5 tick 沿 phases 顺序进一相（影→雾→血→影）。语义由 H50 声明式字段 formGroup/nextPhase/cycleTicks 承载，无效果原语，见 frameworkFlags"
+          "note": "自发周期：每 5 tick 沿 phases 顺序进一相（影→雾→血→影）。语义由 声明式字段 formGroup/nextPhase/cycleTicks 承载，无效果原语，见 frameworkFlags"
         }
       ],
-      "note": "三形态 StatusDef 登记在【影形态】卡（H50 formGroup/nextPhase/cycleTicks/phases）；未持有本条时三形态仍可单卡使用。建为形轴身份状态（原为 invisible，仅【隐形】一张挂载，无法覆盖形态轮转主题）。",
+      "note": "三形态 StatusDef 登记在【影形态】卡（formGroup/nextPhase/cycleTicks/phases）；未持有本条时三形态仍可单卡使用。建为形轴身份状态（原为 invisible，仅【隐形】一张挂载，无法覆盖形态轮转主题）。",
       "maxStacks": 3,
       "stackPolicy": "refresh"
     },
@@ -671,7 +671,7 @@
         "damage_taken_mul": 0,
         "excludeFromActionOrder": true
       },
-      "note": "不可被选中（C8）+ 不可行动 + 免疫一切伤害 + 不参与行动排序三合一（H5 潜行母版 damage_immune 参数位 + action_nullify）；duration 到期跌回原坐标；乘区审批：0 值=绝对语义档（完全免除/封印/断绝），非渐变乘区，单列登记"
+      "note": "不可被选中（C8）+ 不可行动 + 免疫一切伤害 + 不参与行动排序三合一（潜行母版 damage_immune 参数位 + action_nullify）；duration 到期跌回原坐标；乘区审批：0 值=绝对语义档（完全免除/封印/断绝），非渐变乘区，单列登记"
     },
     {
       "id": "charm_axis",
@@ -731,7 +731,7 @@
           "consumeCharge": 1
         }
       ],
-      "note": "命运主题不译概率，做「受击追加」次数型状态；与 F21 astral_mark 同触发点不同载荷",
+      "note": "命运主题不译概率，做「受击追加」次数型状态；与 astral_mark 同触发点不同载荷",
       "crossPathway": true,
       "participants": [
         "assassin",

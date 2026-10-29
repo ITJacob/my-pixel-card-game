@@ -77,7 +77,7 @@
         "moveImmune": true,
         "gaugeRateMul": 0.7
       },
-      "note": "F7 已登记定义（H24 减速族：禁位移 + gauge_rate ×0.7）。原 6 途径各一份重复 def 已合并为此权威定义。乘区审批：0.7=标准减伤母版档（H3）/0.75=轻减档"
+      "note": "状态定义（减速族：禁位移 + gauge_rate ×0.7）。原 6 途径各一份重复 def 已合并为此权威定义。乘区审批：0.7=标准减伤母版档/0.75=轻减档"
     },
     {
       "id": "slow",
@@ -91,7 +91,7 @@
       "modifiers": {
         "gaugeRateMul": 0.7
       },
-      "note": "通用减速：行动速率 ×mul（mul<1）。归并纯减速私有换皮所得机制桩。基准 gaugeRateMul 0.7，卡面 mount_status 传 value 覆盖。纯禁位移(moveImmune) 不在此。乘区审批：0.7=标准减伤母版档（H3）/0.75=轻减档"
+      "note": "通用减速：行动速率 ×mul（mul<1）。归并纯减速私有换皮所得机制桩。基准 gaugeRateMul 0.7，卡面 mount_status 传 value 覆盖。纯禁位移(moveImmune) 不在此。乘区审批：0.7=标准减伤母版档/0.75=轻减档"
     },
     {
       "id": "counter_stance",
@@ -260,7 +260,7 @@
       "modifiers": {
         "damage_taken_mul": 0.7
       },
-      "note": "§2.2：mul 0.7 / duration 4。乘区审批：0.7=标准减伤母版档（H3）/0.75=轻减档"
+      "note": "§2.2：mul 0.7 / duration 4。乘区审批：0.7=标准减伤母版档/0.75=轻减档"
     },
     {
       "id": "charm",
@@ -271,7 +271,7 @@
       "dispelable": true,
       "duration": 10,
       "modifiers": {},
-      "note": "F15 已登记（罪犯+药师途径合并登记，机制=反向嘲讽），权威定义见状态表，此处为引用副本，不新立状态；与 corrupted 同持时 corrupted 优先（贪婪压过好感，见腐蚀条）",
+      "note": "罪犯+药师途径合并登记，机制=反向嘲讽；权威定义见状态表，此处为引用副本，不新立状态；与 corrupted 同持时 corrupted 优先（贪婪压过好感，见腐蚀条）",
       "behaviorModifiers": [
         {
           "anchor": "self_faction_hp_desc",

@@ -150,7 +150,7 @@
           "note": "破除"
         }
       ],
-      "note": "F11 引用副本（H5 潜行母版 + C8 候选池过滤）｜ 与 sleepless 潜行统一签名：direction both→inbound（敌方不可选中，正典潜行语义）"
+      "note": "引用副本（潜行母版 + C8 候选池过滤）｜ 与 sleepless 潜行统一签名：direction both→inbound（敌方不可选中，正典潜行语义）"
     },
     {
       "id": "scentless",
@@ -244,7 +244,7 @@
       "modifiers": {
         "heal_received_mul": 1.3
       },
-      "note": "heal_received_mul 正向档 1.3（H21，与 F20 同字段复用）"
+      "note": "heal_received_mul 正向档 1.3（与同族状态同字段复用）"
     },
     {
       "id": "moonlight_form",
@@ -266,14 +266,14 @@
               "type": "heal",
               "value": 0,
               "target": "self",
-              "note": "H7 lethalProtect：阻止死亡、保留 1 血并 heal 至 25% 最大生命（重组），消耗该层"
+              "note": "lethalProtect：阻止死亡、保留 1 血并 heal 至 25% 最大生命（重组），消耗该层"
             }
           ]
         }
       ],
       "lethalProtect": true,
       "hpRatio": 0.25,
-      "note": "H5 + H7 + C6；duration 5 满足 G15-b"
+      "note": "潜行 + 致死保护 + C6；duration 5 满足 G15-b"
     },
     {
       "id": "crimson_vitality",
@@ -295,7 +295,7 @@
           ]
         }
       ],
-      "note": "H42 常驻模板（duration:null + on_tick）",
+      "note": "常驻模板（duration:null + on_tick）",
       "maxStacks": 3,
       "stackPolicy": "refresh",
       "stackThreshold": {
@@ -329,7 +329,7 @@
               "type": "heal",
               "value": 0,
               "target": "self",
-              "note": "H7：阻止死亡、保留 1 血并 heal 至 20% 最大生命"
+              "note": "阻止死亡、保留 1 血并 heal 至 20% 最大生命"
             },
             {
               "type": "damage",
@@ -343,7 +343,7 @@
       ],
       "lethalProtect": true,
       "hpRatio": 0.2,
-      "note": "与傀儡系【纸人替身】同源（H7），本条多一层反噬"
+      "note": "与傀儡系【纸人替身】同源，本条多一层反噬"
     },
     {
       "id": "spirit_pact",
@@ -362,7 +362,7 @@
               "statusId": "shield",
               "value": 3,
               "target": "target",
-              "note": "契印护佑（spawn.companionBuff F54）"
+              "note": "契印护佑（spawn.companionBuff）"
             }
           ],
           "note": "仅由你召唤的单位（casterOwned 过滤）"
@@ -419,7 +419,7 @@
           ]
         }
       ],
-      "note": "H42 常驻模板"
+      "note": "常驻模板"
     },
     {
       "id": "moon_cycle",
@@ -442,7 +442,7 @@
         {
           "event": "on_tick",
           "effects": [],
-          "note": "① 自发周期：每 6 tick 沿 phases 顺序进一相——语义由 H50 声明式字段（formGroup/nextPhase/cycleTicks，见五相 StatusDef 登记）承载，无效果原语，见 frameworkFlags"
+          "note": "① 自发周期：每 6 tick 沿 phases 顺序进一相——语义由 声明式字段（formGroup/nextPhase/cycleTicks，见五相 StatusDef 登记）承载，无效果原语，见 frameworkFlags"
         },
         {
           "event": "on_tick",
@@ -460,10 +460,10 @@
               "note": "③ 条件触发：首次低于 30% 切至满月并保持到下一次自发轮转"
             }
           ],
-          "note": "首次：需 once 标记，语义待引擎确认"
+          "note": "首次：需 once 标记"
         }
       ],
-      "note": "五相 StatusDef 登记在【满月】卡（位阶最低的首个登记点，H50 formGroup/nextPhase/cycleTicks/phases）；未持有本条时【满月】仍可单卡使用；层数档 maxStacks 5 / refresh（五相轮转计数 5 层）。",
+      "note": "五相 StatusDef 登记在【满月】卡（位阶最低的首个登记点，formGroup/nextPhase/cycleTicks/phases）；未持有本条时【满月】仍可单卡使用；层数档 maxStacks 5 / refresh（五相轮转计数 5 层）。",
       "maxStacks": 5,
       "stackPolicy": "refresh",
       "stackThreshold": {
@@ -552,7 +552,7 @@
           ]
         }
       ],
-      "note": "召唤位上限 +2（modifiers.summon_cap_bonus）；维持费 0.4 生命/tick，断供或到期后超限部分按 H39 最老消散。"
+      "note": "召唤位上限 +2（modifiers.summon_cap_bonus）；维持费 0.4 生命/tick，断供或到期后超限部分按最老优先消散。"
     }
   ],
   "unitDefs": [
