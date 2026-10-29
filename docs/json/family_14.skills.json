@@ -1,0 +1,311 @@
+{
+  "level": "family",
+  "familyId": "family_14",
+  "familyName": "家族·拾肆",
+  "faction": "faction_07",
+  "cards": [
+    {
+      "id": "f07_brew",
+      "name": "药剂调配",
+      "kind": "active",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "brew",
+      "flagship": false,
+      "describe": "治疗一名友军 4 点生命，并交给其一瓶预服药水（攻击/防御提升，50tick，可叠 3 层）；月相 ≥2 层时治疗 +1；自身生命 -1（以身试药）。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 10,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "ally",
+          "scope": "board"
+        },
+        "fallbackSort": "hp_asc"
+      },
+      "effects": [
+        {
+          "type": "heal",
+          "value": 4
+        },
+        {
+          "type": "mount_status",
+          "statusId": "prepared_draught",
+          "stacks": 1,
+          "stackMode": "add",
+          "duration": 50,
+          "target": "target",
+          "note": "调配出一瓶备用药水交予友军（环节⑤ 2026-09-29 补产层段）"
+        },
+        {
+          "type": "grant_immunity",
+          "target": "self",
+          "charges": 1,
+          "duration": 5,
+          "note": "预服在前：抗性已经铺好"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "self",
+            "id": "moon_cycle",
+            "cmp": ">=",
+            "n": 2
+          },
+          "then": [
+            {
+              "type": "heal",
+              "value": 1,
+              "target": "target",
+              "note": "月相催药：月力足时药效更盛"
+            }
+          ],
+          "else": [],
+          "note": "brew 读 moon（跨轴）"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "hp",
+          "value": -1,
+          "mode": "delta",
+          "target": "self",
+          "note": "以身试药：调配前先自尝一口"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f07_herbal_dressing",
+      "name": "草药敷贴",
+      "kind": "active",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "brew",
+      "flagship": false,
+      "describe": "治疗一名友军 3 点生命，并使其再生 15tick（每 tick 0.4 点），备好一剂预服药水；若其已带预服药水，药效激发，额外治疗 2 点；自身带药记时治疗 +2。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "ally",
+          "scope": "board"
+        },
+        "fallbackSort": "hp_asc"
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "heal",
+              "value": 3
+            },
+            {
+              "type": "mount_status",
+              "statusId": "regen",
+              "duration": 15
+            },
+            {
+              "type": "mount_status",
+              "statusId": "prepared_draught",
+              "stacks": 1,
+              "stackMode": "add",
+              "duration": 50,
+              "target": "target",
+              "note": "敷贴时备好一剂药水"
+            }
+          ]
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "prepared_draught",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "heal",
+              "value": 2,
+              "note": "药水激效：带预服药水者治疗 +2（环节⑤ 2026-09-29 补读层段：brew payoff 落地）"
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "self",
+            "id": "remedy_mark",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "heal",
+              "value": 2,
+              "note": "药记在册：剂量拿捏更准，治疗 +2"
+            }
+          ],
+          "else": [],
+          "note": "药记集火读取（remedy_mark）"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f07_toxin_resist",
+      "name": "毒素抗性",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "brew",
+      "flagship": false,
+      "describe": "战斗开始时，自身毒素抗性 +20（整场）；受到毒素伤害时自行化解 1 点（回复 1 点生命）。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "resist:poison",
+          "value": 20,
+          "mode": "delta",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "antivenom",
+          "duration": null,
+          "target": "self"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f07_health_sight",
+      "name": "健康灵视",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "brew",
+      "flagship": false,
+      "describe": "开战后获得「健康灵视」：你施放的治疗对当前生命低于 50% 的目标治疗量 ×1.5。",
+      "hook": [
+        "on_tick"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "not",
+            "condition": {
+              "kind": "has_status",
+              "side": "self",
+              "id": "health_sight",
+              "cmp": ">=",
+              "n": 1
+            }
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "health_sight",
+              "duration": null,
+              "target": "self"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f07_beast_sense",
+      "name": "动物感官",
+      "kind": "passive",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "beasts",
+      "flagship": false,
+      "describe": "开战后：己方动物类/召唤物攻击 +1、行动条速率 +5（整场）；你受到伤害时，己方全体召唤物行动条 +10。",
+      "hook": [
+        "on_tick"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "not",
+            "condition": {
+              "kind": "has_status",
+              "side": "self",
+              "id": "beast_sense",
+              "cmp": ">=",
+              "n": 1
+            }
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "beast_sense",
+              "duration": null,
+              "target": "self"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f07_wild_instinct",
+      "name": "野性直觉",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "beasts",
+      "flagship": false,
+      "describe": "战斗开始时永久获得兽觉：识破与兽群感应先行一步——首次负面状态被免疫（5tick），潜伏者无处藏身。",
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "beast_sense",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "grant_immunity",
+          "target": "self",
+          "charges": 1,
+          "duration": 5,
+          "note": "野性直觉：先手警觉，首次负面状态被免疫（5tick）"
+        }
+      ],
+      "tentative": false,
+      "hook": [
+        "on_battle_start"
+      ]
+    }
+  ],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

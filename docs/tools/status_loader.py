@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
-"""三层作用域定义加载：global / faction / hero 文件的五池统一入口。
+"""四层作用域定义加载：global / faction / family / hero 文件的五池统一入口。
 
-文件布局（按文件名约定发现，manifest 不登记 global/hero）：
+文件布局（按文件名约定发现，manifest 只登记 faction）：
   global.skills.json       全域级（唯一）：跨派系复用内容
-  faction_NN.skills.json   派系级（manifest.factions 登记）：派系公共卡 + 派系蓝本池
-  hero_NN.skills.json      英雄级：英雄独自卡；NN 与 faction_NN 配对
+  faction_NN.skills.json   派系级（manifest.factions 登记）：派系蓝本池（公共卡已入 family 层）
+  family_NN.skills.json    家族级：家族公共卡（原 fNN_ 前缀，f 释义为 family）
+  hero_NN.skills.json      英雄级：英雄独自卡 + family 归属字段；NN 与 faction_NN 配对
 
 引用/$extends 解析序（引擎与工具一致）：
-  hero 文件   → 本文件 → 同派系 faction 文件 → global
+  hero 文件   → 本文件 → family 字段所指 family 文件 → 同派系 faction 文件 → global
+  family 文件 → 本文件 → faction 字段所指 faction 文件 → global
   faction 文件 → 本文件 → global
   global 文件 → 本文件
-禁同层跨文件 $extends（hero_01 不能 extends hero_02 / faction_01 的条目）。
+禁同层跨文件 $extends（hero_01 不能 extends hero_02 / family_01 的条目）。
 
 $extends 物化规则（声明式，加载时合并）：
   逐字段浅合并，子字段存在即覆写；tags 取父∪子并集（继承语义核心）；
@@ -51,13 +53,28 @@ def file_level(doc):
 
 
 def chain_files(fname):
-    """$extends/引用解析链（含本文件）：hero → 同派系 faction → global。"""
-    doc = load_docs().get(fname)
+    """$extends/引用解析链（含本文件）：hero → family → faction → global。"""
+    docs = load_docs()
+    doc = docs.get(fname)
     lvl = (doc or {}).get("level")
     if lvl == "hero":
+        chain = [fname]
+        fam = (doc.get("family") or "") + ".skills.json"
+        if fam in docs:
+            chain.append(fam)
         num = fname[len("hero_"):len("hero_") + 2]
         fac = "faction_%s.skills.json" % num
-        return [fname, fac, GLOBAL_FILE] if fac in load_docs() else [fname, GLOBAL_FILE]
+        if fac in docs:
+            chain.append(fac)
+        chain.append(GLOBAL_FILE)
+        return chain
+    if lvl == "family":
+        chain = [fname]
+        fac = ((doc.get("faction") or "") + ".skills.json")
+        if fac in docs:
+            chain.append(fac)
+        chain.append(GLOBAL_FILE)
+        return chain
     if lvl == "faction":
         return [fname, GLOBAL_FILE]
     return [fname]
@@ -153,12 +170,13 @@ def all_pool_ids(pool):
 def iter_status_defs():
     """Yield (scope_key, label, statusDef)：全库 statusDef 流（物化后）。
 
-    scope_key = global / faction_NN / hero_NN；label = 文件名。
+    scope_key = global / faction_NN / family_NN / hero_NN；label = 文件名。
     """
     docs = load_docs()
     for fname in sorted(docs):
         doc = docs[fname]
-        key = doc.get("factionId") or doc.get("heroId") or doc.get("level") or fname
+        key = (doc.get("factionId") or doc.get("familyId") or doc.get("heroId")
+               or doc.get("level") or fname)
         for iid, sd in materialize(fname, "statusDefs").items():
             yield (key, fname, sd)
         for c in doc.get("cards") or []:

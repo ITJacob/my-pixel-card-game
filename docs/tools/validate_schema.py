@@ -17,8 +17,9 @@
                           $extends 解析合规与物化后结构复核）
 两者都应为 0 错误才视为合规。
 
-三层作用域：global.skills.json（全域）/ faction_NN.skills.json（派系）/ hero_NN.skills.json
-（英雄）；根 oneOf 按 level 分派。hero/global 文件按文件名约定发现，不在 manifest 登记。
+四层作用域：global.skills.json（全域）/ faction_NN.skills.json（派系）/ family_NN.skills.json
+（家族）/ hero_NN.skills.json（英雄）；根 oneOf 按 level 分派。hero/family/global 文件按文件名约定
+发现，不在 manifest 登记（manifest 仍只登记 faction）。
 """
 import io
 import os
@@ -129,15 +130,26 @@ def _leaf_errors(err):
 def cross_check(docs, manifest, errors, warns):
     """schema 表达不了的跨字段约束。"""
     # 1) 卡 id 前缀规则（按文件层级）：
-    #    faction 文件 → ^f<NN>_<slug>，NN=文件派系号；hero 文件 → ^h<NN>_<slug>，NN=heroId 序号；
-    #    global 文件 → 无前缀约束。文件名 ↔ 内字段一致性（hero_NN ↔ heroId/faction）同此检查。
+    #    family 文件 → ^f<NN>_<slug>，NN=文件 faction 号（同派系家族组共享 f 号，f 释义为 family）；
+    #    hero 文件 → ^h<NN>_<slug>，NN=heroId 序号；
+    #    faction 文件 cards 恒为空不校验前缀；global 文件 → 无前缀约束。
+    #    文件名 ↔ 内字段一致性（family_NN ↔ familyId/faction、hero_NN ↔ heroId/faction/family）同此检查。
     f_re = re.compile(r"^f(\d\d)_[a-z0-9_]+$")
     h_re = re.compile(r"^h(\d\d)_[a-z0-9_]+$")
+    fac_ids = {d.get("factionId") for d in docs.values() if d.get("level") == "faction"}
+    fam_by_id = {d.get("familyId"): d for d in docs.values() if d.get("level") == "family"}
     for name, d in docs.items():
         lvl = d.get("level")
         num = None
-        if lvl == "faction":
-            num = (d.get("factionId") or "").split("_", 1)[1] if "_" in (d.get("factionId") or "") else None
+        if lvl == "family":
+            # 文件名 ↔ familyId 配对 + faction 指向存在性
+            nnum = name[len("family_"):len("family_") + 2]
+            if d.get("familyId") != "family_%s" % nnum:
+                errors.append("%s: familyId %s 与文件名序号 %s 不一致"
+                              % (name, d.get("familyId"), nnum))
+            if d.get("faction") not in fac_ids:
+                errors.append("%s: faction 字段 %s 无对应 faction 文件" % (name, d.get("faction")))
+            num = (d.get("faction") or "").split("_", 1)[1] if "_" in (d.get("faction") or "") else None
             id_pat = f_re
         elif lvl == "hero":
             num = (d.get("heroId") or "").split("_", 1)[1] if "_" in (d.get("heroId") or "") else None
@@ -150,6 +162,13 @@ def cross_check(docs, manifest, errors, warns):
             if d.get("faction") != "faction_%s" % fnum:
                 errors.append("%s: faction 字段 %s 与文件名序号 %s 不一致（须 faction_%s）"
                               % (name, d.get("faction"), fnum, fnum))
+            # family 字段：必须指向存在的 family 文件，且该 family 与本英雄同派系
+            fam = fam_by_id.get(d.get("family"))
+            if fam is None:
+                errors.append("%s: family 字段 %s 无对应 family 文件" % (name, d.get("family")))
+            elif fam.get("faction") != d.get("faction"):
+                errors.append("%s: family %s 属于 %s，与 hero faction %s 不一致"
+                              % (name, d.get("family"), fam.get("faction"), d.get("faction")))
         else:
             id_pat = None
         for c in d.get("cards", []):
@@ -160,7 +179,7 @@ def cross_check(docs, manifest, errors, warns):
             if not m:
                 errors.append("%s %s: id 前缀应为 %s（当前 %s）"
                               % (name, cid,
-                                 "f<NN>_<slug>" if lvl == "faction" else "h<NN>_<slug>", cid))
+                                 "f<NN>_<slug>" if lvl == "family" else "h<NN>_<slug>", cid))
                 continue
             if num is not None and m.group(1) != num:
                 errors.append("%s %s: id 序号 %s 与文件 %s 序号 %s 不一致"
@@ -199,17 +218,22 @@ def cross_check(docs, manifest, errors, warns):
     if not manifest:
         return
 
-    # 3) manifest ↔ faction 文件对齐（global/hero 按文件名约定发现，不在 manifest 登记）
+    # 3) manifest ↔ faction 文件对齐（global/family/hero 按文件名约定发现，不在 manifest 登记）
+    #    cardCount 口径：派系卡数 = 该派系在册 family 文件 cards 之和（faction 文件 cards 恒空）
     m_by_id = {p["id"]: p for p in manifest.get("factions", [])}
     fac_docs = {d.get("factionId"): d for d in docs.values() if d.get("level") == "faction"}
+    fam_cards = {}
+    for d in docs.values():
+        if d.get("level") == "family":
+            fam_cards[d.get("faction")] = fam_cards.get(d.get("faction"), 0) + len(d.get("cards") or [])
     for pid, d in fac_docs.items():
         if pid not in m_by_id:
             errors.append("manifest: 缺少派系条目 %s" % pid)
             continue
         p = m_by_id[pid]
-        n = len(d.get("cards", []))
+        n = fam_cards.get(pid, 0)
         if p.get("cardCount") != n:
-            errors.append("manifest %s: cardCount %s != 实际 %d" % (pid, p.get("cardCount"), n))
+            errors.append("manifest %s: cardCount %s != 在册家族卡数之和 %d" % (pid, p.get("cardCount"), n))
         if p.get("file") != "%s.skills.json" % pid:
             errors.append("manifest %s: file 字段 %r 与 factionId 不匹配" % (pid, p.get("file")))
 

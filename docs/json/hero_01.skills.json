@@ -2,6 +2,7 @@
   "level": "hero",
   "heroId": "hero_01",
   "heroName": "英雄·壹",
+  "family": "family_01",
   "faction": "faction_01",
   "playstyle": "装备近战 + 契约点名（武器耐久/护具护甲池 + 将死契约点杀）",
   "cards": [

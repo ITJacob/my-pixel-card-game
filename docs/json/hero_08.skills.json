@@ -2,6 +2,7 @@
   "level": "hero",
   "heroId": "hero_08",
   "heroName": "英雄·捌",
+  "family": "family_16",
   "faction": "faction_08",
   "playstyle": "风暴连锁时序（风雷雨按序入链，链成一次天灾，链断大额作废）",
   "cards": [

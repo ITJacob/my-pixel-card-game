@@ -1,0 +1,254 @@
+{
+  "level": "family",
+  "familyId": "family_13",
+  "familyName": "家族·拾叁",
+  "faction": "faction_06",
+  "cards": [
+    {
+      "id": "f06_inspiration_sense",
+      "name": "灵感超高",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "inspiration",
+      "flagship": false,
+      "describe": "战斗开始时能量 +3，并获得「灵感超高」（整场）：敌方隐匿类状态对你无效，你对隐匿目标造成的伤害 ×1.2。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "modify_resource",
+          "resource": "energy",
+          "value": 3,
+          "mode": "delta",
+          "target": "self",
+          "note": "超前感知 = 开局能量（稿面）"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "inspiration_sense",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "restore_snapshot",
+          "fields": [
+            "gauge"
+          ],
+          "target": "self",
+          "note": "命运轮盘：行动条回到先前的位置"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f06_danger_sense",
+      "name": "危险预感",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "inspiration",
+      "flagship": false,
+      "describe": "战斗开始时获得「危险预感」：受到的下一次伤害 ×0.6，约每 10 tick 自动补充 1 次，持续整场。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "danger_sense",
+          "charges": 1,
+          "duration": 50,
+          "target": "self"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f06_precise_shot",
+      "name": "精准射击",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "inspiration",
+      "flagship": false,
+      "describe": "对一名敌人造成 2 点物理伤害（本途径的输出地基）；目标生命不高于 50% 时追加 1 点物理伤害。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 10,
+        "castTime": 0
+      },
+      "reach": "thrown",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy"
+        },
+        "fallbackSort": "hp_desc"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "physical",
+          "value": 2
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "hp_percent",
+            "side": "target",
+            "cmp": "<=",
+            "n": 50
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "physical",
+              "value": 1,
+              "note": "残命者一枪收尾"
+            }
+          ],
+          "else": [],
+          "note": "命运押注：低血目标处决加成（确定性，不掷骰）"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f06_machine_mind",
+      "name": "恐怖计算",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "inspiration",
+      "flagship": false,
+      "describe": "获得「恐怖计算」20tick：自身行动条速率 +8，免疫目标改写类状态。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "machine_mind",
+          "duration": 20,
+          "target": "self",
+          "note": "恐怖计算：20tick 内推演全局"
+        }
+      ],
+      "tentative": false,
+      "cost": {
+        "energy": 2,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "anchor": "caster",
+          "pickCount": 1
+        }
+      }
+    },
+    {
+      "id": "f06_enhanced_physique",
+      "name": "素质增强",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "inspiration",
+      "flagship": false,
+      "describe": "获得「素质增强」20tick：自身攻击 +2、防御 +1、护甲 +2。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "attack",
+          "value": 2,
+          "mode": "delta",
+          "duration": 20,
+          "target": "self"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "defense",
+          "value": 1,
+          "mode": "delta",
+          "duration": 20,
+          "target": "self"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "armor",
+          "value": 2,
+          "mode": "delta",
+          "target": "self"
+        }
+      ],
+      "tentative": false,
+      "cost": {
+        "energy": 1,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "anchor": "caster",
+          "pickCount": 1
+        }
+      }
+    },
+    {
+      "id": "f06_calamity_foresight",
+      "name": "预见灾祸",
+      "kind": "passive",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "calamity",
+      "flagship": false,
+      "describe": "开战后获得「预见灾祸」（整场）：每次受到伤害立即架起减伤（受伤 ×0.85，10tick），并给攻击者叠 1 层厄运。",
+      "hook": [
+        "on_tick"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "not",
+            "condition": {
+              "kind": "has_status",
+              "side": "self",
+              "id": "calamity_foresight",
+              "cmp": ">=",
+              "n": 1
+            }
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "calamity_foresight",
+              "duration": null,
+              "target": "self"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

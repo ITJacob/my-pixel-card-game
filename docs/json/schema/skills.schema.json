@@ -1,14 +1,17 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://cardgame.local/schema/skills.schema.json",
-  "title": "MyPixelCardGame 技能池（v2 三层作用域）",
-  "description": "三层作用域文件统一走本 schema：level=global（global.skills.json，跨派系复用内容）/ faction（faction_NN.skills.json，派系公共卡 + 派系蓝本池）/ hero（hero_NN.skills.json，英雄独自卡）。根按 level 字段 oneOf 分派到三个 fileRoot。五池（cards/statusDefs/unitDefs/zoneDefs/domainDefs）统一格式、均可空；条目可带 $extends 声明式继承上层定义（解析序：hero → 同派系 faction → global；浅合并、tags 取并集，见 docs/meta/SCHEMA.md §2）。",
+  "title": "MyPixelCardGame 技能池（v2 四层作用域）",
+  "description": "四层作用域文件统一走本 schema：level=global（global.skills.json，跨派系复用内容）/ faction（faction_NN.skills.json，派系蓝本池）/ family（family_NN.skills.json，家族公共卡）/ hero（hero_NN.skills.json，英雄独自卡）。根按 level 字段 oneOf 分派到四个 fileRoot。五池（cards/statusDefs/unitDefs/zoneDefs/domainDefs）统一格式、均可空；条目可带 $extends 声明式继承上层定义（解析序：hero → family → faction → global；浅合并、tags 取并集，见 docs/meta/SCHEMA.md §3）。",
   "oneOf": [
     {
       "$ref": "#/$defs/fileRootGlobal"
     },
     {
       "$ref": "#/$defs/fileRootFaction"
+    },
+    {
+      "$ref": "#/$defs/fileRootFamily"
     },
     {
       "$ref": "#/$defs/fileRootHero"
@@ -39,7 +42,7 @@
         "id": {
           "type": "string",
           "pattern": "^[a-z][a-z0-9_]*$",
-          "description": "全局唯一 ID。前缀约束按文件层级由 cross_check 执行：faction 文件 f<NN>_ / hero 文件 h<NN>_（NN=文件序号）；global 文件无前缀约束。"
+          "description": "全局唯一 ID。前缀约束按文件层级由 cross_check 执行：family 文件 f<NN>_（NN=文件 faction 号）/ hero 文件 h<NN>_（NN=文件序号）；faction 文件 cards 恒空、global 文件无前缀约束。"
         },
         "name": {
           "type": "string",
@@ -4376,7 +4379,7 @@
     },
     "fileRootFaction": {
       "type": "object",
-      "description": "faction_NN.skills.json 文件根（派系级）：cards 仅含派系公共卡（id fNN_ 前缀）；蓝本池保持派系私有内容。",
+      "description": "faction_NN.skills.json 文件根（派系级）：派系蓝本池（statusDefs/unitDefs/zoneDefs/domainDefs）保持派系私有；派系公共卡已下沉 family 层，cards 恒为空数组。",
       "required": [
         "level",
         "factionId",
@@ -4433,6 +4436,71 @@
         }
       }
     },
+    "fileRootFamily": {
+      "type": "object",
+      "description": "family_NN.skills.json 文件根（家族级）：家族公共卡（id fNN_ 前缀，NN=派系号，f 释义为 family）+ 家族元信息；未展开家族五池全空。",
+      "required": [
+        "level",
+        "familyId",
+        "familyName",
+        "faction",
+        "cards",
+        "statusDefs",
+        "unitDefs",
+        "zoneDefs",
+        "domainDefs"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "level": {
+          "const": "family"
+        },
+        "familyId": {
+          "type": "string",
+          "pattern": "^family_[0-9]{2}$",
+          "description": "家族 id：family_01..22 封闭（源质分组序，登记于 SCHEMA.md）。"
+        },
+        "familyName": {
+          "type": "string",
+          "description": "家族中文名（占位符期：家族·壹…家族·贰拾贰）。"
+        },
+        "faction": {
+          "type": "string",
+          "pattern": "^faction_[0-9]{2}$",
+          "description": "所属派系 id（须与文件名序号规则自洽并经 cross_check 配对验证）。"
+        },
+        "cards": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/card"
+          }
+        },
+        "statusDefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/statusDef"
+          }
+        },
+        "unitDefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/unitDef"
+          }
+        },
+        "zoneDefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/zoneDef"
+          }
+        },
+        "domainDefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/domainDef"
+          }
+        }
+      }
+    },
     "fileRootHero": {
       "type": "object",
       "description": "hero_NN.skills.json 文件根（英雄级）：cards 仅含该英雄独自卡（id hNN_ 前缀）；蓝本池留空占位。",
@@ -4440,6 +4508,7 @@
         "level",
         "heroId",
         "heroName",
+        "family",
         "faction",
         "playstyle",
         "cards",
@@ -4459,6 +4528,11 @@
         },
         "heroName": {
           "type": "string"
+        },
+        "family": {
+          "type": "string",
+          "pattern": "^family_[0-9]{2}$",
+          "description": "所属家族 id（须为存在的 family 文件，且该 family 的 faction 与本文件 faction 一致）。"
         },
         "faction": {
           "type": "string",

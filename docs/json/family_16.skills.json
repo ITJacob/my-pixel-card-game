@@ -1,0 +1,371 @@
+{
+  "level": "family",
+  "familyId": "family_16",
+  "familyName": "家族·拾陆",
+  "faction": "faction_08",
+  "cards": [
+    {
+      "id": "f08_great_strength",
+      "name": "卓越力量",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "authority",
+      "flagship": false,
+      "describe": "战斗开始时，自身攻击 +2，持续整场。；踏浪：换到阵列尾梢。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "attack",
+          "value": 2,
+          "mode": "delta",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "move",
+          "op": "insert_tail_cross_lane",
+          "target": "self",
+          "note": "踏浪：换到阵列尾梢"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "attack",
+          "value": 2,
+          "mode": "delta",
+          "target": "self",
+          "note": "卓越力量：攻击 +2"
+        }
+      ],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_deal_damage",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "attack",
+              "value": 1,
+              "mode": "delta",
+              "duration": 10,
+              "target": "self",
+              "note": "卓越力量：造成伤害后攻击 +1（10tick）"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f08_scale_veil",
+      "name": "幻鳞",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "authority",
+      "flagship": false,
+      "describe": "开战后获得幻鳞：无法被位移，且受到的伤害 ×0.9，持续整场。；踏浪：在风暴里换到更远的位置。",
+      "hook": [
+        "on_tick"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "not",
+            "condition": {
+              "kind": "has_status",
+              "side": "self",
+              "id": "scale_veil",
+              "cmp": ">=",
+              "n": 1
+            }
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "scale_veil",
+              "duration": null,
+              "target": "self"
+            },
+            {
+              "type": "move",
+              "op": "insert_tail_cross_lane",
+              "target": "self",
+              "note": "踏浪：在风暴里换到更远的位置"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f08_aquatic_agility",
+      "name": "水中灵活",
+      "kind": "active",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "ocean",
+      "flagship": false,
+      "describe": "自身移动到己方半场内一个指定空位，并获得一次性水影：15tick 内下一次受击伤害 ×0.5。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        }
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "move",
+              "op": "param",
+              "target": "self",
+              "note": "落点限定己方半场（G8③：handleMove 入口统一 to.faction === from.faction 校验）"
+            },
+            {
+              "type": "mount_status",
+              "statusId": "guard",
+              "charges": 1,
+              "duration": 15,
+              "target": "self",
+              "value": 0.5
+            }
+          ]
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f08_rage_burst",
+      "name": "愤怒爆发",
+      "kind": "passive",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "rage",
+      "flagship": false,
+      "describe": "战斗开始时获得愤怒：每次受击叠 1 层（至多 5 层，整场），每层攻击 +1、行动条速率 +2。；踏浪：在风暴里换到更远的位置。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "rage",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "move",
+          "op": "insert_tail_cross_lane",
+          "target": "self"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "defense",
+          "value": -1,
+          "mode": "delta",
+          "target": "self",
+          "duration": 10,
+          "note": "愤怒的代价：自身防御 -1"
+        }
+      ],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_turn_start",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "has_status",
+                "side": "self",
+                "id": "rage",
+                "cmp": ">=",
+                "n": 5
+              },
+              "then": [
+                {
+                  "type": "modify_resource",
+                  "resource": "energy",
+                  "value": 1,
+                  "mode": "delta",
+                  "target": "self",
+                  "note": "怒极回能：怒层 ≥5 回 1 能量"
+                }
+              ],
+              "else": [],
+              "note": "读层：rage"
+            }
+          ],
+          "note": "怒极回能：每回合怒≥5 回 1 能量"
+        }
+      ]
+    },
+    {
+      "id": "f08_navigator_intuition",
+      "name": "天文地理直觉",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "storm",
+      "flagship": false,
+      "describe": "开战后自身行动条 +15，且整场免疫行动条被削减（永不迷路）。；踏浪：在风暴里换到更远的位置。",
+      "hook": [
+        "on_tick"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "not",
+            "condition": {
+              "kind": "has_status",
+              "side": "self",
+              "id": "navigator_intuition",
+              "cmp": ">=",
+              "n": 1
+            }
+          },
+          "then": [
+            {
+              "op": "sequence",
+              "steps": [
+                {
+                  "type": "modify_resource",
+                  "resource": "gauge.current",
+                  "value": 15,
+                  "mode": "delta",
+                  "target": "self",
+                  "note": "on_turn_start 被动自推有效（G5/G6 只禁主动技能回合内自推）"
+                },
+                {
+                  "type": "mount_status",
+                  "statusId": "navigator_intuition",
+                  "duration": null,
+                  "target": "self"
+                }
+              ]
+            },
+            {
+              "type": "move",
+              "op": "insert_tail_cross_lane",
+              "target": "self"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f08_ocean_blessing",
+      "name": "海洋眷顾",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "ocean",
+      "flagship": false,
+      "describe": "战斗开始时，自身攻击 +1、防御 +1、护甲 +5，持续整场。；眷顾即没入海中（自身深潜 15tick）。；踏浪：在风暴里换到更远的位置。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "attack",
+          "value": 1,
+          "mode": "delta",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "defense",
+          "value": 1,
+          "mode": "delta",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "armor",
+          "value": 5,
+          "mode": "delta",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "submerge",
+          "duration": 15,
+          "target": "self",
+          "note": "眷顾即没入海中（环节⑤ 2026-09-29 补产层段）"
+        },
+        {
+          "type": "move",
+          "op": "insert_tail_cross_lane",
+          "target": "self"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "defense",
+          "value": -1,
+          "mode": "delta",
+          "target": "self",
+          "duration": 10,
+          "note": "海洋的代价：自身防御 -1"
+        },
+        {
+          "type": "heal",
+          "value": 4,
+          "target": "self",
+          "note": "海洋眷顾：回复 4 点"
+        }
+      ],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_turn_start",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "has_status",
+                "side": "self",
+                "id": "chain"
+              },
+              "then": [
+                {
+                  "type": "heal",
+                  "value": 2,
+                  "target": "self",
+                  "note": "风暴之后的海：连锁在场回复 2"
+                }
+              ],
+              "else": [],
+              "note": "跨轴读层：storm"
+            }
+          ],
+          "note": "风暴之后的海：每回合若连锁在场回复 2"
+        }
+      ]
+    }
+  ],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

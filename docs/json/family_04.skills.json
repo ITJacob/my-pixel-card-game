@@ -1,0 +1,368 @@
+{
+  "level": "family",
+  "familyId": "family_04",
+  "familyName": "家族·肆",
+  "faction": "faction_02",
+  "cards": [
+    {
+      "id": "f02_featherlight",
+      "name": "羽毛般轻盈",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "form",
+      "flagship": false,
+      "describe": "战斗开始时获得「轻盈」：自身行动条速率 +6，持续整场；每场 3 次，你受击后在己方半场内自动后撤一格。；增益自镜中取用——先留下一具替身承接指向。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "featherlight",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "modify_targetability",
+          "target": "self",
+          "untargetable": true,
+          "duration": 3,
+          "direction": "enemy_targeted",
+          "note": "镜像放逐（改为「镜替身」：不加位移、不付迷失租金）"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f02_eagle_sight",
+      "name": "鹰的视力",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "form",
+      "flagship": false,
+      "describe": "开战后获得「鹰的视力」：敌方的隐匿类状态与「镜中囚禁」状态对你无效——你可以选中并攻击那些单位，持续整场。；增益自镜中取用——先留下一具替身承接指向。",
+      "hook": [
+        "on_tick"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "not",
+            "condition": {
+              "kind": "has_status",
+              "side": "self",
+              "id": "eagle_sight",
+              "cmp": ">=",
+              "n": 1
+            }
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "eagle_sight",
+              "duration": null,
+              "target": "self"
+            },
+            {
+              "type": "modify_targetability",
+              "target": "self",
+              "untargetable": true,
+              "duration": 3,
+              "direction": "enemy_targeted"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f02_shadow_hide",
+      "name": "阴影躲藏",
+      "kind": "active",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "form",
+      "flagship": false,
+      "describe": "躲入阴影 10tick：敌方单体技能无法选中你；你的下一次伤害 ×1.5，出手后立即暴露。；增益自镜中取用——先留下一具替身承接指向。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        }
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "shadow_hide",
+          "duration": 10,
+          "target": "self"
+        },
+        {
+          "type": "modify_targetability",
+          "target": "self",
+          "untargetable": true,
+          "duration": 3,
+          "direction": "enemy_targeted"
+        }
+      ],
+      "tentative": false,
+      "dimHooks": [
+        {
+          "dim": "luminance",
+          "comparator": "<=",
+          "threshold": 2,
+          "mul": 1.2,
+          "target": "all",
+          "note": "暗夜档（光照度 ≤2）阴影类加成 ×1.2"
+        }
+      ]
+    },
+    {
+      "id": "f02_burst_strike",
+      "name": "力量爆发于一击",
+      "kind": "active",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "form",
+      "flagship": false,
+      "describe": "对一名近战敌人造成 2 点物理伤害；若你正处于阴影躲藏或隐形状态，追加 4 点物理伤害。；出手即把目标拽进镜面一瞬，再原样放回。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "melee",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "point",
+          "pickCount": 1
+        },
+        "fallbackSort": "hp_asc"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "physical",
+          "value": 2
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "any_of",
+            "conditions": [
+              {
+                "kind": "caster_status_exists",
+                "id": "shadow_hide"
+              },
+              {
+                "kind": "caster_status_exists",
+                "id": "invisible"
+              }
+            ]
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "physical",
+              "value": 4,
+              "note": "背刺追加"
+            }
+          ],
+          "else": []
+        },
+        {
+          "type": "translocate",
+          "op": "pull_into",
+          "duration": 1,
+          "target": "target",
+          "note": "镜中拉入：目标被拽入镜面一瞬（穿梭形状）"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lost",
+          "value": 1,
+          "mode": "delta",
+          "target": "self",
+          "note": "镜穿梭的租金：迷失值 +1"
+        }
+      ],
+      "tentative": false,
+      "dimHooks": [
+        {
+          "dim": "luminance",
+          "comparator": "<=",
+          "threshold": 2,
+          "mul": 1.2,
+          "target": "damage"
+        }
+      ]
+    },
+    {
+      "id": "f02_invisible",
+      "name": "隐形",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "form",
+      "flagship": false,
+      "describe": "隐形 15tick：敌方单体技能无法选中你，受伤 ×0.7；你的下一次伤害 ×1.5，但出手不会解除隐形。；增益自镜中取用——先留下一具替身承接指向。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        }
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "invisible",
+          "duration": 15,
+          "target": "self"
+        },
+        {
+          "type": "modify_targetability",
+          "target": "self",
+          "untargetable": true,
+          "duration": 3,
+          "direction": "enemy_targeted"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f02_hair_blades",
+      "name": "发刃",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "form",
+      "flagship": false,
+      "describe": "以发丝连刺一名敌人 3 次，每次 2 点物理伤害；末段使其易伤 10tick（受伤 ×1.3）。；出手即把目标拽进镜面一瞬，再原样放回。；自身带借来的动作时追加伤害。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "whole_lane",
+          "pickCount": 1
+        },
+        "fallbackSort": "hp_desc"
+      },
+      "effects": [
+        {
+          "op": "repeat",
+          "count": 3,
+          "shareTarget": true,
+          "steps": [
+            {
+              "type": "damage",
+              "element": "physical",
+              "value": 2
+            }
+          ]
+        },
+        {
+          "type": "mount_status",
+          "statusId": "vulnerable",
+          "duration": 10,
+          "note": "伤口千疮百孔"
+        },
+        {
+          "type": "translocate",
+          "op": "pull_into",
+          "duration": 1,
+          "target": "target"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lost",
+          "value": 1,
+          "mode": "delta",
+          "target": "self"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "self",
+            "id": "borrowed_step",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "dark",
+              "value": 1,
+              "target": "target",
+              "note": "借序：发刃追加 1 点"
+            }
+          ],
+          "else": [],
+          "note": "读层：borrowed_step"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "defense",
+          "value": -1,
+          "mode": "delta",
+          "target": "self",
+          "duration": 10,
+          "note": "发刃的代价：自身防御 -1"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "self",
+            "id": "assassin_form"
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "dark",
+              "value": 1,
+              "note": "发刃：形态在场追加 1 点"
+            }
+          ],
+          "else": [],
+          "note": "读层：assassin_form"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

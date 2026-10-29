@@ -2,6 +2,7 @@
   "level": "hero",
   "heroId": "hero_02",
   "heroName": "英雄·贰",
+  "family": "family_04",
   "faction": "faction_02",
   "playstyle": "镜映借序（读对手招式并重放；诱导对手出招是核心决策）",
   "cards": [

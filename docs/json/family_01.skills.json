@@ -1,0 +1,415 @@
+{
+  "level": "family",
+  "familyId": "family_01",
+  "familyName": "家族·壹",
+  "faction": "faction_01",
+  "cards": [
+    {
+      "id": "f01_strong_physique",
+      "name": "强健体魄",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "martial",
+      "flagship": false,
+      "describe": "战斗开始时，自身行动条速率 +3，持续整场；受击时若生命低于 50%，回复 2 点生命（每 5 tick 至多一次）。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "gauge.rate",
+          "value": 3,
+          "mode": "delta",
+          "duration": null,
+          "target": "self"
+        }
+      ],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_take_damage",
+          "minIntervalTicks": 5,
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "hp_percent",
+                "side": "self",
+                "cmp": "<",
+                "n": 0.5
+              },
+              "then": [
+                {
+                  "type": "heal",
+                  "value": 2,
+                  "target": "self",
+                  "note": "强健体魄：重伤之下撑住一口气"
+                }
+              ],
+              "else": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f01_arms_mastery",
+      "name": "兵械通晓",
+      "kind": "passive",
+      "initialEquip": "h01_standard_blade",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "martial",
+      "flagship": false,
+      "describe": "战斗开始时装备制式长剑（耐久 4 次）：攻击 +1；自身护甲 +3；战意：每次击杀积 1 层（不受回合上限限制，主动技能可消耗）；若击杀的是已登记将死的目标，改为积 2 层；若击杀时已有战意 ≥3，额外积 1 层。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "modify_resource",
+          "resource": "armor",
+          "value": 3,
+          "mode": "delta",
+          "target": "self"
+        }
+      ],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_kill",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "has_status",
+                "side": "self",
+                "id": "war_spirit",
+                "cmp": ">=",
+                "n": 3
+              },
+              "then": [
+                {
+                  "type": "mount_status",
+                  "statusId": "war_spirit",
+                  "stacks": 1,
+                  "stackMode": "add",
+                  "target": "self",
+                  "ignoreWarSpiritCap": true,
+                  "note": "熟械：战意已足，击杀再积 1 层"
+                }
+              ],
+              "else": [],
+              "note": "战意读档：击杀时 ≥3 层，额外积 1 层"
+            },
+            {
+              "op": "if",
+              "condition": {
+                "kind": "has_status",
+                "side": "target",
+                "id": "doom_mark",
+                "cmp": ">=",
+                "n": 1
+              },
+              "then": [
+                {
+                  "type": "mount_status",
+                  "statusId": "war_spirit",
+                  "stacks": 2,
+                  "stackMode": "add",
+                  "target": "self",
+                  "note": "宣判兑现：击杀将死目标双倍战意",
+                  "ignoreWarSpiritCap": true
+                }
+              ],
+              "else": [
+                {
+                  "type": "mount_status",
+                  "statusId": "war_spirit",
+                  "stacks": 1,
+                  "stackMode": "add",
+                  "target": "self",
+                  "ignoreWarSpiritCap": true
+                }
+              ],
+              "note": "兵械通晓：击杀产战意；已登记目标额外奖励"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f01_iron_body",
+      "name": "铁躯",
+      "kind": "passive",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "guard",
+      "flagship": false,
+      "describe": "战斗开始时获得「铁躯」：全元素抗性 +12%，持续整场，不可驱散；并获得 4 点护甲；获得 2 次物理免疫（10tick）。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "iron_body",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "armor",
+          "value": 4,
+          "mode": "delta",
+          "target": "self",
+          "note": "铁躯：抗性之外再厚一层甲"
+        },
+        {
+          "type": "grant_immunity",
+          "target": "self",
+          "element": "physical",
+          "charges": 2,
+          "duration": 10,
+          "note": "铁躯（物理）：按元素分档硬吃两次，不再是泛免疫一次"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f01_close_grapple",
+      "name": "近身缠斗",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "martial",
+      "flagship": false,
+      "describe": "徒手擒拿：对敌方最前排的一名敌人造成 2 点物理伤害，并使其行动条进度 -20；并把目标撞退一格（摔投）。贴身时露出破绽，自身防御 -1（5tick）。目标生命低于 50% 时，摔投追加 1 点物理伤害；否则若自身战意 ≥2，摔投额外推条 10。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 10,
+        "castTime": 0
+      },
+      "reach": "melee",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "point",
+          "pickCount": 1,
+          "anchor": "enemy_front"
+        },
+        "fallbackSort": "index_asc"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "physical",
+          "value": 2,
+          "armorPierceRatio": 0.4,
+          "note": "贴身缠斗：格斗术无视 40% 护甲（C）"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "gauge.current",
+          "value": -20,
+          "mode": "delta"
+        },
+        {
+          "type": "move",
+          "op": "push_back",
+          "target": "target",
+          "note": "摔投：贴身缠住的下一步就是把对方撞退一格"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "defense",
+          "value": -1,
+          "mode": "delta",
+          "duration": 5,
+          "target": "self",
+          "note": "贴身时露出破绽"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "hp_percent",
+            "side": "target",
+            "cmp": "<",
+            "n": 0.5
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "physical",
+              "value": 1,
+              "target": "target",
+              "note": "摔投追击：虚弱者被掼得更狠"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "has_status",
+                "side": "self",
+                "id": "war_spirit",
+                "cmp": ">=",
+                "n": 2
+              },
+              "then": [
+                {
+                  "type": "modify_resource",
+                  "resource": "gauge.current",
+                  "value": -10,
+                  "mode": "delta",
+                  "target": "target",
+                  "note": "战意·缠劲：摔投再推一档"
+                }
+              ],
+              "else": [],
+              "note": "战意读档：≥2 层时额外推条 10"
+            }
+          ],
+          "note": "低血追加伤害；否则战意≥2 时额外推条"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f01_force_deflect",
+      "name": "卸力",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "guard",
+      "flagship": false,
+      "describe": "驱散自身 1 个减益或持续伤害状态，并获得 4 点护盾，持续 10tick；并弃攻 1 个自身回合，竖起无形墙壁（可挡 2 次）。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self"
+        }
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "dispel",
+              "target": "self",
+              "dispelTarget": "unit",
+              "filter": {
+                "category": [
+                  "debuff"
+                ],
+                "count": 1
+              }
+            },
+            {
+              "type": "mount_status",
+              "statusId": "shield",
+              "value": 4,
+              "duration": 10,
+              "target": "self"
+            }
+          ]
+        },
+        {
+          "type": "mount_status",
+          "statusId": "abandon_attack",
+          "target": "self",
+          "duration": 1,
+          "durationUnit": "self_turn",
+          "note": "卸力：这一刻不出手，把力道全留给招架"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "war_bulwark",
+          "target": "self",
+          "charges": 2,
+          "note": "无形墙壁（可挡 2 次）（卸力的正解：弃攻竖起无形墙壁，格数即可挡次数）"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f01_whetstone",
+      "name": "磨刃",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "martial",
+      "flagship": false,
+      "describe": "若装备剑类武器（tag: sword）：武器攻击 +2；否则徒手磨砺，自身攻击 +1（10tick）。代价：自身行动条 -5。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point",
+          "pickCount": 1
+        }
+      },
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_equipped",
+            "slot": "weapon",
+            "tag": "sword"
+          },
+          "then": [
+            {
+              "type": "modify_weapon",
+              "target": "self",
+              "attackDelta": 2,
+              "note": "磨刃：剑类武器攻击 +2"
+            }
+          ],
+          "else": [
+            {
+              "type": "modify_stat",
+              "stat": "attack",
+              "value": 1,
+              "mode": "delta",
+              "duration": 10,
+              "target": "self",
+              "note": "徒手磨砺：攻击 +1（10tick）"
+            }
+          ],
+          "note": "weapon_tag 谓词：tag=sword"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "gauge.current",
+          "value": -5,
+          "mode": "delta",
+          "target": "self",
+          "note": "磨刃的代价：自身行动条 -5"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

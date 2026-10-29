@@ -4,12 +4,13 @@
 封闭取值域以 docs/json/schema/skills.schema.json 为机器正源（运行时加载，不另抄一份）；
 ddd 参数篇文本侧与机器正源的漂移由 check_enum_sync.py 对账。
 
-三层作用域（v2 重构后）：
+四层作用域（v2 重构后）：
   - global.skills.json（全域级）：跨派系复用内容（common 状态注册表已并入其 statusDefs）
-  - faction_NN.skills.json（派系级）：派系公共卡（fNN_ 前缀）+ 派系蓝本池
-  - hero_NN.skills.json（英雄级）：英雄独自卡（hNN_ 前缀），heroId/heroName/faction/playstyle 元信息
+  - faction_NN.skills.json（派系级）：派系蓝本池（公共卡已入 family 层，cards 留空）
+  - family_NN.skills.json（家族级）：家族公共卡（fNN_ 前缀，f 释义为 family）
+  - hero_NN.skills.json（英雄级）：英雄独自卡（hNN_ 前缀）+ family 归属字段
   - 卡无 scope/heroId 字段（归属由所在文件定）；$extends 物化由 status_loader 负责
-  - 状态/单位/界域/区域引用解析三级：本文件 → 同派系 faction 文件 → global
+  - 状态/单位/界域/区域引用解析链：本文件 → family → 同派系 faction → global
 """
 import json, io, sys, glob, os, re
 
@@ -461,18 +462,35 @@ def main():
             for sd in c.get("statusDefs") or []: globs.add(sd["id"])
     ALLSTATUS = globs
 
-    # initialEquip 分组索引：global 卡一组；faction_NN + hero_NN 同组（允许跨本文件互引）
+    # initialEquip 分组索引：global 卡一组；family_NN + 其下 hero 文件同组（同家族文件组，允许跨本文件互引）
+    def _fam_group(_d):
+        _lvl = _d.get("level")
+        if _lvl == "global":
+            return "global"
+        if _lvl == "family":
+            _fid = _d.get("familyId") or ""
+            return _fid.split("_", 1)[1] if "_" in _fid else None
+        if _lvl == "hero":
+            _fam = _d.get("family") or ""
+            return _fam.split("_", 1)[1] if "_" in _fam else None
+        return None  # faction 文件 cards 已空，不参与分组
     EQUIP_IDS = {}
     for f in files:
         _d = json.load(io.open(f, encoding='utf-8'))
-        _lvl = _d.get("level")
-        if _lvl == "global":
-            _g = "global"
-        else:
-            _g = (_d.get("factionId") or _d.get("faction") or "_").split("_", 1)[1]
+        _g = _fam_group(_d)
+        if _g is None:
+            continue
         for _c in _d.get("cards") or []:
             if _c.get("kind") == "equipment":
                 EQUIP_IDS.setdefault(_g, set()).add(_c.get("id"))
+
+    # 派系在册家族卡数合计（manifest cardCount 口径：派系 = 其 family 文件 cards 之和）
+    fam_sum = {}
+    for f in files:
+        _d = json.load(io.open(f, encoding='utf-8'))
+        if _d.get("level") == "family":
+            _fac = _d.get("faction") or ""
+            fam_sum[_fac] = fam_sum.get(_fac, 0) + len(_d.get("cards") or [])
 
     # 描述↔元素一致性 Gate 的引用索引（statusId / def / zone / unitId 解析用）
     _refs = {"status": {}, "defs": {}}
@@ -609,10 +627,9 @@ def main():
 
     for f in files:
         d = json.load(io.open(f, encoding='utf-8'))
-        pid = d.get("factionId") or d.get("heroId") or d.get("level") or os.path.basename(f)
-        # 本文件派系组号（initialEquip 跨文件规则用；global 恒命中 global 组）
-        _grp = "global" if d.get("level") == "global" else \
-            (d.get("factionId") or d.get("faction") or "_").split("_", 1)[1]
+        pid = d.get("factionId") or d.get("familyId") or d.get("heroId") or d.get("level") or os.path.basename(f)
+        # 本文件家族组号（initialEquip 跨文件规则用；global 恒命中 global 组）
+        _grp = _fam_group(d)
         errors, warns = [], []
         # 编目三池的 modifiers 与状态池同一治理闸
         for _pool in ('unitDefs', 'zoneDefs', 'domainDefs'):
@@ -621,8 +638,12 @@ def main():
                 _check_desc_elems(_e, "%s %s:%s" % (pid, _pool, _e.get('id', '?')), _refs, errors, warns)
         cards = d.get("cards", [])
         total_cards += len(cards)
-        if pid in expect and len(cards) != expect[pid]:
-            errors.append("card count %d != manifest %d" % (len(cards), expect[pid]))
+        if pid in expect:
+            # faction 文件的 manifest 卡数 = 本文件 cards + 该派系在册 family 文件 cards 之和
+            n_actual = len(cards) + (fam_sum.get(d.get("factionId"), 0)
+                                     if d.get("level") == "faction" else 0)
+            if n_actual != expect[pid]:
+                errors.append("card count %d != manifest %d" % (n_actual, expect[pid]))
         ids = set()
         by_id = {c.get("id"): c for c in cards}
         for c in cards:
@@ -670,9 +691,9 @@ def main():
             if _init_eq is not None:
                 if _kind != "passive":
                     errors.append("%s: initialEquip 只能写在 passive 卡上" % cid)
-                # 三级规则：目标须为 global 或同派系文件组（faction_NN + hero_NN）内的 kind=equipment 卡
-                if _init_eq not in EQUIP_IDS.get(_grp, set()) and _init_eq not in EQUIP_IDS.get("global", set()):
-                    errors.append("%s: initialEquip %s 必须是 global 或同派系文件内的 kind=equipment 卡" % (cid, _init_eq))
+                # 规则：目标须为 global 或同家族文件组（family_NN + 其下 hero 文件）内的 kind=equipment 卡
+                if _grp is None or (_init_eq not in EQUIP_IDS.get(_grp, set()) and _init_eq not in EQUIP_IDS.get("global", set())):
+                    errors.append("%s: initialEquip %s 必须是 global 或同家族文件组内的 kind=equipment 卡" % (cid, _init_eq))
             walk(c.get("effects"), cid, "eff", errors, warns, _passive)
             trigs(c.get("triggers"), cid, "card", errors, warns, _passive)
             if _kind == "equipment":

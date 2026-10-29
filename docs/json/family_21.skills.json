@@ -1,0 +1,296 @@
+{
+  "level": "family",
+  "familyId": "family_21",
+  "familyName": "家族·贰拾壹",
+  "faction": "faction_09",
+  "cards": [
+    {
+      "id": "f09_strong_body",
+      "name": "强壮身体",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "demon",
+      "flagship": false,
+      "describe": "战斗开始时，自身生命上限 +15、护甲 +2，持续整场。；放纵自身：欲壑 +1，身体被欲望推着往前扑。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "hp_max",
+          "value": 15,
+          "mode": "delta",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "armor",
+          "value": 2,
+          "mode": "delta",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "self",
+          "note": "放纵自身：欲壑 +1"
+        },
+        {
+          "type": "move",
+          "op": "charge_forward",
+          "target": "self",
+          "note": "扑食：欲望驱动身体前压"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f09_keen_intuition",
+      "name": "敏锐直觉",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "demon",
+      "flagship": false,
+      "describe": "战斗开始时，自身行动条速率 +6、精神抗性 +10%，持续整场。；放纵自身：欲壑 +1，身体被欲望推着往前扑。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "gauge.rate",
+          "value": 6,
+          "mode": "delta",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "resist:mental",
+          "value": 10,
+          "mode": "delta",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "self"
+        },
+        {
+          "type": "move",
+          "op": "charge_forward",
+          "target": "self"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f09_crime_abilities",
+      "name": "犯罪能力",
+      "kind": "active",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "vice",
+      "flagship": false,
+      "describe": "对一名近战敌人造成 2 点物理伤害，并有 30% 概率使其易伤 10tick。；伤口浇灌欲望，深渊顺势把人往下拽。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 10,
+        "castTime": 0
+      },
+      "reach": "melee",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "hp_desc"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "physical",
+          "value": 2
+        },
+        {
+          "type": "mount_status",
+          "statusId": "vulnerable",
+          "duration": 10,
+          "condition": {
+            "kind": "chance",
+            "p": 0.3
+          },
+          "note": "概率只作用于是否附加状态（非伤害维度，R5 合规），需登记 RandomUsageRegistry（R3）、单次抽样（R4）"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "note": "产能方身份：推高目标恶欲值"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "target",
+          "note": "放纵：受伤也在浇灌欲望"
+        },
+        {
+          "type": "move",
+          "op": "pull_forward",
+          "target": "target",
+          "note": "深渊拖拽（向下的力）"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f09_weapon_mastery",
+      "name": "武器上手",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "elements",
+      "flagship": false,
+      "describe": "每次你受到伤害时获得「武器上手」：自身造成的物理伤害 ×1.15，持续整场。；放纵自身：欲壑 +1，身体被欲望推着往前扑。",
+      "hook": [
+        "on_take_damage"
+      ],
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "weapon_mastery",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "self"
+        },
+        {
+          "type": "move",
+          "op": "charge_forward",
+          "target": "self"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f09_slow",
+      "name": "迟缓",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "filth",
+      "flagship": false,
+      "describe": "对一名远程敌人造成 2 点物理伤害，并使其迟缓 15tick：行动条速率 ×0.75。；伤口浇灌欲望，深渊顺势把人往下拽。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "diamond_1",
+          "pickCount": 1
+        },
+        "fallbackSort": "gauge_desc"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "physical",
+          "value": 2
+        },
+        {
+          "type": "mount_status",
+          "statusId": "slow",
+          "duration": 15,
+          "value": 0.75
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "target"
+        },
+        {
+          "type": "move",
+          "op": "pull_forward",
+          "target": "target"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f09_malice_sense",
+      "name": "恶意感知",
+      "kind": "passive",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "demon",
+      "flagship": false,
+      "describe": "战斗开始时，自身行动条速率 +5（整场），并获得反伤 2（整场）：攻击你的人受到 2 点反弹伤害。；放纵自身：欲壑 +1，身体被欲望推着往前扑。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "gauge.rate",
+          "value": 5,
+          "mode": "delta",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "thorns",
+          "value": 2,
+          "duration": null,
+          "target": "self",
+          "note": "复用既有「反伤」状态（H42 常驻模板 + 数值参数化）"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 1,
+          "mode": "delta",
+          "target": "self"
+        },
+        {
+          "type": "move",
+          "op": "charge_forward",
+          "target": "self"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}
