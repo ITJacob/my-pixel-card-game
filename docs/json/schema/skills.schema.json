@@ -94,7 +94,7 @@
         },
         "tentative": {
           "type": "boolean",
-          "description": "数值待拍板。当前全库 829 张均为 true。"
+          "description": "数值待。当前全库 829 张均为 true。"
         },
         "cost": {
           "$ref": "#/$defs/cost"
@@ -710,7 +710,7 @@
             "manual",
             "auto"
           ],
-          "description": "谁拍板：manual=框定范围内由玩家选（候选数>pickCount 时等待）；auto=引擎按 sort 取前 pickCount。"
+          "description": "谁：manual=框定范围内由玩家选（候选数>pickCount 时等待）；auto=引擎按 sort 取前 pickCount。"
         }
       }
     },

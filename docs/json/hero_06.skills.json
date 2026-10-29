@@ -550,7 +550,7 @@
         {
           "type": "spawn",
           "duration": 40,
-          "note": "界域回迁批次 8 拍板：厄运领域保持 Zone（ZoneDef 登记），不走 domain 界域牌",
+          "note": "界域回迁：厄运领域保持 Zone（ZoneDef 登记），不走 domain 界域牌",
           "consumption": "zone",
           "zone": "zone_doom_field"
         }
@@ -851,7 +851,7 @@
               "else": []
             }
           ],
-          "note": "F52 target_has_status 已泛化为共享内核 §三 has_status(side,id,cmp,n)（新增项 2）；嵌套 If 表达「混乱或厄运」"
+          "note": "F52 target_has_status 已泛化为共享内核 §三 has_status(side,id,cmp,n)；嵌套 If 表达「混乱或厄运」"
         }
       ],
       "tentative": false,
@@ -1370,7 +1370,7 @@
                 "gauge"
               ],
               "target": "target",
-              "note": "复刻命运片段：存档目标单位的生命/资源池/状态/行动条（主方案升格，新增项 8 已落 ddd）"
+              "note": "复刻命运片段：存档目标单位的生命/资源池/状态/行动条（主方案升格，已落 ddd）"
             },
             {
               "type": "mount_status",
@@ -1503,7 +1503,7 @@
                 "target",
                 "secondary_target"
               ],
-              "note": "swap_resource（新增项 14，已落 ddd：效果上下文 §2.1；gauge.current 在可交换资源列）",
+              "note": "swap_resource（已落 ddd：效果上下文 §2.1；gauge.current 在可交换资源列）",
               "mode": "swap"
             },
             {

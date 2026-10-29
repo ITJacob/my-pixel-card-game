@@ -58,7 +58,7 @@
               "charges": 1,
               "duration": 50,
               "target": "self",
-              "note": "自续链：预感一次次重新浮现（新增项 5，on_remove 合法化）"
+              "note": "自续链：预感一次次重新浮现（on_remove 合法化）"
             }
           ]
         },
@@ -118,7 +118,7 @@
         "categories": [
           "retarget"
         ],
-        "note": "精准控制：自身攻击目标不会被改写（新 StatusCategory retarget，新增项 19）"
+        "note": "精准控制：自身攻击目标不会被改写（新 StatusCategory retarget）"
       }
     },
     {
@@ -133,7 +133,7 @@
         "gaugeReductionImmune": {
           "value": true,
           "scope": "self",
-          "note": "免疫 gauge.current 减少（新增项 18，H27/H31）"
+          "note": "免疫 gauge.current 减少（H27/H31）"
         },
         "concealRevealBlock": {
           "value": true,
@@ -209,7 +209,7 @@
       "duration": null,
       "maxStacks": 3,
       "stackPolicy": "stack",
-      "note": "H11 计数型资源状态（新增项 1：F51 stacks + F48 consume）。maxStacks 基础 3，可被绝对灵感 +1（→4）、赢家 +3（→6）提升。消耗出口：赢家 4 层换免死 / 赐福 2 层换祝福 / 重启循环 3 层续接"
+      "note": "H11 计数型资源状态（F51 stacks + F48 consume）。maxStacks 基础 3，可被绝对灵感 +1（→4）、赢家 +3（→6）提升。消耗出口：赢家 4 层换免死 / 赐福 2 层换祝福 / 重启循环 3 层续接"
     },
     {
       "id": "tide_low",
@@ -282,12 +282,12 @@
               "stackMode": "add",
               "duration": null,
               "target": "self",
-              "note": "回合轮转：高潮期每个回合开始幸运 +1——命运轮转状态面（矩阵 on_turn_start 正主落地）"
+              "note": "回合轮转：高潮期每个回合开始幸运 +1——命运轮转状态面"
             }
           ]
         }
       ],
-      "note": "on_turn_start 回合轮转（命运轮转状态面——矩阵触发点正主落地）"
+      "note": "on_turn_start 回合轮转"
     },
     {
       "id": "windfall",
@@ -383,7 +383,7 @@
           }
         ]
       },
-      "note": "H2 参数化复合 debuff 母版（新增项 10）；挂载刷新不叠层，避免乘区指数化 ｜ 水手天灾降临读取（天灾乘厄运跨系段） ｜ clockwork_tick 修饰键首发（命运循环状态面） ｜ fear 类别认领（厄运惊惧——共享 fear 语义：不眠者 dread 是恐惧回击正主，怪物是厄运缠身的心惊胆战，语义分叉不冲突）",
+      "note": "H2 参数化复合 debuff 母版；挂载刷新不叠层，避免乘区指数化 ｜ 水手天灾降临读取（天灾乘厄运跨系段） ｜ clockwork_tick 修饰键首发（命运循环状态面） ｜ fear 类别认领（厄运惊惧——共享 fear 语义：不眠者 dread 是恐惧回击正主，怪物是厄运缠身的心惊胆战，语义分叉不冲突）",
       "crossPathway": true,
       "participants": [
         "sleepless",
@@ -416,7 +416,7 @@
       "dispelable": true,
       "duration": 30,
       "lethalProtect": true,
-      "note": "H7 致死保护母版（新增项 3，与傀儡系同源同一母版）：化解下次致死伤害、保留 1 血；注意不是复活；hpFloor=1"
+      "note": "H7 致死保护母版（与傀儡系同源同一母版）：化解下次致死伤害、保留 1 血；注意不是复活；hpFloor=1"
     },
     {
       "id": "fortune_mastery",
@@ -460,7 +460,7 @@
         "gaugeReductionImmune": {
           "value": true,
           "scope": "all_allies",
-          "note": "新增项 18：免疫推条布尔 + scope 参数（自身/全队两档），反占卜的全队版"
+          "note": "免疫推条布尔 + scope 参数（自身/全队两档），反占卜的全队版"
         },
         "concealRevealBlock": {
           "value": true,
@@ -522,7 +522,7 @@
               "misfortune"
             ]
           },
-          "note": "H4 按状态过滤的伤害乘区（新增项 17 口径），💡⚡ 咬合"
+          "note": "H4 按状态过滤的伤害乘区（口径），💡⚡ 咬合"
         }
       }
     },
@@ -538,7 +538,7 @@
         "damage_mul": 1.2,
         "damage_taken_mul": 0.9
       },
-      "note": "H10 参数化增益母版（新增项 11，与 F14 tutelage 同源）"
+      "note": "H10 参数化增益母版（与 F14 tutelage 同源）"
     },
     {
       "id": "mercury_body",
@@ -552,10 +552,9 @@
         "incomingMiss": {
           "to": "first_empty",
           "charges": 2,
-          "note": "入射侧闪避型转向（新增项 4，执行参数 §一 RedirectRule.to first_empty，ddd 明示怪物·水银之躯即此承载）：打向持有者的攻击改写为空坐标，每次实际生效消耗 1 层；与 C7 出射侧目标改写共用锚点"
+          "note": "入射侧闪避型转向（执行参数 §一 RedirectRule.to first_empty，ddd 明示怪物·水银之躯即此承载）：打向持有者的攻击改写为空坐标，每次实际生效消耗 1 层；与 C7 出射侧目标改写共用锚点"
         }
-      },
-      "note": "退化方案（damage_taken_mul: 0 的 charges 型状态）仍备，建议先上退化版验证强度"
+      }
     },
     {
       "id": "fate_chaos",
@@ -569,7 +568,7 @@
         {
           "op": "target_override",
           "anchor": "nearest_any",
-          "note": "打向不分阵营的最近单位（新增项 13 锚点 nearest_any，已并入 H12 状态族母版）；状态 ID 按命名冲突提醒取 fate_chaos，避开律师途径 chaos 撞车"
+          "note": "打向不分阵营的最近单位（锚点 nearest_any，已并入 H12 状态族母版）；状态 ID 按命名冲突提醒取 fate_chaos，避开律师途径 chaos 撞车"
         }
       ],
       "note": "charges 2：前 2 次攻击生效，每次消耗 1 层",
@@ -615,7 +614,7 @@
               "statusId": "mercury_cycle",
               "duration": 50,
               "target": "self",
-              "note": "自续链（新增项 5）"
+              "note": "自续链"
             }
           ]
         }
@@ -640,7 +639,7 @@
               "mode": "delta",
               "duration": 25,
               "target": "self",
-              "note": "退化方案（新增项 7 拍板采用）：抬高行动条阈值延后填满时机，等效「循环往复」；INV-S5 合规（改源属性 threshold，原稿 modify_stat 写法不可用）"
+              "note": "INV-S5 合规（改源属性 threshold，原稿 modify_stat 写法不可用）"
             }
           ]
         }
@@ -703,7 +702,7 @@
           ]
         }
       ],
-      "note": "主方案升格：致死回滚 = restore_snapshot(statuses) 胚胎态还原 + 回复至 30% 生命；依赖卡面开战 snapshot 建档；「洗掉疯狂」从 dispel 升格为状态回滚；H7 致死保护母版（新增项 3，傀儡系/耕种者/不眠者/歌颂者/秘祈人同源统一）：逆转为胚胎 = 回到初始态保住一命，非死后召回",
+      "note": "主方案升格：致死回滚 = restore_snapshot(statuses) 胚胎态还原 + 回复至 30% 生命；依赖卡面开战 snapshot 建档；「洗掉疯狂」从 dispel 升格为状态回滚；H7 致死保护母版（傀儡系/耕种者/不眠者/歌颂者/秘祈人同源统一）：逆转为胚胎 = 回到初始态保住一命，非死后召回",
       "lethalProtect": true
     },
     {
@@ -723,7 +722,7 @@
               "reviveOf": "self",
               "hpRatio": 0.4,
               "position": "original",
-              "note": "退化方案（C4 miracle 式死后召回）：把「死」替换为「以 40% 血归来」；G4 reviveOf + C5 hpRatio/position 已登记。与重启循环（自身致死保护）不同：本条是他人死后召回"
+              "note": "G4 reviveOf + C5 hpRatio/position 已登记。与重启循环（自身致死保护）不同：本条是他人死后召回"
             }
           ]
         }
@@ -742,7 +741,7 @@
           "op": "target_override",
           "anchor": "manual",
           "manualTarget": "secondary_target",
-          "note": "新增项 12：锚点 manual 已落 ddd（共享内核 §一 anchor 枚举 + 执行参数 §2.2）；本途径唯一由玩家决定改写方向的 target_override（H12 状态族多注册锚点，不新增机制）"
+          "note": "锚点 manual 已落 ddd（共享内核 §一 anchor 枚举 + 执行参数 §2.2）；本途径唯一由玩家决定改写方向的 target_override（H12 状态族多注册锚点，不新增机制）"
         }
       ]
     },
@@ -763,7 +762,7 @@
             "faction": "enemy",
             "scope": "single",
             "sort": "gauge_desc",
-            "note": "确定性选取当前行动条最高的敌方单位（新增项 21：sort gauge_desc + faction enemy，H13 排序键族），目标选择零随机（R1）"
+            "note": "确定性选取当前行动条最高的敌方单位（sort gauge_desc + faction enemy，H13 排序键族），目标选择零随机（R1）"
           },
           "effects": [
             {
@@ -863,7 +862,7 @@
           "duration": 20
         }
       ],
-      "note": "H9 Zone 母版；Zone 跨半场落敌方半场已拍板（战场上下文 §二）"
+      "note": "H9 Zone 母版；Zone 跨半场落敌方半场（战场上下文 §二）"
     }
   ],
   "domainDefs": []

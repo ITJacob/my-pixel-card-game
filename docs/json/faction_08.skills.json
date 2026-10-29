@@ -16,7 +16,7 @@
         "moveImmune": true,
         "damage_taken_mul": 0.9
       },
-      "note": "moveImmune 走 H27（与傀儡系新增项 6 同源并入）；减伤部分建议并入参数化减伤状态母版（F 组合并候选 2）"
+      "note": "moveImmune 走 H27（与傀儡系 同源并入）；减伤部分建议并入参数化减伤状态母版（F 组合并候选 2）"
     },
     {
       "id": "rage",
@@ -48,7 +48,7 @@
           ]
         }
       ],
-      "note": "H34 statPerStack + F51 stacks（本稿新增项 1）；INV-S5 合规（改 gauge.rate 源属性）。退化方案：满 5 层挂 frenzy（attack +3 / gauge.rate +8，duration 3） ｜ rage_overflow 修饰键首发（满层溢出转冰霜附伤，矩阵 §十五 水手签名键落地）",
+      "note": "H34 statPerStack + F51 stacks；INV-S5 合规（改 gauge.rate 源属性）。｜ rage_overflow 修饰键首发",
       "modifiers": {
         "rage_overflow": {
           "threshold": 5,
@@ -69,7 +69,7 @@
       "modifiers": {
         "gaugeReductionImmune": true
       },
-      "note": "H31（与傀儡系新增项 10 命运锚点同源并入）"
+      "note": "H31（与傀儡系 命运锚点同源并入）"
     },
     {
       "id": "glide",

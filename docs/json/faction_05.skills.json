@@ -541,7 +541,7 @@
         ],
         "note": "规律改写层数达标 → 防御提升"
       },
-      "note": "退化方案为无条件 damage_taken_mul 0.75（失去「改写某条具体规律」的语义）；乘区审批：0.4–0.5=深度减免档",
+      "note": "乘区审批：0.4–0.5=深度减免档",
       "crossPathway": true,
       "participants": [
         "savant",

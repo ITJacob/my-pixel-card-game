@@ -83,7 +83,7 @@
           "statusId": "marked",
           "duration": null,
           "target": "all_enemies",
-          "note": "新登场敌方单位（召唤物）补标记依赖 on_spawn 全局第三方监听；退化方案：只标记开局在场敌人"
+          "note": "新登场敌方单位（召唤物）补标记依赖 on_spawn 全局第三方监听"
         }
       ],
       "tentative": false

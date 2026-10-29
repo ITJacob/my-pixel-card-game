@@ -586,7 +586,7 @@
               "statusId": "shackle",
               "duration": 5,
               "target": "target",
-              "note": "星封共鸣：目标已处封印之中，星光囚笼与其共鸣，枷锁再延长 5tick——读不眠者枢纽 occult_seal（封印正主批次十落地，participants 补录窥秘人）"
+              "note": "星封共鸣：目标已处封印之中，星光囚笼与其共鸣，枷锁再延长 5tick——读不眠者枢纽 occult_seal（封印正主落地，participants 补录窥秘人）"
             }
           ],
           "else": []
@@ -1321,7 +1321,7 @@
             "bulwark": "vulnerable",
             "gauge_rate_up": "shackle"
           },
-          "note": "SS5 状态改写算子（transfer_status mode:rewrite，H32；与傀儡系稿新增项 2 / F50 同源并入同一母版，不重复立项）",
+          "note": "SS5 状态改写算子（transfer_status mode:rewrite，H32；与傀儡系稿 / F50 同源并入同一母版，不重复立项）",
           "fallback": [
             {
               "type": "dispel",

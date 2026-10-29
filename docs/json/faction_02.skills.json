@@ -115,7 +115,7 @@
           "note": "下一次攻击 ×1.5（爆发层）；不会因出手而自动卸载"
         }
       },
-      "note": "与 F4 shadow_veil 同源，建议并入统一潜行母版 乘区审批：0.7=标准减伤母版档（H3 已裁定）/0.75=轻减档",
+      "note": "与 F4 shadow_veil 同源，建议并入统一潜行母版 乘区审批：0.7=标准减伤母版档（H3）/0.75=轻减档",
       "maxStacks": 3,
       "stackPolicy": "stack",
       "stackThreshold": {
@@ -182,7 +182,7 @@
           "dispelable": false
         }
       },
-      "note": "\"男性变女性\"落在战外晋升事件，故 gender: any；状态级不可驱散标志（H8，与傀儡系新增项 2 同源）"
+      "note": "\"男性变女性\"落在战外晋升事件，故 gender: any；状态级不可驱散标志（H8，与傀儡系 同源）"
     },
     {
       "id": "mirror_substitute",
@@ -253,7 +253,7 @@
           "consumeCharge": 1
         }
       ],
-      "note": "lethal_protect（H7，已落 ddd）+ caster_has_summon 谓词（本稿新增项 11）；与傀儡系【纸人替身】同机制不同代价",
+      "note": "lethal_protect（H7，已落 ddd）+ caster_has_summon 谓词；与傀儡系【纸人替身】同机制不同代价",
       "crossPathway": true,
       "participants": [
         "assassin",
@@ -335,7 +335,7 @@
               "mode": "delta",
               "duration": 10,
               "target": "attacker",
-              "note": "寒气反噬（F61 attacker 寻址，🟡 已登记）；退化方案：全体敌人 gauge.rate -4"
+              "note": "寒气反噬（F61 attacker 寻址，🟡 已登记）"
             }
           ]
         },
@@ -398,7 +398,7 @@
           ]
         }
       ],
-      "note": "数值拍板：ramp 1/2/3/4→1/1/2/2、爆发 4→2——单体 20tick 总 8，对齐位格5 锚 5 × DoT 延迟兑现 1.5 = 7.5（容忍 +1）；瘟疫（全体 15tick）读 ramp 前三项 + 爆发 = 5/敌，对齐真群体 3×1.5=4.5。共享方：疾病/黑焰/末日。",
+      "note": "数值：ramp 1/2/3/4→1/1/2/2、爆发 4→2——单体 20tick 总 8，对齐位格5 锚 5 × DoT 延迟兑现 1.5 = 7.5（容忍 +1）；瘟疫（全体 15tick）读 ramp 前三项 + 爆发 = 5/敌，对齐真群体 3×1.5=4.5。共享方：疾病/黑焰/末日。",
       "maxStacks": 4,
       "stackPolicy": "stack",
       "stackThreshold": {
@@ -541,7 +541,7 @@
           "note": "持有者接下来 2 次造成的伤害不产生任何效果（被漩涡融化成未发生的可能性），每次消耗一层"
         }
       },
-      "note": "damage_intercept 母版（编队参数 §2.4 H3 乘区=0 档；action_nullify 已落 ddd：编队参数 §1.1b）；退化方案：damage_mul 0.4，彻底失去\"未发生\"的味道，不推荐"
+      "note": "damage_intercept 母版（编队参数 §2.4 H3 乘区=0 档；action_nullify 已落 ddd：编队参数 §1.1b）"
     },
     {
       "id": "form_shadow",

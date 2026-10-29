@@ -258,7 +258,7 @@
                 "stat": "attack"
               },
               "target": "status_holder",
-              "note": "弄假成真：等于其攻击力的精神伤害给持有者自身；on_attack 在每次攻击行为发起时 fire、含落空（执行参数 §2.1 本稿新增项 3/12）"
+              "note": "弄假成真：等于其攻击力的精神伤害给持有者自身；on_attack 在每次攻击行为发起时 fire、含落空（执行参数 §2.1）"
             }
           ]
         }
@@ -267,7 +267,7 @@
         "gauge.rate": -8,
         "attack": -3
       },
-      "note": "四要素全落地：弄假（打空）/ 成真（反噬）/ 愚弄时间（gauge.rate -8）/ 降低智商（attack -3）；退化方案：去掉反噬，保留双次打空+减速+减攻"
+      "note": "四要素全落地：弄假（打空）/ 成真（反噬）/ 愚弄时间（gauge.rate -8）/ 降低智商（attack -3）"
     },
     {
       "id": "illusion_daze",
@@ -405,7 +405,7 @@
       "baseOn": "summon_baseline",
       "hpRatio": 0.25,
       "atkRatio": 0.4,
-      "note": "H1 召唤物基线模板（编队参数 §2.4 本稿新增项 15） ｜ unitType 补登对齐权威表（召唤物参数.md §一）",
+      "note": "H1 召唤物基线模板（编队参数 §2.4） ｜ unitType 补登对齐权威表（召唤物参数.md §一）",
       "unitType": "CONSTRUCT"
     }
   ],

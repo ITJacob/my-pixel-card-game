@@ -222,7 +222,7 @@
               "resource": "gauge.current",
               "value": -50,
               "mode": "delta",
-              "note": "击退（D1 已拍板，KNOCKBACK_DISTANCE）"
+              "note": "击退（D1，KNOCKBACK_DISTANCE）"
             }
           ]
         },
@@ -893,7 +893,7 @@
           "position": "tail",
           "hpRatio": 0.25,
           "atkRatio": 0.4,
-          "note": "全局 on_death 第三方监听（执行参数 §2.1 本稿新增项 5）：任意单位死亡时除 fire 给死者自身，另向持有该被动的单位 fire；与 A4 on_kill fire 给击杀者不同",
+          "note": "全局 on_death 第三方监听（执行参数 §2.1）：任意单位死亡时除 fire 给死者自身，另向持有该被动的单位 fire；与 A4 on_kill fire 给击杀者不同",
           "unitId": "unit_marionette"
         }
       ],

@@ -1320,7 +1320,7 @@
           "threshold": 4,
           "mul": 1.5,
           "target": "heal",
-          "note": "收割读层（矩阵批次五）：board.death_tally≥4 时，击杀净化回血 ×1.5——战场死者越多，黄昏净化越彻底"
+          "note": "收割读层：board.death_tally≥4 时，击杀净化回血 ×1.5——战场死者越多，黄昏净化越彻底"
         }
       ],
       "equipment": {
@@ -2110,7 +2110,7 @@
           "threshold": 6,
           "mul": 1.3,
           "target": "heal",
-          "note": "收割读层（矩阵批次五）：board.death_tally≥6 时，全体回血 ×1.3——尸骸铺就的路，尽头是黎明"
+          "note": "收割读层：board.death_tally≥6 时，全体回血 ×1.3——尸骸铺就的路，尽头是黎明"
         }
       ]
     }

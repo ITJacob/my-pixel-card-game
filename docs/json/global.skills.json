@@ -14,7 +14,7 @@
       "modifiers": {
         "shieldDelta": 5
       },
-      "note": "拍板层叠制（弃 maxStacks:1，层数不设上限）：各层独立 shield 层池，后加持先结算 LIFO；每层时限/次数独立（defaultDuration 6 / delta 5），不融合、不刷新、不顶替——重复加持行为须卡面特殊说明；不抵 DoT；减伤顺序=护盾→护甲→抗性→防御（效果上下文 §三）。"
+      "note": "层叠制（弃 maxStacks:1，层数不设上限）：各层独立 shield 层池，后加持先结算 LIFO；每层时限/次数独立（defaultDuration 6 / delta 5），不融合、不刷新、不顶替——重复加持行为须卡面特殊说明；不抵 DoT；减伤顺序=护盾→护甲→抗性→防御（效果上下文 §三）。"
     },
     {
       "id": "taunt",
@@ -28,7 +28,7 @@
       "modifiers": {
         "taunt": true
       },
-      "note": "§2.2 已裁定：defaultDuration 6；force 普攻 + target_override。"
+      "note": "§2.2：defaultDuration 6；force 普攻 + target_override。"
     },
     {
       "id": "stun",
@@ -40,7 +40,7 @@
       "duration": 25,
       "maxStacks": 1,
       "modifiers": {},
-      "note": "§2.2 已裁定：defaultDuration 5；剥夺全部四个行为（INV-P5 硬控清除 stance）。",
+      "note": "§2.2：defaultDuration 5；剥夺全部四个行为（INV-P5 硬控清除 stance）。",
       "disallowActions": [
         "move",
         "basic_attack",
@@ -63,7 +63,7 @@
       "modifiers": {
         "guardTarget": true
       },
-      "note": "§2.2 已裁定：defaultDuration 6 / priority 10；binding.guardTarget 被保护单位。"
+      "note": "§2.2：defaultDuration 6 / priority 10；binding.guardTarget 被保护单位。"
     },
     {
       "id": "shackle",
@@ -77,7 +77,7 @@
         "moveImmune": true,
         "gaugeRateMul": 0.7
       },
-      "note": "F7 已登记定义（H24 减速族：禁位移 + gauge_rate ×0.7）。原 6 途径各一份重复 def 已合并为此权威定义。乘区审批：0.7=标准减伤母版档（H3 已裁定）/0.75=轻减档"
+      "note": "F7 已登记定义（H24 减速族：禁位移 + gauge_rate ×0.7）。原 6 途径各一份重复 def 已合并为此权威定义。乘区审批：0.7=标准减伤母版档（H3）/0.75=轻减档"
     },
     {
       "id": "slow",
@@ -91,7 +91,7 @@
       "modifiers": {
         "gaugeRateMul": 0.7
       },
-      "note": "通用减速：行动速率 ×mul（mul<1）。归并纯减速私有换皮所得机制桩。基准 gaugeRateMul 0.7，卡面 mount_status 传 value 覆盖。纯禁位移(moveImmune) 不在此。乘区审批：0.7=标准减伤母版档（H3 已裁定）/0.75=轻减档"
+      "note": "通用减速：行动速率 ×mul（mul<1）。归并纯减速私有换皮所得机制桩。基准 gaugeRateMul 0.7，卡面 mount_status 传 value 覆盖。纯禁位移(moveImmune) 不在此。乘区审批：0.7=标准减伤母版档（H3）/0.75=轻减档"
     },
     {
       "id": "counter_stance",
@@ -102,7 +102,7 @@
       "dispelable": true,
       "duration": 15,
       "charges": 2,
-      "note": "与决斗姿态对称的远程面：受投掷 / 法术攻击（reach ∈ {thrown, spell}）时顺序反击——先结算主攻击、再以反作用动作回击攻击者（执行上下文 §六，sourceRef=ranged_counter）；还击的是攻击者本人而非弹道，故法术虽无形、守卫姿态不可拦，照样触发反击。对撞的同步性仍为决斗姿态独有。charges 2：前 2 次远程受击反击，每次生效消耗 1 层（R5 确定性）。姿态生命周期同 INV-P8 跳过维持 / INV-P9 行动退出 / INV-P5 硬控清除。挂载卡：战士·守护状态 / 猎人·挑衅（矩阵 stance 行共享列）。数值按当前档。"
+      "note": "与决斗姿态对称的远程面：受投掷 / 法术攻击（reach ∈ {thrown, spell}）时顺序反击——先结算主攻击、再以反作用动作回击攻击者（执行上下文 §六，sourceRef=ranged_counter）；还击的是攻击者本人而非弹道，故法术虽无形、守卫姿态不可拦，照样触发反击。对撞的同步性仍为决斗姿态独有。charges 2：前 2 次远程受击反击，每次生效消耗 1 层（R5 确定性）。姿态生命周期同 INV-P8 跳过维持 / INV-P9 行动退出 / INV-P5 硬控清除。挂载卡：战士·守护状态 / 猎人·挑衅。数值按当前档。"
     },
     {
       "id": "regen",
@@ -116,7 +116,7 @@
       "modifiers": {
         "healOnTick": 0.4
       },
-      "note": "§2.2 已裁定：defaultDuration 6；实例 value 0.4/tick（总回复 12）。⚠️ 原平衡结论失效，需重验。"
+      "note": "§2.2：defaultDuration 6；实例 value 0.4/tick（总回复 12）。⚠️ 原平衡结论失效，需重验。"
     },
     {
       "id": "vulnerable",
@@ -130,7 +130,7 @@
       "modifiers": {
         "damage_taken_mul": 1.3
       },
-      "note": "§2.2 已裁定：defaultDuration 4 / mul 1.3（与抗性同乘区加算）。⚠️ 与 hunter 卡面内联 def（mul 1.2 / duration 3 / maxStacks 3 + 叠层阈值）数值分歧，以本 §2.2 裁定为权威；提取后须删除 hunter 内联副本。"
+      "note": "§2.2：defaultDuration 4 / mul 1.3（与抗性同乘区加算）。⚠️ 与 hunter 卡面内联 def（mul 1.2 / duration 3 / maxStacks 3 + 叠层阈值）数值分歧，以本 §2.2为权威；提取后须删除 hunter 内联副本。"
     },
     {
       "id": "burn",
@@ -146,7 +146,7 @@
         "dotOnTick": 0.4,
         "dot_element": "fire"
       },
-      "note": "通用火属性 DOT，多处引用但 §2.2 未单列裁定；数值定档：duration 15tick / maxStacks 3 refresh / 0.4 点每 tick（总量 6 点，对齐单卡预算锚）。全库 DoT 校正：原 2/tick 系回合→tick 换算残留（3 回合 × 2 点/回合 被写成 15 tick × 2 点/tick，总量膨胀 5 倍），与各途径 DoT 状态同批 ÷5。",
+      "note": "通用火属性 DOT，多处引用但 §2.2 未单列；数值定档：duration 15tick / maxStacks 3 refresh / 0.4 点每 tick（总量 6 点，对齐单卡预算锚）。全库 DoT 校正：原 2/tick 系回合→tick 换算残留（3 回合 × 2 点/回合 被写成 15 tick × 2 点/tick，总量膨胀 5 倍），与各途径 DoT 状态同批 ÷5。",
       "element": "fire",
       "triggers": [
         {
@@ -211,7 +211,7 @@
       "duration": 40,
       "maxStacks": 1,
       "modifiers": {},
-      "note": "§2.2 已裁定：defaultDuration 8；禁用使用技能。",
+      "note": "§2.2：defaultDuration 8；禁用使用技能。",
       "disallowActions": [
         "skill"
       ]
@@ -225,7 +225,7 @@
       "dispelable": true,
       "duration": 25,
       "maxStacks": 1,
-      "note": "§2.2 已裁定：defaultDuration 5；cast_time_set 0。",
+      "note": "§2.2：defaultDuration 5；cast_time_set 0。",
       "behaviorModifiers": [
         {
           "op": "cast_time_set",
@@ -246,7 +246,7 @@
       "modifiers": {
         "thornsDamage": 1
       },
-      "note": "§2.2 已裁定：defaultDuration 8 / source_filter melee；实例 value 1。"
+      "note": "§2.2：defaultDuration 8 / source_filter melee；实例 value 1。"
     },
     {
       "id": "guard",
@@ -260,7 +260,7 @@
       "modifiers": {
         "damage_taken_mul": 0.7
       },
-      "note": "§2.2 已裁定：mul 0.7 / duration 4。 乘区审批：0.7=标准减伤母版档（H3 已裁定）/0.75=轻减档"
+      "note": "§2.2：mul 0.7 / duration 4。乘区审批：0.7=标准减伤母版档（H3）/0.75=轻减档"
     },
     {
       "id": "charm",
@@ -271,7 +271,7 @@
       "dispelable": true,
       "duration": 10,
       "modifiers": {},
-      "note": "F15 已登记（罪犯+药师途径合并登记，机制=反向嘲讽），权威定义见状态表，此处为引用副本，不新立状态；与 corrupted 同持时 corrupted 优先（贪婪压过好感，裁定见腐蚀条）",
+      "note": "F15 已登记（罪犯+药师途径合并登记，机制=反向嘲讽），权威定义见状态表，此处为引用副本，不新立状态；与 corrupted 同持时 corrupted 优先（贪婪压过好感，见腐蚀条）",
       "behaviorModifiers": [
         {
           "anchor": "self_faction_hp_desc",

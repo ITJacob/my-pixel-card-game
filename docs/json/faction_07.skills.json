@@ -120,7 +120,7 @@
           ]
         }
       ],
-      "note": "§1.2b unitType/tags + §一 filter.isSummon（新增项 10）",
+      "note": "§1.2b unitType/tags + §一 filter.isSummon",
       "maxStacks": 3,
       "stackPolicy": "refresh"
     },
@@ -161,7 +161,7 @@
       "dispelable": true,
       "duration": 10,
       "modifiers": {},
-      "note": "G12 immune 字段（事前阻断，非事后清洗）；退化方案（on_tick 驱散）仍备",
+      "note": "G12 immune 字段（事前阻断，非事后清洗）",
       "immune": {
         "categories": [
           "debuff"
