@@ -229,7 +229,7 @@
         "attack": 3,
         "gauge.rate": 8
       },
-      "note": "此处为引用副本（编队参数 §2.4）；modify_stat duration 回滚 v1.5 已修"
+      "note": "此处为引用副本（编队参数 §2.4）；modify_stat duration 回滚已修"
     },
     {
       "id": "fooled",

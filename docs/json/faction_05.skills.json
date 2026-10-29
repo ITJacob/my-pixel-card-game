@@ -380,7 +380,7 @@
       "modifiers": {
         "damage_mul": 1.15
       },
-      "note": "纯数据配置，零新机制；v0.1「全队智力 +3」为无效键，改 energy_regen；「将力量赋予知识」的自用部分"
+      "note": "纯数据配置，零新机制；「全队智力 +3」为无效键，改 energy_regen；「将力量赋予知识」的自用部分"
     },
     {
       "id": "concealment_authority",

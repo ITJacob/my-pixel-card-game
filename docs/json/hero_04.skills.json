@@ -893,7 +893,7 @@
           "position": "tail",
           "hpRatio": 0.25,
           "atkRatio": 0.4,
-          "note": "全局 on_death 第三方监听（执行参数 §2.1）：任意单位死亡时除 fire 给死者自身，另向持有该被动的单位 fire；与 A4 on_kill fire 给击杀者不同",
+          "note": "全局 on_death 第三方监听（执行参数 §2.1）：任意单位死亡时除 fire 给死者自身，另向持有该被动的单位 fire；与 on_kill 直接 fire 给击杀者不同",
           "unitId": "unit_marionette"
         }
       ],

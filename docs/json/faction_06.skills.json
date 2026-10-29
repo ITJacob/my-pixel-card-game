@@ -639,7 +639,7 @@
               "mode": "delta",
               "duration": 25,
               "target": "self",
-              "note": "INV-S5 合规（改源属性 threshold，原稿 modify_stat 写法不可用）"
+              "note": "INV-S5 合规（改源属性 threshold，modify_stat 写法不可用）"
             }
           ]
         }
