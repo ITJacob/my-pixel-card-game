@@ -416,7 +416,7 @@
               "op": "push_back",
               "distance": 99,
               "target": "self",
-              "note": "退回己方半场最后位，C1 已落地，G8 合规"
+              "note": "退回己方半场最后位，已落地，半场合规"
             },
             {
               "type": "mount_status",
@@ -470,7 +470,7 @@
               "type": "move",
               "op": "insert_tail_cross_lane",
               "target": "target",
-              "note": "既有 move.op，G8 合规"
+              "note": "既有 move.op，半场合规"
             },
             {
               "type": "modify_resource",
@@ -1321,7 +1321,7 @@
             "bulwark": "vulnerable",
             "gauge_rate_up": "shackle"
           },
-          "note": "SS5 状态改写算子（transfer_status mode:rewrite；与傀儡系稿同源并入同一母版，不重复立项）",
+          "note": "状态改写算子（transfer_status mode:rewrite；与傀儡系稿同源并入同一母版，不重复立项）",
           "fallback": [
             {
               "type": "dispel",

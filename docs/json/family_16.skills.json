@@ -249,7 +249,7 @@
                   "value": 15,
                   "mode": "delta",
                   "target": "self",
-                  "note": "on_turn_start 被动自推有效（G5/G6 只禁主动技能回合内自推）"
+                  "note": "on_turn_start 被动自推有效（只禁主动技能回合内自推）"
                 },
                 {
                   "type": "mount_status",

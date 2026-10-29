@@ -15,7 +15,7 @@
       "modifiers": {
         "see_through": true
       },
-      "note": "识破分支（C8，共享内核参数 §四）：敌方隐匿/潜行类状态对持有者无效",
+      "note": "识破分支（共享内核参数 §四）：敌方隐匿/潜行类状态对持有者无效",
       "maxStacks": 3,
       "stackPolicy": "refresh"
     },
@@ -43,7 +43,7 @@
           "consumeCharge": true
         }
       ],
-      "note": "C6 charges 表达一次性预感；mount_status.stacks 表达每回合补层（编队上下文 §六）"
+      "note": "charges 表达一次性预感；mount_status.stacks 表达每回合补层（编队上下文 §六）"
     },
     {
       "id": "poise",
@@ -56,7 +56,7 @@
       "modifiers": {
         "moveImmune": true
       },
-      "note": "G12 immune + moveImmune（编队参数 §1.1b）；与 shackle 是同字段正反两面，建议统一为 move_immune 布尔",
+      "note": "immune + moveImmune（编队参数 §1.1b）；与 shackle 是同字段正反两面，建议统一为 move_immune 布尔",
       "immune": [
         "control"
       ]
@@ -215,7 +215,7 @@
         "damageDealtMulVsConcealed": 1.3,
         "see_through": true
       },
-      "note": "C8 识破分支（与【灵视】同源）；对隐匿/潜行状态单位伤害 ×1.3 走隐藏目标过滤乘区"
+      "note": "识破分支（与【灵视】同源）；对隐匿/潜行状态单位伤害 ×1.3 走隐藏目标过滤乘区"
     },
     {
       "id": "beast_form",
@@ -445,7 +445,7 @@
                 {
                   "type": "target_override",
                   "anchor": "first_empty",
-                  "note": "该次攻击打向幻象本身（C7 空坐标）；R5 确定性落空 ≈ 卡面 20%"
+                  "note": "该次攻击打向幻象本身（空坐标）；R5 确定性落空 ≈ 卡面 20%"
                 }
               ],
               "else": [

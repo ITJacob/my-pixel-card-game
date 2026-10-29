@@ -555,7 +555,7 @@
               "op": "push_back",
               "distance": 99,
               "target": "self",
-              "note": "摊开滑回己方最后位，G8 合规（锁定己方半场）"
+              "note": "摊开滑回己方最后位，半场合规（锁定己方半场）"
             },
             {
               "type": "mount_status",

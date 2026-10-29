@@ -45,7 +45,7 @@
             "kind": "chance",
             "p": 0.4
           },
-          "note": "G1：概率写在 EffectRef.condition（R3 登记、R5 限非伤害维度）；元素取 fire（引擎无 dark，黑焰辨识度来自外观与技能名，不共享给猎人）"
+          "note": "概率写在 EffectRef.condition（R3 登记、R5 限非伤害维度）；元素取 fire（引擎无 dark，黑焰辨识度来自外观与技能名，不共享给猎人）"
         },
         {
           "type": "mount_status",
@@ -434,7 +434,7 @@
               "statusId": "mirror_maze",
               "duration": 20,
               "target": "all_enemies",
-              "note": "降临瞬间入场效果：每个敌人下一击砍空（C7）"
+              "note": "降临瞬间入场效果：每个敌人下一击砍空"
             },
             {
               "type": "spawn",
@@ -442,7 +442,7 @@
               "hpRatio": 0.2,
               "position": "tail",
               "target": "self",
-              "note": "从迷宫里走出一具你的镜像（C5）"
+              "note": "从迷宫里走出一具你的镜像"
             },
             {
               "type": "modify_resource",
@@ -508,7 +508,7 @@
               "type": "move",
               "op": "swap_ally",
               "target": "target",
-              "note": "swap_ally 锁定 from.faction（G8 合规，与傀儡系换位同机制）；可与镜像分身换位"
+              "note": "swap_ally 锁定 from.faction（半场合规，与傀儡系换位同机制）；可与镜像分身换位"
             }
           ]
         }
@@ -800,7 +800,7 @@
                   "buff"
                 ]
               },
-              "note": "万物归于混沌（C2）"
+              "note": "万物归于混沌"
             },
             {
               "type": "mount_status",
@@ -922,7 +922,7 @@
               "value": 20,
               "mode": "delta",
               "target": "all_allies",
-              "note": "从镜中走出，抢先出手；G5/G6 合规（推全体友军，不靠自推）"
+              "note": "从镜中走出，抢先出手；合规（推全体友军，不靠自推）"
             },
             {
               "type": "modify_resource",

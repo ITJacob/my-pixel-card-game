@@ -48,7 +48,7 @@
               "op": "push_back",
               "distance": 1,
               "target": "all_enemies",
-              "note": "C1 锁定 from.faction，G8 合规"
+              "note": "锁定 from.faction，半场合规"
             },
             {
               "type": "damage",
@@ -615,7 +615,7 @@
               "target": "all_enemies"
             }
           ],
-          "note": "G3 运行时展开；shareTarget:false + 全体目标 → 每名敌人各承受 3 段。敌方存活单位数少于段数时的分配规则需实现显式约定"
+          "note": "运行时展开；shareTarget:false + 全体目标 → 每名敌人各承受 3 段。敌方存活单位数少于段数时的分配规则需实现显式约定"
         },
         {
           "op": "if",
@@ -792,7 +792,7 @@
               "type": "move",
               "op": "push_back",
               "distance": 99,
-              "note": "C1 锁定 from.faction，吹到其自己队列最后位，G8 合规"
+              "note": "锁定 from.faction，吹到其自己队列最后位，半场合规"
             },
             {
               "type": "damage",
@@ -889,7 +889,7 @@
               "type": "move",
               "op": "insert_tail_cross_lane",
               "target": "self",
-              "note": "己方半场内换道，G8 合规"
+              "note": "己方半场内换道，半场合规"
             },
             {
               "type": "mount_status",
@@ -1078,7 +1078,7 @@
               "op": "push_back",
               "distance": 1,
               "target": "all_enemies",
-              "note": "雷灾：C1 ✅"
+              "note": "雷灾：合规"
             },
             {
               "op": "if",

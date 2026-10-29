@@ -36,7 +36,7 @@
           "value": 25,
           "mode": "delta",
           "target": "target",
-          "note": "G5 铁律：受益者必须是友军，禁 SELF 自推条"
+          "note": "铁律：受益者必须是友军，禁 SELF 自推条"
         },
         {
           "op": "if",
@@ -917,7 +917,7 @@
                   "debuff"
                 ]
               },
-              "note": "C2 数组 + count 省略 = 全部清除"
+              "note": "数组 + count 省略 = 全部清除"
             },
             {
               "type": "heal",
@@ -1041,7 +1041,7 @@
               "value": 30,
               "mode": "delta",
               "target": "target",
-              "note": "G5 铁律：受益者必须为友军；与未来画面（+25/2 能）构成阶梯"
+              "note": "铁律：受益者必须为友军；与未来画面（+25/2 能）构成阶梯"
             },
             {
               "type": "mount_status",

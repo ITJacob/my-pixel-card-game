@@ -267,14 +267,14 @@
               "type": "damage",
               "element": "fire",
               "value": 4,
-              "note": "近战攻击进程（G8 禁越中线，编队上下文 §十一）"
+              "note": "近战攻击进程（禁越中线，编队上下文 §十一）"
             },
             {
               "type": "move",
               "op": "push_back",
               "distance": 99,
               "target": "self",
-              "note": "自身退回己方半场最后位（G8 合规，己方半场内位移）"
+              "note": "自身退回己方半场最后位（半场合规，己方半场内位移）"
             }
           ]
         }
@@ -646,7 +646,7 @@
       "rarity": "rare",
       "axis": "trick",
       "flagship": false,
-      "describe": "与指定秘偶交换位置（swap_ally 锁定同阵营，G8 合规）；自身带纸人替身时换位后获得 3 点护盾；自身带提线木偶时回能 +1。",
+      "describe": "与指定秘偶交换位置（swap_ally 锁定同阵营，半场合规）；自身带纸人替身时换位后获得 3 点护盾；自身带提线木偶时回能 +1。",
       "cost": {
         "energy": 2,
         "cooldown": 15,

@@ -911,7 +911,7 @@
               "op": "pull_forward",
               "distance": 1,
               "target": "self",
-              "note": "或 move(swap_ally)，二选一按配置；均锁定 from.faction（G8 合规）"
+              "note": "或 move(swap_ally)，二选一按配置；均锁定 from.faction（半场合规）"
             },
             {
               "type": "mount_status",

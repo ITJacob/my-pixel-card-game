@@ -519,7 +519,7 @@
               "op": "push_back",
               "distance": 99,
               "target": "self",
-              "note": "本体退回己方半场队尾（G8 合规）"
+              "note": "本体退回己方半场队尾（半场合规）"
             },
             {
               "type": "dispel",
@@ -528,7 +528,7 @@
               "filter": {
                 "statusId": "shadow_double"
               },
-              "note": "消耗 1 层（C6）"
+              "note": "消耗 1 层"
             }
           ]
         }

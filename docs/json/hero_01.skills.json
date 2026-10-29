@@ -687,7 +687,7 @@
               "type": "damage",
               "element": "physical",
               "value": 4,
-              "note": "近战攻击进程，不调 move（G8 合规）"
+              "note": "近战攻击进程，不调 move（半场合规）"
             },
             {
               "type": "modify_stat",
@@ -859,7 +859,7 @@
               "op": "pull_forward",
               "distance": 99,
               "target": "self",
-              "note": "前压至己方半场最前排，G8 合规"
+              "note": "前压至己方半场最前排，半场合规"
             },
             {
               "type": "damage",

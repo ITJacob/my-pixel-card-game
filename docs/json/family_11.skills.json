@@ -203,7 +203,7 @@
                   "type": "move",
                   "op": "pull_forward",
                   "distance": 1,
-                  "note": "在其自己队列内前拉 1 格，C1 锁定 from.faction，G8 合规"
+                  "note": "在其自己队列内前拉 1 格，锁定 from.faction，半场合规"
                 }
               ]
             }
@@ -292,7 +292,7 @@
             ],
             "count": 1
           },
-          "note": "C2 数组类别：照明破除依附于黑暗的状态（隐匿类与增益类同属 buff）"
+          "note": "数组类别：照明破除依附于黑暗的状态（隐匿类与增益类同属 buff）"
         },
         {
           "type": "modify_skill",

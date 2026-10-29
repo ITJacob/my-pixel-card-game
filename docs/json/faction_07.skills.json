@@ -69,7 +69,7 @@
               "filter": {
                 "isSummon": true
               },
-              "note": "分享感官：推友军不推自己（G5/G6 合规）"
+              "note": "分享感官：推友军不推自己（合规）"
             }
           ]
         },
@@ -150,7 +150,7 @@
           "note": "破除"
         }
       ],
-      "note": "引用副本（潜行母版 + C8 候选池过滤）｜ 与 sleepless 潜行统一签名：direction both→inbound（敌方不可选中，正典潜行语义）"
+      "note": "引用副本（潜行母版 + 候选池过滤）｜ 与 sleepless 潜行统一签名：direction both→inbound（敌方不可选中，正典潜行语义）"
     },
     {
       "id": "scentless",
@@ -161,7 +161,7 @@
       "dispelable": true,
       "duration": 10,
       "modifiers": {},
-      "note": "G12 immune 字段（事前阻断，非事后清洗）",
+      "note": "immune 字段（事前阻断，非事后清洗）",
       "immune": {
         "categories": [
           "debuff"
@@ -273,7 +273,7 @@
       ],
       "lethalProtect": true,
       "hpRatio": 0.25,
-      "note": "潜行 + 致死保护 + C6；duration 5 满足 G15-b"
+      "note": "潜行 + 致死保护；duration 5"
     },
     {
       "id": "crimson_vitality",

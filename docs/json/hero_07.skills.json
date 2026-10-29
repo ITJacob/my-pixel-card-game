@@ -689,7 +689,7 @@
                   "debuff"
                 ]
               },
-              "note": "C2 数组；count 省略 = 全部"
+              "note": "数组；count 省略 = 全部"
             },
             {
               "type": "heal",

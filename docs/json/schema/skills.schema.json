@@ -1622,7 +1622,7 @@
             "status_holder",
             "last_dead_ally"
           ],
-          "description": "复活语义（G4：不新增原语）。"
+          "description": "复活语义（不新增原语）。"
         },
         "oncePerBattle": {
           "type": "boolean"

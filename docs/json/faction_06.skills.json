@@ -45,7 +45,7 @@
         "damage_taken_mul": {
           "value": 0.6,
           "charges": 1,
-          "note": "次数型减伤（C6）：on_take_damage 响应式派发 -1，归零卸载"
+          "note": "次数型减伤：on_take_damage 响应式派发 -1，归零卸载"
         }
       },
       "triggers": [
@@ -138,7 +138,7 @@
         "concealRevealBlock": {
           "value": true,
           "scope": "self",
-          "note": "敌方识破/隐匿忽略/必定命中类状态对持有者无效（C8 反向，共享内核 §四 识破分支）"
+          "note": "敌方识破/隐匿忽略/必定命中类状态对持有者无效（反向，共享内核 §四 识破分支）"
         }
       },
       "triggers": [
@@ -379,7 +379,7 @@
           {
             "type": "target_override",
             "anchor": "first_empty",
-            "note": "厄运爆发：立即打空一次并清空层数（stackThreshold，R5 确定性写法，C7 锚点）"
+            "note": "厄运爆发：立即打空一次并清空层数（stackThreshold，R5 确定性写法，锚点）"
           }
         ]
       },
@@ -403,7 +403,7 @@
         {
           "op": "target_override",
           "anchor": "first_empty",
-          "note": "持有者打出的攻击被改写为最近空坐标（C7 ✅，每次生效消耗 1 charges）"
+          "note": "持有者打出的攻击被改写为最近空坐标（✅，每次生效消耗 1 charges）"
         }
       ]
     },
@@ -465,7 +465,7 @@
         "concealRevealBlock": {
           "value": true,
           "scope": "all_allies",
-          "note": "敌方识破/隐匿忽略类状态对己方全体无效（C8 反向）"
+          "note": "敌方识破/隐匿忽略类状态对己方全体无效（反向）"
         }
       }
     },
@@ -552,7 +552,7 @@
         "incomingMiss": {
           "to": "first_empty",
           "charges": 2,
-          "note": "入射侧闪避型转向（执行参数 §一 RedirectRule.to first_empty，ddd 明示怪物·水银之躯即此承载）：打向持有者的攻击改写为空坐标，每次实际生效消耗 1 层；与 C7 出射侧目标改写共用锚点"
+          "note": "入射侧闪避型转向（执行参数 §一 RedirectRule.to first_empty，ddd 明示怪物·水银之躯即此承载）：打向持有者的攻击改写为空坐标，每次实际生效消耗 1 层；与出射侧目标改写共用锚点"
         }
       }
     },
@@ -722,7 +722,7 @@
               "reviveOf": "self",
               "hpRatio": 0.4,
               "position": "original",
-              "note": "G4 reviveOf + C5 hpRatio/position 已登记。与重启循环（自身致死保护）不同：本条是他人死后召回"
+              "note": "reviveOf + hpRatio/position 已登记。与重启循环（自身致死保护）不同：本条是他人死后召回"
             }
           ]
         }
@@ -774,7 +774,7 @@
                 "kind": "chance",
                 "p": 0.5
               },
-              "note": "全稿唯一概率（G1 口径：condition 挂在 EffectRef 上，无 Chance 算子）；只作用行动条这一非伤害维度（R5），单次抽样（R4），R3 登记可筛出"
+              "note": "全稿唯一概率（口径：condition 挂在 EffectRef 上，无 Chance 算子）；只作用行动条这一非伤害维度（R5），单次抽样（R4），R3 登记可筛出"
             },
             {
               "op": "if",

@@ -23,7 +23,7 @@
         "see_through": {
           "value": true,
           "direction": "inbound",
-          "note": "C8 候选池过滤：敌方 stealth / shadow_veil / 不可选中类状态对持有者无效"
+          "note": "候选池过滤：敌方 stealth / shadow_veil / 不可选中类状态对持有者无效"
         }
       },
       "maxStacks": 3,
@@ -54,7 +54,7 @@
       "duration": null,
       "maxStacks": 3,
       "stackPolicy": "stack",
-      "note": "SS2 计数型状态（母版，与 inscription 同源）；由技能显式 +1，消耗走 status.consume ｜ behaviorModifiers cast_time_set 卷轴技法（省时 不归零）",
+      "note": "计数型状态（母版，与 inscription 同源）；由技能显式 +1，消耗走 status.consume ｜ behaviorModifiers cast_time_set 卷轴技法（省时 不归零）",
       "stackThreshold": {
         "stacks": 2,
         "effects": [
@@ -108,10 +108,10 @@
               "target": "attacker"
             }
           ],
-          "note": "触发后 charges 归零卸载（C6）"
+          "note": "触发后 charges 归零卸载"
         }
       ],
-      "note": "SS9 预存触发状态族：charges:1 + silent_immune + 触发事件 + 载荷"
+      "note": "预存触发状态族：charges:1 + silent_immune + 触发事件 + 载荷"
     },
     {
       "id": "scroll_paralyze",
@@ -141,10 +141,10 @@
               "target": "target"
             }
           ],
-          "note": "触发后 charges 归零卸载（C6）"
+          "note": "触发后 charges 归零卸载"
         }
       ],
-      "note": "SS9 预存触发状态族，进攻向；「眩晕 5t」强度高，若验证判超模则降级为 shackle 减速半段（差异改为 ice/shock 元素）"
+      "note": "预存触发状态族，进攻向；「眩晕 5t」强度高，若验证判超模则降级为 shackle 减速半段（差异改为 ice/shock 元素）"
     },
     {
       "id": "stellar_phase",
@@ -171,10 +171,10 @@
               "note": "穿梭后抢先反击"
             }
           ],
-          "note": "触发后 charges 归零卸载（C6）"
+          "note": "触发后 charges 归零卸载"
         }
       ],
-      "note": "SS10 参数化减伤状态（参数化减伤母版）；位移仅为己方半场内后退，穿梭本体为减伤 + 反抢节奏；乘区审批：0.4–0.5=深度减免档（重控/代价/位格压制态），单列登记"
+      "note": "参数化减伤状态；位移仅为己方半场内后退，穿梭本体为减伤 + 反抢节奏；乘区审批：0.4–0.5=深度减免档（重控/代价/位格压制态），单列登记"
     },
     {
       "id": "ego_constellation",
@@ -203,7 +203,7 @@
               "target": "self"
             }
           ],
-          "note": "SS13：hp_percent（side:self）谓词，SS19 SelfHpBelow 已并入；触发后 charges 归零（每场一次保底反打）"
+          "note": "hp_percent（side:self）谓词，SelfHpBelow 已并入；触发后 charges 归零（每场一次保底反打）"
         }
       ],
       "maxStacks": 3,
@@ -253,7 +253,7 @@
           ]
         }
       ],
-      "note": "SS3 计数型状态（母版，与 inscription 同源）；回充不写在状态上，由各知识类技能效果显式 +1（零新依赖主方案）"
+      "note": "计数型状态（母版，与 inscription 同源）；回充不写在状态上，由各知识类技能效果显式 +1（零新依赖主方案）"
     },
     {
       "id": "doomsday",
@@ -281,7 +281,7 @@
           "note": "倒计时爆发（on_remove 载荷）"
         }
       ],
-      "note": "SS12 参数化复合 debuff（含 on_remove 载荷参数，与 同族复合减益 同源）"
+      "note": "参数化复合 debuff（含 on_remove 载荷参数，与同族复合减益同源）"
     },
     {
       "id": "scrying_authority",
@@ -294,12 +294,12 @@
       "modifiers": {
         "dispelParams": {
           "ignoreDispelable": true,
-          "note": "SS4：驱散命中 dispelable:false 的状态也照常移除（窥见被隐藏的知识，强行揭示）"
+          "note": "驱散命中 dispelable:false 的状态也照常移除（窥见被隐藏的知识，强行揭示）"
         },
         "see_through": {
           "value": true,
           "direction": "inbound",
-          "note": "C8 候选池过滤：隐匿 / 不可选中类状态对持有者无效"
+          "note": "候选池过滤：隐匿 / 不可选中类状态对持有者无效"
         }
       },
       "note": "高位权柄，与窥秘之眼（感官级）分层不重叠"
@@ -334,7 +334,7 @@
           ]
         }
       ],
-      "note": "SS14：与 shadow_veil 机制完全同族（0.7 减伤 / charges 2 / 攻击破除，此处 0.6），建议并入潜行母版，本卡只填参数 ｜ 潜行/虚化母版三件套齐备：untargetableByTargeted（不可选中）+ damage_taken_mul（减伤）+ on_deal_damage 破除（攻击即显形）。乘区审批：0.6=深度减免档（石化/集群/直觉类重态）"
+      "note": "与 shadow_veil 机制完全同族（0.7 减伤 / charges 2 / 攻击破除，此处 0.6），建议并入潜行母版，本卡只填参数 ｜ 潜行/虚化母版三件套齐备：untargetableByTargeted（不可选中）+ damage_taken_mul（减伤）+ on_deal_damage 破除（攻击即显形）。乘区审批：0.6=深度减免档（石化/集群/直觉类重态）"
     },
     {
       "id": "reforge",
@@ -380,7 +380,7 @@
       "modifiers": {
         "damage_mul": 1.15
       },
-      "note": "SS18 纯数据配置，零新机制；v0.1「全队智力 +3」为无效键，改 energy_regen；「将力量赋予知识」的自用部分"
+      "note": "纯数据配置，零新机制；v0.1「全队智力 +3」为无效键，改 energy_regen；「将力量赋予知识」的自用部分"
     },
     {
       "id": "concealment_authority",
@@ -411,7 +411,7 @@
           ]
         }
       ],
-      "note": "SS17 潜行母版（与 shadow_veil / stealth 同源，建议并入）；显形段由伴随状态 concealment_broken 承载"
+      "note": "潜行母版（与 shadow_veil / stealth 同源，建议并入）；显形段由伴随状态 concealment_broken 承载"
     },
     {
       "id": "concealment_broken",
@@ -453,7 +453,7 @@
                 ]
               },
               "target": "self",
-              "note": "SS6 status_snapshot：挂载时记录自身增益状态快照"
+              "note": "status_snapshot：挂载时记录自身增益状态快照"
             }
           ]
         },
@@ -480,7 +480,7 @@
               "note": "还原快照中的增益（保留剩余 duration）"
             }
           ],
-          "note": "致死保护（SS7）中断死亡不进死亡结算；触发后 charges 归零（C6，每场一次）"
+          "note": "致死保护中断死亡不进死亡结算；触发后 charges 归零（每场一次）"
         }
       ],
       "note": "下位四权柄（备份/复制/删除/修改）里最隐蔽的一条：从备份还原的是状态不是生命；与傀儡系灵之虫（on_death→spawn 死后召回 4 次）不同"

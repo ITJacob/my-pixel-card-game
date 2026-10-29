@@ -89,7 +89,7 @@
               "op": "push_back",
               "distance": 99,
               "target": "self",
-              "note": "借风脱离：退到己方半场最后位，G8 合规"
+              "note": "借风脱离：退到己方半场最后位，半场合规"
             }
           ],
           "note": "借风脱离：退到己方半场最后位，整场 1 次（minIntervalTicks=9999；charges 无 consumeCharge 不递减）",
