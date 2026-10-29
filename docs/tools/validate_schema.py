@@ -130,12 +130,14 @@ def _leaf_errors(err):
 def cross_check(docs, manifest, errors, warns):
     """schema 表达不了的跨字段约束。"""
     # 1) 卡 id 前缀规则（按文件层级）：
-    #    family 文件 → ^f<NN>_<slug>，NN=文件 faction 号（同派系家族组共享 f 号，f 释义为 family）；
+    #    family 文件 → ^j<NN>_<slug>，NN=文件 faction 号（同派系家族组共享 j 号，j 释义为家族）；
     #    hero 文件 → ^h<NN>_<slug>，NN=heroId 序号；
     #    faction 文件 cards 恒为空不校验前缀；global 文件 → 无前缀约束。
+    #    f<NN>_ 预留给 faction 级卡：出现于其他任何层级即报错（faction 文件 cards 为空，暂不产生合法用例）。
     #    文件名 ↔ 内字段一致性（family_NN ↔ familyId/faction、hero_NN ↔ heroId/faction/family）同此检查。
-    f_re = re.compile(r"^f(\d\d)_[a-z0-9_]+$")
+    j_re = re.compile(r"^j(\d\d)_[a-z0-9_]+$")
     h_re = re.compile(r"^h(\d\d)_[a-z0-9_]+$")
+    reserved_f_re = re.compile(r"^f\d\d_[a-z0-9_]+$")
     fac_ids = {d.get("factionId") for d in docs.values() if d.get("level") == "faction"}
     fam_by_id = {d.get("familyId"): d for d in docs.values() if d.get("level") == "family"}
     for name, d in docs.items():
@@ -150,7 +152,7 @@ def cross_check(docs, manifest, errors, warns):
             if d.get("faction") not in fac_ids:
                 errors.append("%s: faction 字段 %s 无对应 faction 文件" % (name, d.get("faction")))
             num = (d.get("faction") or "").split("_", 1)[1] if "_" in (d.get("faction") or "") else None
-            id_pat = f_re
+            id_pat = j_re
         elif lvl == "hero":
             num = (d.get("heroId") or "").split("_", 1)[1] if "_" in (d.get("heroId") or "") else None
             id_pat = h_re
@@ -173,13 +175,16 @@ def cross_check(docs, manifest, errors, warns):
             id_pat = None
         for c in d.get("cards", []):
             cid = c.get("id", "")
+            # f<NN>_ 预留给 faction 级卡：出现在 faction 以外层级即报错
+            if lvl != "faction" and reserved_f_re.match(cid):
+                errors.append("%s %s: f<NN>_ 前缀预留给 faction 级卡，%s 文件不得使用" % (name, cid, lvl))
             if id_pat is None:
                 continue
             m = id_pat.match(cid)
             if not m:
                 errors.append("%s %s: id 前缀应为 %s（当前 %s）"
                               % (name, cid,
-                                 "f<NN>_<slug>" if lvl == "family" else "h<NN>_<slug>", cid))
+                                 "j<NN>_<slug>" if lvl == "family" else "h<NN>_<slug>", cid))
                 continue
             if num is not None and m.group(1) != num:
                 errors.append("%s %s: id 序号 %s 与文件 %s 序号 %s 不一致"

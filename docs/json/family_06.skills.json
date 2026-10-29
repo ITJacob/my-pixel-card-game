@@ -5,7 +5,7 @@
   "faction": "faction_03",
   "cards": [
     {
-      "id": "f03_convincing_authority",
+      "id": "j03_convincing_authority",
       "name": "信服与权威",
       "kind": "passive",
       "sequence": 9,
@@ -29,7 +29,7 @@
       "tentative": false
     },
     {
-      "id": "f03_martial_arts",
+      "id": "j03_martial_arts",
       "name": "格斗术",
       "kind": "active",
       "sequence": 9,
@@ -66,7 +66,7 @@
       "tentative": false
     },
     {
-      "id": "f03_photographic_memory",
+      "id": "j03_photographic_memory",
       "name": "过目不忘",
       "kind": "passive",
       "sequence": 8,
@@ -89,7 +89,7 @@
       "tentative": false
     },
     {
-      "id": "f03_anomaly_sense",
+      "id": "j03_anomaly_sense",
       "name": "察觉异常",
       "kind": "passive",
       "sequence": 8,
@@ -118,7 +118,7 @@
       "tentative": false
     },
     {
-      "id": "f03_weapon_mastery",
+      "id": "j03_weapon_mastery",
       "name": "精通武器",
       "kind": "passive",
       "sequence": 7,
@@ -142,7 +142,7 @@
       "tentative": false
     },
     {
-      "id": "f03_exemption_ledger",
+      "id": "j03_exemption_ledger",
       "name": "豁免登记",
       "kind": "passive",
       "sequence": 6,

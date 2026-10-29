@@ -5,7 +5,7 @@
   "faction": "faction_08",
   "cards": [
     {
-      "id": "f08_great_strength",
+      "id": "j08_great_strength",
       "name": "卓越力量",
       "kind": "passive",
       "sequence": 9,
@@ -59,7 +59,7 @@
       ]
     },
     {
-      "id": "f08_scale_veil",
+      "id": "j08_scale_veil",
       "name": "幻鳞",
       "kind": "passive",
       "sequence": 9,
@@ -103,7 +103,7 @@
       "tentative": false
     },
     {
-      "id": "f08_aquatic_agility",
+      "id": "j08_aquatic_agility",
       "name": "水中灵活",
       "kind": "active",
       "sequence": 9,
@@ -149,7 +149,7 @@
       "tentative": false
     },
     {
-      "id": "f08_rage_burst",
+      "id": "j08_rage_burst",
       "name": "愤怒爆发",
       "kind": "passive",
       "sequence": 8,
@@ -215,7 +215,7 @@
       ]
     },
     {
-      "id": "f08_navigator_intuition",
+      "id": "j08_navigator_intuition",
       "name": "天文地理直觉",
       "kind": "passive",
       "sequence": 7,
@@ -271,7 +271,7 @@
       "tentative": false
     },
     {
-      "id": "f08_ocean_blessing",
+      "id": "j08_ocean_blessing",
       "name": "海洋眷顾",
       "kind": "passive",
       "sequence": 7,

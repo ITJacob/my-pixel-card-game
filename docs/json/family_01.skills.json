@@ -5,7 +5,7 @@
   "faction": "faction_01",
   "cards": [
     {
-      "id": "f01_strong_physique",
+      "id": "j01_strong_physique",
       "name": "强健体魄",
       "kind": "passive",
       "sequence": 9,
@@ -55,7 +55,7 @@
       ]
     },
     {
-      "id": "f01_arms_mastery",
+      "id": "j01_arms_mastery",
       "name": "兵械通晓",
       "kind": "passive",
       "initialEquip": "h01_standard_blade",
@@ -141,7 +141,7 @@
       ]
     },
     {
-      "id": "f01_iron_body",
+      "id": "j01_iron_body",
       "name": "铁躯",
       "kind": "passive",
       "sequence": 8,
@@ -179,7 +179,7 @@
       "tentative": false
     },
     {
-      "id": "f01_close_grapple",
+      "id": "j01_close_grapple",
       "name": "近身缠斗",
       "kind": "active",
       "sequence": 8,
@@ -280,7 +280,7 @@
       "tentative": false
     },
     {
-      "id": "f01_force_deflect",
+      "id": "j01_force_deflect",
       "name": "卸力",
       "kind": "active",
       "sequence": 8,
@@ -344,7 +344,7 @@
       "tentative": false
     },
     {
-      "id": "f01_whetstone",
+      "id": "j01_whetstone",
       "name": "磨刃",
       "kind": "active",
       "sequence": 6,

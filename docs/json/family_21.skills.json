@@ -5,7 +5,7 @@
   "faction": "faction_09",
   "cards": [
     {
-      "id": "f09_strong_body",
+      "id": "j09_strong_body",
       "name": "强壮身体",
       "kind": "passive",
       "sequence": 9,
@@ -51,7 +51,7 @@
       "tentative": false
     },
     {
-      "id": "f09_keen_intuition",
+      "id": "j09_keen_intuition",
       "name": "敏锐直觉",
       "kind": "passive",
       "sequence": 9,
@@ -95,7 +95,7 @@
       "tentative": false
     },
     {
-      "id": "f09_crime_abilities",
+      "id": "j09_crime_abilities",
       "name": "犯罪能力",
       "kind": "active",
       "sequence": 9,
@@ -159,7 +159,7 @@
       "tentative": false
     },
     {
-      "id": "f09_weapon_mastery",
+      "id": "j09_weapon_mastery",
       "name": "武器上手",
       "kind": "passive",
       "sequence": 9,
@@ -193,7 +193,7 @@
       "tentative": false
     },
     {
-      "id": "f09_slow",
+      "id": "j09_slow",
       "name": "迟缓",
       "kind": "active",
       "sequence": 8,
@@ -245,7 +245,7 @@
       "tentative": false
     },
     {
-      "id": "f09_malice_sense",
+      "id": "j09_malice_sense",
       "name": "恶意感知",
       "kind": "passive",
       "sequence": 6,

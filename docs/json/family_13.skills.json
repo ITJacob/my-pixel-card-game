@@ -5,7 +5,7 @@
   "faction": "faction_06",
   "cards": [
     {
-      "id": "f06_inspiration_sense",
+      "id": "j06_inspiration_sense",
       "name": "灵感超高",
       "kind": "passive",
       "sequence": 9,
@@ -43,7 +43,7 @@
       "tentative": false
     },
     {
-      "id": "f06_danger_sense",
+      "id": "j06_danger_sense",
       "name": "危险预感",
       "kind": "passive",
       "sequence": 9,
@@ -66,7 +66,7 @@
       "tentative": false
     },
     {
-      "id": "f06_precise_shot",
+      "id": "j06_precise_shot",
       "name": "精准射击",
       "kind": "active",
       "sequence": 8,
@@ -117,7 +117,7 @@
       "tentative": false
     },
     {
-      "id": "f06_machine_mind",
+      "id": "j06_machine_mind",
       "name": "恐怖计算",
       "kind": "active",
       "sequence": 8,
@@ -155,7 +155,7 @@
       }
     },
     {
-      "id": "f06_enhanced_physique",
+      "id": "j06_enhanced_physique",
       "name": "素质增强",
       "kind": "active",
       "sequence": 8,
@@ -209,7 +209,7 @@
       }
     },
     {
-      "id": "f06_calamity_foresight",
+      "id": "j06_calamity_foresight",
       "name": "预见灾祸",
       "kind": "passive",
       "sequence": 6,

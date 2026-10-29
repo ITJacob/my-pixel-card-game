@@ -5,7 +5,7 @@
   "faction": "faction_04",
   "cards": [
     {
-      "id": "f04_clairvoyance",
+      "id": "j04_clairvoyance",
       "name": "灵视",
       "kind": "passive",
       "sequence": 9,
@@ -59,7 +59,7 @@
       "tentative": false
     },
     {
-      "id": "f04_divination",
+      "id": "j04_divination",
       "name": "占卜",
       "kind": "passive",
       "sequence": 9,
@@ -100,7 +100,7 @@
       "tentative": false
     },
     {
-      "id": "f04_flying_card",
+      "id": "j04_flying_card",
       "name": "飞牌",
       "kind": "active",
       "sequence": 8,
@@ -140,7 +140,7 @@
       "tentative": false
     },
     {
-      "id": "f04_perfect_poise",
+      "id": "j04_perfect_poise",
       "name": "完美协调",
       "kind": "passive",
       "sequence": 8,
@@ -177,7 +177,7 @@
       "tentative": false
     },
     {
-      "id": "f04_keen_observe",
+      "id": "j04_keen_observe",
       "name": "细微观察",
       "kind": "passive",
       "sequence": 6,
@@ -213,7 +213,7 @@
       "tentative": false
     },
     {
-      "id": "f04_power_refine",
+      "id": "j04_power_refine",
       "name": "能力精进",
       "kind": "passive",
       "sequence": 6,

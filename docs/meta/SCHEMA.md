@@ -45,10 +45,10 @@ docs/json/
 | level | const "family" | 层级标记 |
 | familyId / familyName | string | `family_01..22` 封闭 / 家族中文名（占位符期：家族·壹…家族·贰拾贰） |
 | faction | string | 所属派系 id（须为存在的 faction 文件，经 cross_check 配对验证） |
-| cards | card[] | 家族公共卡（id `fNN_` 前缀，NN=派系号；f 释义为 family） |
+| cards | card[] | 家族公共卡（id `jNN_` 前缀，NN=派系号；j 释义为家族） |
 | statusDefs / unitDefs / zoneDefs / domainDefs | 数组 | 未展开家族恒空；家族私有蓝本池未来随展开登记 |
 
-- 家族文件 id 前缀口径：卡 id `f<NN>_` 的 NN = **文件 faction 号**（同派系家族组共享 f 号，如 family_04 与 family_05 同为 faction_02 组、均挂 f02_ 卡）；`familyId` 序号 = 文件名序号（源质分组序），与 f 号无对应关系。
+- 家族文件 id 前缀口径：卡 id `j<NN>_` 的 NN = **文件 faction 号**（同派系家族组共享 j 号，如 family_04 与 family_05 同为 faction_02 组、均挂 j02_ 卡）；`familyId` 序号 = 文件名序号（源质分组序），与 j 号无对应关系。**f 前缀预留给 faction 级卡**（faction 文件 cards 恒空，暂无此类卡）。
 - **hero_NN.skills.json**：
 
 | 字段 | 类型 | 说明 |
@@ -76,7 +76,7 @@ docs/json/
 - `kind`：active / passive / equipment / summon。
   - active → 必填 cost/reach/target；passive → 必填 hook；equipment → 必填 cost + equipment 载荷（slot=weapon|armor）；summon → 必填 cost + summon 载荷（一卡一单位）。
 - `effects`：效果树（原语叶子 + sequence/repeat/if 算子）；equipment/summon 的 effects 为可选战吼。
-- `id`：`^[a-z][a-z0-9_]*$`；前缀约束按文件层级由 cross_check 执行（family 文件 `fNN_` / hero 文件 `hNN_`；faction 文件 cards 恒空、global 无前缀约束，见 §2 口径）。
+- `id`：`^[a-z][a-z0-9_]*$`；前缀约束按文件层级由 cross_check 执行（family 文件 `jNN_` / hero 文件 `hNN_`；faction 文件 cards 恒空、global 无前缀约束，见 §2 口径；`fNN_` 预留给 faction 级卡，出现在其他层级即报错）。
 - 文本面：name / describe（机制描述，禁设计过程）；lore/flavor 命名专项前不回流。
 - 无 sequenceName / sourceFile 等旧里程碑字段。
 

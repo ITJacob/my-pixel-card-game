@@ -7,7 +7,7 @@ ddd 参数篇文本侧与机器正源的漂移由 check_enum_sync.py 对账。
 四层作用域（v2 重构后）：
   - global.skills.json（全域级）：跨派系复用内容（common 状态注册表已并入其 statusDefs）
   - faction_NN.skills.json（派系级）：派系蓝本池（公共卡已入 family 层，cards 留空）
-  - family_NN.skills.json（家族级）：家族公共卡（fNN_ 前缀，f 释义为 family）
+  - family_NN.skills.json（家族级）：家族公共卡（jNN_ 前缀，j 释义为家族）
   - hero_NN.skills.json（英雄级）：英雄独自卡（hNN_ 前缀）+ family 归属字段
   - 卡无 scope/heroId 字段（归属由所在文件定）；$extends 物化由 status_loader 负责
   - 状态/单位/界域/区域引用解析链：本文件 → family → 同派系 faction → global

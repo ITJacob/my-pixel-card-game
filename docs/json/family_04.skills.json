@@ -5,7 +5,7 @@
   "faction": "faction_02",
   "cards": [
     {
-      "id": "f02_featherlight",
+      "id": "j02_featherlight",
       "name": "羽毛般轻盈",
       "kind": "passive",
       "sequence": 9,
@@ -35,7 +35,7 @@
       "tentative": false
     },
     {
-      "id": "f02_eagle_sight",
+      "id": "j02_eagle_sight",
       "name": "鹰的视力",
       "kind": "passive",
       "sequence": 9,
@@ -80,7 +80,7 @@
       "tentative": false
     },
     {
-      "id": "f02_shadow_hide",
+      "id": "j02_shadow_hide",
       "name": "阴影躲藏",
       "kind": "active",
       "sequence": 9,
@@ -130,7 +130,7 @@
       ]
     },
     {
-      "id": "f02_burst_strike",
+      "id": "j02_burst_strike",
       "name": "力量爆发于一击",
       "kind": "active",
       "sequence": 9,
@@ -213,7 +213,7 @@
       ]
     },
     {
-      "id": "f02_invisible",
+      "id": "j02_invisible",
       "name": "隐形",
       "kind": "active",
       "sequence": 7,
@@ -253,7 +253,7 @@
       "tentative": false
     },
     {
-      "id": "f02_hair_blades",
+      "id": "j02_hair_blades",
       "name": "发刃",
       "kind": "active",
       "sequence": 5,

@@ -5,7 +5,7 @@
   "faction": "faction_07",
   "cards": [
     {
-      "id": "f07_brew",
+      "id": "j07_brew",
       "name": "药剂调配",
       "kind": "active",
       "sequence": 9,
@@ -81,7 +81,7 @@
       "tentative": false
     },
     {
-      "id": "f07_herbal_dressing",
+      "id": "j07_herbal_dressing",
       "name": "草药敷贴",
       "kind": "active",
       "sequence": 9,
@@ -169,7 +169,7 @@
       "tentative": false
     },
     {
-      "id": "f07_toxin_resist",
+      "id": "j07_toxin_resist",
       "name": "毒素抗性",
       "kind": "passive",
       "sequence": 9,
@@ -199,7 +199,7 @@
       "tentative": false
     },
     {
-      "id": "f07_health_sight",
+      "id": "j07_health_sight",
       "name": "健康灵视",
       "kind": "passive",
       "sequence": 9,
@@ -237,7 +237,7 @@
       "tentative": false
     },
     {
-      "id": "f07_beast_sense",
+      "id": "j07_beast_sense",
       "name": "动物感官",
       "kind": "passive",
       "sequence": 8,
@@ -275,7 +275,7 @@
       "tentative": false
     },
     {
-      "id": "f07_wild_instinct",
+      "id": "j07_wild_instinct",
       "name": "野性直觉",
       "kind": "passive",
       "sequence": 7,

@@ -5,7 +5,7 @@
   "faction": "faction_05",
   "cards": [
     {
-      "id": "f05_scrying_eye",
+      "id": "j05_scrying_eye",
       "name": "窥秘之眼",
       "kind": "passive",
       "sequence": 9,
@@ -48,7 +48,7 @@
       ]
     },
     {
-      "id": "f05_arcane_knowledge",
+      "id": "j05_arcane_knowledge",
       "name": "神秘知识",
       "kind": "passive",
       "sequence": 9,
@@ -116,7 +116,7 @@
       ]
     },
     {
-      "id": "f05_adaptive_martial_arts",
+      "id": "j05_adaptive_martial_arts",
       "name": "格斗术·因敌施技",
       "kind": "active",
       "sequence": 8,
@@ -213,7 +213,7 @@
       "tentative": false
     },
     {
-      "id": "f05_scholar_physique",
+      "id": "j05_scholar_physique",
       "name": "学者体魄",
       "kind": "passive",
       "sequence": 8,
@@ -252,7 +252,7 @@
       "tentative": false
     },
     {
-      "id": "f05_illumination",
+      "id": "j05_illumination",
       "name": "照明术",
       "kind": "active",
       "sequence": 7,
@@ -306,7 +306,7 @@
       "tentative": false
     },
     {
-      "id": "f05_spell_analysis",
+      "id": "j05_spell_analysis",
       "name": "法术解析",
       "kind": "active",
       "sequence": 7,

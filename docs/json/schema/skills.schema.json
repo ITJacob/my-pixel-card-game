@@ -42,7 +42,7 @@
         "id": {
           "type": "string",
           "pattern": "^[a-z][a-z0-9_]*$",
-          "description": "全局唯一 ID。前缀约束按文件层级由 cross_check 执行：family 文件 f<NN>_（NN=文件 faction 号）/ hero 文件 h<NN>_（NN=文件序号）；faction 文件 cards 恒空、global 文件无前缀约束。"
+          "description": "全局唯一 ID。前缀约束按文件层级由 cross_check 执行：family 文件 j<NN>_（NN=文件 faction 号）/ hero 文件 h<NN>_（NN=文件序号）；faction 文件 cards 恒空、global 文件无前缀约束。f<NN>_ 预留给 faction 级卡。"
         },
         "name": {
           "type": "string",
@@ -4438,7 +4438,7 @@
     },
     "fileRootFamily": {
       "type": "object",
-      "description": "family_NN.skills.json 文件根（家族级）：家族公共卡（id fNN_ 前缀，NN=派系号，f 释义为 family）+ 家族元信息；未展开家族五池全空。",
+      "description": "family_NN.skills.json 文件根（家族级）：家族公共卡（id jNN_ 前缀，NN=派系号，j 释义为家族）+ 家族元信息；未展开家族五池全空。",
       "required": [
         "level",
         "familyId",
