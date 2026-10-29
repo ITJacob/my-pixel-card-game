@@ -41,7 +41,6 @@ FROM_VALIDATE = {
     "revealScope": validate.REVEAL_SCOPES,
     "onExpire": validate.CONTROL_EXPIRE,
     "actionPolicy": validate.CONTROL_POLICY,
-    "cardScope": validate.SCOPES,
 }
 
 # ② schema $defs 下其余 enum → glossary 类别。
@@ -51,8 +50,6 @@ ENUM_TO_CAT = {
     "card.rarity": "rarity",
     "card.reach": "reach",
     "card.gender": "gender",
-    # v2 新增：scope 区分派系公共技能与英雄独自技能（卡片归属）
-    "card.scope": "cardScope",
     "cardTarget.selectionMode": "selectionMode",
     "cardTarget.consumption": "consumption",
     "unitRequest.mode": "mode",

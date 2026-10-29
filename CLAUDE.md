@@ -23,7 +23,7 @@
 ```
 docs/ddd/    战斗内核设计（权威正源；contexts/ 五上下文 + params/ 三参数 + README 不变量）
 docs/meta/   WORKFLOW（五环节+环节⑥）/ SCHEMA（JSON 结构规范）/ 骨架重议 / 待办 / 迁移映射表 / glossary
-docs/json/   卡池唯一权威源：manifest.json + faction_NN.skills.json ×9 + common.statuses.json + schema/
+docs/json/   卡池唯一权威源：manifest.json + global.skills.json + faction_NN.skills.json ×9 + hero_NN.skills.json ×9 + schema/
 docs/tools/  validate（语义）/ validate_schema（结构）/ check_enum_sync（枚举对账）/ check_glossary（词典）
 ```
 
@@ -31,7 +31,7 @@ docs/tools/  validate（语义）/ validate_schema（结构）/ check_enum_sync�
 
 1. 从 CardGame 参考源挑轴取卡（旧途径/卡 id 记入 `docs/meta/迁移映射表.md`，含改动类型：直迁/改数值/合并/重写）。
 2. 去 IP 改写：name/describe 机制化表述，删 lore/flavor，清 sequenceName 前缀。
-3. 按 schema 落 faction_NN.skills.json（scope: faction|hero）。
+3. 按 schema 落对应层级文件（派系公共卡 → faction_NN，英雄独自卡 → hero_NN，跨派系复用 → global）。
 4. 四脚本全绿后提交；每英雄迁移一个 commit。
 
 ## Git 方式

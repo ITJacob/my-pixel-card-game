@@ -23,11 +23,11 @@
 > 适用后续同派系第二英雄 / 落选旧职业轴玩法入档。
 
 1. **取数登记**：从 CardGame 参考源（只读）选轴取卡，逐卡登记 `meta/迁移映射表.md`（新 id ↔ 旧途径/旧卡 id ↔ 改动类型）；每英雄一个 commit。
-2. **改 id 与 scope**：卡 id 形态 `fNN_<slug>`（派系公共）/ `hNN_<slug>`（英雄独自，带 `heroId`）；公共技能 5–8 张（原职业通用段）。
+2. **改 id**：卡 id 形态 `fNN_<slug>`（派系公共，落 faction_NN 文件）/ `hNN_<slug>`（英雄独自，落 hero_NN 文件）；公共技能 5–8 张（原职业通用段）。
 3. **剥字段**：删 lore/flavor/sequenceName/art/conversionNotes/frameworkFlags/sharedAcross/upgradeLadder/variants/secondaryTargets/role。
 4. **闭包收集**：状态按卡引用闭包（含状态二级引用）；单位蓝本按 `unitId`/`unitDef` 键；界域/区域按卡面 `domain`/`zone` 对象的 `def` 键（注意不是 `zoneId`）。
 5. **去 IP**：状态/卡文本 `非凡→超自然`、`占卜家→先知`、源质/愚者等专名清为通用词；**跨系枢纽（crossPathway / occult_seal 等读层）不继承**，死引用整段剔除。
-6. **common 提入**：跨派系通用状态（burn/guard/thorns/charm/free_cast/silence 等）提入 `common.statuses.json`，权威定义以参考源 common 为准，common 没有的从 owner 途径取。
+6. **common 提入**：跨派系通用状态（burn/guard/thorns/charm/free_cast/silence 等）提入 `global.skills.json` 顶层 statusDefs，权威定义以参考源 common 为准，common 没有的从 owner 途径取。
 7. **describe 对齐**：describe 的元素声称必须与效果结构可解析元素一致（四选一/随机派发卡尤其注意），validator 会抓。
 8. **门禁**：四脚本全绿后才算迁完；映射表、manifest cardCount、待办同步勾选。
 

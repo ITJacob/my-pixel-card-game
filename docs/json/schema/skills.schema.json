@@ -1,72 +1,19 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://cardgame.local/schema/skills.schema.json",
-  "title": "MyPixelCardGame 派系技能池（v2）",
-  "description": "一张派系技能卡池。factionId/factionName 定派系；sharedSkillIds 为派系公共技能池；heroes 为英雄块（玩法骨架 + 技能树）；cards 全集，卡带 scope（faction=公共技能 / hero=独自技能）。",
-  "type": "object",
-  "required": [
-    "factionId",
-    "factionName",
-    "sharedSkillIds",
-    "heroes",
-    "cards"
-  ],
-  "additionalProperties": false,
-  "properties": {
-    "factionId": {
-      "type": "string",
-      "pattern": "^faction_[0-9]{2}$",
-      "description": "派系 id：faction_01..09 封闭（源于九源质）。"
+  "title": "MyPixelCardGame 技能池（v2 三层作用域）",
+  "description": "三层作用域文件统一走本 schema：level=global（global.skills.json，跨派系复用内容）/ faction（faction_NN.skills.json，派系公共卡 + 派系蓝本池）/ hero（hero_NN.skills.json，英雄独自卡）。根按 level 字段 oneOf 分派到三个 fileRoot。五池（cards/statusDefs/unitDefs/zoneDefs/domainDefs）统一格式、均可空；条目可带 $extends 声明式继承上层定义（解析序：hero → 同派系 faction → global；浅合并、tags 取并集，见 docs/meta/SCHEMA.md §2）。",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/fileRootGlobal"
     },
-    "factionName": {
-      "type": "string",
-      "description": "派系中文名（占位符期：派系·壹…玖）。"
+    {
+      "$ref": "#/$defs/fileRootFaction"
     },
-    "sharedSkillIds": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      },
-      "description": "派系公共技能池（卡 id，须对应 scope=faction 的卡）。"
-    },
-    "heroes": {
-      "type": "array",
-      "minItems": 1,
-      "items": {
-        "$ref": "#/$defs/hero"
-      }
-    },
-    "cards": {
-      "type": "array",
-      "items": {
-        "$ref": "#/$defs/card"
-      }
-    },
-    "statusDefs": {
-      "type": "array",
-      "items": {
-        "$ref": "#/$defs/statusDef"
-      }
-    },
-    "unitDefs": {
-      "type": "array",
-      "items": {
-        "$ref": "#/$defs/unitDef"
-      }
-    },
-    "zoneDefs": {
-      "type": "array",
-      "items": {
-        "$ref": "#/$defs/zoneDef"
-      }
-    },
-    "domainDefs": {
-      "type": "array",
-      "items": {
-        "$ref": "#/$defs/domainDef"
-      }
+    {
+      "$ref": "#/$defs/fileRootHero"
     }
-  },
+  ],
   "$defs": {
     "axis": {
       "type": "string",
@@ -85,15 +32,14 @@
         "flagship",
         "describe",
         "effects",
-        "tentative",
-        "scope"
+        "tentative"
       ],
       "additionalProperties": false,
       "properties": {
         "id": {
           "type": "string",
-          "pattern": "^([fh])[0-9]{2}_[a-z0-9_]+$",
-          "description": "全局唯一 ID（v2）：[fh]<派系号>_<英文短名>。f=派系公共技能，h=英雄独自技能。"
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "description": "全局唯一 ID。前缀约束按文件层级由 cross_check 执行：faction 文件 f<NN>_ / hero 文件 h<NN>_（NN=文件序号）；global 文件无前缀约束。"
         },
         "name": {
           "type": "string",
@@ -233,18 +179,10 @@
           },
           "description": "本卡对战场相位的乘区挂钩列表（相位乘区挂钩机制，见 docs/ddd/params/战场参数.md §1.3b）。与 dimHooks 平行：dimHooks 管连续量维度，phaseHooks 管枚举相位。"
         },
-        "scope": {
+        "$extends": {
           "type": "string",
-          "enum": [
-            "faction",
-            "hero"
-          ],
-          "description": "faction = 派系公共技能；hero = 英雄独自技能（须带 heroId）。"
-        },
-        "heroId": {
-          "type": "string",
-          "pattern": "^hero_[0-9]{2}$",
-          "description": "scope=hero 时必填：归属英雄 id。"
+          "minLength": 1,
+          "description": "声明式继承：父定义 id。解析序 hero → 同派系 faction → global（faction 文件 → global）；逐字段浅合并（子存在即覆写），tags 取父∪子并集，嵌套对象整体替换。父定义 id 形态由所在文件层级定（见各 fileRoot 的 id 前缀规则）。"
         }
       },
       "allOf": [
@@ -317,23 +255,6 @@
             "required": [
               "cost",
               "summon"
-            ]
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "scope": {
-                "const": "hero"
-              }
-            },
-            "required": [
-              "scope"
-            ]
-          },
-          "then": {
-            "required": [
-              "heroId"
             ]
           }
         }
@@ -2970,6 +2891,11 @@
       ],
       "additionalProperties": false,
       "properties": {
+        "$extends": {
+          "type": "string",
+          "minLength": 1,
+          "description": "声明式继承：父定义 id（同池内解析：本文件 → 同派系 faction 文件 → global；faction 文件 → global；禁同层跨文件）。浅合并、tags 并集，语义见根 description。"
+        },
         "id": {
           "type": "string",
           "pattern": "^[a-z][a-z0-9_]*$"
@@ -3468,6 +3394,11 @@
       ],
       "additionalProperties": false,
       "properties": {
+        "$extends": {
+          "type": "string",
+          "minLength": 1,
+          "description": "声明式继承：父定义 id（同池内解析：本文件 → 同派系 faction 文件 → global；faction 文件 → global；禁同层跨文件）。浅合并、tags 并集，语义见根 description。"
+        },
         "id": {
           "type": "string",
           "pattern": "^[a-z][a-z0-9_]*$"
@@ -3638,6 +3569,11 @@
       ],
       "additionalProperties": false,
       "properties": {
+        "$extends": {
+          "type": "string",
+          "minLength": 1,
+          "description": "声明式继承：父定义 id（同池内解析：本文件 → 同派系 faction 文件 → global；faction 文件 → global；禁同层跨文件）。浅合并、tags 并集，语义见根 description。"
+        },
         "id": {
           "type": "string",
           "pattern": "^[a-z][a-z0-9_]*$"
@@ -3788,6 +3724,11 @@
       ],
       "additionalProperties": false,
       "properties": {
+        "$extends": {
+          "type": "string",
+          "minLength": 1,
+          "description": "声明式继承：父定义 id（同池内解析：本文件 → 同派系 faction 文件 → global；faction 文件 → global；禁同层跨文件）。浅合并、tags 并集，语义见根 description。"
+        },
         "id": {
           "type": "string",
           "pattern": "^[a-z][a-z0-9_]*$"
@@ -4380,17 +4321,138 @@
         }
       }
     },
-    "hero": {
+    "fileRootGlobal": {
       "type": "object",
+      "description": "global.skills.json 文件根（全域级，唯一一份）：只收跨派系复用内容；id 无前缀约束。",
       "required": [
-        "heroId",
-        "heroName",
-        "playstyle",
-        "skillTree",
-        "uniqueSkillIds"
+        "level",
+        "name",
+        "cards",
+        "statusDefs",
+        "unitDefs",
+        "zoneDefs",
+        "domainDefs"
       ],
       "additionalProperties": false,
       "properties": {
+        "level": {
+          "const": "global"
+        },
+        "name": {
+          "type": "string",
+          "description": "文件显示名（如「全域」）。"
+        },
+        "cards": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/card"
+          }
+        },
+        "statusDefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/statusDef"
+          }
+        },
+        "unitDefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/unitDef"
+          }
+        },
+        "zoneDefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/zoneDef"
+          }
+        },
+        "domainDefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/domainDef"
+          }
+        }
+      }
+    },
+    "fileRootFaction": {
+      "type": "object",
+      "description": "faction_NN.skills.json 文件根（派系级）：cards 仅含派系公共卡（id fNN_ 前缀）；蓝本池保持派系私有内容。",
+      "required": [
+        "level",
+        "factionId",
+        "factionName",
+        "cards",
+        "statusDefs",
+        "unitDefs",
+        "zoneDefs",
+        "domainDefs"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "level": {
+          "const": "faction"
+        },
+        "factionId": {
+          "type": "string",
+          "pattern": "^faction_[0-9]{2}$",
+          "description": "派系 id：faction_01..09 封闭（源于九源质）。"
+        },
+        "factionName": {
+          "type": "string",
+          "description": "派系中文名（占位符期：派系·壹…玖）。"
+        },
+        "cards": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/card"
+          }
+        },
+        "statusDefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/statusDef"
+          }
+        },
+        "unitDefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/unitDef"
+          }
+          },
+        "zoneDefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/zoneDef"
+          }
+        },
+        "domainDefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/domainDef"
+          }
+        }
+      }
+    },
+    "fileRootHero": {
+      "type": "object",
+      "description": "hero_NN.skills.json 文件根（英雄级）：cards 仅含该英雄独自卡（id hNN_ 前缀）；蓝本池留空占位。",
+      "required": [
+        "level",
+        "heroId",
+        "heroName",
+        "faction",
+        "playstyle",
+        "cards",
+        "statusDefs",
+        "unitDefs",
+        "zoneDefs",
+        "domainDefs"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "level": {
+          "const": "hero"
+        },
         "heroId": {
           "type": "string",
           "pattern": "^hero_[0-9]{2}$"
@@ -4398,23 +4460,44 @@
         "heroName": {
           "type": "string"
         },
+        "faction": {
+          "type": "string",
+          "pattern": "^faction_[0-9]{2}$",
+          "description": "所属派系 id（须与文件名序号一致：hero_01 ↔ faction_01）。"
+        },
         "playstyle": {
           "type": "string",
           "description": "玩法骨架一句话（一条轴的玩法声明）。"
         },
-        "skillTree": {
+        "cards": {
           "type": "array",
           "items": {
-            "type": "string"
-          },
-          "description": "技能树入口卡 id（独自技能分期解锁序）。"
+            "$ref": "#/$defs/card"
+          }
         },
-        "uniqueSkillIds": {
+        "statusDefs": {
           "type": "array",
           "items": {
-            "type": "string"
-          },
-          "description": "英雄独自技能全集。"
+            "$ref": "#/$defs/statusDef"
+          }
+        },
+        "unitDefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/unitDef"
+          }
+        },
+        "zoneDefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/zoneDef"
+          }
+        },
+        "domainDefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/domainDef"
+          }
         }
       }
     }

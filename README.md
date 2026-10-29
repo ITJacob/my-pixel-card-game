@@ -17,7 +17,7 @@ docs/
 │  ├─ contexts/    战斗/编队/效果/战场/编目 五上下文
 │  └─ params/      效果/执行/编队 参数取值域
 ├─ meta/           流程·规范·映射表（WORKFLOW / SCHEMA / 骨架重议 / 待办 / 迁移映射表 / glossary）
-├─ json/           卡池数据唯一权威源（manifest + faction_01..09 + schema + common.statuses）
+├─ json/           卡池数据唯一权威源（manifest + global + faction_01..09 + hero_01..09 + schema）
 └─ tools/          数据校验脚本（纯 Python，唯一门禁）
 ```
 

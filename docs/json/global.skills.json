@@ -1,7 +1,7 @@
 {
-  "_meta": {
-    "purpose": "跨派系共享状态注册表（中性战斗机制状态）。"
-  },
+  "level": "global",
+  "name": "全域",
+  "cards": [],
   "statusDefs": [
     {
       "id": "shield",
@@ -280,5 +280,8 @@
         }
       ]
     }
-  ]
+  ],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
 }

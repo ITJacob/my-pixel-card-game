@@ -4,12 +4,12 @@
 封闭取值域以 docs/json/schema/skills.schema.json 为机器正源（运行时加载，不另抄一份）；
 ddd 参数篇文本侧与机器正源的漂移由 check_enum_sync.py 对账。
 
-v2 适配（派系制）：
-  - 顶层 pathwayId/pathwayName/axes/sampleBuilds/designNote 等 → factionId/factionName/heroes[]
-  - 卡 id 形态 f<NN>_<slug>（派系公共）/ h<NN>_<slug>（英雄独自，带 heroId），无 s<seq> 段
-  - scope 字段：faction / hero（hero 必带 heroId）
-  - 派系私有状态在文件顶层 statusDefs[]（不再走 <pathway>.statuses.json）
-  - crossPathway/participants（旧跨途径枢纽）v2 首版不继承，相关检查已删
+三层作用域（v2 重构后）：
+  - global.skills.json（全域级）：跨派系复用内容（common 状态注册表已并入其 statusDefs）
+  - faction_NN.skills.json（派系级）：派系公共卡（fNN_ 前缀）+ 派系蓝本池
+  - hero_NN.skills.json（英雄级）：英雄独自卡（hNN_ 前缀），heroId/heroName/faction/playstyle 元信息
+  - 卡无 scope/heroId 字段（归属由所在文件定）；$extends 物化由 status_loader 负责
+  - 状态/单位/界域/区域引用解析三级：本文件 → 同派系 faction 文件 → global
 """
 import json, io, sys, glob, os, re
 
@@ -63,7 +63,6 @@ TARGET_PIERCE = _enum("effModifyTargetability", "properties", "pierce")
 REVEAL_SCOPES = _enum("effReveal", "properties", "scope")
 CONTROL_EXPIRE = _enum("effTakeControl", "properties", "onExpire")
 CONTROL_POLICY = _enum("effTakeControl", "properties", "actionPolicy")
-SCOPES = _enum("card", "properties", "scope")
 EQUIP_SLOTS = {"weapon", "armor"}
 PRIMS, OPS = set(), set()
 for _r in DEFS["effect"]["oneOf"]:
@@ -354,7 +353,7 @@ def check_summon_card(c, cid, def_ids, errors):
     if not isinstance(uid, str) or not uid:
         errors.append("%s: summon.unitId 必填" % cid)
     elif uid not in def_ids:
-        errors.append("%s: summon.unitId %s 未在任何派系顶层 unitDefs 池定义" % (cid, uid))
+        errors.append("%s: summon.unitId %s 未在任何文件顶层 unitDefs 池（派系/global）定义" % (cid, uid))
     cnt = sp.get("count")
     if cnt is not None and (not isinstance(cnt, int) or isinstance(cnt, bool) or cnt < 1):
         errors.append("%s: summon.count 必须为 >=1 的整数" % cid)
@@ -433,7 +432,7 @@ def lint_playability(pid, cards, warns):
 
 
 def check_status_def(sd, cid, errors, warns):
-    """statusDef 通用校验（派系顶层 statusDefs[] 与 common.statuses.json 共用）。"""
+    """statusDef 通用校验（三层文件顶层 statusDefs[] 共用）。"""
     for cat in sd.get("category", []) or []:
         if cat not in CATS: errors.append("%s sd %s: bad category %s" % (cid, sd.get("id"), cat))
     if sd.get("equipSlot") is not None or sd.get("initialEquip") is not None:
@@ -456,18 +455,24 @@ def main():
     files = sorted(glob.glob(os.path.join(JSON_DIR,'*.skills.json')))
     for f in files:
         d = json.load(io.open(f, encoding='utf-8'))
-        # v2：派系私有状态在文件顶层 statusDefs[]；卡内联 statusDefs 仅作兼容扫描
+        # 三层文件顶层 statusDefs[]（派系私有 / 全域 common / hero 占位）+ 卡内联（兼容扫描）
         for sd in d.get("statusDefs") or []: globs.add(sd["id"])
         for c in d.get("cards",[]):
             for sd in c.get("statusDefs") or []: globs.add(sd["id"])
-    # 公共状态注册表 common.statuses.json
-    for f in sorted(glob.glob(os.path.join(JSON_DIR,'*.statuses.json'))):
-        try:
-            d = json.load(io.open(f, encoding='utf-8'))
-            for sd in d.get("statusDefs") or []: globs.add(sd["id"])
-        except Exception:
-            pass
     ALLSTATUS = globs
+
+    # initialEquip 分组索引：global 卡一组；faction_NN + hero_NN 同组（允许跨本文件互引）
+    EQUIP_IDS = {}
+    for f in files:
+        _d = json.load(io.open(f, encoding='utf-8'))
+        _lvl = _d.get("level")
+        if _lvl == "global":
+            _g = "global"
+        else:
+            _g = (_d.get("factionId") or _d.get("faction") or "_").split("_", 1)[1]
+        for _c in _d.get("cards") or []:
+            if _c.get("kind") == "equipment":
+                EQUIP_IDS.setdefault(_g, set()).add(_c.get("id"))
 
     # 描述↔元素一致性 Gate 的引用索引（statusId / def / zone / unitId 解析用）
     _refs = {"status": {}, "defs": {}}
@@ -486,15 +491,7 @@ def main():
                     _refs["defs"].setdefault(_x["id"], _x)
     pre_errors, pre_warns = [], []
 
-    # 状态定义层校验：派系顶层 statusDefs[] + common.statuses.json
-    for f in sorted(glob.glob(os.path.join(JSON_DIR,'*.statuses.json'))):
-        pid = os.path.basename(f).replace('.statuses.json','')
-        try:
-            d = json.load(io.open(f, encoding='utf-8'))
-        except Exception:
-            pre_errors.append("%s: 解析失败" % os.path.basename(f)); continue
-        for sd in d.get("statusDefs") or []:
-            check_status_def(sd, pid, pre_errors, pre_warns)
+    # 状态定义层校验：三层文件顶层 statusDefs[]（原始定义；$extends 物化检查在 validate_schema）
     for f in files:
         fid = os.path.basename(f).replace('.skills.json', '')
         try:
@@ -612,7 +609,10 @@ def main():
 
     for f in files:
         d = json.load(io.open(f, encoding='utf-8'))
-        pid = d.get("factionId", os.path.basename(f))
+        pid = d.get("factionId") or d.get("heroId") or d.get("level") or os.path.basename(f)
+        # 本文件派系组号（initialEquip 跨文件规则用；global 恒命中 global 组）
+        _grp = "global" if d.get("level") == "global" else \
+            (d.get("factionId") or d.get("faction") or "_").split("_", 1)[1]
         errors, warns = [], []
         # 编目三池的 modifiers 与状态池同一治理闸
         for _pool in ('unitDefs', 'zoneDefs', 'domainDefs'):
@@ -625,20 +625,14 @@ def main():
             errors.append("card count %d != manifest %d" % (len(cards), expect[pid]))
         ids = set()
         by_id = {c.get("id"): c for c in cards}
-        hero_ids = {h.get("heroId") for h in (d.get("heroes") or [])}
         for c in cards:
             cid = c.get("id","?")
             if cid in ids: errors.append("dup id %s"%cid)
             ids.add(cid)
-            for fld in ("id","name","kind","sequence","rarity","axis","flagship","describe","effects","tentative","scope"):
+            for fld in ("id","name","kind","sequence","rarity","axis","flagship","describe","effects","tentative"):
                 if fld not in c: errors.append("%s: missing %s"%(cid,fld))
             if "rarity" in c and "sequence" in c and c["rarity"] != RARITY_BY_SEQ(c["sequence"]):
                 errors.append("%s: rarity mismatch (seq %s, %s)"%(cid,c["sequence"],c["rarity"]))
-            _scope = c.get("scope")
-            if _scope is not None and _scope not in SCOPES:
-                errors.append("%s: bad scope %s"%(cid,_scope))
-            if _scope == "hero" and c.get("heroId") not in hero_ids:
-                errors.append("%s: scope=hero 但 heroId '%s' 不在本文件 heroes[]"%(cid,c.get("heroId")))
             _kind = c.get("kind")
             if _kind=="active":
                 if "cost" not in c or "reach" not in c or "target" not in c:
@@ -676,9 +670,9 @@ def main():
             if _init_eq is not None:
                 if _kind != "passive":
                     errors.append("%s: initialEquip 只能写在 passive 卡上" % cid)
-                _tgt = by_id.get(_init_eq)
-                if not _tgt or _tgt.get("kind") != "equipment":
-                    errors.append("%s: initialEquip 必须引用同文件 kind=equipment 的卡（%s）" % (cid, _init_eq))
+                # 三级规则：目标须为 global 或同派系文件组（faction_NN + hero_NN）内的 kind=equipment 卡
+                if _init_eq not in EQUIP_IDS.get(_grp, set()) and _init_eq not in EQUIP_IDS.get("global", set()):
+                    errors.append("%s: initialEquip %s 必须是 global 或同派系文件内的 kind=equipment 卡" % (cid, _init_eq))
             walk(c.get("effects"), cid, "eff", errors, warns, _passive)
             trigs(c.get("triggers"), cid, "card", errors, warns, _passive)
             if _kind == "equipment":

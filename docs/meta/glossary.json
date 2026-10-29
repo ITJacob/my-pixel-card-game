@@ -210,21 +210,6 @@
         }
       }
     },
-    "cardScope": {
-      "label": "卡归属",
-      "desc": "一张技能卡归属于派系公共池还是某个英雄独自：scope 区分派系公共技能（f<NN>_ 前缀，进 sharedSkillIds）与英雄独自技能（h<NN>_ 前缀，带 heroId，进该英雄 uniqueSkillIds/skillTree）。归属是编队层约束。",
-      "source": "docs/json/schema/skills.schema.json card.scope / ddd/params/编队参数.md 卡型节",
-      "terms": {
-        "faction": {
-          "zh": "派系公共技能",
-          "brief": "派系共享技能池；id 前缀 f<NN>_，登记在 faction 文件顶层 sharedSkillIds"
-        },
-        "hero": {
-          "zh": "英雄独自技能",
-          "brief": "单个英雄专属；id 前缀 h<NN>_，须带 heroId，登记在归属英雄 uniqueSkillIds/skillTree"
-        }
-      }
-    },
     "rarity": {
       "label": "稀有度",
       "desc": "投放强度档位，决定单卡预算上限与可出位次范围。强度按稀有度给基线，不靠单卡手调数值。",
