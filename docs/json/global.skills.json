@@ -279,6 +279,59 @@
           "note": "反向嘲讽：被魅惑单位攻击其己方队友"
         }
       ]
+    },
+    {
+      "id": "burn_resonance",
+      "name": "燃尽",
+      "category": [
+        "debuff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "maxStacks": 3,
+      "element": "fire",
+      "stackThreshold": {
+        "stacks": 3,
+        "effects": [
+          {
+            "type": "damage",
+            "element": "fire",
+            "value": 3,
+            "target": "self",
+            "note": "燃尽爆发：3 次火伤喂灼烧 → 3 点火伤"
+          },
+          {
+            "type": "dispel",
+            "target": "self",
+            "dispelTarget": "unit",
+            "filter": {
+              "statusId": "burn_resonance",
+              "count": 1
+            },
+            "note": "计数清零"
+          }
+        ],
+        "note": "元素共鸣 3 档（计数爆发）"
+      },
+      "note": "灼烧的同元素计数载体；由 burn 的 on_take_damage 累加",
+      "stackPolicy": "stack"
+    },
+    {
+      "id": "combustion",
+      "name": "燃焚",
+      "category": [
+        "debuff"
+      ],
+      "dispelable": true,
+      "duration": 15,
+      "maxStacks": 3,
+      "stackPolicy": "refresh",
+      "modifiers": {
+        "dotOnTick": 0.4,
+        "dot_element": "fire"
+      },
+      "note": "燃焚轴身份状态（自 common burn 分叉私有化）：火属性 0.4/tick DoT，叠层 refresh；火焰系技能统一改指此 id，common burn（灼烧）保留为刺客/罪犯/窥秘人/智者通用火 DoT",
+      "element": "fire"
     }
   ],
   "unitDefs": [],

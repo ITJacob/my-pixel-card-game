@@ -501,6 +501,53 @@
           "value": 1.5
         }
       ]
+    },
+    {
+      "id": "law_edit",
+      "name": "规律改写",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": 25,
+      "maxStacks": 3,
+      "stackPolicy": "stack",
+      "modifiers": {
+        "damage_taken_mul": {
+          "value": 0.5,
+          "filter": {
+            "element": [
+              "$variant.element"
+            ]
+          },
+          "note": "仅对变体选定元素生效（H4 dynamic 条件乘区）"
+        }
+      },
+      "slots": {
+        "element": "构筑时选定（fire/poison/ice/shock）"
+      },
+      "stackThreshold": {
+        "stacks": 2,
+        "effects": [
+          {
+            "type": "modify_stat",
+            "stat": "defense",
+            "value": 1,
+            "mode": "delta",
+            "duration": null,
+            "target": "self",
+            "note": "规律改写达 2 层：防御 +1"
+          }
+        ],
+        "note": "规律改写层数达标 → 防御提升"
+      },
+      "note": "退化方案为无条件 damage_taken_mul 0.75（失去「改写某条具体规律」的语义）；乘区审批：0.4–0.5=深度减免档",
+      "crossPathway": true,
+      "participants": [
+        "savant",
+        "reader",
+        "arbiter"
+      ]
     }
   ],
   "unitDefs": [],

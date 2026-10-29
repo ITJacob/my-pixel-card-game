@@ -451,6 +451,97 @@
         }
       },
       "note": "领域轴身份状态（2026-09-29 自 common poison 分叉私有化，数值蓝本同源：0.2/tick 穿透护甲 DoT（2026-10-09 回合→tick 换算残留校正，原 1/tick），叠层 refresh）；罪犯全途径（领域/污秽轴产层 + 污秽之王读层 + 恶魔化触发）统一改指此 id；common poison（中毒）保留为收尸人/囚犯/耕种者通用毒。⚠️ 副作用登记：污秽之王不再放大敌方的通用中毒（跨途径涌现 combo 断开），平衡期再裁定是否走 crossPathway 接回。"
+    },
+    {
+      "id": "abundance",
+      "name": "丰饶",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "maxStacks": 1,
+      "stackPolicy": "stack",
+      "note": "枢纽状态：归属耕种者，罪犯『荒芜侵蚀』读取。",
+      "crossPathway": true,
+      "participants": [
+        "planter",
+        "criminal"
+      ]
+    },
+    {
+      "id": "grazing_slot",
+      "name": "放牧槽",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "maxStacks": 7,
+      "stackPolicy": "stack",
+      "slots": {
+        "soul": "存储『任意途径灵魂 → 其能力引用』的动态槽，供五途径互读 / 外部经放牧接口借能"
+      },
+      "note": "枢纽状态：五途径内部互读；外部借能（观众放牧·借能、水手放牧·借雷）。放牧释放的灵魂可被收尸人『净化』反制。",
+      "crossPathway": true,
+      "participants": [
+        "spectator",
+        "chanter",
+        "reader",
+        "sailor",
+        "supplicant"
+      ]
+    },
+    {
+      "id": "shadow_double",
+      "name": "阴影替身",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": 25,
+      "charges": 1,
+      "triggers": [
+        {
+          "event": "on_take_damage",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "defense",
+              "value": 0,
+              "mode": "set",
+              "duration": 0,
+              "target": "self",
+              "note": "该次伤害 ×0（替身承受）的表达锚点：以伤害链截断载荷承载，待内核裁定精确写法"
+            },
+            {
+              "type": "move",
+              "op": "push_back",
+              "distance": 99,
+              "target": "self",
+              "note": "本体退回己方半场队尾（G8 合规）"
+            },
+            {
+              "type": "dispel",
+              "target": "self",
+              "dispelTarget": "unit",
+              "filter": {
+                "statusId": "shadow_double"
+              },
+              "note": "消耗 1 层（C6）"
+            }
+          ]
+        }
+      ],
+      "note": "on_take_damage 事件驱动不受 duration 尺度影响；duration 25 按覆盖 1 个自身回合取保守值",
+      "crossPathway": true,
+      "participants": [
+        "assassin",
+        "seer",
+        "lawyer",
+        "supplicant",
+        "prisoner"
+      ]
     }
   ],
   "unitDefs": [],

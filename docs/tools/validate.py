@@ -520,14 +520,24 @@ def main():
             check_status_def(sd, fid, pre_errors, pre_warns)
 
     errors_all, warns_all = [], []
-    errors_all += pre_errors
-    warns_all += pre_warns
     total_cards = 0
+
+    def scan_cond(c, cid, path, errors):
+        # has_status 条件读取长期无校验：未定义 id 会让分支永远不成立
+        if isinstance(c, dict):
+            if c.get("kind") == "has_status":
+                sid = c.get("id") or c.get("statusId")
+                if isinstance(sid, str) and not sid.startswith("$") and sid not in ALLSTATUS:
+                    errors.append("%s %s: unknown statusId %s (has_status)" % (cid, path, sid))
+            for v in c.values(): scan_cond(v, cid, path, errors)
+        elif isinstance(c, list):
+            for v in c: scan_cond(v, cid, path, errors)
 
     def walk(effs, cid, path, errors, warns, passive=False):
         for i, e in enumerate(effs or []):
             p = "%s.%d" % (path, i)
             t = e.get("type")
+            scan_cond(e.get("condition"), cid, p, errors)
             if t is None:
                 op = e.get("op")
                 if op not in OPS: errors.append("%s %s: bad operator %s" % (cid,p,op)); continue
@@ -542,8 +552,11 @@ def main():
                 if sr.get("selector") not in SKILL_SELECTORS:
                     errors.append("%s %s: bad modify_skill.skillRef.selector %s" % (cid,p,sr.get("selector")))
             if t=="modify_status":
-                if not e.get("statusId"):
+                sid = e.get("statusId")
+                if not sid:
                     errors.append("%s %s: modify_status missing statusId" % (cid,p))
+                elif not str(sid).startswith("$") and sid not in ALLSTATUS:
+                    errors.append("%s %s: unknown statusId %s" % (cid,p,sid))
                 if e.get("slot") is not None:
                     errors.append("%s %s: modify_status.slot 已退役，武器请用 modify_weapon" % (cid,p))
                 if e.get("target") not in EFFECT_TARGETS: errors.append("%s %s: bad modify_status.target %s" % (cid,p,e.get("target")))
@@ -744,6 +757,26 @@ def main():
         errors_all += [pid+": "+e for e in errors]
         warns_all += warns
 
+    # 顶层 statusDefs 触发器校验（此前只校验字段，触发器内的状态引用漏检）
+    for f in files:
+        _pid = os.path.basename(f).replace('.skills.json', '')
+        try:
+            _sd_doc = json.load(io.open(f, encoding='utf-8'))
+        except Exception:
+            continue
+        _errs, _warns = [], []
+        for sd in _sd_doc.get("statusDefs") or []:
+            _path = "sd:" + sd.get("id", "?")
+            trigs(sd.get("triggers"), _pid, _path, _errs, _warns)
+            for tf in ("thresholdTrigger", "stackThreshold"):
+                walk((sd.get(tf) or {}).get("effects"), _pid, _path + "." + tf, _errs, _warns)
+        for e in _errs: print("  E:", _pid, e)
+        for w in _warns: print("  W:", _pid, w)
+        errors_all += [_pid + ": " + e for e in _errs]
+        warns_all += _warns
+
+    errors_all += pre_errors
+    warns_all += pre_warns
     for e in pre_errors: print("  E:", e)
     for w in pre_warns: print("  W:", w)
     print("-"*60)

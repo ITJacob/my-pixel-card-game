@@ -268,6 +268,134 @@
         "attack": -3
       },
       "note": "四要素全落地：弄假（打空）/ 成真（反噬）/ 愚弄时间（gauge.rate -8）/ 降低智商（attack -3）；退化方案：去掉反噬，保留双次打空+减速+减攻"
+    },
+    {
+      "id": "illusion_daze",
+      "name": "幻境落空计数",
+      "category": [
+        "stance"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "maxStacks": 5,
+      "note": "域内计数状态：满 5 层时该次攻击 target_override → first_empty 并 consume(5)（计数逻辑挂载于 domainDef 触发器）"
+    },
+    {
+      "id": "astral_anchor",
+      "name": "星界锚",
+      "category": [
+        "link"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "maxStacks": 1,
+      "stackPolicy": "stack",
+      "note": "枢纽状态：归属学徒；窥秘人【星光囚笼】读层；观众编织梦境读取（星界锚引梦跨系段）",
+      "crossPathway": true,
+      "participants": [
+        "apprentice",
+        "pryer",
+        "spectator"
+      ]
+    },
+    {
+      "id": "deep_parasitized",
+      "name": "深度寄生",
+      "category": [
+        "debuff",
+        "control"
+      ],
+      "dispelable": true,
+      "duration": 30,
+      "maxStacks": 3,
+      "stackPolicy": "refresh",
+      "phases": [
+        {
+          "name": "初步寄生",
+          "ticks": [
+            1,
+            3
+          ],
+          "triggers": [
+            {
+              "event": "on_tick",
+              "effects": [
+                {
+                  "type": "drain",
+                  "resource": "hp",
+                  "value": 0.4,
+                  "target": "self",
+                  "note": "宿主 → 施法者（F56 casterId 寻址）"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "全面控制",
+          "ticks": [
+            4,
+            6
+          ],
+          "modifiers": {
+            "behaviorModifiers": [
+              {
+                "op": "target_override",
+                "anchor": "self_faction_hp_desc",
+                "note": "宿主的攻击转向它自己的同伴（H12 target_override 族）"
+              }
+            ]
+          }
+        }
+      ],
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "attack",
+              "value": -1,
+              "mode": "delta",
+              "duration": 30,
+              "target": "self"
+            }
+          ]
+        }
+      ],
+      "note": "两阶段寄生（H50 formGroup/phases）；层数档 maxStacks 3 + refresh",
+      "crossPathway": true,
+      "participants": [
+        "supplicant",
+        "thief",
+        "seer"
+      ]
+    },
+    {
+      "id": "fate_gap",
+      "name": "命运缝隙",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "modifiers": {
+        "damage_mul": {
+          "value": 1.3,
+          "filter": {
+            "gaugeAbove": 70
+          }
+        }
+      },
+      "note": "gauge_above 谓词（共享内核参数 §三）",
+      "crossPathway": true,
+      "participants": [
+        "assassin",
+        "seer",
+        "monster",
+        "pryer",
+        "thief"
+      ]
     }
   ],
   "unitDefs": [
@@ -282,5 +410,79 @@
     }
   ],
   "zoneDefs": [],
-  "domainDefs": []
+  "domainDefs": [
+    {
+      "id": "domain_illusion",
+      "tier": "overlay",
+      "dispelable": true,
+      "duration": 15,
+      "durationUnit": "tick",
+      "triggers": [
+        {
+          "event": "on_attack",
+          "filter": {
+            "side": "ally"
+          },
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "has_status",
+                "target": "self",
+                "id": "illusion_daze",
+                "stacksAtLeast": 5
+              },
+              "then": [
+                {
+                  "type": "dispel",
+                  "target": "self",
+                  "statusId": [
+                    "illusion_daze"
+                  ],
+                  "count": "all",
+                  "note": "consume(5) 落空计数清零"
+                },
+                {
+                  "type": "target_override",
+                  "anchor": "first_empty",
+                  "note": "该次攻击打向幻象本身（C7 空坐标）；R5 确定性落空 ≈ 卡面 20%"
+                }
+              ],
+              "else": [
+                {
+                  "type": "mount_status",
+                  "statusId": "illusion_daze",
+                  "stacks": 1,
+                  "target": "self"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "rulePatches": [
+        {
+          "kind": "empower",
+          "side": "both",
+          "tag": [
+            "幻象",
+            "镜像"
+          ],
+          "mul": 1.5
+        },
+        {
+          "kind": "empower",
+          "side": "both",
+          "tag": [
+            "光",
+            "净化"
+          ],
+          "mul": 0.7
+        }
+      ],
+      "envRules": {
+        "hand_hidden": true
+      }
+    }
+  ]
 }

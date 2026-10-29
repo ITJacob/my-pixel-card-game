@@ -846,6 +846,25 @@
     }
   ],
   "unitDefs": [],
-  "zoneDefs": [],
+  "zoneDefs": [
+    {
+      "id": "zone_doom_field",
+      "kind": "hazard",
+      "trigger": "on_occupy_tick",
+      "interval": 2,
+      "affects": "enemy_of_owner",
+      "duration": 40,
+      "durationUnit": "tick",
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "misfortune",
+          "stacks": 1,
+          "duration": 20
+        }
+      ],
+      "note": "H9 Zone 母版；Zone 跨半场落敌方半场已拍板（战场上下文 §二）"
+    }
+  ],
   "domainDefs": []
 }

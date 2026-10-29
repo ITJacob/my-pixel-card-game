@@ -207,6 +207,16 @@
       "maxStacks": 3,
       "stackPolicy": "stack",
       "note": "元素连锁（2026-10-23 E1 重构新建）：狂风写 wind 键、雷击在风键存在时接续 thunder/water；风暴汇聚读三键齐全才成链。断链=缺键，大额作废。"
+    },
+    {
+      "id": "drowning",
+      "name": "溺沉",
+      "category": [
+        "debuff"
+      ],
+      "dispelable": true,
+      "duration": 15,
+      "note": "连环闪电导电联动的载体"
     }
   ],
   "unitDefs": [
