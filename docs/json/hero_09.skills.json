@@ -238,7 +238,7 @@
       "rarity": "uncommon",
       "axis": "filth",
       "flagship": false,
-      "describe": "三选一：缓慢使目标行动条速率 ×0.6（15tick）并造成 1 点毒素伤害；死使目标硫磺剧毒 20tick，若其生命 ≤25% 再造成 6 点毒素伤害；堕落重击并使其陷入欲望 15tick；恶语出口即成污秽：目标污秽 +1（20tick）。；伤口浇灌欲望，深渊顺势把人往下拽。",
+      "describe": "使目标行动条速率 ×0.6（15tick）并造成 1 点毒素伤害；恶语出口即成污秽：目标污秽 +1（20tick），欲壑 +1，并被深渊顺势拉近一档。",
       "cost": {
         "energy": 3,
         "cooldown": 20,
@@ -261,20 +261,18 @@
           "stat": "gauge.rate",
           "mode": "mul",
           "value": 0.6,
-          "duration": 15,
-          "note": "默认分支：缓慢"
+          "duration": 15
         },
         {
           "type": "damage",
           "element": "poison",
-          "value": 1,
-          "note": "缓慢分支"
+          "value": 1
         },
         {
           "type": "mount_status",
           "statusId": "filth",
           "duration": 20,
-          "note": "恶语成秽：目标污秽 +1（环节⑤ 2026-09-29 补产层段）本卡 describe 三选一但 AST 仅缓慢分支，死/堕落分支缺失，缺口登记遗留"
+          "note": "恶语成秽：目标污秽 +1"
         },
         {
           "type": "modify_resource",
@@ -819,7 +817,7 @@
       "rarity": "epic",
       "axis": "filth",
       "flagship": false,
-      "describe": "四选一：失控使目标魅惑 10tick（攻击自己人）；重创造成 8 点伤害；混乱叠加 2 层呓语（15tick）并使其行动条速率 ×0.7；诅咒使其易伤 20tick 并硫磺剧毒 15tick。；放纵自身：欲壑 +1，身体被欲望推着往前扑。",
+      "describe": "使目标魅惑 10tick（攻击自己人）；放纵自身：欲壑 +1，身体被欲望推着往前扑。",
       "cost": {
         "energy": 4,
         "cooldown": 30,
@@ -840,8 +838,7 @@
         {
           "type": "mount_status",
           "statusId": "charm",
-          "duration": 10,
-          "note": "默认分支：失控"
+          "duration": 10
         },
         {
           "type": "modify_resource",
