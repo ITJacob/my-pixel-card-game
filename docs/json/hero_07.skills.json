@@ -368,7 +368,7 @@
               "type": "move",
               "op": "swap_ally",
               "target": "target",
-              "note": "「月光范围」绑定友军所在（原著未定义，稿面处置见遗留 3）"
+              "note": "「月光范围」绑定友军所在"
             },
             {
               "type": "damage",

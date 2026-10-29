@@ -460,7 +460,7 @@
         "gaugeReductionImmune": {
           "value": true,
           "scope": "all_allies",
-          "note": "新增项 18：免疫推条布尔 + scope 参数（自身/全队两档），序列8 反占卜的全队版"
+          "note": "新增项 18：免疫推条布尔 + scope 参数（自身/全队两档），反占卜的全队版"
         },
         "concealRevealBlock": {
           "value": true,
@@ -608,7 +608,7 @@
               "charges": 2,
               "duration": 50,
               "target": "self",
-              "note": "约每 10 tick 自动进入一次「不被命中」窗口（原著「十秒」「被动」逐字对应）"
+              "note": "约每 10 tick 自动进入一次「不被命中」窗口"
             },
             {
               "type": "mount_status",

@@ -90,7 +90,7 @@
           "items": {
             "$ref": "#/$defs/effect"
           },
-          "description": "卡面效果序列（可嵌套算子）。weapon 卡可为空（无战吼）；active/passive 的语义非空由 validate.py 约束。"
+          "description": "卡面效果组（可嵌套算子）。weapon 卡可为空（无战吼）；active/passive 的语义非空由 validate.py 约束。"
         },
         "tentative": {
           "type": "boolean",
@@ -859,7 +859,7 @@
         },
         "rankBelowCaster": {
           "type": "boolean",
-          "description": "位格筛选：仅位格低于施法者者可入选（原著高位格压制低位格；§1.4 位格判定 + 轴签名提案C）。"
+          "description": "位格筛选：仅位格低于施法者者可入选（高位格压制低位格；§1.4 位格判定）。"
         },
         "rankAboveCaster": {
           "type": "boolean",
@@ -879,7 +879,7 @@
             "male",
             "female"
           ],
-          "description": "性别筛选（魔女/猎人系原著机制；取值域与 card.gender 同源），提案D。"
+          "description": "性别筛选（旧机制保留；取值域与 card.gender 同源）。"
         }
       }
     },
@@ -3180,7 +3180,7 @@
         },
         "lineageStack": {
           "type": "object",
-          "description": "异类谱系栈（编队参数 §2.4）：异类形态按栈叠加，支持 lineage_push（推入）/ lineage_depth（深度）/ 演出回放（栈内形态序列重演）。",
+          "description": "异类谱系栈（编队参数 §2.4）：异类形态按栈叠加，支持 lineage_push（推入）/ lineage_depth（深度）/ 演出回放（栈内形态顺序重演）。",
           "additionalProperties": false,
           "properties": {
             "push": {
@@ -3199,7 +3199,7 @@
             },
             "replay": {
               "type": "object",
-              "description": "演出回放：回放栈内形态序列。",
+              "description": "演出回放：回放栈内形态顺序。",
               "additionalProperties": false,
               "properties": {
                 "enabled": {
@@ -3802,7 +3802,7 @@
             "male",
             "female"
           ],
-          "description": "单位性别（Unit.gender）：供获取期过滤与性别限制判定（刺客序列4+ 高位谱系要求 female）。"
+          "description": "单位性别（Unit.gender）：供获取期过滤与性别限制判定（高位谱系要求 female）。"
         }
       }
     },
@@ -4191,7 +4191,7 @@
     },
     "effAdvanceClock": {
       "type": "object",
-      "description": "战场时钟推进：board.clock += N（mod 72）。触发 on_phase_change。时钟只进不退——不提供回拨算子，「回到过去」走已有的 保存/重启/命运循环（快照回滚，原著水银之蛇「非逆转时光」）。见 docs/ddd/params/战场参数.md §1.3",
+      "description": "战场时钟推进：board.clock += N（mod 72）。触发 on_phase_change。时钟只进不退——不提供回拨算子，「回到过去」走已有的 保存/重启/命运循环（快照回滚，非逆转时光）。见 docs/ddd/params/战场参数.md §1.3",
       "required": [
         "type"
       ],

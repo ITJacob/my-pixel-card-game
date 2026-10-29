@@ -236,7 +236,7 @@
       "dispelable": true,
       "maxStacks": 3,
       "stackPolicy": "stack",
-      "note": "F16 通用状态最小副本：精神污染叠层（F51 stacks）；污染权柄（序列3）可将其运行时覆写为不可驱散。权威定义见 F16 登记"
+      "note": "F16 通用状态最小副本：精神污染叠层（F51 stacks）；污染权柄可将其运行时覆写为不可驱散。权威定义见 F16 登记"
     },
     {
       "id": "pollution_authority",

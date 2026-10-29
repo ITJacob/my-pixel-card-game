@@ -182,7 +182,7 @@
           "scope": "same_faction"
         }
       },
-      "note": "direction: both（共享内核 §四），与序列2【均衡分割】共用"
+      "note": "direction: both（共享内核 §四），与【均衡分割】共用"
     },
     {
       "id": "rank_jurisdiction",

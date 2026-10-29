@@ -379,7 +379,7 @@
           ],
           "mul": 1.2,
           "target": "damage",
-          "note": "星象类仅在夜空可见：phase ∈ {night, midnight} 时加成 ×1.2；原著星象师序列「占星/星光」"
+          "note": "星象类仅在夜空可见：phase ∈ {night, midnight} 时加成 ×1.2；星象轴「占星/星光」"
         }
       ]
     },
@@ -549,7 +549,7 @@
           "type": "mount_status",
           "statusId": "silence",
           "duration": 5,
-          "note": "原著本途径唯一封技点（单体 5t）；若验证判超模首选砍沉默保留 shackle"
+          "note": "本途径唯一封技点（单体 5t）；若验证判超模首选砍沉默保留 shackle"
         },
         {
           "op": "if",
