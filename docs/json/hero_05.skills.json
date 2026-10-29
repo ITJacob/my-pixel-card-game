@@ -566,7 +566,7 @@
               "statusId": "shackle",
               "duration": 10,
               "target": "target",
-              "note": "星界锚定者无处可逃：枷锁延长 10tick（PENDING 窥秘人 #3 闭环）"
+              "note": "星界锚定者无处可逃：枷锁延长 10tick"
             }
           ],
           "else": []

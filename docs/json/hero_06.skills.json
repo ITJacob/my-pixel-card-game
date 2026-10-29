@@ -851,7 +851,7 @@
               "else": []
             }
           ],
-          "note": "F52 target_has_status 已泛化为共享内核 §三 has_status(side,id,cmp,n)（新增项 2）；嵌套 If 表达「混乱或厄运」，避开未落地的 any_of 组合子"
+          "note": "F52 target_has_status 已泛化为共享内核 §三 has_status(side,id,cmp,n)（新增项 2）；嵌套 If 表达「混乱或厄运」"
         }
       ],
       "tentative": false,

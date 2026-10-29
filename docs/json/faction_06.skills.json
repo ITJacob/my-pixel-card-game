@@ -209,7 +209,7 @@
       "duration": null,
       "maxStacks": 3,
       "stackPolicy": "stack",
-      "note": "H11 计数型资源状态（新增项 1 主体已落：F51 stacks + F48 consume；唯「监听自身获得指定状态」触发面未落）。maxStacks 基础 3，可被绝对灵感 +1（→4）、赢家 +3（→6）提升。消耗出口：赢家 4 层换免死 / 赐福 2 层换祝福 / 重启循环 3 层续接"
+      "note": "H11 计数型资源状态（新增项 1：F51 stacks + F48 consume）。maxStacks 基础 3，可被绝对灵感 +1（→4）、赢家 +3（→6）提升。消耗出口：赢家 4 层换免死 / 赐福 2 层换祝福 / 重启循环 3 层续接"
     },
     {
       "id": "tide_low",

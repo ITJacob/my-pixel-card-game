@@ -4124,7 +4124,7 @@
             "exemptions",
             "scope"
           ],
-          "description": "规则槽字段枚举校验（防非法字段写入），见 lawyer PENDING / 效果上下文 §2.1。"
+          "description": "规则槽字段枚举校验（防非法字段写入），见效果上下文 §2.1。"
         },
         "value": {
           "description": "写入的规则内容（结构按 field 语义：trigger=触发条件 / punish=惩罚载荷 / exemptions=豁免名单 / scope=作用范围）。"
@@ -4166,7 +4166,7 @@
             "exemptions",
             "scope"
           ],
-          "description": "规则槽字段枚举校验（防非法字段写入），见 lawyer PENDING / 效果上下文 §2.1。"
+          "description": "规则槽字段枚举校验（防非法字段写入），见效果上下文 §2.1。"
         },
         "value": {
           "description": "改写的规则内容或增量。"

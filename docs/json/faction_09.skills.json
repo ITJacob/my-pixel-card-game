@@ -74,21 +74,21 @@
           "count": 1,
           "atkRatio": 0.5,
           "hpRatio": 0.4,
-          "note": "占位：1 层刻印 → 弱恶魔"
+          "note": "1 层刻印 → 弱恶魔"
         },
         {
           "stacks": 3,
           "count": 1,
           "atkRatio": 0.8,
           "hpRatio": 0.6,
-          "note": "占位：3 层 → 中阶恶魔"
+          "note": "3 层 → 中阶恶魔"
         },
         {
           "stacks": 5,
           "count": 2,
           "atkRatio": 1.0,
           "hpRatio": 0.8,
-          "note": "占位：5 层 → 双恶魔 / 换高阶模板"
+          "note": "5 层 → 双恶魔 / 换高阶模板"
         }
       ]
     },
@@ -512,7 +512,7 @@
               "mode": "set",
               "duration": 0,
               "target": "self",
-              "note": "该次伤害 ×0（替身承受）的表达锚点：以伤害链截断载荷承载，待内核裁定精确写法"
+              "note": "该次伤害 ×0（替身承受）的表达锚点：以伤害链截断载荷承载"
             },
             {
               "type": "move",

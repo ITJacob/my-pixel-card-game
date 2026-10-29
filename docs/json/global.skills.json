@@ -91,7 +91,7 @@
       "modifiers": {
         "gaugeRateMul": 0.7
       },
-      "note": "通用减速：行动速率 ×mul（mul<1）。归并纯减速私有换皮所得机制桩。基准 gaugeRateMul 0.7，卡面 mount_status 传 value 覆盖。纯禁位移(moveImmune) 不在此，另见 immobilize（待建）。乘区审批：0.7=标准减伤母版档（H3 已裁定）/0.75=轻减档"
+      "note": "通用减速：行动速率 ×mul（mul<1）。归并纯减速私有换皮所得机制桩。基准 gaugeRateMul 0.7，卡面 mount_status 传 value 覆盖。纯禁位移(moveImmune) 不在此。乘区审批：0.7=标准减伤母版档（H3 已裁定）/0.75=轻减档"
     },
     {
       "id": "counter_stance",

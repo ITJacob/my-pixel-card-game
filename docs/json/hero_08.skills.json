@@ -1168,7 +1168,7 @@
               "element": "lightning",
               "value": 1,
               "target": "all_enemies",
-              "note": "跨源读取：厄运在场，天灾追加 1（补既有 note 未落地段）"
+              "note": "跨源读取：厄运在场，天灾追加 1"
             }
           ],
           "else": [],
