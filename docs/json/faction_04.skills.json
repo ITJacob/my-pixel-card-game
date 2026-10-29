@@ -15,7 +15,7 @@
       "modifiers": {
         "see_through": true
       },
-      "note": "识破分支（C8，共享内核参数 §四）：敌方隐匿/潜行类状态对持有者无效 层数引擎 2026-09-29 环节⑤补（maxStacks 3 / refresh）层数档已定（2026-10-01 标定批）：maxStacks 3 + refresh 基准档——层数=强度/资源深度档，产层-读层闭环见轴元数据。。",
+      "note": "识破分支（C8，共享内核参数 §四）：敌方隐匿/潜行类状态对持有者无效",
       "maxStacks": 3,
       "stackPolicy": "refresh"
     },
@@ -181,7 +181,7 @@
       ],
       "dispelable": true,
       "duration": 30,
-      "note": "F9 已登记；权威定义见状态表，此处为引用副本 层数引擎 2026-09-29 环节⑤补（maxStacks 3 / refresh；收尸人亡者轴身份锚定同修）层数档已定（2026-10-01）：3 层 refresh 枢纽标准档（跨系共享Hub，层数读档上限）。",
+      "note": "F9 已登记；权威定义见状态表，此处为引用副本",
       "crossPathway": true,
       "participants": [
         "apprentice",
@@ -405,7 +405,7 @@
       "baseOn": "summon_baseline",
       "hpRatio": 0.25,
       "atkRatio": 0.4,
-      "note": "H1 召唤物基线模板（编队参数 §2.4 本稿新增项 15） ｜ 2026-10-02 unitType 补登对齐权威表（召唤物参数.md §一）",
+      "note": "H1 召唤物基线模板（编队参数 §2.4 本稿新增项 15） ｜ unitType 补登对齐权威表（召唤物参数.md §一）",
       "unitType": "CONSTRUCT"
     }
   ],

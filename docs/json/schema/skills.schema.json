@@ -106,7 +106,7 @@
             "thrown",
             "spell"
           ],
-          "description": "攻击作用形态（与双方站位正交；决定对撞/反击触发与可拦截性）：melee=近身对抗（贴身，触发决斗姿态对撞，可为物理或法术），thrown=有形投射物发射（弓箭/投矛/火球等抛射，可被守卫姿态拦截、触发反击姿态，可为物理或法术），spell=无形作用（诅咒/祝福/精神影响等无投射物，不可被拦截、仍触发反击姿态）；非攻击类写 none。原 ranged 已按形态拆为 thrown / spell（2026-10-04）。"
+          "description": "攻击作用形态（与双方站位正交；决定对撞/反击触发与可拦截性）：melee=近身对抗（贴身，触发决斗姿态对撞，可为物理或法术），thrown=有形投射物发射（弓箭/投矛/火球等抛射，可被守卫姿态拦截、触发反击姿态，可为物理或法术），spell=无形作用（诅咒/祝福/精神影响等无投射物，不可被拦截、仍触发反击姿态）；非攻击类写 none。原 ranged 已按形态拆为 thrown / spell。"
         },
         "target": {
           "$ref": "#/$defs/cardTarget"
@@ -116,7 +116,7 @@
           "items": {
             "$ref": "#/$defs/triggerEvent"
           },
-          "description": "被动技能的挂载触发点（数组；与 triggers[].event 同源 triggerEvent 枚举，任一事件触发即执行主体 effects）。2026-10-04 由标量改为数组：标量与 triggers[] 本是同一级事件，但 hook 单选导致 t=0 兜底只能塞进 triggers[]，故统一为数组。语义边界：多个事件共享同一套主体 effects，而非每事件配一套 effects；effects 内无法判断本次被哪个事件触发（condition 全集 36 种均为世界状态判断，无 trigger_is/event_is），故数组只适用于「同效多挂载点」（各事件跑出来的结果语义等价、重复执行无害）。若不同事件需执行不同效果（异效），主事件放 hook、其余事件放 triggers[]——其每项自带 event + inline effects + condition + consumeCharge/consume + global。"
+          "description": "被动技能的挂载触发点（数组；与 triggers[].event 同源 triggerEvent 枚举，任一事件触发即执行主体 effects）。由标量改为数组：标量与 triggers[] 本是同一级事件，但 hook 单选导致 t=0 兜底只能塞进 triggers[]，故统一为数组。语义边界：多个事件共享同一套主体 effects，而非每事件配一套 effects；effects 内无法判断本次被哪个事件触发（condition 全集 36 种均为世界状态判断，无 trigger_is/event_is），故数组只适用于「同效多挂载点」（各事件跑出来的结果语义等价、重复执行无害）。若不同事件需执行不同效果（异效），主事件放 hook、其余事件放 triggers[]——其每项自带 event + inline effects + condition + consumeCharge/consume + global。"
         },
         "equipment": {
           "$ref": "#/$defs/equipmentSpec",
@@ -354,7 +354,7 @@
     },
     "summonSpec": {
       "type": "object",
-      "description": "召唤载荷（仅 kind=summon，2026-10-23 召唤牌化）：打出即落场。卡面只写实例参数；unitType/基线属性/技能组由途径顶层 unitDefs 蓝本兜底，不两写。template/reviveOf/zone 语义留在 spawn 原语，不进入本载荷。",
+      "description": "召唤载荷（仅 kind=summon）：打出即落场。卡面只写实例参数；unitType/基线属性/技能组由途径顶层 unitDefs 蓝本兜底，不两写。template/reviveOf/zone 语义留在 spawn 原语，不进入本载荷。",
       "required": [
         "unitId"
       ],
@@ -449,7 +449,7 @@
             "luminance",
             "death_tally"
           ],
-          "description": "挂钩的战场维度：隐秘值 / 秩序度 / 命运值 / 光照度 / 死亡簿（2026-10-02 量表族第 6 员，死亡结算 +1、cap 10，见 源质维度与跨系枢纽.md §一点五）。光照度取值域 int[0,10]，官方档位 2 / 5 / 8（见 docs/ddd/params/战场参数.md §1.3b）。"
+          "description": "挂钩的战场维度：隐秘值 / 秩序度 / 命运值 / 光照度 / 死亡簿（死亡结算 +1、cap 10，见 源质维度与跨系枢纽.md §一点五）。光照度取值域 int[0,10]，官方档位 2 / 5 / 8（见 docs/ddd/params/战场参数.md §1.3b）。"
         },
         "comparator": {
           "type": "string",
@@ -482,7 +482,7 @@
             "all",
             "cost"
           ],
-          "description": "乘区作用目标；默认 damage。rule_strength 用于秩序度类规则强度系数；cost 用于折费（2026-10-01 时空迷宫批：支付阶段读取 board.<dim>，本卡能量费乘 mul，mul<1 为折扣）。"
+          "description": "乘区作用目标；默认 damage。rule_strength 用于秩序度类规则强度系数；cost 用于折费（本卡能量费乘 mul，mul<1 为折扣）。"
         },
         "filterTags": {
           "type": "array",
@@ -644,7 +644,7 @@
           "$ref": "#/$defs/unitFilter"
         },
         "anchor": {
-          "description": "几何原点/参照，只回答『从哪量几何』。缺省按 faction 推导（enemy→enemy_front，ally/self→self）。ally_front=我方同路排首（守护/替承/前排增益语义，2026-10-03 §轴签名 提案A）；enemy_back=敌方同路最后排（暗杀/狙击后排，提案B）。specific_unit(<id>)/fixed_cell(<index>)/unit_doppelganger 等动态寻址用 anyOf 放宽为字符串。净化后不再承载阵营/排序/位置（§10.1）。",
+          "description": "几何原点/参照，只回答『从哪量几何』。缺省按 faction 推导（enemy→enemy_front，ally/self→self）。ally_front=我方同路排首（守护/替承/前排增益语义）；enemy_back=敌方同路最后排（暗杀/狙击后排，提案B）。specific_unit(<id>)/fixed_cell(<index>)/unit_doppelganger 等动态寻址用 anyOf 放宽为字符串。净化后不再承载阵营/排序/位置（§10.1）。",
           "anyOf": [
             {
               "enum": [
@@ -1444,7 +1444,7 @@
             "order",
             "fate_value"
           ],
-          "description": "资源标识。单位级 Pool：hp/energy/shield/armor/lust（下限截断 0）；迷失值 lost（界域租金/清零）；行动条 Gauge：gauge.current。战场级量表（2026-10-01 起，值域截断见 源质维度与跨系枢纽.md §二–§四）：secrecy/order（[0,10]）、fate_value（[−10,+10]）；战场量表写入仅限 ddd 登记写入方（fate_value 仅怪物）。加血请用 heal。"
+          "description": "资源标识。单位级 Pool：hp/energy/shield/armor/lust（下限截断 0）；迷失值 lost（界域租金/清零）；行动条 Gauge：gauge.current。战场级量表（值域截断见 源质维度与跨系枢纽.md §二–§四）：secrecy/order（[0,10]）、fate_value（[−10,+10]）；战场量表写入仅限 ddd 登记写入方（fate_value 仅怪物）。加血请用 heal。"
         },
         "value": {
           "$ref": "#/$defs/scalar"
@@ -1541,11 +1541,11 @@
         },
         "unitId": {
           "type": "string",
-          "description": "召唤物单位 id（引用 unitDefs 或全局单位蓝本；静态具名单位唯一正键，2026-10-01 裁定原 unit 键并入本键）"
+          "description": "召唤物单位 id（引用 unitDefs 或全局单位蓝本，静态具名单位唯一正键）"
         },
         "template": {
           "type": "string",
-          "description": "模板来源——动态模板（killed_unit / primary_target / holder）或固定蓝本 template 名（2026-10-01 补登记）。"
+          "description": "模板来源——动态模板（killed_unit / primary_target / holder）或固定蓝本 template 名。"
         },
         "def": {
           "type": "string",
@@ -2118,13 +2118,13 @@
         },
         "target": {
           "type": "string",
-          "description": "回响主体：目标单位最近一次技能；缺省=施法者自身（2026-10-23 E3 借序：target 指向敌方即借对手动作）"
+          "description": "回响主体：目标单位最近一次技能；缺省=施法者自身"
         }
       }
     },
     "effGaugeShuffle": {
       "type": "object",
-      "description": "行动条数值集合守恒重排（R5 合规：重分配既有数值，非随机生成）。作用域随 target 锚点，省略 = 卡面目标全集。2026-10-02 转正（律师差异化迭代），语义见 docs/ddd/params/效果参数.md。",
+      "description": "行动条数值集合守恒重排（R5 合规：重分配既有数值，非随机生成）。作用域随 target 锚点，省略 = 卡面目标全集。转正（律师差异化迭代），语义见 docs/ddd/params/效果参数.md。",
       "required": [
         "type",
         "resource"
@@ -2148,7 +2148,7 @@
     },
     "effStatusShuffle": {
       "type": "object",
-      "description": "状态乱序：mode rotate = 作用域内单位按 sort 排序后轮转易主 count 个状态。作用域随 target 锚点，省略 = 卡面目标全集。2026-10-02 转正（律师差异化迭代）。",
+      "description": "状态乱序：mode rotate = 作用域内单位按 sort 排序后轮转易主 count 个状态。作用域随 target 锚点，省略 = 卡面目标全集。转正（律师差异化迭代）。",
       "required": [
         "type"
       ],
@@ -3467,7 +3467,7 @@
         },
         "side": {
           "type": "string",
-          "description": "作用侧（all / ally / enemy / both）——disable_effect 与 empower 必填；seal_effect 与 cost_mod 天然敌我双向，不写本字段（2026-10-02 对齐 ddd 正典，原必填修正）。"
+          "description": "作用侧（all / ally / enemy / both）——disable_effect 与 empower 必填；seal_effect 与 cost_mod 天然敌我双向，不写本字段（原必填修正）。"
         },
         "tag": {
           "oneOf": [
@@ -3513,7 +3513,7 @@
         },
         "delta": {
           "type": "integer",
-          "description": "cost_mod 的成本增减（如 1 = 费用 +1）；仅 cost_mod kind 使用，2026-10-02 补登（口径见 docs/ddd/params/战场参数.md §1.2）。"
+          "description": "cost_mod 的成本增减（如 1 = 费用 +1）；仅 cost_mod kind 使用，补登（口径见 docs/ddd/params/战场参数.md §1.2）。"
         },
         "note": {
           "type": "string"
@@ -3951,7 +3951,7 @@
     },
     "effectTarget": {
       "type": "string",
-      "description": "效果级目标锚点（相对卡面 target 的二次寻址）。新增取值须先在共享内核参数登记。 board = 战场级锚点（2026-10-01 量表批）：承载 board 量表写入（modify_resource 的 secrecy/order/fate_value）。 rule_breaker = 规则槽 punish 载荷语境下的违约单位（2026-10-16 登记，当前仅见于 write_rule_slot.value.punish[].target）。",
+      "description": "效果级目标锚点（相对卡面 target 的二次寻址）。新增取值须先在共享内核参数登记。board = 战场级锚点：承载 board 量表写入（modify_resource 的 secrecy/order/fate_value）。rule_breaker = 规则槽 punish 载荷语境下的违约单位（当前仅见于 write_rule_slot.value.punish[].target）。",
       "enum": [
         "self",
         "caster",
@@ -3982,7 +3982,7 @@
     },
     "sortKey": {
       "type": "string",
-      "description": "目标排序键。取值域见 ddd/params/共享内核参数.md（该处于 2026-09-14 已登记 atk_asc，schema 于 2026-09-16 同步）。",
+      "description": "目标排序键。取值域见 ddd/params/共享内核参数.md。",
       "enum": [
         "none",
         "hp_asc",

@@ -366,7 +366,7 @@
               "statusId": "guardianship",
               "duration": 10,
               "target": "self",
-              "note": "独身守护：无被守护者，仅取自身减伤语义（环节⑤ 2026-09-29 补产层段）＋守护次数 2",
+              "note": "独身守护：无被守护者，仅取自身减伤语义＋守护次数 2",
               "charges": 2
             },
             {
@@ -443,7 +443,7 @@
               "binding": {
                 "guardTarget": "target"
               },
-              "note": "守护轴身份状态（2026-09-29 自 common guard 分叉私有化）"
+              "note": "守护轴身份状态"
             },
             {
               "type": "mount_status",

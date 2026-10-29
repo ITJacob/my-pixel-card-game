@@ -51,7 +51,7 @@
           "type": "mount_status",
           "statusId": "disease",
           "duration": 15,
-          "note": "黑焰燎疾：疫由焰生（环节⑤ 2026-09-29 补产层段）"
+          "note": "黑焰燎疾：疫由焰生"
         },
         {
           "type": "translocate",
@@ -184,7 +184,7 @@
           "charges": 1,
           "duration": 20,
           "target": "self",
-          "note": "镜中藏替：占卜时预置替身（环节⑤ 2026-09-29 补产层段）"
+          "note": "镜中藏替：占卜时预置替身"
         },
         {
           "type": "modify_targetability",
@@ -621,7 +621,7 @@
               "type": "mount_status",
               "statusId": "petrification",
               "duration": 20,
-              "note": "傀儡易石化：目标带提线木偶则石化延长至 20tick（环节⑤ 2026-09-29 跨系读层段：form→seer puppet_string）"
+              "note": "傀儡易石化：目标带提线木偶则石化延长至 20tick"
             },
             {
               "type": "modify_resource",
@@ -1042,7 +1042,7 @@
                   "mode": "delta",
                   "duration": 15,
                   "target": "enemy",
-                  "note": "形态极致：自身形态掌握在场则静止多压 3 点速率（环节⑤ 2026-09-29 补读层段：assassin_form payoff 升 landed）"
+                  "note": "形态极致：自身形态掌握在场则静止多压 3 点速率"
                 }
               ],
               "else": []
@@ -1061,7 +1061,7 @@
                   "type": "heal",
                   "value": 3,
                   "target": "self",
-                  "note": "镜中静养：自身镜子替身在场则静止后回补 3 点生命（环节⑤ 2026-09-29 跨轴读层段：form→mirror）"
+                  "note": "镜中静养：自身镜子替身在场则静止后回补 3 点生命"
                 }
               ],
               "else": []
@@ -1116,7 +1116,7 @@
                   "target": "self"
                 }
               ],
-              "note": "影中权威加持（环节⑤ 2026-09-29 跨系读层段：form→sleepless conceal_authority）"
+              "note": "影中权威加持"
             }
           ],
           "else": [
@@ -1219,7 +1219,7 @@
           "stackMode": "add",
           "duration": null,
           "target": "self",
-          "note": "形态变换积累形态掌握（环节⑤ 2026-09-29 补产层段）"
+          "note": "形态变换积累形态掌握"
         },
         {
           "type": "modify_targetability",
@@ -1269,7 +1269,7 @@
           "stackMode": "add",
           "duration": null,
           "target": "self",
-          "note": "形态变换积累形态掌握（环节⑤ 2026-09-29 补产层段）"
+          "note": "形态变换积累形态掌握"
         },
         {
           "type": "modify_targetability",

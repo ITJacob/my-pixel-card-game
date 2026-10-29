@@ -188,7 +188,7 @@
               "target": "self"
             }
           ],
-          "note": "2026-10-25 开局生效回补：一次性激活（原 hook 载荷）"
+          "note": "开局生效回补：一次性激活（原 hook 载荷）"
         }
       ]
     },
@@ -277,7 +277,7 @@
             }
           ],
           "else": [],
-          "note": "跨系读层段：monster→assassin doom（2026-09-29 跨系批二）"
+          "note": "跨系读层段：monster→assassin doom"
         },
         {
           "type": "modify_stat",
@@ -354,7 +354,7 @@
               "note": "风暴余波：目标短暂陷入混乱"
             }
           ],
-          "note": "混乱集火读取 + 第二写入方（2026-10-24 ⑤）"
+          "note": "混乱集火读取 + 第二写入方"
         }
       ],
       "tentative": false
@@ -570,7 +570,7 @@
           "threshold": 6,
           "mul": 0.75,
           "target": "cost",
-          "note": "死亡簿折费（2026-10-02 矩阵复审）：board.death_tally≥6 时，本卡能量费 ×0.75——崩坏中的世界处处是厄运"
+          "note": "死亡簿折费：board.death_tally≥6 时，本卡能量费 ×0.75——崩坏中的世界处处是厄运"
         }
       ]
     },
@@ -869,7 +869,7 @@
           "threshold": 3,
           "mul": 1.5,
           "target": "damage",
-          "note": "死亡簿读层（2026-10-02 矩阵复审）：board.death_tally≥3 时，看守者对混乱/厄运敌人的伤害 ×1.5——死者的命运归于看守者"
+          "note": "死亡簿读层：board.death_tally≥3 时，看守者对混乱/厄运敌人的伤害 ×1.5——死者的命运归于看守者"
         }
       ]
     },
@@ -1081,7 +1081,7 @@
           "value": 1,
           "mode": "delta",
           "target": "board",
-          "note": "命运值写入（2026-10-01 量表写入批）：战斗开始时一次性 +1。"
+          "note": "命运值写入：战斗开始时一次性 +1。"
         }
       ],
       "tentative": false,
@@ -1176,7 +1176,7 @@
           "value": -1,
           "mode": "delta",
           "target": "board",
-          "note": "命运值写入（2026-10-01 量表写入批）：-1 推向 ≤−5 反噬档（怪物自身承担反噬风险，R5 合规语义）。"
+          "note": "命运值写入：-1 推向 ≤−5 反噬档（怪物自身承担反噬风险，R5 合规语义）。"
         },
         {
           "type": "advance_clock",
@@ -1532,7 +1532,7 @@
           "value": 1,
           "mode": "delta",
           "target": "board",
-          "note": "命运值写入（2026-10-01 量表写入批）：怪物为 fate_value 唯一登记写入方；+1 推向 ≥+5 好运档。"
+          "note": "命运值写入：怪物为 fate_value 唯一登记写入方；+1 推向 ≥+5 好运档。"
         },
         {
           "type": "modify_resource",

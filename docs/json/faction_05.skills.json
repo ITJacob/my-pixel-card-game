@@ -54,7 +54,7 @@
       "duration": null,
       "maxStacks": 3,
       "stackPolicy": "stack",
-      "note": "SS2 计数型状态（H11 母版，与 F1 inscription 同源）；由技能显式 +1，消耗走 F48 status.consume ｜ 2026-10-02 批次十：behaviorModifiers cast_time_set 卷轴技法（省时 不归零）",
+      "note": "SS2 计数型状态（H11 母版，与 F1 inscription 同源）；由技能显式 +1，消耗走 F48 status.consume ｜ behaviorModifiers cast_time_set 卷轴技法（省时 不归零）",
       "stackThreshold": {
         "stacks": 2,
         "effects": [
@@ -346,7 +346,7 @@
       "duration": null,
       "maxStacks": 1,
       "stackPolicy": "stack",
-      "note": "跨源质可读白名单（PENDING 窥秘人 #3）：服务于『篡改·信息』combo；傀儡系侧亦有【重组】卡，故并列参与者。 ｜ 2026-10-23 接线：participants 扩 savant（机械维修读取同源重组）。",
+      "note": "跨源质可读白名单（PENDING 窥秘人 #3）：服务于『篡改·信息』combo；傀儡系侧亦有【重组】卡，故并列参与者。｜ 接线：participants 扩 savant（机械维修读取同源重组）。",
       "crossPathway": true,
       "participants": [
         "pryer",
@@ -494,7 +494,7 @@
       "dispelable": true,
       "duration": 50,
       "maxStacks": 1,
-      "note": "格斗轴身份状态（2026-09-29 自 common energy_strain 分叉私有化，语义蓝本同源：能量消耗 ×1.5，被灌输错乱知识而施法吃力）；common energy_strain 保留为全库通用耗能工具（仲裁人律令等通用挂载不改指）。",
+      "note": "格斗轴身份状态（语义蓝本同源：能量消耗 ×1.5，被灌输错乱知识而施法吃力）；common energy_strain 保留为全库通用耗能工具（仲裁人律令等通用挂载不改指）。",
       "behaviorModifiers": [
         {
           "op": "energy_cost_mul",

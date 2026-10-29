@@ -14,7 +14,7 @@
       "modifiers": {
         "shieldDelta": 5
       },
-      "note": "2026-10-02 拍板层叠制（弃 maxStacks:1，层数不设上限）：各层独立 shield 层池，后加持先结算 LIFO；每层时限/次数独立（defaultDuration 6 / delta 5），不融合、不刷新、不顶替——重复加持行为须卡面特殊说明；不抵 DoT；减伤顺序=护盾→护甲→抗性→防御（效果上下文 §三）。"
+      "note": "拍板层叠制（弃 maxStacks:1，层数不设上限）：各层独立 shield 层池，后加持先结算 LIFO；每层时限/次数独立（defaultDuration 6 / delta 5），不融合、不刷新、不顶替——重复加持行为须卡面特殊说明；不抵 DoT；减伤顺序=护盾→护甲→抗性→防御（效果上下文 §三）。"
     },
     {
       "id": "taunt",
@@ -77,7 +77,7 @@
         "moveImmune": true,
         "gaugeRateMul": 0.7
       },
-      "note": "F7 已登记定义（H24 减速族：禁位移 + gauge_rate ×0.7）。原 6 途径各一份重复 def 已合并为此权威定义（2026-09-19）。 乘区审批：0.7=标准减伤母版档（H3 已裁定）/0.75=轻减档"
+      "note": "F7 已登记定义（H24 减速族：禁位移 + gauge_rate ×0.7）。原 6 途径各一份重复 def 已合并为此权威定义。乘区审批：0.7=标准减伤母版档（H3 已裁定）/0.75=轻减档"
     },
     {
       "id": "slow",
@@ -91,7 +91,7 @@
       "modifiers": {
         "gaugeRateMul": 0.7
       },
-      "note": "通用减速：行动速率 ×mul（mul<1）。归并纯减速私有换皮所得机制桩（2026-09-19 降格批次4）。基准 gaugeRateMul 0.7，卡面 mount_status 传 value 覆盖。纯禁位移(moveImmune) 不在此，另见 immobilize（待建）。 乘区审批：0.7=标准减伤母版档（H3 已裁定）/0.75=轻减档"
+      "note": "通用减速：行动速率 ×mul（mul<1）。归并纯减速私有换皮所得机制桩。基准 gaugeRateMul 0.7，卡面 mount_status 传 value 覆盖。纯禁位移(moveImmune) 不在此，另见 immobilize（待建）。乘区审批：0.7=标准减伤母版档（H3 已裁定）/0.75=轻减档"
     },
     {
       "id": "counter_stance",
@@ -102,7 +102,7 @@
       "dispelable": true,
       "duration": 15,
       "charges": 2,
-      "note": "与决斗姿态对称的远程面（2026-10-02 设计落地）：受投掷 / 法术攻击（reach ∈ {thrown, spell}）时顺序反击——先结算主攻击、再以反作用动作回击攻击者（执行上下文 §六，sourceRef=ranged_counter）；还击的是攻击者本人而非弹道，故法术虽无形、守卫姿态不可拦，照样触发反击。对撞的同步性仍为决斗姿态独有。charges 2：前 2 次远程受击反击，每次生效消耗 1 层（R5 确定性）。姿态生命周期同 INV-P8 跳过维持 / INV-P9 行动退出 / INV-P5 硬控清除。挂载卡：战士·守护状态 / 猎人·挑衅（矩阵 stance 行共享列）。数值按当前档。"
+      "note": "与决斗姿态对称的远程面：受投掷 / 法术攻击（reach ∈ {thrown, spell}）时顺序反击——先结算主攻击、再以反作用动作回击攻击者（执行上下文 §六，sourceRef=ranged_counter）；还击的是攻击者本人而非弹道，故法术虽无形、守卫姿态不可拦，照样触发反击。对撞的同步性仍为决斗姿态独有。charges 2：前 2 次远程受击反击，每次生效消耗 1 层（R5 确定性）。姿态生命周期同 INV-P8 跳过维持 / INV-P9 行动退出 / INV-P5 硬控清除。挂载卡：战士·守护状态 / 猎人·挑衅（矩阵 stance 行共享列）。数值按当前档。"
     },
     {
       "id": "regen",
@@ -146,7 +146,7 @@
         "dotOnTick": 0.4,
         "dot_element": "fire"
       },
-      "note": "通用火属性 DOT，多处引用但 §2.2 未单列裁定；数值定档：duration 15tick / maxStacks 3 refresh / 0.4 点每 tick（总量 6 点，对齐单卡预算锚）。2026-10-09 全库 DoT 校正：原 2/tick 系回合→tick 换算残留（3 回合 × 2 点/回合 被写成 15 tick × 2 点/tick，总量膨胀 5 倍），与各途径 DoT 状态同批 ÷5。",
+      "note": "通用火属性 DOT，多处引用但 §2.2 未单列裁定；数值定档：duration 15tick / maxStacks 3 refresh / 0.4 点每 tick（总量 6 点，对齐单卡预算锚）。全库 DoT 校正：原 2/tick 系回合→tick 换算残留（3 回合 × 2 点/回合 被写成 15 tick × 2 点/tick，总量膨胀 5 倍），与各途径 DoT 状态同批 ÷5。",
       "element": "fire",
       "triggers": [
         {

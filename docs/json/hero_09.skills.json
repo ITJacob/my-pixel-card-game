@@ -413,7 +413,7 @@
               "type": "damage",
               "element": "mental",
               "value": 3,
-              "note": "失控即爆：目标恶欲值 ≥6（失控档）则炸弹提前引爆追加 3 点精神伤害（环节⑤ 2026-09-29 补读层段：lust 池 payoff 升 landed）"
+              "note": "失控即爆：目标恶欲值 ≥6（失控档）则炸弹提前引爆追加 3 点精神伤害"
             }
           ],
           "else": []
@@ -432,7 +432,7 @@
               "type": "damage",
               "element": "mental",
               "value": 2,
-              "note": "腐蚀助燃：目标已被腐蚀（友方律师所挂）则欲火更烈，追加 2 点（环节⑤ 2026-09-29 二轮跨系读层段：vice→lawyer corrupted）"
+              "note": "腐蚀助燃：目标已被腐蚀（友方律师所挂）则欲火更烈，追加 2 点"
             }
           ],
           "else": []
@@ -722,7 +722,7 @@
           "type": "mount_status",
           "statusId": "sulfur_toxin",
           "duration": 15,
-          "note": "酸凝为毒：主目标硫磺剧毒 15tick（环节⑤ 2026-09-29 补产层段）"
+          "note": "酸凝为毒：主目标硫磺剧毒 15tick"
         },
         {
           "type": "modify_resource",
@@ -789,7 +789,7 @@
               "type": "damage",
               "element": "dark",
               "value": 2,
-              "note": "硫磺助燃：目标带硫磺剧毒则伤害 +2（环节⑤ 2026-09-29 补读层段：sulfur_toxin payoff 升 landed）"
+              "note": "硫磺助燃：目标带硫磺剧毒则伤害 +2"
             }
           ],
           "else": []
@@ -1466,7 +1466,7 @@
                   "type": "damage",
                   "element": "poison",
                   "value": 2,
-                  "note": "秽土深耕：目标已污秽则追加 2 点毒素伤害（环节⑤ 2026-09-29 补读层段：filth payoff 升 landed）"
+                  "note": "秽土深耕：目标已污秽则追加 2 点毒素伤害"
                 }
               ],
               "else": []
@@ -1501,7 +1501,7 @@
             }
           ],
           "else": [],
-          "note": "跨系接线（2026-10-23）：读取枢纽 abundance"
+          "note": "跨系接线：读取枢纽 abundance"
         }
       ],
       "tentative": false

@@ -40,7 +40,7 @@
           "stackMode": "add",
           "duration": 50,
           "target": "target",
-          "note": "调配出一瓶备用药水交予友军（环节⑤ 2026-09-29 补产层段）"
+          "note": "调配出一瓶备用药水交予友军"
         },
         {
           "type": "grant_immunity",
@@ -141,7 +141,7 @@
             {
               "type": "heal",
               "value": 2,
-              "note": "药水激效：带预服药水者治疗 +2（环节⑤ 2026-09-29 补读层段：brew payoff 落地）"
+              "note": "药水激效：带预服药水者治疗 +2"
             }
           ],
           "else": []

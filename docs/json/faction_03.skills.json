@@ -43,7 +43,7 @@
           "note": "你对被标记单位造成的伤害 +1（施加者侧过滤）"
         }
       },
-      "note": "识破分支（共享内核 §四）+ 排序键 status:marked:desc；施加者=被动持有者 层数引擎 2026-09-29 环节⑤补（maxStacks 3）层数档已定（2026-10-01 标定批）：maxStacks 3 + refresh 基准档——层数=强度/资源深度档，产层-读层闭环见轴元数据。。",
+      "note": "识破分支（共享内核 §四）+ 排序键 status:marked:desc；施加者=被动持有者",
       "maxStacks": 3,
       "stackPolicy": "refresh"
     },
@@ -108,7 +108,7 @@
           ]
         }
       ],
-      "note": "decree 状态族：rule / punishment 由规则槽承载（on_active_skill 惩罚已迁至 Rules[3] slot0）；本状态保留 duration/charges 标记与 on_turn_start 回合宣示。 ｜ 2026-10-02 补漏批③：on_turn_start 状态面。"
+      "note": "decree 状态族：rule / punishment 由规则槽承载（on_active_skill 惩罚已迁至 Rules[3] slot0）；本状态保留 duration/charges 标记与 on_turn_start 回合宣示。｜ on_turn_start 状态面。"
     },
     {
       "id": "authority",
@@ -140,7 +140,7 @@
           "mul": 1.5
         }
       },
-      "note": "duration +1 走 H14 durationModifier（✅ 已落）；区域数值倍率 🟡 随 zone_jurisdiction 一并落地 层数引擎 2026-09-29 环节⑤补（maxStacks 3）层数档已定（2026-10-01 标定批）：maxStacks 3 + refresh 基准档——层数=强度/资源深度档，产层-读层闭环见轴元数据。。",
+      "note": "duration +1 走 H14 durationModifier（✅ 已落）；区域数值倍率 🟡 随 zone_jurisdiction 一并落地",
       "maxStacks": 3,
       "stackPolicy": "refresh"
     },
@@ -160,7 +160,7 @@
           }
         }
       },
-      "note": "按施法者过滤的 ×1.4（H4，✅ 已落）；「全场唯一持有者 + 改判自动卸载」语义 ddd 尚无字段（🟡 新增项 8）。退化方案：改为易伤（×1.3 全员可用），代价=与既有状态重合失去输出引擎 层数引擎 2026-09-29 环节⑤补（maxStacks 1）。",
+      "note": "按施法者过滤的 ×1.4（H4，✅ 已落）；「全场唯一持有者 + 改判自动卸载」语义 ddd 尚无字段（🟡 新增项 8）。退化方案：改为易伤（×1.3 全员可用），代价=与既有状态重合失去输出引擎",
       "maxStacks": 1
     },
     {
@@ -238,7 +238,7 @@
       "duration": 30,
       "maxStacks": 1,
       "stackPolicy": "refresh",
-      "note": "法令标记（2026-10-23 C1 重构新建）：立规/禁制追击给目标写上法令；执行/反诉卡读层兑现（对带法令目标追加伤害）。可驱散——法令可被废止。"
+      "note": "法令标记：立规/禁制追击给目标写上法令；执行/反诉卡读层兑现（对带法令目标追加伤害）。可驱散——法令可被废止。"
     },
     {
       "id": "corrupted",

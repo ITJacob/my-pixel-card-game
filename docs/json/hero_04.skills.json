@@ -43,7 +43,7 @@
           "statusId": "clairvoyance",
           "duration": 20,
           "target": "self",
-          "note": "占星开启灵视（环节⑤ 2026-09-29 补产层段）"
+          "note": "占星开启灵视"
         },
         {
           "op": "if",
@@ -60,7 +60,7 @@
               "resource": "gauge.current",
               "value": 10,
               "mode": "delta",
-              "note": "命运缝隙共鸣：自身命运缝隙在场则行动条再 +10（环节⑤ 2026-09-29 跨系读层段：foresight→thief fate_gap）"
+              "note": "命运缝隙共鸣：自身命运缝隙在场则行动条再 +10"
             }
           ],
           "else": []
@@ -145,7 +145,7 @@
           "charges": 1,
           "duration": 20,
           "target": "self",
-          "note": "危机预感凝为纸人（环节⑤ 2026-09-29 补产层段）"
+          "note": "危机预感凝为纸人"
         }
       ],
       "triggers": [
@@ -177,7 +177,7 @@
                 }
               ],
               "else": [],
-              "note": "跨系接线（2026-10-23）：读取枢纽 deep_parasitized（迁至命中语境）"
+              "note": "跨系接线：读取枢纽 deep_parasitized（迁至命中语境）"
             }
           ],
           "note": "提线木偶与跨系读层迁至 on_deal_damage（on_turn_start 无受害方）"
@@ -343,7 +343,7 @@
             }
           ],
           "else": [],
-          "note": "跨系接线（2026-10-23）：读取枢纽 fate_gap"
+          "note": "跨系接线：读取枢纽 fate_gap"
         },
         {
           "op": "if",
@@ -363,7 +363,7 @@
             }
           ],
           "else": [],
-          "note": "跨系接线（2026-10-23）：读取枢纽 shadow_double"
+          "note": "跨系接线：读取枢纽 shadow_double"
         }
       ],
       "tentative": false
@@ -409,7 +409,7 @@
           "stacks": 1,
           "stackMode": "add",
           "duration": 20,
-          "note": "以线牵之：转移伤害前先以灵体之线系住目标（环节⑤ 2026-09-29 补产层段）"
+          "note": "以线牵之：转移伤害前先以灵体之线系住目标"
         },
         {
           "op": "if",
@@ -425,7 +425,7 @@
               "type": "heal",
               "value": 2,
               "target": "self",
-              "note": "纸人代承：自身纸人替身在场则转移后回补 2 点生命（环节⑤ 2026-09-29 跨轴读层段：marionette→trick）"
+              "note": "纸人代承：自身纸人替身在场则转移后回补 2 点生命"
             }
           ],
           "else": []

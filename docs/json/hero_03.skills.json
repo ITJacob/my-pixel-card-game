@@ -87,7 +87,7 @@
           "value": 1,
           "mode": "delta",
           "target": "board",
-          "note": "秩序度写入（2026-10-01 量表写入批）：辖区成立秩序 +1。"
+          "note": "秩序度写入：辖区成立秩序 +1。"
         }
       ],
       "tentative": false
@@ -141,7 +141,7 @@
               "type": "damage",
               "element": "mental",
               "value": 2,
-              "note": "标记目标精神破绽毕露：追加 2 点（环节⑤ 2026-09-29 补读层段：inquest payoff 升 landed）"
+              "note": "标记目标精神破绽毕露：追加 2 点"
             }
           ],
           "else": []
@@ -251,7 +251,7 @@
             }
           ],
           "else": [],
-          "note": "跨系读层段：arbiter→savant law_edit（2026-09-29 跨系批二）"
+          "note": "跨系读层段：arbiter→savant law_edit"
         },
         {
           "type": "modify_resource",
@@ -259,7 +259,7 @@
           "value": 1,
           "mode": "delta",
           "target": "board",
-          "note": "秩序度写入（2026-10-01 量表写入批）：立规落地秩序 +1（仲裁人推高，dimHook order≥7 律令 ×1.5 的供源）。"
+          "note": "秩序度写入：立规落地秩序 +1（仲裁人推高，dimHook order≥7 律令 ×1.5 的供源）。"
         }
       ],
       "tentative": false
@@ -511,7 +511,7 @@
             }
           ],
           "else": [],
-          "note": "跨系读层段：arbiter→sleepless conceal_authority（2026-09-29 跨系批）"
+          "note": "跨系读层段：arbiter→sleepless conceal_authority"
         },
         {
           "type": "mount_status",
@@ -678,7 +678,7 @@
           "value": 1,
           "mode": "delta",
           "target": "board",
-          "note": "秩序度写入（2026-10-01 量表写入批）：律令展开秩序 +1。"
+          "note": "秩序度写入：律令展开秩序 +1。"
         }
       ],
       "tags": [
@@ -865,7 +865,7 @@
           "stackMode": "add",
           "duration": null,
           "target": "self",
-          "note": "行使管辖权威：权威质变 +1 层（环节⑤ 2026-09-29 补产层段）"
+          "note": "行使管辖权威：权威质变 +1 层"
         },
         {
           "type": "modify_resource",
@@ -1011,7 +1011,7 @@
             }
           ],
           "else": [],
-          "note": "跨系读层段：arbiter→assassin doom（2026-09-29 跨系批）"
+          "note": "跨系读层段：arbiter→assassin doom"
         },
         {
           "type": "modify_resource",
@@ -1089,7 +1089,7 @@
                   "statusId": "isolated",
                   "duration": 10,
                   "target": "target",
-                  "note": "权威者的分割更彻底：延长 10tick（环节⑤ 2026-09-29 跨轴读层段：decree→jurisdiction）"
+                  "note": "权威者的分割更彻底：延长 10tick"
                 }
               ],
               "else": []

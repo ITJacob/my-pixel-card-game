@@ -232,7 +232,7 @@
               "else": []
             }
           ],
-          "note": "2026-10-25 开局生效回补：一次性激活（原 hook 载荷）"
+          "note": "开局生效回补：一次性激活（原 hook 载荷）"
         }
       ]
     },
@@ -254,7 +254,7 @@
           "statusId": "submerge",
           "duration": null,
           "target": "self",
-          "note": "海洋轴身份深潜（2026-09-29 自 common conceal 分叉私有化）"
+          "note": "海洋轴身份深潜"
         },
         {
           "type": "move",
@@ -369,7 +369,7 @@
               "type": "mount_status",
               "statusId": "emc_disorder",
               "duration": 10,
-              "note": "雷击带电：电磁紊乱 10tick（环节⑤ 2026-09-29 补产层段）"
+              "note": "雷击带电：电磁紊乱 10tick"
             },
             {
               "type": "mount_status",
@@ -533,7 +533,7 @@
             }
           ],
           "else": [],
-          "note": "跨系接线（2026-10-23）：读取枢纽 grazing_slot"
+          "note": "跨系接线：读取枢纽 grazing_slot"
         }
       ],
       "tentative": false
@@ -632,7 +632,7 @@
               "element": "physical",
               "value": 1,
               "target": "all_enemies",
-              "note": "乱流风刃：目标电磁紊乱则风刃更利，全体敌方额外受 1 点（环节⑤ 2026-09-29 补读层段：emc_disorder payoff 升 landed）"
+              "note": "乱流风刃：目标电磁紊乱则风刃更利，全体敌方额外受 1 点"
             }
           ],
           "else": []
@@ -950,10 +950,10 @@
               "statusId": "tide_call",
               "duration": 20,
               "target": "self",
-              "note": "跨系枢纽挂载（2026-09-29 跨系批，产层兼枢纽计数）"
+              "note": "跨系枢纽挂载（产层兼枢纽计数）"
             }
           ],
-          "note": "2026-10-25 开局生效回补：原 on_battle_start 载荷迁入 on_tick 一次激活"
+          "note": "开局生效回补：原 on_battle_start 载荷迁入 on_tick 一次激活"
         }
       ]
     },
@@ -1172,7 +1172,7 @@
             }
           ],
           "else": [],
-          "note": "跨系接线（2026-10-23）：读取枢纽 misfortune"
+          "note": "跨系接线：读取枢纽 misfortune"
         }
       ],
       "tentative": false
@@ -1298,7 +1298,7 @@
               "consumption": "zone",
               "zone": "zone_storm_hell",
               "duration": 25,
-              "note": "深海风暴：自身深潜在场则风暴地狱延长至 25tick（环节⑤ 2026-09-29 跨轴读层段：storm→ocean）"
+              "note": "深海风暴：自身深潜在场则风暴地狱延长至 25tick"
             }
           ],
           "else": [
@@ -1306,8 +1306,7 @@
               "type": "spawn",
               "consumption": "zone",
               "zone": "zone_storm_hell",
-              "duration": 20,
-              "note": "（2026-10-09 时长校正：稿期 4 回合 → 20tick，1 回合=5tick）"
+              "duration": 20
             }
           ]
         },
@@ -1418,7 +1417,7 @@
             }
           ],
           "else": [],
-          "note": "跨系读层段：sailor→assassin doom（2026-09-29 跨系批）"
+          "note": "跨系读层段：sailor→assassin doom"
         }
       ],
       "tentative": false,

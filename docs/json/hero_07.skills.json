@@ -55,7 +55,7 @@
           "statusId": "stealth",
           "duration": 10,
           "target": "self",
-          "note": "当场摔瓶只发挥半数：隐身 10tick（半效档）——药剂必须预服/延迟的身份红线的卡面化（批次十一 2026-10-02）"
+          "note": "当场摔瓶只发挥半数：隐身 10tick（半效档）——药剂必须预服/延迟的身份红线的卡面化"
         },
         {
           "op": "if",
@@ -80,7 +80,7 @@
               "statusId": "stealth",
               "duration": 20,
               "target": "self",
-              "note": "预服全效：战前调服的药剂发挥完全隐身 20tick——预服延迟兑现结构化（红线：当场喝半数以下，批次十一 2026-10-02）"
+              "note": "预服全效：战前调服的药剂发挥完全隐身 20tick——预服延迟兑现结构化（红线：当场喝半数以下）"
             }
           ],
           "else": []
@@ -191,7 +191,7 @@
           "statusId": "remedy_mark",
           "duration": 20,
           "target": "self",
-          "note": "跨系枢纽挂载（2026-09-29 跨系批，产层兼枢纽计数）"
+          "note": "跨系枢纽挂载（产层兼枢纽计数）"
         },
         {
           "type": "grant_immunity",
@@ -225,7 +225,7 @@
                 }
               ],
               "else": [],
-              "note": "跨系读层段：apothecary→lawyer corrupted（2026-09-29 跨系批）"
+              "note": "跨系读层段：apothecary→lawyer corrupted"
             }
           ],
           "note": "跨系读层：打中带腐蚀的目标追加毒伤（迁自开局快照）"
@@ -318,7 +318,7 @@
               "statusId": "moon_cycle",
               "duration": null,
               "target": "self",
-              "note": "强制切相经月相轮转形式组承载（同组新相顶旧相，环节⑤ 2026-09-29 补产层实证）"
+              "note": "强制切相经月相轮转形式组承载（同组新相顶旧相）"
             }
           ]
         }
@@ -609,7 +609,7 @@
               "value": -8,
               "mode": "delta",
               "duration": 30,
-              "note": "生命缩短：生效即截断当前生命，到期回滚不回补（效果参数 §1.1 hp_max 削减截断行，2026-09-04 确认）"
+              "note": "生命缩短：生效即截断当前生命，到期回滚不回补（效果参数 §1.1 hp_max 削减截断行）"
             }
           ]
         }
@@ -789,7 +789,7 @@
             }
           ],
           "else": [],
-          "note": "兽群咬合（caster_has_summon，2026-10-24 ⑤）"
+          "note": "兽群咬合（caster_has_summon）"
         }
       ],
       "tentative": false,
@@ -843,7 +843,7 @@
             }
           ],
           "else": [],
-          "note": "跨系接线（2026-10-23）：读取枢纽 beast_swarm"
+          "note": "跨系接线：读取枢纽 beast_swarm"
         },
         {
           "op": "if",
@@ -938,7 +938,7 @@
               "type": "damage",
               "element": "physical",
               "value": 2,
-              "note": "兽觉指引：伤害 +2（环节⑤ 2026-09-29 补读层段：beasts payoff 落地）"
+              "note": "兽觉指引：伤害 +2"
             }
           ],
           "else": []
@@ -957,7 +957,7 @@
               "type": "damage",
               "element": "physical",
               "value": 1,
-              "note": "药剂激发兽性：自身带预服药水伤害 +1（环节⑤ 2026-09-29 跨轴读层段：beasts→brew）"
+              "note": "药剂激发兽性：自身带预服药水伤害 +1"
             }
           ],
           "else": []

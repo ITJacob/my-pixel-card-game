@@ -108,7 +108,7 @@
               "value": 10,
               "mode": "delta",
               "target": "target",
-              "note": "环节⑤ 2026-09-29 跨轴读层段：astral 卡读 combat 身份"
+              "note": "跨轴读层段：astral 卡读 combat 身份"
             }
           ],
           "else": []
@@ -339,7 +339,7 @@
               "type": "damage",
               "element": "none",
               "value": 2,
-              "note": "星象与命运共鸣：目标带命运诅咒（assassin 枢纽，pryer 在 participants）时追加（环节⑤ 2026-09-29 补跨系读层段）"
+              "note": "星象与命运共鸣：目标带命运诅咒（assassin 枢纽，pryer 在 participants）时追加"
             }
           ],
           "else": []
@@ -430,7 +430,7 @@
               "statusId": "info_form",
               "duration": 15,
               "target": "self",
-              "note": "信息化穿星：穿梭期间自身信息化（不可被单体选中）——info_form 签名第二实证（批次十 2026-10-02）"
+              "note": "信息化穿星：穿梭期间自身信息化（不可被单体选中）——info_form 签名第二实证"
             }
           ]
         }
@@ -566,7 +566,7 @@
               "statusId": "shackle",
               "duration": 10,
               "target": "target",
-              "note": "星界锚定者无处可逃：枷锁延长 10tick（环节⑤ 2026-09-29 落稿面既定意图——读学徒枢纽星界锚，PENDING 窥秘人 #3 闭环）"
+              "note": "星界锚定者无处可逃：枷锁延长 10tick（PENDING 窥秘人 #3 闭环）"
             }
           ],
           "else": []
@@ -608,7 +608,7 @@
             }
           ],
           "else": [],
-          "note": "跨系接线（2026-10-23）：读取枢纽 astral_anchor"
+          "note": "跨系接线：读取枢纽 astral_anchor"
         }
       ],
       "tentative": false,
@@ -774,7 +774,7 @@
                   "type": "damage",
                   "element": "physical",
                   "value": 3,
-                  "note": "耗层换效（环节⑤ 2026-09-29 补读层段：combat payoff 落地）"
+                  "note": "耗层换效"
                 }
               ],
               "else": []
@@ -1040,7 +1040,7 @@
           "stackMode": "add",
           "duration": null,
           "target": "self",
-          "note": "权柄开场即窥视：窥秘之眼 +1 层（环节⑤ 2026-09-29 补产层段，scrying 产层闭环第二实证）"
+          "note": "权柄开场即窥视：窥秘之眼 +1 层（scrying 产层闭环第二实证）"
         },
         {
           "type": "modify_skill",
@@ -1146,7 +1146,7 @@
           "statusId": "knowledge_strain",
           "duration": 10,
           "target": "target",
-          "note": "格斗轴身份知识淤积（2026-09-29 自 common energy_strain 分叉私有化）"
+          "note": "格斗轴身份知识淤积"
         },
         {
           "type": "modify_skill",
@@ -1346,7 +1346,7 @@
           "statusId": "reforge",
           "duration": 20,
           "target": "self",
-          "note": "枢纽接线（2026-10-23）：写入 reforge"
+          "note": "枢纽接线：写入 reforge"
         }
       ],
       "tentative": false
