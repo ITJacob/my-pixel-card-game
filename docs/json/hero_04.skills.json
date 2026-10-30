@@ -1047,7 +1047,7 @@
       "kind": "active",
       "sequence": 2,
       "rarity": "epic",
-      "axis": "miracle",
+      "axis": "trick",
       "flagship": false,
       "describe": "使一名友军被拉入灵界 10tick（detached，规避期间一切伤害与指向），回归时恢复 6 点生命。",
       "effects": [

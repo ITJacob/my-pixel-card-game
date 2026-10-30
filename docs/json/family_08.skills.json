@@ -218,7 +218,7 @@
       "kind": "passive",
       "sequence": 6,
       "rarity": "uncommon",
-      "axis": "miracle",
+      "axis": "trick",
       "flagship": false,
       "describe": "整场自身伤害 ×1.3，仅对途径 seer 的技能生效（途径内增伤协同引擎）。；嫁接：把自己的好处接到既有的条款后面，不改原文。",
       "hook": [
