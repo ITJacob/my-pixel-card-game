@@ -22,9 +22,9 @@
 
 ```
 docs/ddd/    战斗内核设计（权威正源；contexts/ 五上下文 + params/ 三参数 + README 不变量）
-docs/meta/   WORKFLOW（五环节+环节⑥）/ SCHEMA（JSON 结构规范）/ 骨架重议 / 待办 / 迁移映射表 / glossary
+docs/meta/   WORKFLOW（五环节+环节⑥）/ 生成工作流（分层产卡层〇–层四）/ SCHEMA（JSON 结构规范）/ 骨架重议 / 待办 / 迁移映射表 / glossary
 docs/json/   卡池唯一权威源：manifest.json + global.skills.json + faction_NN.skills.json ×9 + family_NN.skills.json ×22 + hero_NN.skills.json ×9 + schema/
-docs/tools/  validate（语义）/ validate_schema（结构）/ check_enum_sync（枚举对账）/ check_glossary（词典）
+docs/tools/  validate（语义）/ validate_schema（结构）/ check_enum_sync（枚举对账）/ check_glossary（词典）/ review_scan（机制层机筛 warn 级）
 ```
 
 ## 迁移工作流

@@ -8,7 +8,7 @@
 |---|---|---|---|
 | ① | 设定补全 | 世界观/派系/英雄设定稿 | 主人拍板入档 |
 | ② | 机制落地 | 原语/触发点/规则扩容提案（`meta/骨架重议.md` 登记） | 环节⑥ Gate 通过 + SCHEMA.md 登记 |
-| ③ | 技能池 JSON | `docs/json/faction_NN.skills.json` 卡面 | schema（结构）+ validate（语义）+ check_enum_sync + check_glossary 四脚本全绿 |
+| ③ | 技能池 JSON | `docs/json/faction_NN.skills.json` 卡面 | schema（结构）+ validate（语义）+ check_enum_sync + check_glossary 四脚本全绿 + review_scan 该英雄组 0 warn |
 | ④ | 分析评分 | 结构评分与蓝图兑现报告 | 评分只诊断结构，不作平衡依据（脚本随需要重建） |
 | ⑤ | 重设计迭代 | 逐英雄/逐轴改卡 | 四脚本全绿 + 分数不回落 |
 
@@ -30,6 +30,10 @@
 6. **common 提入**：跨派系通用状态（burn/guard/thorns/charm/free_cast/silence 等）提入 `global.skills.json` 顶层 statusDefs，权威定义以参考源 common 为准，common 没有的从 owner 途径取。
 7. **describe 对齐**：describe 的元素声称必须与效果结构可解析元素一致（四选一/随机派发卡尤其注意），validator 会抓。
 8. **门禁**：四脚本全绿后才算迁完；映射表、manifest cardCount、待办同步勾选。
+
+## 生成工作流
+
+- 第二英雄及后续新内容的产卡走分层流水线（层〇命题蓝图 → 层一机制骨架 → 层二数值定档 → 层三卡面落地 → 层四回归验收），见 `meta/生成工作流.md`；本文的迁移工艺是其层三/层四在迁移场景下的特例。
 
 ## 迁移记录
 
