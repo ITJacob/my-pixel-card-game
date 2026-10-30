@@ -181,8 +181,6 @@
       ],
       "dispelable": true,
       "duration": null,
-      "maxStacks": 3,
-      "stackPolicy": "refresh",
       "modifiers": {
         "damage_mul": {
           "value": 1.1
