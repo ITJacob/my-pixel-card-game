@@ -15,9 +15,7 @@
       "modifiers": {
         "see_through": true
       },
-      "note": "识破分支（共享内核参数 §四）：敌方隐匿/潜行类状态对持有者无效",
-      "maxStacks": 3,
-      "stackPolicy": "refresh"
+      "note": "识破分支（共享内核参数 §四）：敌方隐匿/潜行类状态对持有者无效"
     },
     {
       "id": "premonition",
