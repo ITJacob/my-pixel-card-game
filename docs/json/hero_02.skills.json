@@ -1355,7 +1355,7 @@
       "kind": "active",
       "sequence": 7,
       "rarity": "uncommon",
-      "axis": "charm",
+      "axis": "mirror",
       "flagship": false,
       "describe": "对一名敌人施加诱惑：攻击 +2（10tick，诱它出招）并记录它两次动作（借来的动作 2 层，30tick）。代价：自身行动条 -5。",
       "cost": {
