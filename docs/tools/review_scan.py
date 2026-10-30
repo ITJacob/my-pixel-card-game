@@ -89,6 +89,21 @@ def group_defs(files):
     return out
 
 
+def branch_damage(effects):
+    """if/else 互斥分支取 max，sequence/repeat 求和——估算单执行路径直伤上界。"""
+    total = 0.0
+    for e in effects or []:
+        if not isinstance(e, dict):
+            continue
+        if e.get("type") == "damage" and isinstance(e.get("value"), (int, float)):
+            total += e["value"]
+        elif e.get("op") in ("sequence", "repeat"):
+            total += branch_damage(e.get("steps"))
+        elif e.get("op") == "if":
+            total += max(branch_damage(e.get("then")), branch_damage(e.get("else")))
+    return total
+
+
 def scan_group(num, files):
     warns = []
     docs = sl.load_docs()
@@ -214,8 +229,9 @@ def scan_group(num, files):
     for f, iid, sd in defs["statusDefs"]:
         mods = sd.get("modifiers") or {}
         mkeys = set(mods.keys()) if isinstance(mods, dict) else set()
+        stack_scaled = isinstance(sd.get("maxStacks"), int) and sd["maxStacks"] > 1
         if (mkeys & {"damage_mul", "damage_taken_mul"}) and sd.get("duration") is None \
-                and not sd.get("charges"):
+                and not sd.get("charges") and not stack_scaled:
             warns.append(("R6", "%s sd %s: 常驻伤害乘区" % (f.split('.')[0], iid)))
     for f, c in cards:
         for n in walk_effects(c.get("effects")):
@@ -278,8 +294,9 @@ def scan_group(num, files):
         energy = (c.get("cost") or {}).get("energy") or 0
         if not isinstance(energy, (int, float)) or energy <= 0:
             continue
-        dmg = sum(n.get("value") for n in walk_effects(c.get("effects"))
-                  if n.get("type") == "damage" and isinstance(n.get("value"), (int, float)))
+        dmg = branch_damage(c.get("effects"))
+        for t in (c.get("triggers") or []):
+            dmg += branch_damage(t.get("effects"))
         if dmg <= 0:
             continue
         req = ((c.get("target") or {}).get("request") or {})
@@ -288,9 +305,9 @@ def scan_group(num, files):
         if area:
             limit *= 2.5
         if dmg > limit:
-            warns.append(("R10", "%s: 直伤合计 %s 超档（预算 %.1f%s）" % (c.get("id"), dmg, limit, "，群体" if area else "")))
+            warns.append(("R10", "%s: 直伤路径上界 %s 超档（预算 %.1f%s）" % (c.get("id"), dmg, limit, "，群体" if area else "")))
         for n in walk_effects(c.get("effects")):
-            if n.get("type") == "modify_stat" and n.get("stat") != "gauge.rate" \
+            if n.get("type") == "modify_stat" and n.get("stat") not in ("gauge.rate", "armor") \
                     and isinstance(n.get("value"), (int, float)) and abs(n["value"]) >= 3:
                 warns.append(("R10", "%s: modify_stat %+d 跳档" % (c.get("id"), n["value"])))
                 break

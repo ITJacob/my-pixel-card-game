@@ -1,12 +1,12 @@
+# 全库基线 2026-10-30（review_scan R1-R11；工具经回归期三轮校准后重跑，37→28 warn）
 == hero_01 ==
   [R10] h01_unstoppable: modify_stat +4 跳档
   -> 1 warns (R10×1)
 == hero_02 ==
-  [R1] axis charm: 轴无读层卡
   [R6] faction_02 sd witch_form: 常驻伤害乘区
   [R6] faction_02 sd form_shadow: 常驻伤害乘区
   [R6] faction_02 sd form_mist: 常驻伤害乘区
-  -> 4 warns (R1×1 R6×3)
+  -> 3 warns (R6×3)
 == hero_03 ==
   [R4] faction_03 sd decree: duration 30tick 挂回合触发点
   [R6] faction_03 sd castigated: 常驻伤害乘区
@@ -24,34 +24,26 @@
   [R6] faction_04 sd fate_gap: 常驻伤害乘区
   -> 4 warns (R1×1 R3×1 R6×2)
 == hero_05 ==
-  [R6] faction_05 sd scrying_eye: 常驻伤害乘区
-  [R6] faction_05 sd hidden_knowledge: 常驻伤害乘区
   [R6] faction_05 sd edification: 常驻伤害乘区
   [R6] faction_05 sd concealment_authority: 常驻伤害乘区
-  [R10] h05_lance_of_longinus: modify_stat -5 跳档
-  [R10] j05_adaptive_martial_arts: 直伤合计 14 超档（预算 10.2）
   [R11] h05_ego_constellation: 被动写战场量表 secrecy（须单独评审）
-  -> 7 warns (R10×2 R11×1 R6×4)
+  -> 3 warns (R11×1 R6×2)
 == hero_06 ==
   [R4] faction_06 sd tide_high: duration 30tick 挂回合触发点
-  [R6] faction_06 sd inspiration_sense: 常驻伤害乘区
   [R11] h06_fate_revelation: 被动写战场量表 fate_value（须单独评审）
-  -> 3 warns (R11×1 R4×1 R6×1)
+  -> 2 warns (R11×1 R4×1)
 == hero_07 ==
-  [R6] faction_07 sd remedy_mark: 常驻伤害乘区
-  -> 1 warns (R6×1)
+  -> 0 warns (0 warn)
 == hero_08 ==
-  [R3] faction_08 sd tide_call: 叠层无读档出口
   [R6] faction_08 sd scale_veil: 常驻伤害乘区
   [R6] faction_08 sd tide_call: 常驻伤害乘区
-  -> 3 warns (R3×1 R6×2)
+  -> 2 warns (R6×2)
 == hero_09 ==
   [R1] axis demon: 轴无读层卡
   [R3] faction_09 sd grazing_slot: 叠层无读档出口
   [R6] faction_09 sd weapon_mastery: 常驻伤害乘区
   [R6] faction_09 sd lost_conscience: 常驻伤害乘区
   [R6] faction_09 sd mental_duelist: 常驻伤害乘区
-  [R10] h09_acid_marsh: modify_stat -3 跳档
-  -> 6 warns (R1×1 R10×1 R3×1 R6×3)
+  -> 5 warns (R1×1 R3×1 R6×3)
 --------------------------------------------------
-TOTAL warns: 37
+TOTAL warns: 28
