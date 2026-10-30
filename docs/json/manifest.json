@@ -25,55 +25,55 @@
   "factions": [
     {
       "id": "faction_01",
-      "name": "派系·壹",
+      "name": "暮河",
       "file": "faction_01.skills.json",
       "cardCount": 6
     },
     {
       "id": "faction_02",
-      "name": "派系·贰",
+      "name": "战祸",
       "file": "faction_02.skills.json",
       "cardCount": 6
     },
     {
       "id": "faction_03",
-      "name": "派系·叁",
+      "name": "律庭",
       "file": "faction_03.skills.json",
       "cardCount": 6
     },
     {
       "id": "faction_04",
-      "name": "派系·肆",
+      "name": "时隙",
       "file": "faction_04.skills.json",
       "cardCount": 6
     },
     {
       "id": "faction_05",
-      "name": "派系·伍",
+      "name": "禁知",
       "file": "faction_05.skills.json",
       "cardCount": 6
     },
     {
       "id": "faction_06",
-      "name": "派系·陆",
+      "name": "星钥",
       "file": "faction_06.skills.json",
       "cardCount": 6
     },
     {
       "id": "faction_07",
-      "name": "派系·柒",
+      "name": "血巢",
       "file": "faction_07.skills.json",
       "cardCount": 6
     },
     {
       "id": "faction_08",
-      "name": "派系·捌",
+      "name": "奇点",
       "file": "faction_08.skills.json",
       "cardCount": 6
     },
     {
       "id": "faction_09",
-      "name": "派系·玖",
+      "name": "欲狱",
       "file": "faction_09.skills.json",
       "cardCount": 6
     }
