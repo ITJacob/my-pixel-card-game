@@ -54,6 +54,7 @@
 | INV-26 | 同 tick 一次机会 | 同 tick 内每个单位至多获得一次行动机会；未消耗记 wasted，不累积到下一 tick |
 | INV-27 | 溯源撤销 | 属性修正按实例 sourceId 记账；撤销恢复到写入前的值；单位离场必须清空账本 |
 | INV-28 | 死亡链优先级 | 死亡结算按 revive_blocked → defined_substitute → lethal_protect → on_death 依次判定，命中即短路 |
+| INV-29 | 近战对撞 | reach=melee 的攻击（含普攻）同步对撞：防守方存活、非硬控（眩晕/冻结/睡眠类）、够得着攻击者时，以攻击力正常档还击（无武器加值/无元素/不耗耐久）；两结果同时应用，对撞致死不中断主攻击；对撞动作不再触发 on_take_damage |
 
 未吸收的不变量明细（源 59 条中的剩余部分）见参考源（CardGame `docs/ddd/` 各上下文不变量表），按需再提。
 
