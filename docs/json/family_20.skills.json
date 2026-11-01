@@ -4,7 +4,31 @@
   "familyName": "家族·贰拾",
   "faction": "faction_08",
   "cards": [],
-  "statusDefs": [],
+  "statusDefs": [
+    {
+      "id": "grazing_slot",
+      "name": "放牧槽",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "maxStacks": 7,
+      "stackPolicy": "stack",
+      "slots": {
+        "soul": "存储『任意途径灵魂 → 其能力引用』的动态槽，供五途径互读 / 外部经放牧接口借能"
+      },
+      "note": "枢纽状态：五途径内部互读；外部借能（观众放牧·借能、水手放牧·借雷）。放牧释放的灵魂可被收尸人『净化』反制。",
+      "crossPathway": true,
+      "participants": [
+        "spectator",
+        "chanter",
+        "reader",
+        "sailor",
+        "supplicant"
+      ]
+    }
+  ],
   "unitDefs": [],
   "zoneDefs": [],
   "domainDefs": []

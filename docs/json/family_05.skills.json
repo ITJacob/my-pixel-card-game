@@ -4,7 +4,26 @@
   "familyName": "家族·伍",
   "faction": "faction_02",
   "cards": [],
-  "statusDefs": [],
+  "statusDefs": [
+    {
+      "id": "beast_swarm",
+      "name": "兽群",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "maxStacks": 1,
+      "stackPolicy": "stack",
+      "note": "枢纽状态：猎人写入；耕种者/药师『兽群入池』可读",
+      "crossPathway": true,
+      "participants": [
+        "hunter",
+        "planter",
+        "apothecary"
+      ]
+    }
+  ],
   "unitDefs": [],
   "zoneDefs": [],
   "domainDefs": []

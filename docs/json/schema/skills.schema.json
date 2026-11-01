@@ -4379,7 +4379,7 @@
     },
     "fileRootFaction": {
       "type": "object",
-      "description": "faction_NN.skills.json 文件根（派系级）：派系蓝本池（statusDefs/unitDefs/zoneDefs/domainDefs）保持派系私有；派系公共卡已下沉 family 层，cards 恒为空数组。",
+      "description": "faction_NN.skills.json 文件根（派系级）：家族间共享蓝本池（statusDefs/unitDefs/zoneDefs/domainDefs，同派系多家族共用才入；家族私有蓝本池 2026-11 已归还 family 层，本池当前为空）；派系公共卡已下沉 family 层，cards 恒为空数组。",
       "required": [
         "level",
         "factionId",

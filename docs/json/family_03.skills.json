@@ -4,7 +4,177 @@
   "familyName": "家族·叁",
   "faction": "faction_01",
   "cards": [],
-  "statusDefs": [],
+  "statusDefs": [
+    {
+      "id": "conceal_authority",
+      "name": "隐秘权柄",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "mount_status",
+              "statusId": "covert_veil",
+              "duration": null,
+              "target": "self",
+              "note": "授予即自持潜匿（一次性）"
+            },
+            {
+              "type": "mount_status",
+              "statusId": "covert_veil",
+              "duration": null,
+              "target": "allies_except_self",
+              "note": "己方其余单位（含召唤物）同时隐去"
+            }
+          ]
+        },
+        {
+          "event": "on_tick",
+          "effects": [
+            {
+              "type": "mount_status",
+              "statusId": "covert_veil",
+              "duration": null,
+              "target": "allies_except_self",
+              "note": "维护通道：为后登场的召唤物补挂潜匿；对已持有者只是刷新时长"
+            }
+          ]
+        }
+      ],
+      "modifiers": {
+        "dispelableOverride": {
+          "categories": [
+            "conceal"
+          ],
+          "dispelable": false,
+          "note": "将任何事物变隐秘：己方 conceal 类状态不可驱散"
+        }
+      },
+      "note": "授予一次性：自身潜匿不再每 tick 补回——出手自破或被隐秘之地消耗后不复原；友军/召唤物走 on_tick 维护通道",
+      "crossPathway": true,
+      "participants": [
+        "apprentice",
+        "corpse_collector",
+        "criminal",
+        "seer",
+        "prisoner",
+        "sleepless",
+        "supplicant",
+        "thief",
+        "warrior",
+        "sailor",
+        "arbiter"
+      ]
+    },
+    {
+      "id": "covert_veil",
+      "name": "潜匿",
+      "category": [
+        "conceal"
+      ],
+      "dispelable": true,
+      "duration": 3,
+      "durationUnit": "self_turn",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "modifiers": {
+        "untargetableByTargeted": {
+          "direction": "inbound",
+          "scope": "single"
+        }
+      },
+      "triggers": [
+        {
+          "event": "on_attack",
+          "effects": [
+            {
+              "type": "dispel",
+              "target": "self",
+              "dispelTarget": "unit",
+              "statusId": "covert_veil",
+              "count": 1,
+              "note": "出手自动破除潜行（普攻）"
+            }
+          ]
+        },
+        {
+          "event": "on_active_skill",
+          "effects": [
+            {
+              "type": "dispel",
+              "target": "self",
+              "dispelTarget": "unit",
+              "statusId": "covert_veil",
+              "count": 1,
+              "note": "出手自动破除潜行（主动技能）"
+            }
+          ]
+        }
+      ],
+      "stackThreshold": {
+        "stacks": 1,
+        "effects": [
+          {
+            "type": "modify_stat",
+            "stat": "attack",
+            "value": 1,
+            "mode": "delta",
+            "duration": 3,
+            "target": "self",
+            "note": "潜匿加持：身处潜匿则攻 +1（随潜匿到期）"
+          }
+        ],
+        "note": "隐秘权柄读层（原开局快照；3tick = 潜匿时长）"
+      },
+      "note": "不眠者私有隐匿状态（自 common conceal 分叉，语义同源）；单层，重复施加只刷新时长；时长口径 self_turn（3 个自身回合，敏捷 0 时≈15tick）；破隐走 on_attack + on_active_skill 双挂，效果结算后 fire"
+    },
+    {
+      "id": "occult_seal",
+      "name": "隐秘封印",
+      "category": [
+        "seal",
+        "control"
+      ],
+      "dispelable": true,
+      "duration": 20,
+      "modifiers": {
+        "gaugeRateMul": 0,
+        "untargetableByTargeted": {
+          "direction": "both",
+          "scope": "all",
+          "note": "双向不可选中；scope: all——绝对封印，连 AoE 也选不中（否则范围伤害即破解封印）"
+        }
+      },
+      "disallowActions": [
+        "move",
+        "basic_attack",
+        "skill",
+        "skip",
+        "react",
+        "channel"
+      ],
+      "note": "绝对封印（行动条速率归零、双向不可选中、禁行动），但不免疫已挂载的持续伤害。",
+      "crossPathway": true,
+      "participants": [
+        "apprentice",
+        "corpse_collector",
+        "criminal",
+        "seer",
+        "prisoner",
+        "sleepless",
+        "supplicant",
+        "thief",
+        "warrior",
+        "apothecary",
+        "pryer"
+      ]
+    }
+  ],
   "unitDefs": [],
   "zoneDefs": [],
   "domainDefs": []

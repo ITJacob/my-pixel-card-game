@@ -4,7 +4,26 @@
   "familyName": "家族·玖",
   "faction": "faction_04",
   "cards": [],
-  "statusDefs": [],
+  "statusDefs": [
+    {
+      "id": "astral_anchor",
+      "name": "星界锚",
+      "category": [
+        "link"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "maxStacks": 1,
+      "stackPolicy": "stack",
+      "note": "枢纽状态：归属学徒；窥秘人【星光囚笼】读层；观众编织梦境读取（星界锚引梦跨系段）",
+      "crossPathway": true,
+      "participants": [
+        "apprentice",
+        "pryer",
+        "spectator"
+      ]
+    }
+  ],
   "unitDefs": [],
   "zoneDefs": [],
   "domainDefs": []

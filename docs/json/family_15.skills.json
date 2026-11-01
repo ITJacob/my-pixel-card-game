@@ -4,7 +4,25 @@
   "familyName": "家族·拾伍",
   "faction": "faction_07",
   "cards": [],
-  "statusDefs": [],
+  "statusDefs": [
+    {
+      "id": "abundance",
+      "name": "丰饶",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "maxStacks": 1,
+      "stackPolicy": "stack",
+      "note": "枢纽状态：归属耕种者，罪犯『荒芜侵蚀』读取。",
+      "crossPathway": true,
+      "participants": [
+        "planter",
+        "criminal"
+      ]
+    }
+  ],
   "unitDefs": [],
   "zoneDefs": [],
   "domainDefs": []

@@ -4,7 +4,34 @@
   "familyName": "家族·拾",
   "faction": "faction_04",
   "cards": [],
-  "statusDefs": [],
+  "statusDefs": [
+    {
+      "id": "fate_gap",
+      "name": "命运缝隙",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "modifiers": {
+        "damage_mul": {
+          "value": 1.3,
+          "filter": {
+            "gaugeAbove": 70
+          }
+        }
+      },
+      "note": "gauge_above 谓词（共享内核参数 §三）",
+      "crossPathway": true,
+      "participants": [
+        "assassin",
+        "seer",
+        "monster",
+        "pryer",
+        "thief"
+      ]
+    }
+  ],
   "unitDefs": [],
   "zoneDefs": [],
   "domainDefs": []

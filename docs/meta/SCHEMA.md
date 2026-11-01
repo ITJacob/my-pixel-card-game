@@ -9,8 +9,8 @@ docs/json/
 ├─ manifest.json            索引：9 派系 id/name/文件/卡数 + rarityMap 校验基准
 ├─ schema/skills.schema.json
 ├─ global.skills.json       全域级（唯一）：跨派系复用内容
-├─ faction_NN.skills.json   派系级 ×9（NN=01..09）：派系私有蓝本池（cards 恒空）
-├─ family_NN.skills.json    家族级 ×22（NN=01..22）：家族公共卡 + 家族元信息
+├─ faction_NN.skills.json   派系级 ×9（NN=01..09）：家族间共享蓝本池（当前为空；cards 恒空）
+├─ family_NN.skills.json    家族级 ×22（NN=01..22）：家族公共卡 + 家族私有蓝本池 + 家族元信息
 └─ hero_NN.skills.json      英雄级 ×9：英雄独自卡 + family 归属字段
 ```
 
@@ -35,8 +35,8 @@ docs/json/
 |---|---|---|
 | level | const "faction" | 层级标记 |
 | factionId / factionName | string | `faction_01..09` 封闭 / 派系中文名 |
-| cards | card[] | **恒为空数组**——原派系公共卡已下沉 family 层（2026-10 结构变更，蓝本池留在本层不动） |
-| statusDefs / unitDefs / zoneDefs / domainDefs | 数组 | 派系私有蓝本池 |
+| cards | card[] | **恒为空数组**——原派系公共卡已下沉 family 层（2026-10 结构变更） |
+| statusDefs / unitDefs / zoneDefs / domainDefs | 数组 | 家族间共享蓝本池（同派系多家族共用才入；2026-11 家族私有蓝本池已归还 family 层，本池当前为空） |
 
 **family_NN.skills.json**：
 
@@ -46,7 +46,7 @@ docs/json/
 | familyId / familyName | string | `family_01..22` 封闭 / 家族中文名（占位符期：家族·壹…家族·贰拾贰） |
 | faction | string | 所属派系 id（须为存在的 faction 文件，经 cross_check 配对验证） |
 | cards | card[] | 家族公共卡（id `jNN_` 前缀，NN=派系号；j 释义为家族） |
-| statusDefs / unitDefs / zoneDefs / domainDefs | 数组 | 未展开家族恒空；家族私有蓝本池未来随展开登记 |
+| statusDefs / unitDefs / zoneDefs / domainDefs | 数组 | 家族私有蓝本池（未展开家族恒空；2026-11 起家族独占定义一律入本层） |
 
 - 家族文件 id 前缀口径：卡 id `j<NN>_` 的 NN = **文件 faction 号**（同派系家族组共享 j 号，如 family_04 与 family_05 同为 faction_02 组、均挂 j02_ 卡）；`familyId` 序号 = 文件名序号（源质分组序），与 j 号无对应关系。**f 前缀预留给 faction 级卡**（faction 文件 cards 恒空，暂无此类卡）。
 - **hero_NN.skills.json**：
