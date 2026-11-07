@@ -3,8 +3,106 @@
   "familyId": "family_02",
   "familyName": "家族·贰",
   "faction": "faction_01",
-  "cards": [],
-  "statusDefs": [],
+  "cards": [
+    {
+      "id": "j01_dusk_cheaper",
+      "name": "冥界折价",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "end",
+      "flagship": false,
+      "describe": "被动。自身召唤位上限 +1（维持费 0.3 生命/tick，不致死）；相位处于黄昏或夜晚时维持费减半（0.15/tick）——冥界夜里不打烊。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "dusk_cheaper",
+          "duration": null,
+          "target": "self"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [
+    {
+      "id": "dusk_cheaper",
+      "name": "冥界折价",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": null,
+      "durationUnit": "tick",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "modifiers": {
+        "summon_cap_bonus": 1
+      },
+      "triggers": [
+        {
+          "event": "on_tick",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "resource_compare",
+                "side": "self",
+                "key": "hp",
+                "cmp": ">",
+                "n": 1
+              },
+              "then": [
+                {
+                  "op": "if",
+                  "condition": {
+                    "kind": "phase_is",
+                    "phases": [
+                      "dusk",
+                      "night"
+                    ]
+                  },
+                  "then": [
+                    {
+                      "type": "modify_resource",
+                      "resource": "hp",
+                      "value": -0.15,
+                      "mode": "delta",
+                      "target": "self",
+                      "note": "夜暮折价：维持费减半 0.15/tick"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "type": "modify_resource",
+                      "resource": "hp",
+                      "value": -0.3,
+                      "mode": "delta",
+                      "target": "self",
+                      "note": "昼间原价：维持费 0.3/tick"
+                    }
+                  ]
+                }
+              ],
+              "else": [
+                {
+                  "type": "dispel",
+                  "statusId": "dusk_cheaper",
+                  "target": "self",
+                  "note": "血肉断供：折价失效，超限召唤物按最老优先消散"
+                }
+              ],
+              "note": "维持费型 cap 特权：生命阈值止于 1（不致死）"
+            }
+          ]
+        }
+      ],
+      "note": "召唤位上限 +1（modifiers.summon_cap_bonus）；维持费 0.3 生命/tick，黄昏/夜晚减半。"
+    }
+  ],
   "unitDefs": [],
   "zoneDefs": [],
   "domainDefs": []

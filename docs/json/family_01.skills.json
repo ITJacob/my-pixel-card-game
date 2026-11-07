@@ -406,6 +406,43 @@
         }
       ],
       "tentative": false
+    },
+    {
+      "id": "j01_dusk_layering",
+      "name": "迟暮加层",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "twilight",
+      "flagship": false,
+      "describe": "被动。自身回合开始时，若相位处于黄昏或夜晚，自身老化 +1 层（既有兑现链不变：崩解/神罚/黄昏重生照常读层）。",
+      "hook": [
+        "on_turn_start"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "phase_is",
+            "phases": [
+              "dusk",
+              "night"
+            ]
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "aging",
+              "stacks": 1,
+              "duration": 25,
+              "target": "self",
+              "note": "迟暮：夜暮档每回合催老 +1 层"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
     }
   ],
   "statusDefs": [

@@ -3,7 +3,67 @@
   "familyId": "family_03",
   "familyName": "家族·叁",
   "faction": "faction_01",
-  "cards": [],
+  "cards": [
+    {
+      "id": "j01_night_engine",
+      "name": "夜幕引擎",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "night",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。拨快战场时钟 9 tick 向夜幕推进；推进后相位处于黄昏或夜晚时，夜色 +1（board.secrecy，双方共享）——赶夜的人先存到色。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "advance_clock",
+              "ticks": 9,
+              "note": "拨时向夜：9 tick ≈ 推进一相位档"
+            },
+            {
+              "op": "if",
+              "condition": {
+                "kind": "phase_is",
+                "phases": [
+                  "dusk",
+                  "night"
+                ]
+              },
+              "then": [
+                {
+                  "type": "modify_resource",
+                  "resource": "secrecy",
+                  "value": 1,
+                  "mode": "delta",
+                  "target": "board",
+                  "note": "入夜存色：board.secrecy +1（双方共享，先到者先用）"
+                }
+              ],
+              "else": []
+            }
+          ]
+        }
+      ],
+      "tentative": false
+    }
+  ],
   "statusDefs": [
     {
       "id": "conceal_authority",
