@@ -302,6 +302,50 @@
       "hook": [
         "on_battle_start"
       ]
+    },
+    {
+      "id": "j07_pre_dose",
+      "name": "预服",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "brew",
+      "flagship": false,
+      "describe": "主动（0 吟唱，18tick CD）。当场服下半成品（再生 10tick，效果半数）；药性 3 tick 后才完全化开：再回复 3 点生命——药剂必须预服/延迟（家族红线）。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 18,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "regen",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "当场半数：再生 10tick"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "draught_pending",
+          "duration": 3,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "药性待发：3 tick 后化开"
+        }
+      ],
+      "tentative": false
     }
   ],
   "statusDefs": [
@@ -854,6 +898,32 @@
         }
       ],
       "note": "召唤位上限 +2（modifiers.summon_cap_bonus）；维持费 0.4 生命/tick，断供或到期后超限部分按最老优先消散。"
+    },
+    {
+      "id": "draught_pending",
+      "name": "药性待发",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": 3,
+      "durationUnit": "tick",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_remove",
+          "effects": [
+            {
+              "type": "heal",
+              "value": 3,
+              "target": "self",
+              "note": "药性化开：回复 3 点生命（预服全效）"
+            }
+          ]
+        }
+      ],
+      "note": "预服卡的延迟兑现面：当场半数（regen）、到期全效（heal 3）——红线「预服/延迟」首次实体化。"
     }
   ],
   "unitDefs": [

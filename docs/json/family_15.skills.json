@@ -3,7 +3,40 @@
   "familyId": "family_15",
   "familyName": "家族·拾伍",
   "faction": "faction_07",
-  "cards": [],
+  "cards": [
+    {
+      "id": "j07_fertile_soil",
+      "name": "沃土",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "growth",
+      "flagship": false,
+      "describe": "被动。自身回合开始时「成长」+1 层（攻击 +1/层，至多 5 层；每 3 tick 至多 1 层）——时间就是肥料，急不得。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_turn_start",
+          "minIntervalTicks": 3,
+          "effects": [
+            {
+              "type": "mount_status",
+              "statusId": "growth_stack",
+              "stacks": 1,
+              "duration": null,
+              "stackMode": "add",
+              "target": "self",
+              "note": "沃土：成长 +1 层"
+            }
+          ]
+        }
+      ]
+    }
+  ],
   "statusDefs": [
     {
       "id": "abundance",
@@ -21,6 +54,21 @@
         "planter",
         "criminal"
       ]
+    },
+    {
+      "id": "growth_stack",
+      "name": "成长",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": null,
+      "maxStacks": 5,
+      "stackPolicy": "stack",
+      "note": "沃土的成长层：时间换强度（红线「拒绝瞬发全额」的反面——慢即是快）。",
+      "statPerStack": {
+        "attack": 1
+      }
     }
   ],
   "unitDefs": [],
