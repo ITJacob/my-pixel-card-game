@@ -2,9 +2,148 @@
   "level": "faction",
   "factionId": "faction_05",
   "factionName": "禁知",
-  "cards": [],
+  "cards": [
+    {
+      "id": "f05_forbidden_lore",
+      "name": "禁忌学识",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "lore",
+      "flagship": false,
+      "describe": "被动。战场隐秘值（secrecy）≥5 时，持有者受击反噬：攻击者受 1 点精神伤害（知识灼伤）——碰禁忌的人先被烫伤。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_take_damage",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "meter_compare",
+                "key": "secrecy",
+                "cmp": ">=",
+                "n": 5
+              },
+              "then": [
+                {
+                  "type": "damage",
+                  "element": "mental",
+                  "value": 1,
+                  "target": "attacker",
+                  "note": "禁忌学识：secrecy ≥5 时受击反噬 1 点精神"
+                }
+              ],
+              "else": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f05_great_silence",
+      "name": "大寂静",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "lore",
+      "flagship": false,
+      "describe": "展开「大寂静」界域 20tick：入场时敌方全体沉默 5tick 且受「荒芜」剥护（受到伤害 +1，10tick）；域存续期间敌方持续迟滞（行动条速率按 slow 既有定义）。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 35,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "domain"
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "domain",
+              "op": "overlay",
+              "def": "domain_great_silence",
+              "duration": 20,
+              "durationUnit": "tick"
+            },
+            {
+              "type": "mount_status",
+              "statusId": "silence",
+              "duration": 5,
+              "durationUnit": "tick",
+              "target": "all_enemies",
+              "note": "入场：万籁俱寂，敌全体沉默 5tick"
+            },
+            {
+              "type": "mount_status",
+              "statusId": "vulnerable",
+              "duration": 10,
+              "durationUnit": "tick",
+              "target": "all_enemies",
+              "note": "入场：荒芜剥护，敌全体受到伤害 +1（10tick）"
+            },
+            {
+              "type": "modify_resource",
+              "resource": "lost",
+              "value": 1,
+              "mode": "delta",
+              "target": "self",
+              "note": "界域操作租金（降临范式 +1）"
+            }
+          ]
+        }
+      ],
+      "domain": {
+        "def": "domain_great_silence",
+        "envRulesText": "域内敌方持续迟滞（行动条速率按 slow 既有定义，每 tick 刷新）"
+      },
+      "tentative": false
+    }
+  ],
   "statusDefs": [],
   "unitDefs": [],
   "zoneDefs": [],
-  "domainDefs": []
+  "domainDefs": [
+    {
+      "id": "domain_great_silence",
+      "tier": "overlay",
+      "dispelable": true,
+      "duration": 20,
+      "durationUnit": "tick",
+      "rulePatches": [],
+      "triggers": [
+        {
+          "event": "on_tick",
+          "filter": {
+            "side": "enemy"
+          },
+          "effects": [
+            {
+              "type": "mount_status",
+              "statusId": "slow",
+              "duration": 3,
+              "durationUnit": "tick",
+              "refresh": true,
+              "target": "self",
+              "note": "大寂静：域内敌方持续迟滞（slow 每 tick 刷新）"
+            }
+          ]
+        }
+      ],
+      "note": "大寂静界域：荒芜与沉寂——入场沉默+剥护，存续期持续迟滞。"
+    }
+  ]
 }
