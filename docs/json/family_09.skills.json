@@ -3,7 +3,51 @@
   "familyId": "family_09",
   "familyName": "家族·玖",
   "faction": "faction_04",
-  "cards": [],
+  "cards": [
+    {
+      "id": "j04_time_tax",
+      "name": "时空税",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "tax",
+      "flagship": false,
+      "describe": "主动（0 吟唱，18tick CD）。预支战力：自身攻击 +2，持续 10tick；税在生效瞬间结算——自身被向后击退 1 格（时空不接受白拿的增益）。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 18,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "time_tax",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "预支：攻击 +2（10tick）"
+        },
+        {
+          "type": "move",
+          "op": "push_back",
+          "distance": 1,
+          "target": "self",
+          "note": "时空税：生效瞬间自身向后击退 1 格"
+        }
+      ],
+      "tentative": false
+    }
+  ],
   "statusDefs": [
     {
       "id": "astral_anchor",
@@ -22,6 +66,35 @@
         "pryer",
         "spectator"
       ]
+    },
+    {
+      "id": "time_tax",
+      "name": "时空税·预支",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": 10,
+      "durationUnit": "tick",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "attack",
+              "value": 2,
+              "mode": "delta",
+              "duration": null,
+              "target": "self",
+              "note": "预支战力：攻击 +2"
+            }
+          ]
+        }
+      ],
+      "note": "时空税的增益面：攻击 +2/10tick；税（击退 1 格）在卡面即时结算，不随状态。"
     }
   ],
   "unitDefs": [],

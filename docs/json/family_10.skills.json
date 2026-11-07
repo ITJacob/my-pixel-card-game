@@ -3,7 +3,55 @@
   "familyId": "family_10",
   "familyName": "家族·拾",
   "faction": "faction_04",
-  "cards": [],
+  "cards": [
+    {
+      "id": "j04_due_date",
+      "name": "当期",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "steal",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。窃取敌方单体 2 点能量归己；借据 10tick 后到期：偿还 3 点能量（2 本 + 1 息）——万物有当期。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "anchor": "enemy_front",
+          "scope": "whole_lane",
+          "sort": "index_asc",
+          "pickCount": 1
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "drain",
+          "resource": "energy",
+          "value": 2,
+          "healRatio": 1.0,
+          "target": "target",
+          "note": "窃取：目标 −2 能量，持有者 +2"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "due_note",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "立下借据：10tick 后到期"
+        }
+      ],
+      "tentative": false
+    }
+  ],
   "statusDefs": [
     {
       "id": "fate_gap",
@@ -30,6 +78,34 @@
         "pryer",
         "thief"
       ]
+    },
+    {
+      "id": "due_note",
+      "name": "借据",
+      "category": [
+        "debuff"
+      ],
+      "dispelable": false,
+      "duration": 10,
+      "durationUnit": "tick",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_remove",
+          "effects": [
+            {
+              "type": "modify_resource",
+              "resource": "energy",
+              "value": -3,
+              "mode": "delta",
+              "target": "self",
+              "note": "到期偿还：能量 −3（2 本 + 1 息）"
+            }
+          ]
+        }
+      ],
+      "note": "当期卡的归还窗口：到期强制偿还；窗口内持有者若被驱散借据（不可驱散）则不成立——借据不可抵赖。"
     }
   ],
   "unitDefs": [],

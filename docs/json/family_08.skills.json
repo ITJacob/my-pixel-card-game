@@ -245,6 +245,44 @@
         }
       ],
       "tentative": false
+    },
+    {
+      "id": "j04_puppet_leverage",
+      "name": "提线借力",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "marionette",
+      "flagship": false,
+      "describe": "被动。持有者造成伤害时，若其召唤物在场（傀儡牵线），追加 1 点无属性伤害——借力已牵线的傀儡，而非自身硬刚。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_deal_damage",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "caster_has_summon"
+              },
+              "then": [
+                {
+                  "type": "damage",
+                  "element": "none",
+                  "value": 1,
+                  "target": "same_target",
+                  "note": "提线借力：傀儡在场追加 1 点伤害"
+                }
+              ],
+              "else": []
+            }
+          ]
+        }
+      ]
     }
   ],
   "statusDefs": [
