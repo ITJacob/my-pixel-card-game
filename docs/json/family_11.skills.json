@@ -370,6 +370,42 @@
         }
       ],
       "tentative": false
+    },
+    {
+      "id": "j05_lore_cash_in",
+      "name": "学识兑现",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "scrying",
+      "flagship": false,
+      "describe": "被动。自身回合开始时，若战场隐秘值 ≥3，自身能量 +1（秘识回能）——隐秘知识是 pryer 的硬通货。",
+      "hook": [
+        "on_turn_start"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "secrecy",
+            "cmp": ">=",
+            "n": 3
+          },
+          "then": [
+            {
+              "type": "modify_resource",
+              "resource": "energy",
+              "value": 1,
+              "mode": "delta",
+              "target": "self",
+              "note": "学识兑现：secrecy ≥3 时能量 +1（pryer 推高的隐秘由 pryer 兑现）"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
     }
   ],
   "statusDefs": [
