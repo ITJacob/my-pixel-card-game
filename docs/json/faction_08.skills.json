@@ -2,8 +2,173 @@
   "level": "faction",
   "factionId": "faction_08",
   "factionName": "奇点",
-  "cards": [],
-  "statusDefs": [],
+  "cards": [
+    {
+      "id": "f08_genesis_order",
+      "name": "创世序",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "genesis",
+      "flagship": false,
+      "describe": "被动。自身回合开始时读取光照度：光 ≥5 时获得「光孕」（行动条速率 +1，每回合重判）——光足则万物速生。",
+      "hook": [
+        "on_turn_start"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "luminance",
+            "cmp": ">=",
+            "n": 5
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "light_womb",
+              "duration": 1,
+              "durationUnit": "self_turn",
+              "refresh": true,
+              "target": "self",
+              "note": "光孕：光照度 ≥5 挂载（速率 +1）"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f08_singularity_burst",
+      "name": "奇点爆发",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "genesis",
+      "flagship": false,
+      "describe": "主动（0 吟唱，30tick CD）。按光照度极性创世结算：光 ≥8 → 友方全体「创生涌流」（攻击 +2，10tick）；光 ≤2 → 敌方全体被「未成形」剥护（受到伤害 +1，10tick）。窗口之外（3–7）无效。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "luminance",
+            "cmp": ">=",
+            "n": 8
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "genesis_surge",
+              "duration": 10,
+              "durationUnit": "tick",
+              "target": "all_allies",
+              "note": "奇点爆发·创世高峰：友方全体攻击 +2"
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "luminance",
+            "cmp": "<=",
+            "n": 2
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "vulnerable",
+              "duration": 10,
+              "durationUnit": "tick",
+              "target": "all_enemies",
+              "note": "奇点爆发·未成形前夜：敌全体受到伤害 +1"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [
+    {
+      "id": "light_womb",
+      "name": "光孕",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": 1,
+      "durationUnit": "self_turn",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "gauge.rate",
+              "value": 1,
+              "mode": "delta",
+              "duration": null,
+              "target": "self",
+              "note": "光孕：行动条速率 +1"
+            }
+          ]
+        }
+      ],
+      "note": "创世序的光照度读层：luminance ≥5 时每自身回合挂载。"
+    },
+    {
+      "id": "genesis_surge",
+      "name": "创生涌流",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": 10,
+      "durationUnit": "tick",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "attack",
+              "value": 2,
+              "mode": "delta",
+              "duration": null,
+              "target": "self",
+              "note": "创生涌流：攻击 +2"
+            }
+          ]
+        }
+      ],
+      "note": "奇点爆发的创世高峰增益：luminance ≥8 时友方全体获得。"
+    }
+  ],
   "unitDefs": [],
   "zoneDefs": [],
   "domainDefs": []
