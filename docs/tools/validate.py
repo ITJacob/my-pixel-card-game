@@ -78,6 +78,7 @@ DIM_RANGES = {
     "fate_value": (-10, 10),
     "luminance": (0, 10),
     "death_tally": (0, 10),
+    "conflict": (0, 10),
 }
 
 # 触发点：语义封闭集 16 个（ddd 执行参数 §触发点，INV-18）。本集合与 ddd 表格、schema triggerEvent

@@ -91,6 +91,7 @@ docs/json/
 - 原语 32 个：封闭集 = schema `effect.oneOf`（35 分支 = 3 算子 + 32 原语叶子）；参数取值域见 `ddd/params/效果参数.md` 原语表。新增先登记再改 schema。
 - 触发点 16 个：on_battle_start / on_turn_start / on_turn_end / on_apply / on_remove / on_tick / on_phase_change / on_spawn / on_death / on_kill / on_attack / on_equipment_equip / on_active_skill / on_take_damage / on_deal_damage / on_status_gain。
 - 元素 / 资源池 / 装备槽 / 状态类别取值域见 ddd params 三篇。
+- 战场量表（2026-11-07 登记 conflict，共 6 个）：secrecy[0,10] / order[0,10] / fate_value[−10,+10] / luminance[0,10] / death_tally[0,10] / **conflict[0,10]**（冲突计数：引擎自动累计双方伤害事件/击杀/施法 +1、每 tick −0.1 自然消退；读层方战祸两族[裁定 #8：计双方，与欲狱 lust 只计敌方放纵分叉]；写入方登记 = 引擎自动 + 战祸派系卡）。维度定义见 源质维度与跨系枢纽.md §二，机器正源 = schema dimHook.enum / effModifyResource.resource.enum / validate.py DIM_RANGES。
 
 ## 6. 已知待修清单
 

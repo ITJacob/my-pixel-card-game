@@ -2,9 +2,181 @@
   "level": "faction",
   "factionId": "faction_02",
   "factionName": "战祸",
-  "cards": [],
-  "statusDefs": [],
+  "cards": [
+    {
+      "id": "f02_war_drum",
+      "name": "战鼓",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "war",
+      "flagship": false,
+      "describe": "被动。持有者每次造成伤害（含对撞）时，冲突计数 +1（board.conflict，双方共享）；冲突计数 ≥6 时，持有者攻击 +1——战越打越旺。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_deal_damage",
+          "effects": [
+            {
+              "type": "modify_resource",
+              "resource": "conflict",
+              "value": 1,
+              "mode": "delta",
+              "target": "board",
+              "note": "战鼓擂响：每次伤害冲突计数 +1"
+            }
+          ]
+        },
+        {
+          "event": "on_turn_start",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "meter_compare",
+                "key": "conflict",
+                "cmp": ">=",
+                "n": 6
+              },
+              "then": [
+                {
+                  "type": "mount_status",
+                  "statusId": "war_fervor",
+                  "duration": 1,
+                  "durationUnit": "self_turn",
+                  "refresh": true,
+                  "target": "self",
+                  "note": "冲突 ≥6：战意沸腾，攻击 +1"
+                }
+              ],
+              "else": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f02_scorched_earth",
+      "name": "焦土",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "war",
+      "flagship": false,
+      "describe": "展开「焦土」界域 25tick：域内每次伤害事件冲突计数额外 +1（双方共享）；且域内所有单位（不分敌我）造成伤害 +1——火上浇油，谁都拦不住。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 35,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "domain"
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "domain",
+              "op": "overlay",
+              "def": "domain_scorched_earth",
+              "duration": 25,
+              "durationUnit": "tick"
+            },
+            {
+              "type": "modify_resource",
+              "resource": "lost",
+              "value": 1,
+              "mode": "delta",
+              "target": "self",
+              "note": "界域操作租金（降临范式 +1）"
+            }
+          ]
+        }
+      ],
+      "domain": {
+        "def": "domain_scorched_earth",
+        "envRulesText": "域内每次伤害事件冲突计数额外 +1；域内所有单位（不分敌我）造成伤害 +1"
+      },
+      "tentative": false
+    }
+  ],
+  "statusDefs": [
+    {
+      "id": "war_fervor",
+      "name": "战意沸腾",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": 1,
+      "durationUnit": "self_turn",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "attack",
+              "value": 1,
+              "mode": "delta",
+              "duration": null,
+              "target": "self",
+              "note": "战意沸腾：攻击 +1"
+            }
+          ]
+        }
+      ],
+      "note": "战鼓的冲突读层：board.conflict ≥6 时每自身回合挂载，跌回 6 以下后最迟 1 个自身回合自然到期。"
+    }
+  ],
   "unitDefs": [],
   "zoneDefs": [],
-  "domainDefs": []
+  "domainDefs": [
+    {
+      "id": "domain_scorched_earth",
+      "tier": "overlay",
+      "dispelable": true,
+      "duration": 25,
+      "durationUnit": "tick",
+      "rulePatches": [],
+      "triggers": [
+        {
+          "event": "on_deal_damage",
+          "effects": [
+            {
+              "type": "modify_resource",
+              "resource": "conflict",
+              "value": 1,
+              "mode": "delta",
+              "target": "board",
+              "note": "焦土：伤害事件冲突计数额外 +1"
+            },
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 1,
+              "target": "attacker",
+              "note": "焦土：不分敌我，造成伤害 +1"
+            }
+          ],
+          "note": "双向放大器：计数与伤害都不分敌我——战祸的界域连自己也烧"
+        }
+      ],
+      "note": "焦土界域：冲突计数放大器 + 全场增伤（含敌方）。"
+    }
+  ]
 }
