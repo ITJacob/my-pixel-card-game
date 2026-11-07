@@ -3,7 +3,45 @@
   "familyId": "family_05",
   "familyName": "家族·伍",
   "faction": "faction_02",
-  "cards": [],
+  "cards": [
+    {
+      "id": "j02_massing_momentum",
+      "name": "集众势",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "massing",
+      "flagship": false,
+      "describe": "被动。自身回合开始时，若冲突计数 ≥4，获得「集众势」（行动条速率 +2、攻击 +1，每回合重判）——战火越旺，冲得越快。",
+      "hook": [
+        "on_turn_start"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "conflict",
+            "cmp": ">=",
+            "n": 4
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "massing_momentum",
+              "duration": 1,
+              "durationUnit": "self_turn",
+              "refresh": true,
+              "target": "self",
+              "note": "集众势：冲突 ≥4 时挂载（速率+2/攻击+1）"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    }
+  ],
   "statusDefs": [
     {
       "id": "beast_swarm",
@@ -22,6 +60,44 @@
         "planter",
         "apothecary"
       ]
+    },
+    {
+      "id": "massing_momentum",
+      "name": "集众势",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": 1,
+      "durationUnit": "self_turn",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "gauge.rate",
+              "value": 2,
+              "mode": "delta",
+              "duration": null,
+              "target": "self",
+              "note": "集众势：行动条速率 +2"
+            },
+            {
+              "type": "modify_stat",
+              "stat": "attack",
+              "value": 1,
+              "mode": "delta",
+              "duration": null,
+              "target": "self",
+              "note": "集众势：攻击 +1"
+            }
+          ]
+        }
+      ],
+      "note": "集众势的冲突读层：board.conflict ≥4 时每自身回合挂载，跌回后最迟 1 个自身回合自然到期。"
     }
   ],
   "unitDefs": [],
