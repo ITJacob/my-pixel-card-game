@@ -245,6 +245,127 @@
         }
       ],
       "tentative": false
+    },
+    {
+      "id": "j06_ridethe_tide",
+      "name": "顺势而为",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "fate",
+      "flagship": false,
+      "describe": "主动（0 吟唱，12tick CD）。命运值向远离零的方向推 1：已在正极 → +1，已在负极 → −1，为零 → +1（顺势开场）——星轨庄家的加注手势。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 12,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "fate_value",
+            "cmp": "<",
+            "n": 0
+          },
+          "then": [
+            {
+              "type": "modify_resource",
+              "resource": "fate_value",
+              "value": -1,
+              "mode": "delta",
+              "target": "board",
+              "note": "顺势：负极加注 −1"
+            }
+          ],
+          "else": [
+            {
+              "type": "modify_resource",
+              "resource": "fate_value",
+              "value": 1,
+              "mode": "delta",
+              "target": "board",
+              "note": "顺势：正极（或零）加注 +1"
+            }
+          ]
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "j06_hasten_fortune",
+      "name": "催运",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "fate",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。自身幸运层 +1；若手中握有幸运币，捏碎它直接转运：币转化为幸运层 +2（合计 +3）——等不及它自己熟。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "lucky_streak",
+          "stacks": 1,
+          "duration": 25,
+          "target": "self",
+          "note": "催运：幸运层 +1"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "self",
+            "id": "lucky_coin",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "dispel",
+              "dispelTarget": "unit",
+              "statusId": "lucky_coin",
+              "target": "self",
+              "note": "捏碎幸运币（不触发转化端）"
+            },
+            {
+              "type": "mount_status",
+              "statusId": "lucky_streak",
+              "stacks": 2,
+              "duration": 25,
+              "target": "self",
+              "note": "币碎转运：幸运层 +2"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
     }
   ],
   "statusDefs": [

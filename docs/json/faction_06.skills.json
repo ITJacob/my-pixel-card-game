@@ -183,6 +183,34 @@
         }
       ],
       "note": "观星的命运负极读层：fate_value ≤−5 时每自身回合挂载（低潮攒运）。"
+    },
+    {
+      "id": "lucky_coin",
+      "name": "幸运币",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": 10,
+      "durationUnit": "tick",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_remove",
+          "effects": [
+            {
+              "type": "modify_resource",
+              "resource": "fate_value",
+              "value": 1,
+              "mode": "delta",
+              "target": "board",
+              "note": "无恙满 10tick：币化幸运——fate_value +1（转化端）"
+            }
+          ]
+        }
+      ],
+      "note": "幸运币（星钥派系通货，基准层实体化）：普攻位获得、耗行动机会（20tick CD 另计）；10tick 窗口内持有者受任意伤害即被夺（币归攻击者，此移除不触发转化），无恙满 10tick 转化为 fate_value +1。被夺语义由引擎在伤害链前置拦截（holder 语境）。"
     }
   ],
   "unitDefs": [],
