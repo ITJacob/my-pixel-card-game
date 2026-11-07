@@ -2,9 +2,163 @@
   "level": "faction",
   "factionId": "faction_07",
   "factionName": "血巢",
-  "cards": [],
-  "statusDefs": [],
+  "cards": [
+    {
+      "id": "f07_lifeline",
+      "name": "生命线",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "life",
+      "flagship": false,
+      "describe": "被动。自身回合开始时读取死亡簿：场上累计死亡 ≥2 时，获得「生命韧性」（受击回血 1，每回合重判）——死亡越多，血巢越韧。",
+      "hook": [
+        "on_turn_start"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "death_tally",
+            "cmp": ">=",
+            "n": 2
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "life_tenacity",
+              "duration": 1,
+              "durationUnit": "self_turn",
+              "refresh": true,
+              "target": "self",
+              "note": "生命韧性：死亡簿 ≥2 挂载（受击回血 1）"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f07_nest_domain",
+      "name": "母巢",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "life",
+      "flagship": false,
+      "describe": "展开「母巢」界域 25tick：入场时友方全体获得再生（每 tick 回血 1，10tick）；域存续期间域内友方持续续杯（regen 每 tick 刷新）——孕育不停。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 35,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "domain"
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "domain",
+              "op": "overlay",
+              "def": "domain_nest",
+              "duration": 25,
+              "durationUnit": "tick"
+            },
+            {
+              "type": "mount_status",
+              "statusId": "regen",
+              "duration": 10,
+              "durationUnit": "tick",
+              "target": "all_allies",
+              "note": "入场：友方全体再生 10tick"
+            },
+            {
+              "type": "modify_resource",
+              "resource": "lost",
+              "value": 1,
+              "mode": "delta",
+              "target": "self",
+              "note": "界域操作租金（降临范式 +1）"
+            }
+          ]
+        }
+      ],
+      "domain": {
+        "def": "domain_nest",
+        "envRulesText": "域内友方持续再生（regen 每 tick 刷新，回血 1/tick）"
+      },
+      "tentative": false
+    }
+  ],
+  "statusDefs": [
+    {
+      "id": "life_tenacity",
+      "name": "生命韧性",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": 1,
+      "durationUnit": "self_turn",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_take_damage",
+          "effects": [
+            {
+              "type": "heal",
+              "value": 1,
+              "target": "self",
+              "note": "生命韧性：受击回血 1"
+            }
+          ]
+        }
+      ],
+      "note": "生命线的死亡簿读层：death_tally ≥2 时每自身回合挂载（死亡簿为引擎自动量表）。"
+    }
+  ],
   "unitDefs": [],
   "zoneDefs": [],
-  "domainDefs": []
+  "domainDefs": [
+    {
+      "id": "domain_nest",
+      "tier": "overlay",
+      "dispelable": true,
+      "duration": 25,
+      "durationUnit": "tick",
+      "rulePatches": [],
+      "triggers": [
+        {
+          "event": "on_tick",
+          "filter": {
+            "side": "ally"
+          },
+          "effects": [
+            {
+              "type": "mount_status",
+              "statusId": "regen",
+              "duration": 3,
+              "durationUnit": "tick",
+              "refresh": true,
+              "target": "self",
+              "note": "母巢：域内友方持续再生"
+            }
+          ]
+        }
+      ],
+      "note": "母巢界域：孕育领域——入场全体再生 + 存续期每 tick 续杯。"
+    }
+  ]
 }
