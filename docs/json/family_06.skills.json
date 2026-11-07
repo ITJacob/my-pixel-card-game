@@ -172,6 +172,77 @@
         }
       ],
       "tentative": false
+    },
+    {
+      "id": "j03_rule_write",
+      "name": "立法",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "decree",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。向敌方同路队首颁布法令：10tick 内禁攻击（decree 既有违例惩罚：精神伤害 + 枷锁）；法理天平 +1 秩序；秩序极 ≥+5 时自身获得「法威」（伤害 +1，每回合重判）。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "anchor": "enemy_front",
+          "scope": "whole_lane",
+          "sort": "index_asc",
+          "pickCount": 1
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "decree",
+          "duration": 30,
+          "charges": 2,
+          "params": {
+            "rule": "no_attack"
+          },
+          "target": "target",
+          "note": "立法：禁攻击令（decree 承载违例惩罚）"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "rule_balance",
+          "value": 1,
+          "mode": "delta",
+          "target": "board",
+          "note": "立法推极：法理天平 +1 秩序"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "rule_balance",
+            "cmp": ">=",
+            "n": 5
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "law_might",
+              "duration": 1,
+              "durationUnit": "self_turn",
+              "refresh": true,
+              "target": "self",
+              "note": "法威：秩序极 ≥+5 挂载（伤害 +1）"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
     }
   ],
   "statusDefs": [
@@ -436,6 +507,33 @@
         "planter",
         "apothecary"
       ]
+    },
+    {
+      "id": "law_might",
+      "name": "法威",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": 1,
+      "durationUnit": "self_turn",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_deal_damage",
+          "effects": [
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 1,
+              "target": "same_target",
+              "note": "法威：执法有据，伤害 +1"
+            }
+          ]
+        }
+      ],
+      "note": "立法卡的秩序极读层：rule_balance ≥+5 时每自身回合挂载。"
     }
   ],
   "unitDefs": [],

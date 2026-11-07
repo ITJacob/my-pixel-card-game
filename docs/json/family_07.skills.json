@@ -3,8 +3,102 @@
   "familyId": "family_07",
   "familyName": "家族·柒",
   "faction": "faction_03",
-  "cards": [],
-  "statusDefs": [],
+  "cards": [
+    {
+      "id": "j03_rule_twist",
+      "name": "扭曲",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "twist",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。守恒重排敌方全体行动条（gauge_shuffle）；法理天平 −1 熵；熵极 ≤−5 时自身获得「诡势」（行动条速率 +2，每回合重判）——秩序的缝隙越撕越大。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "gauge_shuffle",
+          "resource": "gauge.current",
+          "target": "all_enemies",
+          "note": "扭曲：敌方行动条守恒重排"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "rule_balance",
+          "value": -1,
+          "mode": "delta",
+          "target": "board",
+          "note": "扭曲推极：法理天平 −1 熵"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "rule_balance",
+            "cmp": "<=",
+            "n": -5
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "trick_momentum",
+              "duration": 1,
+              "durationUnit": "self_turn",
+              "refresh": true,
+              "target": "self",
+              "note": "诡势：熵极 ≤−5 挂载（速率 +2）"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [
+    {
+      "id": "trick_momentum",
+      "name": "诡势",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": 1,
+      "durationUnit": "self_turn",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "gauge.rate",
+              "value": 2,
+              "mode": "delta",
+              "duration": null,
+              "target": "self",
+              "note": "诡势：行动条速率 +2"
+            }
+          ]
+        }
+      ],
+      "note": "扭曲卡的熵极读层：rule_balance ≤−5 时每自身回合挂载。"
+    }
+  ],
   "unitDefs": [],
   "zoneDefs": [],
   "domainDefs": []
