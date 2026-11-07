@@ -287,6 +287,65 @@
         }
       ],
       "tentative": false
+    },
+    {
+      "id": "j09_incite_lust",
+      "name": "煽欲",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "lust",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。煽风点火：目标敌方单位恶欲 +2（lust 产层——只来自敌方放纵，本卡即推波之手）；若目标恶欲因此 ≥6 失控线，立即引爆 3 点精神伤害。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "anchor": "enemy_front",
+          "scope": "whole_lane",
+          "sort": "index_asc",
+          "pickCount": 1
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "modify_resource",
+          "resource": "lust",
+          "value": 2,
+          "mode": "delta",
+          "target": "target",
+          "note": "煽欲：目标 lust +2（恶欲池产层，失控阈值 ≥6 既有读层）"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "resource_compare",
+            "side": "target",
+            "key": "lust",
+            "cmp": ">=",
+            "n": 6
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "mental",
+              "value": 3,
+              "target": "target",
+              "note": "失控引爆：lust ≥6，恶欲炸弹提前结算"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
     }
   ],
   "statusDefs": [

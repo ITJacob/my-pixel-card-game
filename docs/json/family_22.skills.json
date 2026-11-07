@@ -3,8 +3,80 @@
   "familyId": "family_22",
   "familyName": "家族·贰拾贰",
   "faction": "faction_09",
-  "cards": [],
-  "statusDefs": [],
+  "cards": [
+    {
+      "id": "j09_asceticism",
+      "name": "苦修",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "suffer",
+      "flagship": false,
+      "describe": "主动（0 吟唱，18tick CD）。承受苦难换坚韧：自身生命 −2（最低钳 1），获得「坚韧」（受到伤害 −1，即受击回血 1 结算，10tick）——苦难记账，坚韧是利息。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 18,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "modify_resource",
+          "resource": "hp",
+          "value": -2,
+          "mode": "delta",
+          "target": "self",
+          "note": "苦修付价：生命 −2（钳 1 不致死）"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "hardiness",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "苦难换坚韧"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [
+    {
+      "id": "hardiness",
+      "name": "坚韧",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": 10,
+      "durationUnit": "tick",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_take_damage",
+          "effects": [
+            {
+              "type": "heal",
+              "value": 1,
+              "target": "self",
+              "note": "坚韧：受到的伤害 −1（受击回血 1 结算）"
+            }
+          ]
+        }
+      ],
+      "note": "prisoner 苦修卡的苦难经济面：受苦换减伤，苦难银行的个人账户。"
+    }
+  ],
   "unitDefs": [],
   "zoneDefs": [],
   "domainDefs": []
