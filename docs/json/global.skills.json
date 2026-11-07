@@ -332,6 +332,20 @@
       },
       "note": "燃焚轴身份状态（自 common burn 分叉私有化）：火属性 0.4/tick DoT，叠层 refresh；火焰系技能统一改指此 id，common burn（灼烧）保留为刺客/罪犯/窥秘人/智者通用火 DoT",
       "element": "fire"
+    },
+    {
+      "id": "immobilize",
+      "name": "束缚",
+      "category": [
+        "control"
+      ],
+      "dispelable": true,
+      "duration": 5,
+      "maxStacks": 1,
+      "modifiers": {
+        "moveImmune": true
+      },
+      "note": "纯禁位移（slow 注记指向的本定义）：moveImmune 母版，无速率惩罚——只锁脚不减速。首个登记用户 = 欲狱派系基准普攻（自身与目标同附 5tick，各自计时各自可驱散）。"
     }
   ],
   "unitDefs": [],
