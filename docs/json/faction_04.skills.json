@@ -2,8 +2,108 @@
   "level": "faction",
   "factionId": "faction_04",
   "factionName": "时隙",
-  "cards": [],
-  "statusDefs": [],
+  "cards": [
+    {
+      "id": "f04_gap_leverage",
+      "name": "借缝",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "gap",
+      "flagship": false,
+      "describe": "被动。持有者感知缝隙：战场隐秘值（secrecy）≥5 时，自身获得「缝隙借势」（伤害 +1，每回合重判）；隐秘 <5 时无效果。",
+      "hook": [
+        "on_turn_start"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "secrecy",
+            "cmp": ">=",
+            "n": 5
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "gap_leverage",
+              "duration": 1,
+              "durationUnit": "self_turn",
+              "refresh": true,
+              "target": "self",
+              "note": "缝隙借势：secrecy ≥5 挂载（伤害 +1）"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f04_echo",
+      "name": "回声",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "gap",
+      "flagship": false,
+      "describe": "主动（0 吟唱，25tick CD）。回响自身上一张已结算的主动技能：完整效果再结算一次（能量照付本式）——货可复读，账照样还。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "echo_last_skill",
+          "potency": 1.0,
+          "rounding": "round",
+          "note": "回声：复读自身上一式（potency 1.0 = 完整效果）"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [
+    {
+      "id": "gap_leverage",
+      "name": "缝隙借势",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": 1,
+      "durationUnit": "self_turn",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_deal_damage",
+          "effects": [
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 1,
+              "target": "same_target",
+              "note": "缝隙借势：伤害 +1"
+            }
+          ]
+        }
+      ],
+      "note": "借缝卡的 secrecy 读层（共享通道读，写入方不变）：secrecy ≥5 时每自身回合挂载。"
+    }
+  ],
   "unitDefs": [],
   "zoneDefs": [],
   "domainDefs": []
