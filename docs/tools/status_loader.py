@@ -3,7 +3,7 @@
 
 文件布局（按文件名约定发现，manifest 只登记 faction）：
   global.skills.json       全域级（唯一）：跨派系复用内容
-  faction_NN.skills.json   派系级（manifest.factions 登记）：家族间共享蓝本池（当前为空；公共卡已入 family 层）
+  faction_NN.skills.json   派系级（manifest.factions 登记）：家族间共享蓝本池（当前为空）+ 派系公共卡 fNN_（入门卡+通用稀有卡）
   family_NN.skills.json    家族级：家族公共卡（jNN_ 前缀）+ 家族私有蓝本池
   hero_NN.skills.json      英雄级：英雄独自卡 + family 归属字段；NN 与 faction_NN 配对
 

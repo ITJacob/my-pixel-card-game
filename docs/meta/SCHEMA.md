@@ -35,7 +35,7 @@ docs/json/
 |---|---|---|
 | level | const "faction" | 层级标记 |
 | factionId / factionName | string | `faction_01..09` 封闭 / 派系中文名 |
-| cards | card[] | **恒为空数组**——原派系公共卡已下沉 family 层（2026-10 结构变更） |
+| cards | card[] | **派系公共卡**（id `fNN_` 前缀，NN=本文件序号；2026-11-06 启用——定位：基础入门卡 + 非常通用的稀有卡，供派系下全部家族/英雄的技能组选用） |
 | statusDefs / unitDefs / zoneDefs / domainDefs | 数组 | 家族间共享蓝本池（同派系多家族共用才入；2026-11 家族私有蓝本池已归还 family 层，本池当前为空） |
 
 **family_NN.skills.json**：
@@ -48,7 +48,13 @@ docs/json/
 | cards | card[] | 家族公共卡（id `jNN_` 前缀，NN=派系号；j 释义为家族） |
 | statusDefs / unitDefs / zoneDefs / domainDefs | 数组 | 家族私有蓝本池（未展开家族恒空；2026-11 起家族独占定义一律入本层） |
 
-- 家族文件 id 前缀口径：卡 id `j<NN>_` 的 NN = **文件 faction 号**（同派系家族组共享 j 号，如 family_04 与 family_05 同为 faction_02 组、均挂 j02_ 卡）；`familyId` 序号 = 文件名序号（源质分组序），与 j 号无对应关系。**f 前缀预留给 faction 级卡**（faction 文件 cards 恒空，暂无此类卡）。
+- 家族文件 id 前缀口径：卡 id `j<NN>_` 的 NN = **文件 faction 号**（同派系家族组共享 j 号，如 family_04 与 family_05 同为 faction_02 组、均挂 j02_ 卡）；`familyId` 序号 = 文件名序号（源质分组序），与 j 号无对应关系。**f 前缀 = faction 级卡**（`f<NN>_`，NN = faction 文件序号；2026-11-06 启用）。
+
+## 1·五、技能组三档结构（2026-11-06 主人裁定）
+
+> 技能组（卡组）= **英雄私有卡（hNN_，≤6 张）+ 家族公共卡（jNN_）+ 派系公共卡（fNN_）**。
+> 英雄私有只留招牌与独特性；家族/派系层供**基础入门卡**（新手上手件）与**非常通用的稀有卡**（跨轴通用件）。
+> ⚠️ 存量：在册 9 英雄各 22–35 张私有卡超限，平衡期按三档重构归位（待办 §二）。
 - **hero_NN.skills.json**：
 
 | 字段 | 类型 | 说明 |

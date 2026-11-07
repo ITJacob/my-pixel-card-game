@@ -31,7 +31,7 @@ docs/tools/  validate（语义）/ validate_schema（结构）/ check_enum_sync�
 
 1. 从 CardGame 参考源挑轴取卡（旧途径/卡 id 记入 `docs/meta/迁移映射表.md`，含改动类型：直迁/改数值/合并/重写）。
 2. 去 IP 改写：name/describe 机制化表述，删 lore/flavor，清 sequenceName 前缀。
-3. 按 schema 落对应层级文件（家族公共卡 → family_NN，英雄独自卡 → hero_NN，家族独占蓝本 → family_NN 五池，跨派系复用 → global；faction_NN 只留家族间共享蓝本，当前为空）。
+3. 按 schema 落对应层级文件（英雄私有卡 hNN_（≤6）→ hero_NN，家族公共卡 jNN_ → family_NN，派系公共卡 fNN_ → faction_NN，家族独占蓝本 → family_NN 五池，跨派系复用 → global）。
 4. 四脚本全绿后提交；每英雄迁移一个 commit。
 
 ## Git 方式
