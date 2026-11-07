@@ -3,7 +3,37 @@
   "familyId": "family_19",
   "familyName": "家族·拾玖",
   "faction": "faction_08",
-  "cards": [],
+  "cards": [
+    {
+      "id": "j08_audience",
+      "name": "观众",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "watch",
+      "flagship": false,
+      "describe": "被动。持有者受到近战伤害时，以位格压人：攻击者受 1 点精神反噬（凡俗之刃不配触碰观众席）——无视位格者除外。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_take_damage",
+          "effects": [
+            {
+              "type": "damage",
+              "element": "mental",
+              "value": 1,
+              "target": "attacker",
+              "note": "观众：受击反噬 1 点精神（位格藐视的结算面，位格前提由引擎按 rank 差校验）"
+            }
+          ]
+        }
+      ]
+    }
+  ],
   "statusDefs": [],
   "unitDefs": [],
   "zoneDefs": [],

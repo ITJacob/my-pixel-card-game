@@ -362,6 +362,30 @@
           "note": "风暴之后的海：每回合若连锁在场回复 2"
         }
       ]
+    },
+    {
+      "id": "j08_tailwind",
+      "name": "乘风",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "storm",
+      "flagship": false,
+      "describe": "被动。战斗开始时，自身行动条速率 +2，持续整场——风暴不等人。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "gauge.rate",
+          "value": 2,
+          "mode": "delta",
+          "duration": null,
+          "target": "self"
+        }
+      ],
+      "tentative": false
     }
   ],
   "statusDefs": [

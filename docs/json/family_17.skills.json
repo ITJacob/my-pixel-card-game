@@ -3,7 +3,46 @@
   "familyId": "family_17",
   "familyName": "家族·拾柒",
   "faction": "faction_08",
-  "cards": [],
+  "cards": [
+    {
+      "id": "j08_raise_light",
+      "name": "举火",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "chant",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。点亮光照度 +2（luminance 写入：圣光系登记面）；友方全体回复 2 点生命——光到之处，创生开始。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "set_luminance",
+          "note": "举火：光照度 +2（luminance 光照类写入）",
+          "delta": 2
+        },
+        {
+          "type": "heal",
+          "value": 2,
+          "target": "all_allies"
+        }
+      ],
+      "tentative": false
+    }
+  ],
   "statusDefs": [],
   "unitDefs": [],
   "zoneDefs": [],

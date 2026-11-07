@@ -3,7 +3,52 @@
   "familyId": "family_20",
   "familyName": "家族·贰拾",
   "faction": "faction_08",
-  "cards": [],
+  "cards": [
+    {
+      "id": "j08_blood_pact",
+      "name": "血契",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "pact",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。以血立契：自身生命 −2（最低钳 1 不致死），自身能量 +3——血肉经济的第一笔本金。",
+      "cost": {
+        "energy": 0,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "modify_resource",
+          "resource": "hp",
+          "value": -2,
+          "mode": "delta",
+          "target": "self",
+          "note": "血契本金：生命 −2（钳 1 不致死）"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "energy",
+          "value": 3,
+          "mode": "delta",
+          "target": "self",
+          "note": "契成：能量 +3"
+        }
+      ],
+      "tentative": false
+    }
+  ],
   "statusDefs": [
     {
       "id": "grazing_slot",

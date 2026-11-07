@@ -3,7 +3,47 @@
   "familyId": "family_18",
   "familyName": "家族·拾捌",
   "faction": "faction_08",
-  "cards": [],
+  "cards": [
+    {
+      "id": "j08_deduction",
+      "name": "推演",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "read",
+      "flagship": false,
+      "describe": "主动（0 吟唱，12tick CD）。看破敌方同路队首的破绽：其受到的伤害 +1（5tick）——你出手之前，我已读完。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 12,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "anchor": "enemy_front",
+          "scope": "whole_lane",
+          "sort": "index_asc",
+          "pickCount": 1
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "vulnerable",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "推演：看破破绽，受到的伤害 +1"
+        }
+      ],
+      "tentative": false
+    }
+  ],
   "statusDefs": [],
   "unitDefs": [],
   "zoneDefs": [],
