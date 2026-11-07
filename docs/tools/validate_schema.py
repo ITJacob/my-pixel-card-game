@@ -224,7 +224,8 @@ def cross_check(docs, manifest, errors, warns):
         return
 
     # 3) manifest ↔ faction 文件对齐（global/family/hero 按文件名约定发现，不在 manifest 登记）
-    #    cardCount 口径：派系卡数 = 该派系在册 family 文件 cards 之和（faction 文件 cards 恒空）
+    #    cardCount 口径（2026-11-06 三档结构）：派系卡数 = 该派系在册 family 文件 cards 之和
+    #    + 本 faction 文件 cards（派系公共卡 fNN_）
     m_by_id = {p["id"]: p for p in manifest.get("factions", [])}
     fac_docs = {d.get("factionId"): d for d in docs.values() if d.get("level") == "faction"}
     fam_cards = {}
@@ -236,7 +237,7 @@ def cross_check(docs, manifest, errors, warns):
             errors.append("manifest: 缺少派系条目 %s" % pid)
             continue
         p = m_by_id[pid]
-        n = fam_cards.get(pid, 0)
+        n = fam_cards.get(pid, 0) + len(d.get("cards") or [])
         if p.get("cardCount") != n:
             errors.append("manifest %s: cardCount %s != 在册家族卡数之和 %d" % (pid, p.get("cardCount"), n))
         if p.get("file") != "%s.skills.json" % pid:

@@ -2,9 +2,207 @@
   "level": "faction",
   "factionId": "faction_01",
   "factionName": "暮河",
-  "cards": [],
-  "statusDefs": [],
+  "cards": [
+    {
+      "id": "f01_dusk_compass",
+      "name": "暮色罗盘",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "dusk",
+      "flagship": false,
+      "describe": "被动。持有者感知暮色：相位处于黄昏或夜晚时，自身攻击 +1、行动条速率 +1（每个自身回合按当前相位重判）；白昼档无效果。",
+      "effects": [],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_turn_start",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "phase_is",
+                "phases": [
+                  "dusk",
+                  "night"
+                ]
+              },
+              "then": [
+                {
+                  "type": "mount_status",
+                  "statusId": "dusk_sense",
+                  "duration": 1,
+                  "durationUnit": "self_turn",
+                  "refresh": true,
+                  "target": "self",
+                  "note": "暮色读层：黄昏/夜晚挂载暮感（攻击+1/速率+1），离相后最迟 1 个自身回合自然到期"
+                }
+              ],
+              "else": []
+            }
+          ],
+          "note": "每个自身回合按当前相位重判暮感"
+        }
+      ],
+      "hook": [
+        "on_turn_start"
+      ]
+    },
+    {
+      "id": "f01_dusk_field",
+      "name": "暮色界域",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "dusk",
+      "flagship": false,
+      "describe": "展开「暮色界域」25tick：域内暮河派系单位造成伤害 +1；相位处于黄昏/夜晚时增益翻倍（+2）；白昼档增益归零、域不消散。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "domain"
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "domain",
+              "op": "overlay",
+              "def": "domain_dusk_field",
+              "duration": 25,
+              "durationUnit": "tick"
+            },
+            {
+              "type": "modify_resource",
+              "resource": "lost",
+              "value": 1,
+              "mode": "delta",
+              "target": "self",
+              "note": "界域操作租金（降临范式 +1）"
+            }
+          ]
+        }
+      ],
+      "domain": {
+        "def": "domain_dusk_field",
+        "envRulesText": "域内暮河派系单位造成伤害 +1；黄昏/夜晚档 +2；白昼档增益归零（域不消散）"
+      },
+      "tentative": false
+    }
+  ],
+  "statusDefs": [
+    {
+      "id": "dusk_sense",
+      "name": "暮感",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": 1,
+      "durationUnit": "self_turn",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "attack",
+              "value": 1,
+              "mode": "delta",
+              "duration": null,
+              "target": "self",
+              "note": "暮感：攻击 +1"
+            },
+            {
+              "type": "modify_stat",
+              "stat": "gauge.rate",
+              "value": 1,
+              "mode": "delta",
+              "duration": null,
+              "target": "self",
+              "note": "暮感：行动条速率 +1"
+            }
+          ]
+        }
+      ],
+      "note": "暮色相位读层（暮色罗盘/暮色界域共用）：黄昏/夜晚生效，离相后最迟 1 个自身回合自然到期。"
+    }
+  ],
   "unitDefs": [],
   "zoneDefs": [],
-  "domainDefs": []
+  "domainDefs": [
+    {
+      "id": "domain_dusk_field",
+      "tier": "overlay",
+      "dispelable": true,
+      "duration": 25,
+      "durationUnit": "tick",
+      "triggers": [
+        {
+          "event": "on_deal_damage",
+          "filter": {
+            "side": "ally"
+          },
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "phase_is",
+                "phases": [
+                  "day"
+                ]
+              },
+              "then": [],
+              "else": [
+                {
+                  "op": "if",
+                  "condition": {
+                    "kind": "phase_is",
+                    "phases": [
+                      "dusk",
+                      "night"
+                    ]
+                  },
+                  "then": [
+                    {
+                      "type": "damage",
+                      "element": "none",
+                      "value": 2,
+                      "target": "attacker",
+                      "note": "暮色界域·夜暮档：域内友方造成伤害 +2"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "type": "damage",
+                      "element": "none",
+                      "value": 1,
+                      "target": "attacker",
+                      "note": "暮色界域·常档（黎明/午夜）：域内友方造成伤害 +1"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "note": "增益随相位起落：白昼（day）归零、黄昏/夜晚 +2、黎明/午夜 +1；域不消散。"
+        }
+      ],
+      "note": "暮色界域：暮河派系增益域。增益随相位起落——黄昏/夜晚 +2、常档 +1、白昼归零不散。派系限定写在卡面 envRulesText，结构上以 side:ally 兜底。",
+      "rulePatches": []
+    }
+  ]
 }
