@@ -9,7 +9,7 @@ docs/json/
 ├─ manifest.json            索引：9 派系 id/name/文件/卡数 + rarityMap 校验基准
 ├─ schema/skills.schema.json
 ├─ global.skills.json       全域级（唯一）：跨派系复用内容
-├─ faction_NN.skills.json   派系级 ×9（NN=01..09）：家族间共享蓝本池（当前为空；cards 恒空）
+├─ faction_NN.skills.json   派系级 ×9（NN=01..09）：家族间共享蓝本池（当前为空）+ 派系公共卡 fNN_
 ├─ family_NN.skills.json    家族级 ×22（NN=01..22）：家族公共卡 + 家族私有蓝本池 + 家族元信息
 └─ hero_NN.skills.json      英雄级 ×9：英雄独自卡 + family 归属字段
 ```
@@ -17,7 +17,7 @@ docs/json/
 - 四个层级各一个文件根（schema 根 oneOf 按 `level` 字段分派到 fileRootGlobal / fileRootFaction / fileRootFamily / fileRootHero）。
 - 每个文件统一**五池**格式：`cards` / `statusDefs` / `unitDefs` / `zoneDefs` / `domainDefs`，均为数组、可空。
 - **家族编号（源质分组序，封闭 22 个）**：01 warrior / 02 corpse_collector / 03 sleepless（faction_01）；04 assassin / 05 hunter（faction_02）；06 arbiter / 07 lawyer（faction_03）；08 seer / 09 apprentice / 10 thief（faction_04）；11 pryer / 12 savant（faction_05）；13 monster（faction_06）；14 apothecary / 15 planter（faction_07）；16 sailor / 17 chanter / 18 reader / 19 spectator / 20 supplicant（faction_08）；21 criminal / 22 prisoner（faction_09）。在册 9 族（01/04/06/08/11/13/14/16/21）承接首轮英雄；其余 13 族为未展开空壳（五池全空），第二英雄选材时填充。
-- **manifest 只登记 faction 文件条目**。`cardCount` 口径：派系卡数 = 该派系在册 family 文件 cards 之和（faction 文件 cards 恒空，不再直接计数）；`family_NN` / `hero_NN` / `global` 按文件名约定发现，**不在 manifest 登记**（避免同步面）。validate_schema 校验 family ↔ faction、hero ↔ family/faction 配对。
+- **manifest 只登记 faction 文件条目**。`cardCount` 口径（2026-11-06 起）：派系卡数 = 该派系在册 family 文件 cards 之和 + 本 faction 文件 cards（派系公共卡）；`family_NN` / `hero_NN` / `global` 按文件名约定发现，**不在 manifest 登记**（避免同步面）。validate_schema 校验 family ↔ faction、hero ↔ family/faction 配对。
 
 ## 2. 各层文件根
 
@@ -82,7 +82,7 @@ docs/json/
 - `kind`：active / passive / equipment / summon。
   - active → 必填 cost/reach/target；passive → 必填 hook；equipment → 必填 cost + equipment 载荷（slot=weapon|armor）；summon → 必填 cost + summon 载荷（一卡一单位）。
 - `effects`：效果树（原语叶子 + sequence/repeat/if 算子）；equipment/summon 的 effects 为可选战吼。
-- `id`：`^[a-z][a-z0-9_]*$`；前缀约束按文件层级由 cross_check 执行（family 文件 `jNN_` / hero 文件 `hNN_`；faction 文件 cards 恒空、global 无前缀约束，见 §2 口径；`fNN_` 预留给 faction 级卡，出现在其他层级即报错）。
+- `id`：`^[a-z][a-z0-9_]*$`；前缀约束按文件层级由 cross_check 执行（family 文件 `jNN_` / hero 文件 `hNN_`；faction 文件 fNN_（派系公共卡）、global 无前缀约束，见 §2 口径；`fNN_` 预留给 faction 级卡，出现在其他层级即报错）。
 - 文本面：name / describe（机制描述，禁设计过程）；lore/flavor 命名专项前不回流。
 - 无 sequenceName / sourceFile 等旧里程碑字段。
 
@@ -91,7 +91,7 @@ docs/json/
 - 原语 32 个：封闭集 = schema `effect.oneOf`（35 分支 = 3 算子 + 32 原语叶子）；参数取值域见 `ddd/params/效果参数.md` 原语表。新增先登记再改 schema。
 - 触发点 16 个：on_battle_start / on_turn_start / on_turn_end / on_apply / on_remove / on_tick / on_phase_change / on_spawn / on_death / on_kill / on_attack / on_equipment_equip / on_active_skill / on_take_damage / on_deal_damage / on_status_gain。
 - 元素 / 资源池 / 装备槽 / 状态类别取值域见 ddd params 三篇。
-- 战场量表（2026-11-07 登记 conflict，共 6 个）：secrecy[0,10] / order[0,10] / fate_value[−10,+10] / luminance[0,10] / death_tally[0,10] / **conflict[0,10]**（冲突计数：引擎自动累计双方伤害事件/击杀/施法 +1、每 tick −0.1 自然消退；读层方战祸两族[裁定 #8：计双方，与欲狱 lust 只计敌方放纵分叉]；写入方登记 = 引擎自动 + 战祸派系卡）。维度定义见 源质维度与跨系枢纽.md §二，机器正源 = schema dimHook.enum / effModifyResource.resource.enum / validate.py DIM_RANGES。
+- 战场量表（2026-11-07 登记 conflict / rule_balance，共 7 个）：secrecy[0,10] / order[0,10] / fate_value[−10,+10] / luminance[0,10] / death_tally[0,10] / **conflict[0,10]**（冲突计数：引擎自动累计双方伤害事件/击杀/施法 +1、每 tick −0.1 自然消退；读层方战祸两族[裁定 #8：计双方，与欲狱 lust 只计敌方放纵分叉]；写入方登记 = 引擎自动 + 战祸派系卡）/ **rule_balance[−10,+10]**（法理天平·单表双极：+ 秩序极仅 arbiter 系卡写入、− 熵极仅 lawyer 系卡写入，派系卡与引擎不推、只读；可回零[裁定 #9 与 fate_value 分叉]）。维度定义见 源质维度与跨系枢纽.md §二，机器正源 = schema dimHook.enum / effModifyResource.resource.enum / validate.py DIM_RANGES。
 
 ## 6. 已知待修清单
 

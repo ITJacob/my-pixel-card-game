@@ -2,8 +2,197 @@
   "level": "faction",
   "factionId": "faction_03",
   "factionName": "律庭",
-  "cards": [],
-  "statusDefs": [],
+  "cards": [
+    {
+      "id": "f03_scales_eye",
+      "name": "天平之眼",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "rule",
+      "flagship": false,
+      "describe": "被动。持有者可见法理天平当前值与极性（读层，不推极）：秩序极 ≥+5 时自身受到的伤害 −1（结算为受击回血 1）；熵极 ≤−5 时自身造成的伤害 +1。",
+      "hook": [
+        "on_turn_start"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "rule_balance",
+            "cmp": ">=",
+            "n": 5
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "order_favor",
+              "duration": 1,
+              "durationUnit": "self_turn",
+              "refresh": true,
+              "target": "self",
+              "note": "天平秩序赐：秩序极 ≥+5，受击回血 1"
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "rule_balance",
+            "cmp": "<=",
+            "n": -5
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "entropy_favor",
+              "duration": 1,
+              "durationUnit": "self_turn",
+              "refresh": true,
+              "target": "self",
+              "note": "天平熵赐：熵极 ≤−5，伤害 +1"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f03_final_verdict",
+      "name": "终审",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "rule",
+      "flagship": false,
+      "describe": "主动（0 吟唱，40tick CD）。按法理天平当前极性终局裁定：秩序极 ≥+5 → 敌方全体受 5 点精神违例惩罚；熵极 ≤−5 → 改写敌方法则（驱散敌方全体增益）。裁定后法理天平回零。两级均不足时无效但仍消耗行动。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 40,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "rule_balance",
+            "cmp": ">=",
+            "n": 5
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "mental",
+              "value": 5,
+              "target": "all_enemies",
+              "note": "终审·秩序：违例惩罚 5 点精神伤害"
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "rule_balance",
+            "cmp": "<=",
+            "n": -5
+          },
+          "then": [
+            {
+              "type": "dispel",
+              "dispelTarget": "unit",
+              "category": [
+                "buff"
+              ],
+              "target": "all_enemies",
+              "note": "终审·熵：改写法则，驱散敌方全体增益"
+            }
+          ],
+          "else": []
+        },
+        {
+          "type": "modify_resource",
+          "resource": "rule_balance",
+          "value": 0,
+          "mode": "set",
+          "target": "board",
+          "note": "裁定既下，法理天平回零"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [
+    {
+      "id": "order_favor",
+      "name": "天平秩序赐",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": 1,
+      "durationUnit": "self_turn",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_take_damage",
+          "effects": [
+            {
+              "type": "heal",
+              "value": 1,
+              "target": "self",
+              "note": "秩序庇佑：受到的伤害 −1（结算为受击回血 1）"
+            }
+          ]
+        }
+      ],
+      "note": "天平之眼的秩序极读层：rule_balance ≥+5 时每自身回合挂载。"
+    },
+    {
+      "id": "entropy_favor",
+      "name": "天平熵赐",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": 1,
+      "durationUnit": "self_turn",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_deal_damage",
+          "effects": [
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 1,
+              "target": "same_target",
+              "note": "熵增利刃：造成的伤害 +1"
+            }
+          ]
+        }
+      ],
+      "note": "天平之眼的熵极读层：rule_balance ≤−5 时每自身回合挂载。"
+    }
+  ],
   "unitDefs": [],
   "zoneDefs": [],
   "domainDefs": []
