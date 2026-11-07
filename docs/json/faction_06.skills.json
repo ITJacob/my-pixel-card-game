@@ -2,8 +2,189 @@
   "level": "faction",
   "factionId": "faction_06",
   "factionName": "星钥",
-  "cards": [],
-  "statusDefs": [],
+  "cards": [
+    {
+      "id": "f06_stargaze",
+      "name": "观星",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "star",
+      "flagship": false,
+      "describe": "被动。自身回合开始时读取命运值（只读，不推账户）：≥+5 获得「赐福」（伤害 +1）；≤−5 获得「潮汐」（行动条速率 +1）——高潮收租，低潮攒运。",
+      "hook": [
+        "on_turn_start"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "fate_value",
+            "cmp": ">=",
+            "n": 5
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "star_blessing",
+              "duration": 1,
+              "durationUnit": "self_turn",
+              "refresh": true,
+              "target": "self",
+              "note": "赐福：命运 ≥+5 挂载（伤害 +1）"
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "fate_value",
+            "cmp": "<=",
+            "n": -5
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "star_tide",
+              "duration": 1,
+              "durationUnit": "self_turn",
+              "refresh": true,
+              "target": "self",
+              "note": "潮汐：命运 ≤−5 挂载（速率 +1）"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f06_meteor_shower",
+      "name": "流星雨",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "star",
+      "flagship": false,
+      "describe": "主动（0 吟唱，30tick CD）。按命运值当前极性结算（只读，不推账户）：≥+5 → 星坠兑现，敌方全体受 3 点雷属性伤害；≤−5 → 逆境星愈，自身回复 3 点生命。两极均不足时无效。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "fate_value",
+            "cmp": ">=",
+            "n": 5
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "lightning",
+              "value": 3,
+              "target": "all_enemies",
+              "note": "流星雨·赐福兑现：敌全体 3 点雷伤"
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "fate_value",
+            "cmp": "<=",
+            "n": -5
+          },
+          "then": [
+            {
+              "type": "heal",
+              "value": 3,
+              "target": "self",
+              "note": "流星雨·逆境星愈：自身回复 3"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [
+    {
+      "id": "star_blessing",
+      "name": "赐福",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": 1,
+      "durationUnit": "self_turn",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_deal_damage",
+          "effects": [
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 1,
+              "target": "same_target",
+              "note": "赐福：伤害 +1"
+            }
+          ]
+        }
+      ],
+      "note": "观星的命运正极读层：fate_value ≥+5 时每自身回合挂载。"
+    },
+    {
+      "id": "star_tide",
+      "name": "潮汐",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": 1,
+      "durationUnit": "self_turn",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "gauge.rate",
+              "value": 1,
+              "mode": "delta",
+              "duration": null,
+              "target": "self",
+              "note": "潮汐：行动条速率 +1"
+            }
+          ]
+        }
+      ],
+      "note": "观星的命运负极读层：fate_value ≤−5 时每自身回合挂载（低潮攒运）。"
+    }
+  ],
   "unitDefs": [],
   "zoneDefs": [],
   "domainDefs": []
