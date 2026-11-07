@@ -2,8 +2,130 @@
   "level": "faction",
   "factionId": "faction_09",
   "factionName": "欲狱",
-  "cards": [],
-  "statusDefs": [],
+  "cards": [
+    {
+      "id": "f09_deep_fall",
+      "name": "沉沦",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "abyss",
+      "flagship": false,
+      "describe": "被动。自身回合开始时读取死亡簿：累计死亡 ≥3 时，获得「沉溺」（伤害 +1，每回合重判）——死得越多，沉沦越深。",
+      "hook": [
+        "on_turn_start"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "death_tally",
+            "cmp": ">=",
+            "n": 3
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "deep_dive",
+              "duration": 1,
+              "durationUnit": "self_turn",
+              "refresh": true,
+              "target": "self",
+              "note": "沉溺：死亡簿 ≥3 挂载（伤害 +1）"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f09_abyss_gaze",
+      "name": "深渊凝视",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "abyss",
+      "flagship": false,
+      "describe": "主动（0 吟唱，30tick CD）。凝视深渊结算：死亡簿 ≥5 → 深渊回涌，敌方全体受 3 点暗属性伤害；死数不足（<5）→ 强开者付代价：自身迷失值 +1（反照口径：没有白看的深渊）。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "death_tally",
+            "cmp": ">=",
+            "n": 5
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "dark",
+              "value": 3,
+              "target": "all_enemies",
+              "note": "深渊凝视·回涌：敌全体 3 点暗伤"
+            }
+          ],
+          "else": [
+            {
+              "type": "modify_resource",
+              "resource": "lost",
+              "value": 1,
+              "mode": "delta",
+              "target": "self",
+              "note": "深渊凝视·反照：死数不足，强开付代价（lost +1）"
+            }
+          ]
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [
+    {
+      "id": "deep_dive",
+      "name": "沉溺",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": 1,
+      "durationUnit": "self_turn",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_deal_damage",
+          "effects": [
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 1,
+              "target": "same_target",
+              "note": "沉溺：伤害 +1"
+            }
+          ]
+        }
+      ],
+      "note": "沉沦卡的死亡簿读层：death_tally ≥3 时每自身回合挂载。"
+    }
+  ],
   "unitDefs": [],
   "zoneDefs": [],
   "domainDefs": []
