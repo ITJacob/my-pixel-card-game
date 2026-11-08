@@ -1,0 +1,49 @@
+name: Deploy Wiki Pages
+
+# 组装并发布 GitHub Pages：
+#   产物 = build_wiki.py 从 docs/（设计文档 md + docs/json 卡池）生成的静态 wiki。
+# 前置：仓库 Settings → Pages → Source 需切到 "GitHub Actions"。
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install markdown
+        run: pip install markdown
+
+      - name: Build wiki
+        run: python docs/tools/build_wiki.py
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
