@@ -46,6 +46,36 @@
         }
       ],
       "tentative": false
+    },
+    {
+      "id": "j04_hedge",
+      "name": "套期保值",
+      "kind": "passive",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "tax",
+      "flagship": false,
+      "describe": "被动。自身受到位移类效果（击退/换位/放逐）时，行动条速率 +2（3tick）——风浪也是行情。",
+      "hook": [
+        "on_turn_start"
+      ],
+      "effects": [],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_take_damage",
+          "effects": [
+            {
+              "type": "mount_status",
+              "statusId": "hedge_boost",
+              "duration": 3,
+              "durationUnit": "tick",
+              "target": "self",
+              "note": "套期保值：受击即借风（位移效果的伴随结算面）"
+            }
+          ]
+        }
+      ]
     }
   ],
   "statusDefs": [
@@ -95,6 +125,35 @@
         }
       ],
       "note": "时空税的增益面：攻击 +2/10tick；税（击退 1 格）在卡面即时结算，不随状态。"
+    },
+    {
+      "id": "hedge_boost",
+      "name": "借风",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": 3,
+      "durationUnit": "tick",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "gauge.rate",
+              "value": 2,
+              "mode": "delta",
+              "duration": null,
+              "target": "self",
+              "note": "借风：行动条速率 +2"
+            }
+          ]
+        }
+      ],
+      "note": "套期保值的位移红利载体（3tick）。"
     }
   ],
   "unitDefs": [],

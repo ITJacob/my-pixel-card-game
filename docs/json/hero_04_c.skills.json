@@ -1,0 +1,359 @@
+{
+  "level": "hero",
+  "heroId": "hero_04_c",
+  "heroName": "英雄·肆丙",
+  "family": "family_09",
+  "faction": "faction_04",
+  "playstyle": "行商——先记账后结账、货可复读、路可重走：一切收益必带时空税（时空行商的英雄轴）。",
+  "cards": [
+    {
+      "id": "h04c_advance_pay",
+      "name": "预支",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "tax",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。向时空赊账：自身攻击 +3（8tick）；税在生效瞬间结算——自身被向后击退 1 格。无白拿的增益。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "advance_vigor",
+          "duration": 8,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "预支：攻击 +3（8tick）"
+        },
+        {
+          "type": "move",
+          "op": "push_back",
+          "distance": 1,
+          "target": "self",
+          "note": "时空税：生效瞬间击退 1 格"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h04c_loan_shark",
+      "name": "高利贷",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "tax",
+      "flagship": false,
+      "describe": "主动（吟唱 1tick，22tick CD）。向目标放时空贷：自身能量 +3；目标 10tick 后连本带利收回——其行动条后移 1 格（贷的是时间，还的是节奏）。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 22,
+        "castTime": 1
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "anchor": "enemy_front",
+          "scope": "whole_lane",
+          "sort": "index_asc",
+          "pickCount": 1
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "modify_resource",
+          "resource": "energy",
+          "value": 3,
+          "mode": "delta",
+          "target": "self",
+          "note": "放贷：能量 +3"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "loan_due",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "借据：10tick 后收息"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h04c_replay",
+      "name": "复读",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "echo",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。货可复读：回响自身上一张已结算技能（potency 0.6，效果打六折）；若回响的是带税技能，税减半——老顾客优惠。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "echo_last_skill",
+          "potency": 0.6,
+          "rounding": "round",
+          "note": "复读：回响上一式（0.6 折，带税技能税减半）"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h04c_book_early",
+      "name": "抢先预订",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "echo",
+      "flagship": false,
+      "describe": "主动（吟唱 1tick，25tick CD）。先记后结：记录当前相位与自身状态为存档点（12tick 内有效）；期间可随时再激活本卡提前结算——立即回满行动条（gauge.current 置满）。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 25,
+        "castTime": 1
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "snapshot",
+          "note": "预订：记录存档点（快照语义）",
+          "fields": [
+            "phase",
+            "hp",
+            "gauge.current"
+          ]
+        },
+        {
+          "type": "modify_resource",
+          "resource": "gauge.current",
+          "value": 999,
+          "mode": "set",
+          "target": "self",
+          "note": "结账：立即回满行动条（预排兑现面）"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h04c_side_door",
+      "name": "侧门",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "gate",
+      "flagship": false,
+      "describe": "主动（0 吟唱，18tick CD）。门径穿梭：与一名友方换位（swap_ally）；若自身带有星界锚（敌方读的枢纽），本卡能量 +1——锚住也算到过地方。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 18,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "ally",
+          "scope": "whole_lane",
+          "sort": "gauge_asc",
+          "pickCount": 1
+        },
+        "consumption": "translocate"
+      },
+      "effects": [
+        {
+          "type": "move",
+          "op": "swap_ally",
+          "target": "target",
+          "note": "侧门：与友方换位"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "self",
+            "id": "astral_anchor",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "modify_resource",
+              "resource": "energy",
+              "value": 1,
+              "mode": "delta",
+              "target": "self",
+              "note": "锚到优惠：星界锚在身，能量 +1"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h04c_go_elsewhere",
+      "name": "走为上计",
+      "kind": "active",
+      "sequence": 2,
+      "rarity": "epic",
+      "axis": "gate",
+      "flagship": true,
+      "describe": "主动（0 吟唱，35tick CD）。行商的终极信条：自身放逐出战场 6tick（规避一切指向），回归时清除全部减益、行动条回满——此路不通，另开一门。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 35,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "translocate"
+      },
+      "effects": [
+        {
+          "type": "translocate",
+          "op": "banish",
+          "duration": 6,
+          "target": "self",
+          "returnPayload": [
+            {
+              "type": "dispel",
+              "dispelTarget": "unit",
+              "category": [
+                "debuff"
+              ],
+              "target": "self",
+              "note": "走脱清净：清除全部减益"
+            },
+            {
+              "type": "modify_resource",
+              "resource": "gauge.current",
+              "value": 999,
+              "mode": "set",
+              "target": "self",
+              "note": "回归满条：行动条回满"
+            }
+          ],
+          "note": "走为上计：放逐 6tick（detached 规避），回归结算"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lost",
+          "value": 1,
+          "mode": "delta",
+          "target": "self",
+          "note": "界域/放逐操作租金（降临范式 +1）"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [
+    {
+      "id": "advance_vigor",
+      "name": "预支劲",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": 8,
+      "durationUnit": "tick",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "attack",
+              "value": 3,
+              "mode": "delta",
+              "duration": null,
+              "target": "self",
+              "note": "预支劲：攻击 +3"
+            }
+          ]
+        }
+      ],
+      "note": "预支的增益面（8tick）；税（击退 1 格）在卡面即时结算。"
+    },
+    {
+      "id": "loan_due",
+      "name": "催贷",
+      "category": [
+        "debuff"
+      ],
+      "dispelable": false,
+      "duration": 10,
+      "durationUnit": "tick",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_remove",
+          "effects": [
+            {
+              "type": "move",
+              "op": "push_back",
+              "distance": 1,
+              "target": "status_holder",
+              "note": "收息：目标行动条后移 1 格（连本带利）"
+            }
+          ]
+        }
+      ],
+      "note": "高利贷的归还窗口：到期强制收息（不可驱散）。"
+    }
+  ],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}
