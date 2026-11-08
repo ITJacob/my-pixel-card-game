@@ -1640,6 +1640,45 @@
         }
       ],
       "tentative": false
+    },
+    {
+      "id": "j06_gate_tongue",
+      "name": "门的语言",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "gate",
+      "flagship": false,
+      "describe": "被动。场上有星门存在时，自身伤害 +1——靠近门的人先听见星声。",
+      "hook": [
+        "on_turn_start"
+      ],
+      "effects": [],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_deal_damage",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "caster_status_exists",
+                "id": "star_gate"
+              },
+              "then": [
+                {
+                  "type": "damage",
+                  "element": "none",
+                  "value": 1,
+                  "target": "same_target",
+                  "note": "门的语言：场上有星门，伤害 +1"
+                }
+              ],
+              "else": []
+            }
+          ]
+        }
+      ]
     }
   ],
   "statusDefs": [
@@ -2481,6 +2520,44 @@
         }
       ],
       "note": "R3 登记 / R4 单次抽样 / R5 非伤害维度，三条纪律全守"
+    },
+    {
+      "id": "star_gate",
+      "name": "星门",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": 15,
+      "durationUnit": "tick",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_take_damage",
+          "effects": [
+            {
+              "type": "heal",
+              "value": 1,
+              "target": "self",
+              "note": "星力缓冲：门先挡，持有者受击回血 1"
+            }
+          ]
+        }
+      ],
+      "note": "星空通道的单位级实体（挂持有者=门开着，裁定 #7 缺口落地）：持有者在场即门，受击星力缓冲；穿门红利与开门货币由读卡判定。开「命运的门」——增益通道，不做时空位移/回放（与学徒划界）。"
+    },
+    {
+      "id": "star_key",
+      "name": "星钥层",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "maxStacks": 5,
+      "stackPolicy": "stack",
+      "note": "开门货币（开门人轴的层数账户）：凝钥卡产、开门卡读耗。与幸运币/fate_value 双轨互通（币可凝钥，层不自动转化）。"
     }
   ],
   "unitDefs": [],

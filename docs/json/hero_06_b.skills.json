@@ -1,0 +1,330 @@
+{
+  "level": "hero",
+  "heroId": "hero_06_b",
+  "heroName": "英雄·陆乙",
+  "family": "family_13",
+  "faction": "faction_06",
+  "playstyle": "开门人——我不押注，我开门：门开在己方阵型上，穿门者得星力（星钥缺口的英雄轴）。",
+  "cards": [
+    {
+      "id": "h06b_open_gate",
+      "name": "开门",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "gate",
+      "flagship": false,
+      "describe": "主动（吟唱 1tick，20tick CD）。在己方队尾开启一道星门（15tick）：门持有者受击获星力缓冲；开门的语言即刻生效。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 1
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "ally",
+          "anchor": "ally_front",
+          "scope": "whole_lane",
+          "sort": "index_desc",
+          "pickCount": 1
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "star_gate",
+          "duration": 15,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "开门：星门 15tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h06b_gate_recall",
+      "name": "回门",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "gate",
+      "flagship": false,
+      "describe": "主动（0 吟唱，22tick CD）。一名友方与门持有者换位（swap_ally）——穿过门的人回到门边；若场上无门，改为自身向后微调（push_back 1）。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 22,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "ally",
+          "scope": "whole_lane",
+          "sort": "gauge_desc",
+          "pickCount": 1
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "caster_status_exists",
+            "id": "star_gate"
+          },
+          "then": [
+            {
+              "type": "move",
+              "op": "swap_ally",
+              "target": "target",
+              "note": "回门：目标与门持有者换位"
+            }
+          ],
+          "else": [
+            {
+              "type": "move",
+              "op": "push_back",
+              "distance": 1,
+              "target": "target",
+              "note": "无门：目标向后微调 1 格"
+            }
+          ]
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h06b_condense_key",
+      "name": "凝钥",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "key",
+      "flagship": false,
+      "describe": "主动（0 吟唱，12tick CD）。以幸运凝钥：自身幸运层 −1（没有则支付 1 能量），星钥 +2——命运换成开门的形状。",
+      "cost": {
+        "energy": 0,
+        "cooldown": 12,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "self",
+            "id": "lucky_streak",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "modify_status",
+              "statusId": "lucky_streak",
+              "stacksDelta": -1,
+              "target": "self",
+              "note": "耗幸运层 1"
+            }
+          ],
+          "else": [
+            {
+              "type": "modify_resource",
+              "resource": "energy",
+              "value": -1,
+              "mode": "delta",
+              "target": "self",
+              "note": "无幸运层：改付 1 能量"
+            }
+          ]
+        },
+        {
+          "type": "mount_status",
+          "statusId": "star_key",
+          "stacks": 2,
+          "stackMode": "add",
+          "target": "self",
+          "note": "凝钥：星钥 +2"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h06b_master_key",
+      "name": "万能钥",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "key",
+      "flagship": false,
+      "describe": "被动。自身星钥 ≥2 时，行动条速率 +2（钥匙多了人就来劲）；星钥 <2 无效果。",
+      "hook": [
+        "on_turn_start"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "self",
+            "id": "star_key",
+            "cmp": ">=",
+            "n": 2
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "key_momentum",
+              "duration": 1,
+              "durationUnit": "self_turn",
+              "refresh": true,
+              "target": "self",
+              "note": "万能钥：星钥 ≥2 挂载（速率 +2）"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h06b_key_discount",
+      "name": "钥惠",
+      "kind": "passive",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "key",
+      "flagship": false,
+      "describe": "被动。自身开门类技能（gate 轴卡）结算后，星钥 −1、该次技能伤害面 +1——用钥匙开的门更亮。",
+      "hook": [
+        "on_active_skill"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "all_of",
+            "conditions": [
+              {
+                "kind": "has_status",
+                "side": "self",
+                "id": "star_key",
+                "cmp": ">=",
+                "n": 1
+              }
+            ]
+          },
+          "then": [
+            {
+              "type": "modify_status",
+              "statusId": "star_key",
+              "stacksDelta": -1,
+              "target": "self",
+              "note": "钥惠：开门耗钥 1"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h06b_gates_wide_open",
+      "name": "星门全开",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "gate",
+      "flagship": true,
+      "describe": "主动（吟唱 2tick，40tick CD）。星钥倾注，全阵皆门：己方全体获得星门（15tick）并回复 2 点生命——开门人的巅峰一刻，星钥清零。",
+      "cost": {
+        "energy": 5,
+        "cooldown": 40,
+        "castTime": 2
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "ally",
+          "scope": "board"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "star_gate",
+          "duration": 15,
+          "durationUnit": "tick",
+          "target": "all_allies",
+          "note": "星门全开：己方全体皆门"
+        },
+        {
+          "type": "heal",
+          "value": 2,
+          "target": "all_allies",
+          "note": "星力灌注：全体回复 2"
+        },
+        {
+          "type": "modify_status",
+          "statusId": "star_key",
+          "stacksDelta": -99,
+          "target": "self",
+          "note": "倾尽所有：星钥清零"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [
+    {
+      "id": "key_momentum",
+      "name": "钥势",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": 1,
+      "durationUnit": "self_turn",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "gauge.rate",
+              "value": 2,
+              "mode": "delta",
+              "duration": null,
+              "target": "self",
+              "note": "钥势：行动条速率 +2"
+            }
+          ]
+        }
+      ],
+      "note": "万能钥的读层：star_key ≥2 时每自身回合挂载。"
+    }
+  ],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}
