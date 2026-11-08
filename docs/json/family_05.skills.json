@@ -40,6 +40,42 @@
         }
       ],
       "tentative": false
+    },
+    {
+      "id": "j02_rally_cry",
+      "name": "集结号",
+      "kind": "active",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "massing",
+      "flagship": false,
+      "describe": "主动（0 吟唱，18tick CD）。全体友方进攻提速：自身集众层 +1——人越多，下一波越齐。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 18,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "massing",
+          "stacks": 1,
+          "stackMode": "add",
+          "target": "self",
+          "note": "集结号：集众 +1 层"
+        }
+      ],
+      "tentative": false
     }
   ],
   "statusDefs": [
@@ -98,6 +134,31 @@
         }
       ],
       "note": "集众势的冲突读层：board.conflict ≥4 时每自身回合挂载，跌回后最迟 1 个自身回合自然到期。"
+    },
+    {
+      "id": "prey_mark",
+      "name": "猎物标记",
+      "category": [
+        "debuff"
+      ],
+      "dispelable": true,
+      "duration": 20,
+      "durationUnit": "tick",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "note": "围猎的靶心（挂敌人身上）：猎团卡对带标记者增伤/集火；猎物死亡标记即完成（战果清点读层另行 +集众）。猎手潜伏 conceal 语义的家门户。"
+    },
+    {
+      "id": "massing",
+      "name": "集众层",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "maxStacks": 5,
+      "stackPolicy": "stack",
+      "note": "集众指挥的层数账户（挂猎团长身上，永续）：集结产、集火/围猎读耗；人数是硬约束——层数上限即在场友方数（引擎校验）。"
     }
   ],
   "unitDefs": [],

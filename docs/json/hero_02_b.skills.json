@@ -1,0 +1,349 @@
+{
+  "level": "hero",
+  "heroId": "hero_02_b",
+  "heroName": "英雄·贰乙",
+  "family": "family_05",
+  "faction": "faction_02",
+  "playstyle": "猎团长——标猎物、集众、收网：warrior 单挑，我群殴（围猎指挥的英雄轴）。",
+  "cards": [
+    {
+      "id": "h02b_mark_prey",
+      "name": "标定猎物",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "prey",
+      "flagship": false,
+      "describe": "主动（0 吟唱，12tick CD）。标定敌方单体为猎物（20tick）；冲突计数 ≥4（战鼓正酣）时，集众顺手 +1。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 12,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board"
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "prey_mark",
+          "duration": 20,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "标定：猎物标记 20tick"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "conflict",
+            "cmp": ">=",
+            "n": 4
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "massing",
+              "stacks": 1,
+              "stackMode": "add",
+              "target": "self",
+              "note": "战鼓正酣：conflict ≥4，集众 +1"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h02b_focus_fire",
+      "name": "集火",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "prey",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。全团转向猎物：4 点物理伤害 + 相邻溅射 1；目标带猎物标记时追加 2 点——猎物就是用来围的。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "thrown",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "anchor": "enemy_front",
+          "scope": "whole_lane",
+          "sort": "index_asc",
+          "pickCount": 1
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "physical",
+          "value": 4,
+          "target": "target",
+          "spread": "splash_adjacent",
+          "note": "集火：4 物理 + 相邻溅射 1"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "prey_mark",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "physical",
+              "value": 2,
+              "target": "target",
+              "note": "猎物就范：追加 2 物理"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h02b_momentum",
+      "name": "众势",
+      "kind": "passive",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "massing",
+      "flagship": false,
+      "describe": "被动。自身集众层 ≥3 时，全体友方伤害 +1（人数是弹药量的结正面）；<3 无效果。",
+      "hook": [
+        "on_turn_start"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "self",
+            "id": "massing",
+            "cmp": ">=",
+            "n": 3
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "massing_aura",
+              "duration": 1,
+              "durationUnit": "self_turn",
+              "refresh": true,
+              "target": "self",
+              "note": "众势：集众 ≥3 挂载（光环读层）"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h02b_trophy_count",
+      "name": "战果清点",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "massing",
+      "flagship": false,
+      "describe": "被动。on_kill 战果清点（语义分叉 #8）：击杀时集众 +1、自身能量 +1——越杀越齐整。",
+      "hook": [
+        "on_kill"
+      ],
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "massing",
+          "stacks": 1,
+          "stackMode": "add",
+          "target": "self",
+          "note": "战果：集众 +1"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "energy",
+          "value": 1,
+          "mode": "delta",
+          "target": "self",
+          "note": "清点：能量 +1"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h02b_redistribute",
+      "name": "指挥调防",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "command",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。指挥调防（不做顶替混淆）：目标敌方下次攻击强制打向其己方队首（10tick，触发 1 次后失效）——你的刀归我调度。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "anchor": "enemy_front",
+          "scope": "whole_lane",
+          "sort": "index_asc",
+          "pickCount": 1
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "redirected",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "调防：下次攻击打向己队首"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h02b_pincer",
+      "name": "围猎",
+      "kind": "active",
+      "sequence": 2,
+      "rarity": "epic",
+      "axis": "command",
+      "flagship": true,
+      "describe": "主动（吟唱 2tick，40tick CD）。收网：敌方全体受 3 点物理伤害，全体猎物标记续网 20tick；冲突计数 ≥6 时全场伤害再 +3——围猎完成的瞬间，集众清零。",
+      "cost": {
+        "energy": 5,
+        "cooldown": 40,
+        "castTime": 2
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "physical",
+          "value": 3,
+          "target": "all_enemies",
+          "note": "围猎：敌全体 3 物理"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "prey_mark",
+          "duration": 20,
+          "durationUnit": "tick",
+          "refresh": true,
+          "target": "all_enemies",
+          "note": "续网：全体猎物标记续 20tick"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "conflict",
+            "cmp": ">=",
+            "n": 6
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "physical",
+              "value": 3,
+              "target": "all_enemies",
+              "note": "战鼓顶点：conflict ≥6，全场再 +3"
+            }
+          ],
+          "else": []
+        },
+        {
+          "type": "modify_status",
+          "statusId": "massing",
+          "stacksDelta": -99,
+          "target": "self",
+          "note": "收网完毕：集众清零"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [
+    {
+      "id": "massing_aura",
+      "name": "众势光环",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": 1,
+      "durationUnit": "self_turn",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "note": "众势的读层载体：结正面由引擎按光环结算（全体友方伤害 +1）。"
+    },
+    {
+      "id": "redirected",
+      "name": "被调防",
+      "category": [
+        "debuff"
+      ],
+      "dispelable": true,
+      "duration": 10,
+      "durationUnit": "tick",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_attack",
+          "effects": [
+            {
+              "type": "target_override",
+              "faction": "ally",
+              "anchor": "ally_front",
+              "note": "指挥调防：该次攻击强制打向其己方队首（1 次后本状态消耗）"
+            }
+          ]
+        }
+      ],
+      "note": "指挥调防的载体（家族红线：只做指挥调防，不做顶替混淆）。"
+    }
+  ],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}
