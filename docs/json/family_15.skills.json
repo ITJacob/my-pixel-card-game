@@ -35,6 +35,44 @@
           ]
         }
       ]
+    },
+    {
+      "id": "j07_sow",
+      "name": "播种",
+      "kind": "active",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "crop",
+      "flagship": false,
+      "describe": "主动（0 吟唱，10tick CD）。为一名友方播种：作物层 +2（此后每 tick 自然生长 1 层）——时间是肥料。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 10,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "ally",
+          "scope": "whole_lane",
+          "sort": "index_asc",
+          "pickCount": 1
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "crop",
+          "stacks": 2,
+          "stackMode": "add",
+          "target": "target",
+          "note": "播种：作物 +2 层"
+        }
+      ],
+      "tentative": false
     }
   ],
   "statusDefs": [
@@ -69,6 +107,33 @@
       "statPerStack": {
         "attack": 1
       }
+    },
+    {
+      "id": "crop",
+      "name": "作物层",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": null,
+      "maxStacks": 10,
+      "stackPolicy": "stack",
+      "triggers": [
+        {
+          "event": "on_tick",
+          "effects": [
+            {
+              "type": "mount_status",
+              "statusId": "crop",
+              "stacks": 1,
+              "stackMode": "add",
+              "target": "self",
+              "note": "生长：每 tick +1 层"
+            }
+          ]
+        }
+      ],
+      "note": "大地农会的作物账户（挂友方身上）：种植卡产层、每 tick 自然生长、收割卡清层兑现；催熟/偷收（敌方面）也读写本层——对手交互口的载体。"
     }
   ],
   "unitDefs": [],

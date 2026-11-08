@@ -1,0 +1,323 @@
+{
+  "level": "hero",
+  "heroId": "hero_07_b",
+  "heroName": "英雄·柒乙",
+  "family": "family_15",
+  "faction": "faction_07",
+  "playstyle": "农场主——作物慢慢长，丰收换一切；对手可以偷收（大地农会的英雄轴）。",
+  "cards": [
+    {
+      "id": "h07b_sow_field",
+      "name": "开播",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "crop",
+      "flagship": false,
+      "describe": "主动（0 吟唱，12tick CD）。全阵开播：全体友方作物层 +1——广种才能博收。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 12,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "ally",
+          "scope": "board"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "crop",
+          "stacks": 1,
+          "stackMode": "add",
+          "target": "all_allies",
+          "note": "开播：全体作物 +1"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h07b_harvest_now",
+      "name": "抢收",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "crop",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。收割：目标友方回复 4 点生命并攻击 +1（10tick），作物层清零——早收打折（层数 <4 时回复减半）由引擎按层数校验。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "ally",
+          "scope": "board"
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "heal",
+          "value": 4,
+          "target": "target",
+          "note": "收割：回复 = 作物层数（<4 层减半，早收打折）"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "harvest_vigor",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "丰收劲：攻击 +1（10tick）"
+        },
+        {
+          "type": "modify_status",
+          "statusId": "crop",
+          "stacksDelta": -99,
+          "target": "target",
+          "note": "收割完毕：作物层清零"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h07b_abundance_rise",
+      "name": "丰收在望",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "abundance",
+      "flagship": false,
+      "describe": "主动（吟唱 1tick，18tick CD）。推高丰饶：全体友方获得丰饶 20tick（abundance 枢纽在场，罪犯荒芜侵蚀的对面）——大地回春。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 18,
+        "castTime": 1
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "ally",
+          "scope": "board"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "abundance",
+          "duration": 20,
+          "durationUnit": "tick",
+          "target": "all_allies",
+          "note": "丰收在望：全体丰饶 20tick（枢纽在场）"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h07b_force_ripen",
+      "name": "催熟",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "blight",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。对敌方的作物动手脚：目标敌方作物层 +3——熟得快，也提醒了对方该收了（对手交互口：催熟即暴露收割窗口）。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board"
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "crop",
+          "stacks": 3,
+          "stackMode": "add",
+          "target": "target",
+          "note": "催熟：敌方作物 +3 层（双刃剑，暴露其收割窗口）"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h07b_pilfer_harvest",
+      "name": "偷收",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "blight",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。趁熟下手：目标敌方作物层 ≥4 时清层——对方只得半价回复 2，你抽成 2 能量。早收打折，拒收浪费。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board"
+        },
+        "fallbackSort": "index_desc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "crop",
+            "cmp": ">=",
+            "n": 4
+          },
+          "then": [
+            {
+              "type": "heal",
+              "value": 2,
+              "target": "target",
+              "note": "被偷收：对方只得半价（层数一半）"
+            },
+            {
+              "type": "modify_resource",
+              "resource": "energy",
+              "value": 2,
+              "mode": "delta",
+              "target": "self",
+              "note": "抽成：自身 +2 能量"
+            },
+            {
+              "type": "modify_status",
+              "statusId": "crop",
+              "stacksDelta": -99,
+              "target": "target",
+              "note": "作物被收空"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h07b_great_harvest",
+      "name": "大丰收",
+      "kind": "active",
+      "sequence": 2,
+      "rarity": "epic",
+      "axis": "crop",
+      "flagship": true,
+      "describe": "主动（吟唱 2tick，40tick CD）。金黄遍野：全体友方回复 3、能量 +2，丰饶加身 20tick，作物清零（每层加成由引擎按层数放大）。农场主的一年浓缩在一刻。",
+      "cost": {
+        "energy": 5,
+        "cooldown": 40,
+        "castTime": 2
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "ally",
+          "scope": "board"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "heal",
+          "value": 3,
+          "target": "all_allies",
+          "note": "大丰收：每层作物回 1 生命"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "energy",
+          "value": 2,
+          "mode": "delta",
+          "target": "all_allies",
+          "note": "大丰收：每层作物 +1 能量"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "abundance",
+          "duration": 20,
+          "durationUnit": "tick",
+          "target": "all_allies",
+          "note": "丰饶加身 20tick"
+        },
+        {
+          "type": "modify_status",
+          "statusId": "crop",
+          "stacksDelta": -99,
+          "target": "all_allies",
+          "note": "颗粒归仓：作物清零"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [
+    {
+      "id": "harvest_vigor",
+      "name": "丰收劲",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": 10,
+      "durationUnit": "tick",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "attack",
+              "value": 1,
+              "mode": "delta",
+              "duration": null,
+              "target": "self",
+              "note": "丰收劲：攻击 +1"
+            }
+          ]
+        }
+      ],
+      "note": "抢收的即时增益面（10tick）。"
+    }
+  ],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}
