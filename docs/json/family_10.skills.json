@@ -50,6 +50,53 @@
         }
       ],
       "tentative": false
+    },
+    {
+      "id": "j04_pickpocket",
+      "name": "顺手牵羊",
+      "kind": "active",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "steal",
+      "flagship": false,
+      "describe": "主动（0 吟唱，12tick CD）。小偷小摸：敌方队首能量 −1、自身 +1——小额不留借据，大盗才立据。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 12,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "anchor": "enemy_front",
+          "scope": "whole_lane",
+          "sort": "index_asc",
+          "pickCount": 1
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "drain",
+          "resource": "energy",
+          "value": 1,
+          "healRatio": 0.0,
+          "target": "target",
+          "note": "牵羊：目标 −1 能量"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "energy",
+          "value": 1,
+          "mode": "delta",
+          "target": "self",
+          "note": "到手：自身 +1"
+        }
+      ],
+      "tentative": false
     }
   ],
   "statusDefs": [

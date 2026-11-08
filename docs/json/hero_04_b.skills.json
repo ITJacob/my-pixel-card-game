@@ -1,0 +1,277 @@
+{
+  "level": "hero",
+  "heroId": "hero_04_b",
+  "heroName": "英雄·肆乙",
+  "family": "family_10",
+  "faction": "faction_04",
+  "playstyle": "神偷——seer 借力，我借物：偷来的必须注明归还，只有持有中没有拥有（窃取/偷命/置换的英雄轴）。",
+  "cards": [
+    {
+      "id": "h04b_petty_theft",
+      "name": "妙手空空",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "steal",
+      "flagship": false,
+      "describe": "主动（0 吟唱，10tick CD）。偷目标 2 点能量归己，立借据 10tick——到期强制偿还 3（2 本 1 息，借据不可驱散）。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 10,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "anchor": "enemy_front",
+          "scope": "whole_lane",
+          "sort": "index_asc",
+          "pickCount": 1
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "drain",
+          "resource": "energy",
+          "value": 2,
+          "healRatio": 1.0,
+          "target": "target",
+          "note": "妙手：目标 −2 能量，自身 +2"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "due_note",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "立据：10tick 后偿还 3"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h04b_grand_larceny",
+      "name": "大盗无形",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "steal",
+      "flagship": true,
+      "describe": "主动（吟唱 1tick，30tick CD）。偷走目标身上 1 个增益归己（25tick 持有期，到期自动归还）——偷 buff 也是偷，借据写在空气里。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 30,
+        "castTime": 1
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board"
+        },
+        "fallbackSort": "buff_count_desc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "transfer_status",
+          "mode": "move",
+          "statusesFrom": "buff",
+          "count": 1,
+          "from": {
+            "target": "target"
+          },
+          "to": "self",
+          "keepDuration": true,
+          "note": "大盗：偷取目标 1 个增益归己（25tick 持有期，到期归还）"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h04b_time_snatch",
+      "name": "偷时间",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "fate",
+      "flagship": false,
+      "describe": "主动（0 吟唱，18tick CD）。偷走目标的命运动向：其行动条后移 1 格并被挂上命运缝隙（20tick——fate_gap 归属实体化：行动条高位者受伤加深）。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 18,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board"
+        },
+        "fallbackSort": "gauge_desc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "move",
+          "op": "push_back",
+          "distance": 1,
+          "target": "target",
+          "note": "偷时间：目标行动条后移 1 格"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "fate_gap",
+          "duration": 20,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "命运缝隙：fate_gap 写入（thief 枢纽归属实体化）"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h04b_fated_cut",
+      "name": "命里一刀",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "fate",
+      "flagship": false,
+      "describe": "被动。对带命运缝隙（fate_gap）的目标伤害 +2——你被我偷过命，这一刀是利息。",
+      "hook": [
+        "on_deal_damage"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "fate_gap",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 2,
+              "target": "same_target",
+              "note": "命里一刀：fate_gap 目标 +2"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h04b_swap_meet",
+      "name": "错位",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "swap",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。制造错误：敌方全体轮转易主 1 个状态（守恒）——你的混乱是我的机会。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "status_shuffle",
+          "mode": "rotate",
+          "count": 1,
+          "target": "all_enemies",
+          "note": "错位：敌全体轮转易主 1 状态"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h04b_grand_escape",
+      "name": "金蝉脱壳",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "swap",
+      "flagship": false,
+      "describe": "主动（0 吟唱，35tick CD）。脱身绝活：自身放逐出战场 5tick（规避一切指向），回归时清除自身全部减益并回复 3 点生命——壳留下，人走了。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 35,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "translocate"
+      },
+      "effects": [
+        {
+          "type": "translocate",
+          "op": "banish",
+          "duration": 5,
+          "target": "self",
+          "returnPayload": [
+            {
+              "type": "dispel",
+              "dispelTarget": "unit",
+              "category": [
+                "debuff"
+              ],
+              "target": "self",
+              "note": "脱壳清净：清除全部减益"
+            },
+            {
+              "type": "heal",
+              "value": 3,
+              "target": "self",
+              "note": "回归：回复 3"
+            }
+          ],
+          "note": "金蝉脱壳：放逐 5tick（detached 规避），回归结算清净+回复"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lost",
+          "value": 1,
+          "mode": "delta",
+          "target": "self",
+          "note": "界域/放逐操作租金（降临范式 +1）"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}
