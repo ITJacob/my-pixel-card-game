@@ -4526,7 +4526,7 @@
         },
         "heroId": {
           "type": "string",
-          "pattern": "^hero_[0-9]{2}$"
+          "pattern": "^hero_[0-9]{2}(_[a-z]+)?$"
         },
         "heroName": {
           "type": "string"

@@ -154,13 +154,18 @@ def cross_check(docs, manifest, errors, warns):
             num = (d.get("faction") or "").split("_", 1)[1] if "_" in (d.get("faction") or "") else None
             id_pat = j_re
         elif lvl == "hero":
-            num = (d.get("heroId") or "").split("_", 1)[1] if "_" in (d.get("heroId") or "") else None
-            id_pat = h_re
-            # 文件名 ↔ 内字段配对：hero_01.skills.json 的 heroId 必须 hero_01、faction 必须 faction_01
+            # 2026-11-08 第二英雄：heroId 允许 hero_NN_b 后缀（_b=同派系第二英雄，_c 第三），
+            # 文件名 ↔ heroId 全等配对；卡 id 前缀 h<NN><后缀字母>_
+            hero_id = d.get("heroId") or ""
+            sfx = ""
+            base = hero_id
+            if hero_id.count("_") >= 2:
+                base, sfx = hero_id.rsplit("_", 1)  # hero_01_b → base hero_01 / sfx b
+            num = base.split("_", 1)[1] if "_" in base else None
+            id_pat = re.compile(r"^h(\d\d)[a-z]?_[a-z0-9_]+$") if sfx else h_re
             fnum = name[len("hero_"):len("hero_") + 2]
-            if d.get("heroId") != "hero_%s" % fnum:
-                errors.append("%s: heroId %s 与文件名序号 %s 不一致"
-                              % (name, d.get("heroId"), fnum))
+            if hero_id != name.replace(".skills.json", ""):
+                errors.append("%s: heroId %s 与文件名不一致" % (name, hero_id))
             if d.get("faction") != "faction_%s" % fnum:
                 errors.append("%s: faction 字段 %s 与文件名序号 %s 不一致（须 faction_%s）"
                               % (name, d.get("faction"), fnum, fnum))
