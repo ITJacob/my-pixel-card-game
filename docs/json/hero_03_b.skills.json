@@ -1,0 +1,332 @@
+{
+  "level": "hero",
+  "heroId": "hero_03_b",
+  "heroName": "英雄·叁乙",
+  "family": "family_07",
+  "faction": "faction_03",
+  "playstyle": "辩护人——arbiter 立法，我辩护：己方买豁免、敌方加价、条文抠措辞（律庭法条体系的适用定制轴）。",
+  "cards": [
+    {
+      "id": "h03b_precedent_death",
+      "name": "立案·死亡",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "precedent",
+      "flagship": false,
+      "describe": "主动（吟唱 1tick，18tick CD）。记录「死亡」先例（先例层 +1，永续不撤销）；本战场已有死亡发生时，目标追加 3 点暗属性伤害——死过的人更好打官司。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 18,
+        "castTime": 1
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "anchor": "enemy_front",
+          "scope": "whole_lane",
+          "sort": "index_asc",
+          "pickCount": 1
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "precedent",
+          "stacks": 1,
+          "stackMode": "add",
+          "target": "self",
+          "note": "立案：先例层 +1（永续）"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "dead_count",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "dark",
+              "value": 3,
+              "target": "target",
+              "note": "死亡先例成文：已有死亡，追加 3 点暗伤"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h03b_cite_precedent",
+      "name": "法条援引",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "precedent",
+      "flagship": false,
+      "describe": "主动（吟唱 1tick，15tick CD）。援引先例：4 点精神伤害 + 自身每层先例追加 1 点暗伤，援引后先例层 −1——赢过的官司都是弹药。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 1
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "anchor": "enemy_front",
+          "scope": "whole_lane",
+          "sort": "index_asc",
+          "pickCount": 1
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "mental",
+          "value": 4,
+          "target": "target",
+          "note": "援引基准 4 点精神"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "self",
+            "id": "precedent",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "dark",
+              "value": 2,
+              "target": "target",
+              "note": "援引先例：每层先例追加暗伤（基准 2，按层数由引擎放大）"
+            }
+          ],
+          "else": []
+        },
+        {
+          "type": "modify_status",
+          "statusId": "precedent",
+          "stacksDelta": -1,
+          "target": "self",
+          "note": "援引消耗：先例层 −1"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h03b_heavy_bribe",
+      "name": "重贿",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "bribe",
+      "flagship": false,
+      "describe": "主动（吟唱 2tick，25tick CD）。重金收买敌方全体 15tick：造成的伤害 ×0.85；order ≤2 时收买更顺手——腐蚀再续 5tick。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 2
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "bribed",
+          "duration": 15,
+          "durationUnit": "tick",
+          "target": "all_enemies",
+          "note": "重贿：敌全体收买 15tick"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "order",
+            "cmp": "<=",
+            "n": 2
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "bribed",
+              "duration": 20,
+              "durationUnit": "tick",
+              "refresh": true,
+              "target": "all_enemies",
+              "note": "秩序废弛，腐蚀更顺：收买延长至 20tick"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h03b_hierarchy",
+      "name": "阶层",
+      "kind": "passive",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "rank",
+      "flagship": false,
+      "describe": "被动。位格秩序即阶层：位格低于你的敌人对你造成的伤害 −15%（结算 ×0.85），你对其造成的伤害 +15%（×1.15）——位格前提由引擎按 rank 差校验。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_take_damage",
+          "effects": [
+            {
+              "type": "modify_resource",
+              "resource": "shield",
+              "value": 1,
+              "mode": "delta",
+              "target": "self",
+              "note": "阶层庇护：低阶来犯，护盾 1（×0.85 减伤的结正面，位格前提引擎校验）"
+            }
+          ]
+        },
+        {
+          "event": "on_deal_damage",
+          "effects": [
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 1,
+              "target": "same_target",
+              "note": "阶层压制：对低阶追加 1（×1.15 的结正面，位格前提引擎校验）"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "h03b_redefine",
+      "name": "重定义",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "redefine",
+      "flagship": false,
+      "describe": "主动（吟唱 3tick，35tick CD）。改写生死法条 25tick：敌方全体受到的治疗转为等量无属性伤害（定义改写，不可驱散）——这条文从此归我解释。order −1。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 35,
+        "castTime": 3
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "write_rule_slot",
+          "slot": 2,
+          "field": "trigger",
+          "value": {
+            "article": "art_death",
+            "duration": 25,
+            "charges": 99
+          },
+          "overwrite": true,
+          "note": "重定义：锚定生死法条 25tick"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "redefined_world",
+          "duration": 25,
+          "durationUnit": "tick",
+          "target": "all_enemies",
+          "note": "治疗转伤害：heal_invert 25tick（不可驱散）"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "order",
+          "value": -1,
+          "mode": "delta",
+          "target": "board",
+          "note": "秩序被改写：order −1"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h03b_bribe_all",
+      "name": "万贿归一",
+      "kind": "active",
+      "sequence": 2,
+      "rarity": "epic",
+      "axis": "bribe",
+      "flagship": true,
+      "describe": "主动（吟唱 2tick，40tick CD）。贿赂的终点：敌方全体被收买 25tick（伤害 ×0.85），且全体敌方轮转易主 1 个状态——万贿归一，规则随钱变形。",
+      "cost": {
+        "energy": 5,
+        "cooldown": 40,
+        "castTime": 2
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "bribed",
+          "duration": 25,
+          "durationUnit": "tick",
+          "target": "all_enemies",
+          "note": "万贿归一：敌全体收买 25tick"
+        },
+        {
+          "type": "status_shuffle",
+          "target": "all_enemies",
+          "note": "钱货两讫：全体敌方状态轮转易主 1 个"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

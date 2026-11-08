@@ -200,6 +200,54 @@
         }
       ],
       "tentative": false
+    },
+    {
+      "id": "j03_legal_aid",
+      "name": "法律援助",
+      "kind": "active",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "precedent",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。当庭辩驳：驱散一名友方 1 个减益并使其能量 +1——律师的第一件武器是嘴。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "ally",
+          "scope": "whole_lane",
+          "sort": "debuff_count_desc",
+          "pickCount": 1
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "dispel",
+          "dispelTarget": "unit",
+          "category": [
+            "debuff"
+          ],
+          "count": 1,
+          "target": "target",
+          "note": "当庭辩驳：驱散 1 减益"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "energy",
+          "value": 1,
+          "mode": "delta",
+          "target": "target",
+          "note": "辩成：能量 +1"
+        }
+      ],
+      "tentative": false
     }
   ],
   "statusDefs": [
@@ -289,6 +337,50 @@
         }
       ],
       "note": "混乱自由的 order 低读层：order ≤2 时每自身回合挂载。"
+    },
+    {
+      "id": "precedent",
+      "name": "先例层",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "maxStacks": 5,
+      "stackPolicy": "stack",
+      "note": "立案系层数账户（挂律师身上，永续）：立案卡产、援引卡读耗（每层 +1 追伤，援引消耗 1 层）。原著「立案·死亡/侵蚀 → 法条援引」实体化。"
+    },
+    {
+      "id": "bribed",
+      "name": "被收买",
+      "category": [
+        "debuff"
+      ],
+      "dispelable": true,
+      "duration": 15,
+      "durationUnit": "tick",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "modifiers": {
+        "damage_mul": 0.85
+      },
+      "note": "贿赂系通用收买面：造成伤害 ×0.85（原著收买/重贿/万贿归一共用母版）。"
+    },
+    {
+      "id": "redefined_world",
+      "name": "定义改写",
+      "category": [
+        "debuff"
+      ],
+      "dispelable": false,
+      "duration": 25,
+      "durationUnit": "tick",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "modifiers": {
+        "heal_invert": true
+      },
+      "note": "重定义实体化：窗口内受到的治疗转为等量无属性伤害（锚 art_death 法条，「血没了必须死亡」被改写为「回血即受伤」）。"
     }
   ],
   "unitDefs": [],
