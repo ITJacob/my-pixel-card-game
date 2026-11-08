@@ -400,6 +400,930 @@
           ]
         }
       ]
+    },
+    {
+      "id": "j02_black_flame",
+      "name": "黑焰",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "plague",
+      "flagship": false,
+      "describe": "对一名敌人造成 4 点暗黑伤害，并有 40% 几率使其燃烧。；黑焰燎疾：目标疾病 15tick。；出手即把目标拽进镜面一瞬，再原样放回。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "thrown",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "point",
+          "pickCount": 1
+        },
+        "fallbackSort": "hp_asc"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "dark",
+          "value": 4
+        },
+        {
+          "type": "mount_status",
+          "statusId": "burn",
+          "duration": 15,
+          "condition": {
+            "kind": "chance",
+            "p": 0.4
+          },
+          "note": "概率写在 EffectRef.condition（R3 登记、R5 限非伤害维度）；元素取 fire（引擎无 dark，黑焰辨识度来自外观与技能名，不共享给猎人）"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "disease",
+          "duration": 15,
+          "note": "黑焰燎疾：疫由焰生"
+        },
+        {
+          "type": "translocate",
+          "op": "pull_into",
+          "duration": 1,
+          "target": "target"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lost",
+          "value": 1,
+          "mode": "delta",
+          "target": "self"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "attack",
+          "value": -1,
+          "mode": "delta",
+          "target": "self",
+          "duration": 10,
+          "note": "黑焰的代价：自身攻击 -1"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "j02_frost",
+      "name": "冰霜",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "plague",
+      "flagship": false,
+      "describe": "对一名敌人造成 3 点冰霜伤害，并使其行动条速率 -6（15tick）。；出手即把目标拽进镜面一瞬，再原样放回。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "point",
+          "pickCount": 1
+        },
+        "fallbackSort": "gauge_desc"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "ice",
+          "value": 3
+        },
+        {
+          "type": "modify_stat",
+          "stat": "gauge.rate",
+          "value": -6,
+          "mode": "delta",
+          "duration": 15
+        },
+        {
+          "type": "translocate",
+          "op": "pull_into",
+          "duration": 1,
+          "target": "target"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lost",
+          "value": 1,
+          "mode": "delta",
+          "target": "self"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "defense",
+          "value": -1,
+          "mode": "delta",
+          "target": "self",
+          "duration": 10,
+          "note": "冰霜的代价：自身防御 -1"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "charm_axis"
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "ice",
+              "value": 1,
+              "note": "魅惑目标心神不稳：追加 1 点冰霜"
+            }
+          ],
+          "else": [],
+          "note": "跨轴读层：charm"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "j02_mirror_divination",
+      "name": "魔镜占卜",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "mirror",
+      "flagship": false,
+      "describe": "战斗开始时获得「魔镜占卜」：每次你受到伤害，有 30% 几率想起一句启示，能量 +1。；镜中藏替：获得镜子替身（20tick，1 次）。；增益自镜中取用——先留下一具替身承接指向。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "mirror_divination",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "mirror_substitute",
+          "charges": 1,
+          "duration": 20,
+          "target": "self",
+          "note": "镜中藏替：占卜时预置替身"
+        },
+        {
+          "type": "modify_targetability",
+          "target": "self",
+          "untargetable": true,
+          "duration": 3,
+          "direction": "enemy_targeted"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "j02_witch_form",
+      "name": "女巫之形",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "form",
+      "flagship": false,
+      "describe": "战斗开始时获得「女巫之形」：自身受伤 ×0.9；你施加的魅惑与误导不可被驱散，持续整场。；增益自镜中取用——先留下一具替身承接指向。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "gender": "female",
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "witch_form",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "modify_targetability",
+          "target": "self",
+          "untargetable": true,
+          "duration": 3,
+          "direction": "enemy_targeted"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "j02_silk_web",
+      "name": "无形蛛丝",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "form",
+      "flagship": false,
+      "describe": "缠住一名敌人 15tick：行动条速率 -8、护甲 -5。升级可解锁「结茧」（10tick 不能行动且受伤 ×0.7）与「横移」（自身前插一格）。；增益自镜中取用——先留下一具替身承接指向。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy"
+        },
+        "fallbackSort": "gauge_desc"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "silk_bind",
+          "duration": 15
+        },
+        {
+          "type": "modify_targetability",
+          "target": "self",
+          "untargetable": true,
+          "duration": 3,
+          "direction": "enemy_targeted"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "j02_frost_armor",
+      "name": "冰霜护甲",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "form",
+      "flagship": false,
+      "describe": "为一名友军（可给自己）覆上冰霜护甲 20tick：护甲 +5；期间每次受击，使攻击者行动条速率 -6（10tick）。；增益自镜中取用——先留下一具替身承接指向。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "ally"
+        },
+        "fallbackSort": "hp_asc"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "frost_armor",
+          "duration": 20
+        },
+        {
+          "type": "modify_targetability",
+          "target": "self",
+          "untargetable": true,
+          "duration": 3,
+          "direction": "enemy_targeted"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "j02_disease",
+      "name": "疾病",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "plague",
+      "flagship": false,
+      "describe": "使一名敌人感染 20tick：每 tick 受到递增的毒素伤害（1/1/2/2），到期爆发 4 点毒素伤害。可驱散。；得手后留下替身承接指向。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "point",
+          "pickCount": 1
+        },
+        "fallbackSort": "buff_count_desc"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "disease",
+          "duration": 20
+        },
+        {
+          "type": "modify_targetability",
+          "target": "self",
+          "untargetable": true,
+          "duration": 3,
+          "direction": "enemy_targeted"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "defense",
+          "value": -1,
+          "mode": "delta",
+          "target": "self",
+          "duration": 10,
+          "note": "播疫的代价：自身防御 -1"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "j02_mirror_maze",
+      "name": "镜像迷宫",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "mirror",
+      "flagship": false,
+      "describe": "降临「镜像迷宫」3 回合：敌方单位每 4 次攻击落空 1 次；「镜像/替身」标签卡效果 ×2、非镜像单体卡 ×0.9。入场瞬间：每个敌人下一击砍空（20tick），并召唤 1 具你的镜像。自身迷失值 +1。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "domain"
+      },
+      "effects": [
+        {
+          "op": "sequence",
+          "steps": [
+            {
+              "type": "domain",
+              "op": "overlay",
+              "def": "domain_mirror_maze",
+              "duration": 15,
+              "durationUnit": "tick"
+            },
+            {
+              "type": "mount_status",
+              "statusId": "mirror_maze",
+              "duration": 20,
+              "target": "all_enemies",
+              "note": "降临瞬间入场效果：每个敌人下一击砍空"
+            },
+            {
+              "type": "spawn",
+              "unitId": "unit_mirror_image",
+              "hpRatio": 0.2,
+              "position": "tail",
+              "target": "self",
+              "note": "从迷宫里走出一具你的镜像"
+            },
+            {
+              "type": "modify_resource",
+              "resource": "lost",
+              "value": 1,
+              "mode": "delta",
+              "target": "self",
+              "note": "界域操作租金（降临范式 +1）"
+            }
+          ]
+        }
+      ],
+      "domain": {
+        "def": "domain_mirror_maze",
+        "envRulesText": "全体敌方单位攻击 25% 落空（镜中皆是虚影）；我方「镜像/替身」标签技能必定触发（其 condition:chance 豁免 p=1）；我方非镜像单体技能命中同目标时伤害 −10%"
+      },
+      "tags": [
+        "镜像",
+        "替身"
+      ],
+      "tentative": false
+    },
+    {
+      "id": "j02_mirror_self",
+      "name": "镜中人",
+      "kind": "passive",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "mirror",
+      "flagship": false,
+      "describe": "战斗开始时获得「镜中人」：每场 2 次，你死亡时若场上有镜像分身，销毁一具并在该镜像的位置以 30% 生命复活；没有镜像则原地以 30% 生命复活。；增益自镜中取用——先留下一具替身承接指向。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "mirror_self",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "modify_targetability",
+          "target": "self",
+          "untargetable": true,
+          "duration": 3,
+          "direction": "enemy_targeted"
+        }
+      ],
+      "tentative": false,
+      "gender": "female"
+    },
+    {
+      "id": "j02_eternal_youth",
+      "name": "青春永驻",
+      "kind": "passive",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "form",
+      "flagship": false,
+      "describe": "战斗开始时：自身生命上限 +15（整场），并获得「再生」25tick（每 tick 回复 0.4 点生命）。；增益自镜中取用——先留下一具替身承接指向。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "hp_max",
+          "value": 15,
+          "mode": "delta",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "regen",
+          "duration": 25,
+          "target": "self"
+        },
+        {
+          "type": "modify_targetability",
+          "target": "self",
+          "untargetable": true,
+          "duration": 3,
+          "direction": "enemy_targeted"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "j02_petrification",
+      "name": "石化",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "form",
+      "flagship": false,
+      "describe": "使一名敌人石化 15tick：不能行动、受伤 ×0.6（石头比血肉硬）、不可驱散；解除时碎裂，易伤 10tick。（目标带提线木偶则延长至 20tick，傀儡易石化）。；得手后留下替身承接指向。；反噬：目标带提线木偶时自身行动条 -5。",
+      "cost": {
+        "energy": 5,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy"
+        },
+        "fallbackSort": "atk_desc"
+      },
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "puppet_string",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "petrification",
+              "duration": 20,
+              "note": "傀儡易石化：目标带提线木偶则石化延长至 20tick"
+            },
+            {
+              "type": "modify_resource",
+              "resource": "gauge.current",
+              "value": -5,
+              "mode": "delta",
+              "target": "self",
+              "note": "反噬：石化反作用，自身行动条 -5"
+            }
+          ],
+          "else": [
+            {
+              "type": "mount_status",
+              "statusId": "petrification",
+              "duration": 15
+            }
+          ]
+        },
+        {
+          "type": "modify_targetability",
+          "target": "self",
+          "untargetable": true,
+          "duration": 3,
+          "direction": "enemy_targeted"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "j02_mirror_prison",
+      "name": "镜中囚禁",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "mirror",
+      "flagship": false,
+      "describe": "位格判定后把一名敌人拉入镜中世界 15tick（translocate detached：不可选中、不能行动、免疫伤害、不参与行动排序，到期跌回原坐标）；位格低于你必定成功且目标无察觉，位格不低于你时基础 40% 成功率（眩晕/冰冻/虚弱 +35%、狂乱/失控 +20%、Boss −20%）。迷失 +0.5。；自身带借来的动作时追加伤害。",
+      "cost": {
+        "energy": 5,
+        "cooldown": 30,
+        "castTime": 1
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "point"
+        },
+        "fallbackSort": "atk_desc"
+      },
+      "effects": [
+        {
+          "op": "if",
+          "params": {
+            "rankCheck": true
+          },
+          "condition": {
+            "kind": "stat_compare",
+            "aUnit": "caster",
+            "bUnit": "target",
+            "key": "rank",
+            "cmp": ">"
+          },
+          "then": [
+            {
+              "type": "translocate",
+              "op": "pull_into",
+              "duration": 15,
+              "note": "位格低于施法者：必定拉入镜中（detached：不持坐标/不进候选池/计时冻结，到期跌回原坐标），且目标「不会有任何察觉」——不触发亡语、不触发反击、不触发敌方增益。原语化：mirrored 状态模拟退役，与效果上下文 §三 detached 语义对齐"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "params": {
+                "rankCheck": true
+              },
+              "condition": {
+                "kind": "chance",
+                "p": 0.4,
+                "note": "基础 40%；眩晕/冰冻/虚弱 +35%、狂乱/失控 +20%、Boss −20%（状态修正见 conversionNotes）；R3 登记、单次抽样（R4）、非伤害维度（R5）"
+              },
+              "then": [
+                {
+                  "type": "translocate",
+                  "op": "pull_into",
+                  "duration": 15,
+                  "condition": {
+                    "kind": "chance",
+                    "p": 0.4,
+                    "note": "基础 40%；眩晕/冰冻/虚弱 +35%、狂乱/失控 +20%、Boss −20%；R3 登记、单次抽样（R4）、非伤害维度（R5）"
+                  },
+                  "note": "目标位格 ≥ 施法者：40% 概率拉入镜中"
+                }
+              ],
+              "else": []
+            }
+          ]
+        },
+        {
+          "type": "modify_resource",
+          "resource": "lost",
+          "value": 0.5,
+          "mode": "delta",
+          "target": "self",
+          "note": "拉入范式迷失租金 +0.5（向上取整累计）"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "self",
+            "id": "borrowed_step",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "dark",
+              "value": 3,
+              "target": "target",
+              "note": "借序：镜中囚禁追加 3 点"
+            }
+          ],
+          "else": []
+        },
+        {
+          "type": "modify_stat",
+          "stat": "attack",
+          "value": -1,
+          "mode": "delta",
+          "target": "self",
+          "duration": 10,
+          "note": "囚禁的代价：自身攻击 -1"
+        }
+      ],
+      "tentative": false,
+      "gender": "female"
+    },
+    {
+      "id": "j02_form_mist",
+      "name": "雾形态",
+      "kind": "active",
+      "sequence": 2,
+      "rarity": "epic",
+      "axis": "form",
+      "flagship": false,
+      "describe": "切至雾形态（形态组互斥，25tick 后轮转至血形态）：你受到的伤害 ×0.85。；形态掌握 +1 层（整场）。；增益自镜中取用——先留下一具替身承接指向。",
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "form_mist",
+          "duration": 25,
+          "target": "self"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "assassin_form",
+          "stacks": 1,
+          "stackMode": "add",
+          "duration": null,
+          "target": "self",
+          "note": "形态变换积累形态掌握"
+        },
+        {
+          "type": "modify_targetability",
+          "target": "self",
+          "untargetable": true,
+          "duration": 3,
+          "direction": "enemy_targeted"
+        }
+      ],
+      "tentative": false,
+      "cost": {
+        "energy": 5,
+        "cooldown": 20,
+        "castTime": 2
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point",
+          "pickCount": 1
+        }
+      }
+    },
+    {
+      "id": "j02_form_blood",
+      "name": "血形态",
+      "kind": "active",
+      "sequence": 1,
+      "rarity": "legendary",
+      "axis": "form",
+      "flagship": false,
+      "describe": "切至血形态（形态组互斥，25tick 后轮转回影形态）：你的吸血效果 +2。；形态掌握 +1 层（整场）。；增益自镜中取用——先留下一具替身承接指向。",
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "form_blood",
+          "duration": 25,
+          "target": "self"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "assassin_form",
+          "stacks": 1,
+          "stackMode": "add",
+          "duration": null,
+          "target": "self",
+          "note": "形态变换积累形态掌握"
+        },
+        {
+          "type": "modify_targetability",
+          "target": "self",
+          "untargetable": true,
+          "duration": 3,
+          "direction": "enemy_targeted"
+        }
+      ],
+      "tentative": false,
+      "cost": {
+        "energy": 6,
+        "cooldown": 25,
+        "castTime": 2
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point",
+          "pickCount": 1
+        }
+      }
+    },
+    {
+      "id": "j02_mirror_capture",
+      "name": "镜映",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "mirror",
+      "flagship": false,
+      "describe": "对一名敌人造成 2 点暗元素伤害，并记录它的一次动作（借来的动作 1 层，30tick）。代价：自身防御 -1（10tick）。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "melee",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "point",
+          "pickCount": 1
+        },
+        "fallbackSort": "atk_desc"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "dark",
+          "value": 2,
+          "target": "target"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "borrowed_step",
+          "target": "self",
+          "duration": 30,
+          "stacks": 1,
+          "stackMode": "add",
+          "note": "镜映：把对手的动作记进镜子（借来的动作 +1 层）"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "defense",
+          "value": -1,
+          "mode": "delta",
+          "target": "self",
+          "duration": 10,
+          "note": "举镜的代价：自身防御 -1"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "j02_lure_step",
+      "name": "借势",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "mirror",
+      "flagship": false,
+      "describe": "对一名敌人施加诱惑：攻击 +2（10tick，诱它出招）并记录它两次动作（借来的动作 2 层，30tick）。代价：自身行动条 -5。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "point",
+          "pickCount": 1
+        },
+        "fallbackSort": "hp_desc"
+      },
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "attack",
+          "value": 2,
+          "mode": "delta",
+          "target": "target",
+          "duration": 10,
+          "note": "递台阶：诱使目标出招，攻击 +2（10tick）"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "borrowed_step",
+          "target": "self",
+          "duration": 30,
+          "stacks": 2,
+          "stackMode": "add",
+          "note": "借势：诱来的动作 2 层"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "gauge.current",
+          "value": -5,
+          "mode": "delta",
+          "target": "self",
+          "note": "借势的代价：自身行动条 -5"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "j02_mirror_afterimage",
+      "name": "镜面残像",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "mirror",
+      "flagship": false,
+      "describe": "战斗开始时获得镜面残像：自身防御 +1（整场）；对带借来的动作的目标伤害 +1。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "triggers": [
+        {
+          "event": "on_deal_damage",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "has_status",
+                "side": "self",
+                "id": "borrowed_step"
+              },
+              "then": [
+                {
+                  "type": "damage",
+                  "element": "dark",
+                  "value": 1,
+                  "target": "target",
+                  "note": "镜面残像：借来的动作在场时追加 1"
+                }
+              ],
+              "else": []
+            }
+          ]
+        }
+      ],
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "defense",
+          "value": 1,
+          "mode": "delta",
+          "target": "self",
+          "note": "镜面残影：防御 +1"
+        }
+      ],
+      "tentative": false
     }
   ],
   "statusDefs": [

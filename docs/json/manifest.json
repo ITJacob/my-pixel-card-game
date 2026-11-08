@@ -33,49 +33,49 @@
       "id": "faction_02",
       "name": "战祸",
       "file": "faction_02.skills.json",
-      "cardCount": 10
+      "cardCount": 27
     },
     {
       "id": "faction_03",
       "name": "律庭",
       "file": "faction_03.skills.json",
-      "cardCount": 13
+      "cardCount": 32
     },
     {
       "id": "faction_04",
       "name": "时隙",
       "file": "faction_04.skills.json",
-      "cardCount": 11
+      "cardCount": 26
     },
     {
       "id": "faction_05",
       "name": "禁知",
       "file": "faction_05.skills.json",
-      "cardCount": 10
+      "cardCount": 28
     },
     {
       "id": "faction_06",
       "name": "星钥",
       "file": "faction_06.skills.json",
-      "cardCount": 10
+      "cardCount": 33
     },
     {
       "id": "faction_07",
       "name": "血巢",
       "file": "faction_07.skills.json",
-      "cardCount": 10
+      "cardCount": 25
     },
     {
       "id": "faction_08",
       "name": "奇点",
       "file": "faction_08.skills.json",
-      "cardCount": 15
+      "cardCount": 33
     },
     {
       "id": "faction_09",
       "name": "欲狱",
       "file": "faction_09.skills.json",
-      "cardCount": 10
+      "cardCount": 27
     }
   ]
 }
