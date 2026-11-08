@@ -175,17 +175,17 @@
     },
     {
       "id": "j03_rule_write",
-      "name": "立法",
+      "name": "立法·武器管制",
       "kind": "active",
       "sequence": 7,
       "rarity": "uncommon",
       "axis": "decree",
       "flagship": false,
-      "describe": "主动（0 吟唱，20tick CD）。向敌方同路队首颁布法令：10tick 内禁攻击（decree 既有违例惩罚：精神伤害 + 枷锁）；秩序度（order） +1 秩序；order ≥5 时自身获得「法威」（伤害 +1，每回合重判）。",
+      "describe": "主动（吟唱 3tick，25tick CD）。向武器法条打补丁——接下来 30t 内使用武器者违例：受 3 点精神惩罚并枷锁 5tick（order 决定惩罚力度）；order +1。吟唱可被打断（提交即承诺，资源不退）。",
       "cost": {
         "energy": 3,
-        "cooldown": 20,
-        "castTime": 0
+        "cooldown": 25,
+        "castTime": 3
       },
       "reach": "spell",
       "target": {
@@ -202,15 +202,35 @@
       },
       "effects": [
         {
-          "type": "mount_status",
-          "statusId": "decree",
-          "duration": 30,
-          "charges": 2,
-          "params": {
-            "rule": "no_attack"
+          "type": "write_rule_slot",
+          "slot": 0,
+          "field": "trigger",
+          "value": {
+            "article": "art_weapon",
+            "duration": 30,
+            "charges": 99
           },
-          "target": "target",
-          "note": "立法：禁攻击令（decree 承载违例惩罚）"
+          "overwrite": true,
+          "note": "立法补丁：锚定武器法条，30t 内用武器即违例"
+        },
+        {
+          "type": "write_rule_slot",
+          "slot": 0,
+          "field": "punish",
+          "value": [
+            {
+              "type": "damage",
+              "element": "mental",
+              "valueFrom": "order"
+            },
+            {
+              "type": "mount_status",
+              "statusId": "shackle",
+              "duration": 5
+            }
+          ],
+          "overwrite": true,
+          "note": "违例惩罚：精神伤害按 order 定档 + 枷锁 5tick"
         },
         {
           "type": "modify_resource",
@@ -218,28 +238,7 @@
           "value": 1,
           "mode": "delta",
           "target": "board",
-          "note": "立法推极：法理天平 +1 秩序"
-        },
-        {
-          "op": "if",
-          "condition": {
-            "kind": "meter_compare",
-            "key": "order",
-            "cmp": ">=",
-            "n": 5
-          },
-          "then": [
-            {
-              "type": "mount_status",
-              "statusId": "law_might",
-              "duration": 1,
-              "durationUnit": "self_turn",
-              "refresh": true,
-              "target": "self",
-              "note": "法威：秩序极 ≥+5 挂载（伤害 +1）"
-            }
-          ],
-          "else": []
+          "note": "立法推法威：order +1"
         }
       ],
       "tentative": false

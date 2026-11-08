@@ -4126,7 +4126,7 @@
             "exemptions",
             "scope"
           ],
-          "description": "规则槽字段枚举校验（防非法字段写入），见效果上下文 §2.1。"
+          "description": "规则槽字段枚举校验（防非法字段写入），见效果上下文 §2.1。trigger 值可锚定律庭基础法条库（SCHEMA.md §5·五）：{article: art_energy/art_phase/art_weapon/art_death/art_move, duration, charges}；exemptions 值：{article, who, effect}。立法吟唱 3tick / 贿赂吟唱 2tick（吟唱=全场可打断的交互口）。"
         },
         "value": {
           "description": "写入的规则内容（结构按 field 语义：trigger=触发条件 / punish=惩罚载荷 / exemptions=豁免名单 / scope=作用范围）。"

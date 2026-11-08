@@ -69,17 +69,17 @@
     },
     {
       "id": "j03_loophole",
-      "name": "寻隙",
+      "name": "贿赂·能效",
       "kind": "active",
       "sequence": 7,
       "rarity": "uncommon",
       "axis": "twist",
       "flagship": false,
-      "describe": "主动（0 吟唱，25tick CD）。法不责我：把自身写进豁免名单——30tick 内免疫控制类状态（寻隙在场时律师的所有「先立后破」都有了安全屋）。",
+      "describe": "主动（吟唱 2tick，25tick CD）。向能量法条行贿——接下来 25t 内自己使用技能少付 1 能量（贿赂代价随 order 上升：order ≥5 时额外支付 1 点生命作封口费）。吟唱可被打断。",
       "cost": {
         "energy": 2,
         "cooldown": 25,
-        "castTime": 0
+        "castTime": 2
       },
       "reach": "none",
       "target": {
@@ -93,13 +93,37 @@
       },
       "effects": [
         {
-          "type": "grant_immunity",
-          "against": [
-            "control"
+          "type": "write_rule_slot",
+          "slot": 1,
+          "field": "exemptions",
+          "value": {
+            "article": "art_energy",
+            "who": "self",
+            "duration": 25,
+            "effect": "技能能量费 -1"
+          },
+          "overwrite": true,
+          "note": "贿赂：能量法条豁免自己 25t（order 越高代价越贵的口径由引擎按 order 档校验）"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "order",
+            "cmp": ">=",
+            "n": 5
+          },
+          "then": [
+            {
+              "type": "modify_resource",
+              "resource": "hp",
+              "value": -1,
+              "mode": "delta",
+              "target": "self",
+              "note": "秩序森严，贿赂加钱：封口费 1 血（钳 1 不致死）"
+            }
           ],
-          "duration": 30,
-          "target": "self",
-          "note": "寻隙：豁免名单写上自己（原著「法不责X」母题实体化）"
+          "else": []
         }
       ],
       "tentative": false

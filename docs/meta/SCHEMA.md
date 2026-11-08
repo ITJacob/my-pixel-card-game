@@ -93,6 +93,23 @@ docs/json/
 - 元素 / 资源池 / 装备槽 / 状态类别取值域见 ddd params 三篇。
 - - 战场量表（2026-11-08 撤 rule_balance，共 6 个）：secrecy[0,10] / order[0,10]（**初始 5 中性法理**——arbiter 推高：高读罚则乘区；lawyer 压低：≤2 低读行动自由，写入权两族分立）/ fate_value[−10,+10]（monster 独占写入）/ luminance[0,10] / death_tally[0,10]（引擎自动）/ conflict[0,10]（引擎自动计双方冲突 + 战祸卡，tick −0.1；裁定 #8 与欲狱 lust 分叉）。机器正源 = schema dimHook.enum / effModifyResource.resource.enum / validate.py DIM_RANGES。
 
+## 5·五、律庭基础法条库（2026-11-08 主人裁定）
+
+> 法条 = 游戏基础机制的法律化表述，永远生效、可被规则槽引用锚定。规则槽 value 结构：trigger 字段可写 {"article": "<锚定id>", "duration": N, "charges": M}；punish 为违例载荷；exemptions 为 {"article": id, "who": "self|ally|<unit>", "effect": "…"}。
+
+| 锚定 id | 法条 | 机制本体 |
+|---|---|---|
+| art_energy | 能量法条 | 使用技能必须消耗能量 |
+| art_phase | 时序法条 | 白天之后必须是黑夜（相位按序轮转） |
+| art_weapon | 武器法条 | 使用武器必须消耗耐久 |
+| art_death | 生死法条 | 血没了必须死亡 |
+| art_move | 移动法条 | 移动必须遵守插入语义 |
+
+- **arbiter = 打补丁**：吟唱 3tick 立法——给基础法条叠违例惩罚窗口（不改机制本体）。
+- **lawyer = 贿赂**：吟唱 2tick——为指定单位买法条豁免（锚定 + exemptions + 定制效果）。
+- **order 双职能**：惩罚力度 ∝ order；贿赂代价 ∝ order——推高 = 法律严明（罚狠、行贿贵），压低 = 法纪废弛（罚轻、行贿便宜，律师正反馈）。
+- **吟唱 = 全场交互口**：立法/贿赂走 Channel（提交即承诺、打断作废资源不退，INV 吟唱规则）——任何人可打断律庭的立法与贿赂。
+
 ## 6. 已知待修清单
 
 （暂无——迁移期随发现登记于此）
