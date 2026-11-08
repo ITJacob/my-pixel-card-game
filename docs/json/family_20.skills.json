@@ -47,6 +47,42 @@
         }
       ],
       "tentative": false
+    },
+    {
+      "id": "j08_release_soul",
+      "name": "放牧",
+      "kind": "active",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "graze",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。灵魂外放：自身放牧灵魂 +1 层（至多 3 层；每层速率 +1）——借出去的能，要收得回来。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "soul_herd",
+          "stacks": 1,
+          "stackMode": "add",
+          "target": "self",
+          "note": "放牧：存栏 +1"
+        }
+      ],
+      "tentative": false
     }
   ],
   "statusDefs": [
@@ -72,6 +108,44 @@
         "sailor",
         "supplicant"
       ]
+    },
+    {
+      "id": "soul_herd",
+      "name": "放牧灵魂",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": null,
+      "maxStacks": 3,
+      "stackPolicy": "stack",
+      "note": "牧灵人的存栏账户（挂自身，每层=一头外放灵魂）：放牧卡产层；每层行动条速率 +1（借能红利）；消散/被夺即资产流失——放牧的灵魂必须可追偿（红线）。"
+    },
+    {
+      "id": "blood_pact",
+      "name": "血契",
+      "category": [
+        "debuff"
+      ],
+      "dispelable": false,
+      "duration": 20,
+      "durationUnit": "tick",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_active_skill",
+          "effects": [
+            {
+              "type": "heal",
+              "value": 1,
+              "target": "status_holder",
+              "note": "围栏纳租：契约对象每次行动，牧灵人回血 1（作用者寻址由引擎解析为立契人）"
+            }
+          ]
+        }
+      ],
+      "note": "立契的契约载体（挂目标 20tick，不可单方撕毁）：契约对象行动即纳租。"
     }
   ],
   "unitDefs": [],

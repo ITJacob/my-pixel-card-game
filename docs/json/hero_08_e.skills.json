@@ -1,0 +1,338 @@
+{
+  "level": "hero",
+  "heroId": "hero_08_e",
+  "heroName": "英雄·捌戊",
+  "family": "family_20",
+  "faction": "faction_08",
+  "playstyle": "牧灵人——灵魂是存栏、血肉是本金、契约是围栏：跑了要追回来（灵魂牧场的英雄轴）。",
+  "cards": [
+    {
+      "id": "h08e_graze_deep",
+      "name": "深牧",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "graze",
+      "flagship": false,
+      "describe": "主动（吟唱 1tick，20tick CD）。重仓放牧：自身放牧灵魂 +2 层；入场瞬间借能——自身能量 +2（存栏变现）。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 1
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "soul_herd",
+          "stacks": 2,
+          "stackMode": "add",
+          "target": "self",
+          "note": "深牧：存栏 +2"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "energy",
+          "value": 2,
+          "mode": "delta",
+          "target": "self",
+          "note": "借能变现：能量 +2"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08e_recall",
+      "name": "追偿",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "graze",
+      "flagship": false,
+      "describe": "主动（0 吟唱，18tick CD）。牧场召回：自身放牧灵魂清零，每层回复 2 点生命（至多 6）——跑了的要追，收回来的要养。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 18,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "heal",
+          "value": 4,
+          "target": "self",
+          "note": "追偿：回复 4（按存栏层数由引擎放大，每层 2）"
+        },
+        {
+          "type": "modify_status",
+          "statusId": "soul_herd",
+          "stacksDelta": -99,
+          "target": "self",
+          "note": "回栏：存栏清零"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08e_blood_forge",
+      "name": "血锻",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "flesh",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。以血肉为本：自身生命 −2（最低钳 1），攻击 +3（10tick）——本金越厚，火力越猛。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "modify_resource",
+          "resource": "hp",
+          "value": -2,
+          "mode": "delta",
+          "target": "self",
+          "note": "本金：生命 −2（钳 1）"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "blood_forge_vigor",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "血锻：攻击 +3（10tick）"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08e_soul_tax",
+      "name": "魂税",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "flesh",
+      "flagship": false,
+      "describe": "被动。灵魂代血：自身放牧灵魂 ≥2 时，一切自残类代价 −1（血锻/血契只付 1 血）——存栏就是本金池。",
+      "hook": [
+        "on_turn_start"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "self",
+            "id": "soul_herd",
+            "cmp": ">=",
+            "n": 2
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "soul_tax_shield",
+              "duration": 1,
+              "durationUnit": "self_turn",
+              "refresh": true,
+              "target": "self",
+              "note": "魂税：存栏 ≥2，自残代价 −1（引擎校验）"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08e_make_pact",
+      "name": "立契",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "pact",
+      "flagship": false,
+      "describe": "主动（吟唱 1tick，25tick CD）。与目标敌方立血契 20tick（不可单方撕毁）：它每次行动你回血 1；立契代价自身 1 血——围栏先扎，租后收。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 25,
+        "castTime": 1
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board"
+        },
+        "fallbackSort": "gauge_desc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "modify_resource",
+          "resource": "hp",
+          "value": -1,
+          "mode": "delta",
+          "target": "self",
+          "note": "扎围栏：立契 1 血"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "blood_pact",
+          "duration": 20,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "血契 20tick：它动你纳租"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08e_ranch_call",
+      "name": "牧场呼召",
+      "kind": "active",
+      "sequence": 2,
+      "rarity": "epic",
+      "axis": "graze",
+      "flagship": true,
+      "describe": "主动（吟唱 2tick，40tick CD）。全场立契：敌方全体血契 15tick + 自身放牧 +3 层；若自身生命 ≤30%，触发保本——放牧灵魂全额回栏（每层回 2）——牧场不保人，但保资产。",
+      "cost": {
+        "energy": 5,
+        "cooldown": 40,
+        "castTime": 2
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "blood_pact",
+          "duration": 15,
+          "durationUnit": "tick",
+          "target": "all_enemies",
+          "note": "全场立契：敌全体血契 15tick"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "soul_herd",
+          "stacks": 3,
+          "stackMode": "add",
+          "target": "self",
+          "note": "呼召：存栏 +3"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "hp_percent",
+            "side": "self",
+            "cmp": "<=",
+            "n": 0.3
+          },
+          "then": [
+            {
+              "type": "heal",
+              "value": 4,
+              "target": "self",
+              "note": "保本召回：放牧全额回栏（每层回 2）"
+            },
+            {
+              "type": "modify_status",
+              "statusId": "soul_herd",
+              "stacksDelta": -99,
+              "target": "self",
+              "note": "回栏：存栏清零"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [
+    {
+      "id": "blood_forge_vigor",
+      "name": "血锻劲",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": 10,
+      "durationUnit": "tick",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "attack",
+              "value": 3,
+              "mode": "delta",
+              "duration": null,
+              "target": "self",
+              "note": "血锻劲：攻击 +3"
+            }
+          ]
+        }
+      ],
+      "note": "血锻的增益面（10tick）。"
+    },
+    {
+      "id": "soul_tax_shield",
+      "name": "魂税减免",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": 1,
+      "durationUnit": "self_turn",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "note": "魂税的减免标记（存栏 ≥2 时每自身回合挂载，自残代价 −1 由引擎校验）。"
+    }
+  ],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}
