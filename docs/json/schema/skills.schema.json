@@ -128,7 +128,7 @@
         },
         "initialEquip": {
           "type": "string",
-          "pattern": "^([fh])[0-9]{2}_[a-z0-9_]+$",
+          "pattern": "^([fjh])[0-9]{2}_[a-z0-9_]+$",
           "description": "初始装备（仅 passive）：开局自动装备该装备卡 id（须为同途径 kind=equipment 的卡）。"
         },
         "statusDefs": {
