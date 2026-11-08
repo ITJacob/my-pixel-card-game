@@ -1,0 +1,326 @@
+{
+  "level": "hero",
+  "heroId": "hero_08_b",
+  "heroName": "英雄·捌乙",
+  "family": "family_17",
+  "faction": "faction_08",
+  "playstyle": "公证人——光是我的公章，契约双边成文，违例自动定罪（正午公证处的英雄轴）。",
+  "cards": [
+    {
+      "id": "h08b_vow_of_stillness",
+      "name": "誓约·止戈",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "vow",
+      "flagship": false,
+      "describe": "主动（吟唱 2tick，25tick CD）。双边成文 20tick：使用武器者违例（锚 art_weapon），受 2 点精神惩罚并枷锁 3tick——止戈为武，违者受审。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 2
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "write_rule_slot",
+          "slot": 0,
+          "field": "trigger",
+          "value": {
+            "article": "art_weapon",
+            "duration": 20,
+            "charges": 99
+          },
+          "overwrite": true,
+          "note": "誓约：锚定武器法条 20tick"
+        },
+        {
+          "type": "write_rule_slot",
+          "slot": 0,
+          "field": "punish",
+          "value": [
+            {
+              "type": "damage",
+              "element": "mental",
+              "value": 2
+            },
+            {
+              "type": "mount_status",
+              "statusId": "shackle",
+              "duration": 3
+            }
+          ],
+          "overwrite": true,
+          "note": "违例惩罚：2 精神 + 枷锁 3tick"
+        },
+        {
+          "type": "set_luminance",
+          "delta": 1,
+          "note": "定罪举火：luminance +1"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08b_court_window",
+      "name": "开庭",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "vow",
+      "flagship": false,
+      "describe": "主动（吟唱 2tick，30tick CD）。开庭窗口 15tick：窗口内己方全体违例免疫（grant_immunity debuff 15tick——契约保护己方当事人）；窗口结束自然闭庭。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 30,
+        "castTime": 2
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "ally",
+          "scope": "board"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "grant_immunity",
+          "against": [
+            "debuff"
+          ],
+          "duration": 15,
+          "target": "all_allies",
+          "note": "开庭：己方全体违例免疫 15tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08b_raise_light",
+      "name": "圣光如昼",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "light",
+      "flagship": false,
+      "describe": "主动（吟唱 1tick，20tick CD）。luminance +3（向满光档推进）；满光档（≥8）时全体友方回复 2 点生命——正午的公证处不打烊。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 1
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "set_luminance",
+          "delta": 3,
+          "note": "圣光如昼：luminance +3"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "luminance_compare",
+            "cmp": ">=",
+            "n": 8
+          },
+          "then": [
+            {
+              "type": "heal",
+              "value": 2,
+              "target": "all_allies",
+              "note": "满光档：全体回复 2"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08b_noon_gold",
+      "name": "正午金辉",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "light",
+      "flagship": false,
+      "describe": "被动。满光档（luminance ≥8）时，自身伤害 +2；低于 8 无效果——正午圣光就是我的巅峰。",
+      "hook": [
+        "on_turn_start"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "luminance_compare",
+            "cmp": ">=",
+            "n": 8
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "noon_vigor",
+              "duration": 1,
+              "durationUnit": "self_turn",
+              "refresh": true,
+              "target": "self",
+              "note": "正午金辉：满光档伤害 +2"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08b_notarize",
+      "name": "公证",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "verdict",
+      "flagship": false,
+      "describe": "主动（0 吟唱，18tick CD）。公证处盖章：一名友方清除 1 个减益并获得 1 点能量（若有——没有也行，公证书照发）。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 18,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "ally",
+          "scope": "whole_lane",
+          "sort": "debuff_count_desc",
+          "pickCount": 1
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "dispel",
+          "dispelTarget": "unit",
+          "category": [
+            "debuff"
+          ],
+          "count": 1,
+          "target": "target",
+          "note": "公证：清除 1 减益"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "energy",
+          "value": 1,
+          "mode": "delta",
+          "target": "target",
+          "note": "盖章：能量 +1"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08b_final_judgment",
+      "name": "终审判决",
+      "kind": "active",
+      "sequence": 2,
+      "rarity": "epic",
+      "axis": "verdict",
+      "flagship": true,
+      "describe": "主动（吟唱 2tick，40tick CD）。终审落地：驱散敌方全体增益，每驱散 1 个其受 1 点精神伤害；随后 luminance 压至满档（set 8）——判决之日，正午永驻。",
+      "cost": {
+        "energy": 5,
+        "cooldown": 40,
+        "castTime": 2
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "dispel",
+          "dispelTarget": "unit",
+          "category": [
+            "buff"
+          ],
+          "target": "all_enemies",
+          "note": "终审：驱散敌方全体增益（每 1 个追 1 精神，引擎结算）"
+        },
+        {
+          "type": "damage",
+          "element": "mental",
+          "value": 3,
+          "target": "all_enemies",
+          "note": "判决基准 3 精神"
+        },
+        {
+          "type": "set_luminance",
+          "value": 8,
+          "note": "正午永驻：luminance 置满档 8"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [
+    {
+      "id": "noon_vigor",
+      "name": "正午金辉",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": 1,
+      "durationUnit": "self_turn",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_deal_damage",
+          "effects": [
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 2,
+              "target": "same_target",
+              "note": "正午金辉：伤害 +2"
+            }
+          ]
+        }
+      ],
+      "note": "满光档读层载体（luminance ≥8 每自身回合挂载）。"
+    }
+  ],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

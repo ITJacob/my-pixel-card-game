@@ -41,6 +41,47 @@
         }
       ],
       "tentative": false
+    },
+    {
+      "id": "j08_burn_away",
+      "name": "烧尽",
+      "kind": "active",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "light",
+      "flagship": false,
+      "describe": "主动（0 吟唱，12tick CD）。正午圣光的日常：净化目标敌方 1 个增益（单体驱散）——污秽见不得光。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 12,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "anchor": "enemy_front",
+          "scope": "whole_lane",
+          "sort": "index_asc",
+          "pickCount": 1
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "dispel",
+          "dispelTarget": "unit",
+          "category": [
+            "buff"
+          ],
+          "count": 1,
+          "target": "target",
+          "note": "烧尽：驱散 1 增益"
+        }
+      ],
+      "tentative": false
     }
   ],
   "statusDefs": [],
