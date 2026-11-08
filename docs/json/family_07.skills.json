@@ -12,7 +12,7 @@
       "rarity": "uncommon",
       "axis": "twist",
       "flagship": false,
-      "describe": "主动（0 吟唱，20tick CD）。守恒重排敌方全体行动条（gauge_shuffle）；法理天平 −1 熵；熵极 ≤−5 时自身获得「诡势」（行动条速率 +2，每回合重判）——秩序的缝隙越撕越大。",
+      "describe": "主动（0 吟唱，20tick CD）。守恒重排敌方全体行动条（gauge_shuffle）；秩序度（order） −1 熵；order ≤2 时自身获得「诡势」（行动条速率 +2，每回合重判）——秩序的缝隙越撕越大。",
       "cost": {
         "energy": 3,
         "cooldown": 20,
@@ -37,7 +37,7 @@
         },
         {
           "type": "modify_resource",
-          "resource": "rule_balance",
+          "resource": "order",
           "value": -1,
           "mode": "delta",
           "target": "board",
@@ -47,9 +47,9 @@
           "op": "if",
           "condition": {
             "kind": "meter_compare",
-            "key": "rule_balance",
+            "key": "order",
             "cmp": "<=",
-            "n": -5
+            "n": 2
           },
           "then": [
             {
@@ -60,6 +60,116 @@
               "refresh": true,
               "target": "self",
               "note": "诡势：熵极 ≤−5 挂载（速率 +2）"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "j03_loophole",
+      "name": "寻隙",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "twist",
+      "flagship": false,
+      "describe": "主动（0 吟唱，25tick CD）。法不责我：把自身写进豁免名单——30tick 内免疫控制类状态（寻隙在场时律师的所有「先立后破」都有了安全屋）。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "grant_immunity",
+          "against": [
+            "control"
+          ],
+          "duration": 30,
+          "target": "self",
+          "note": "寻隙：豁免名单写上自己（原著「法不责X」母题实体化）"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "j03_bribe",
+      "name": "贿赂",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "twist",
+      "flagship": false,
+      "describe": "主动（0 吟唱，22tick CD）。与敌方全体打通利益通道 20tick：期间它们每次造成伤害，你抽成 2 点能量——它们打谁都行，反正抽成归你。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 22,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "bribe_link",
+          "duration": 20,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "利益通道：敌方每次伤害，律师抽成 2 能量"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "j03_chaos_freedom",
+      "name": "混乱自由",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "twist",
+      "flagship": false,
+      "describe": "被动。自身回合开始时，若秩序度 ≤2（法理崩坏），获得「混乱利刃」（伤害 +1，每回合重判）——秩序的缝隙就是律师的高速公路。",
+      "hook": [
+        "on_turn_start"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "order",
+            "cmp": "<=",
+            "n": 2
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "chaos_edge",
+              "duration": 1,
+              "durationUnit": "self_turn",
+              "refresh": true,
+              "target": "self",
+              "note": "混乱利刃：order ≤2 挂载（伤害 +1）"
             }
           ],
           "else": []
@@ -96,7 +206,65 @@
           ]
         }
       ],
-      "note": "扭曲卡的熵极读层：rule_balance ≤−5 时每自身回合挂载。"
+      "note": "扭曲卡的混乱低读层：order ≤2 时每自身回合挂载（混乱自由）。"
+    },
+    {
+      "id": "bribe_link",
+      "name": "利益通道",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": 20,
+      "durationUnit": "tick",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_deal_damage",
+          "filter": {
+            "side": "enemy"
+          },
+          "effects": [
+            {
+              "type": "modify_resource",
+              "resource": "energy",
+              "value": 2,
+              "mode": "delta",
+              "target": "self",
+              "note": "抽成：敌方每次伤害，律师 +2 能量"
+            }
+          ]
+        }
+      ],
+      "note": "贿赂卡的利益通道（原著贿赂·关联实体化）：挂在律师身上，敌方伤害事件触发抽成。"
+    },
+    {
+      "id": "chaos_edge",
+      "name": "混乱利刃",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": 1,
+      "durationUnit": "self_turn",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_deal_damage",
+          "effects": [
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 1,
+              "target": "same_target",
+              "note": "混乱利刃：伤害 +1"
+            }
+          ]
+        }
+      ],
+      "note": "混乱自由的 order 低读层：order ≤2 时每自身回合挂载。"
     }
   ],
   "unitDefs": [],

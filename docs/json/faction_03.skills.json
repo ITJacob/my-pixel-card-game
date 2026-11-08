@@ -20,7 +20,7 @@
           "op": "if",
           "condition": {
             "kind": "meter_compare",
-            "key": "rule_balance",
+            "key": "order",
             "cmp": ">=",
             "n": 5
           },
@@ -41,7 +41,7 @@
           "op": "if",
           "condition": {
             "kind": "meter_compare",
-            "key": "rule_balance",
+            "key": "order",
             "cmp": "<=",
             "n": -5
           },
@@ -69,7 +69,7 @@
       "rarity": "rare",
       "axis": "rule",
       "flagship": false,
-      "describe": "主动（0 吟唱，40tick CD）。按法理天平当前极性终局裁定：秩序极 ≥+5 → 敌方全体受 5 点精神违例惩罚；熵极 ≤−5 → 改写敌方法则（驱散敌方全体增益）。裁定后法理天平回零。两级均不足时无效但仍消耗行动。",
+      "describe": "主动（0 吟唱，40tick CD）。按秩序度终局裁定：order ≥5 → 敌方全体受 5 点精神违例惩罚；order ≤2 → 改写敌方法则（驱散敌方全体增益）。裁定后 order 回初始 5（中性法理）。窗口（3–4）内无效但仍消耗行动。",
       "cost": {
         "energy": 4,
         "cooldown": 40,
@@ -90,7 +90,7 @@
           "op": "if",
           "condition": {
             "kind": "meter_compare",
-            "key": "rule_balance",
+            "key": "order",
             "cmp": ">=",
             "n": 5
           },
@@ -109,9 +109,9 @@
           "op": "if",
           "condition": {
             "kind": "meter_compare",
-            "key": "rule_balance",
+            "key": "order",
             "cmp": "<=",
-            "n": -5
+            "n": 2
           },
           "then": [
             {
@@ -128,11 +128,11 @@
         },
         {
           "type": "modify_resource",
-          "resource": "rule_balance",
-          "value": 0,
+          "resource": "order",
+          "value": 5,
           "mode": "set",
           "target": "board",
-          "note": "裁定既下，法理天平回零"
+          "note": "裁定既下，法理回中（order 回初始 5）"
         }
       ],
       "tentative": false
@@ -163,7 +163,7 @@
           ]
         }
       ],
-      "note": "天平之眼的秩序极读层：rule_balance ≥+5 时每自身回合挂载。"
+      "note": "天平之眼的秩序高读层：order ≥5 时每自身回合挂载（初始 5 起算）。"
     },
     {
       "id": "entropy_favor",
@@ -190,7 +190,7 @@
           ]
         }
       ],
-      "note": "天平之眼的熵极读层：rule_balance ≤−5 时每自身回合挂载。"
+      "note": "天平之眼的混乱低读层：order ≤2 时每自身回合挂载。"
     }
   ],
   "unitDefs": [],

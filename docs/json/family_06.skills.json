@@ -181,7 +181,7 @@
       "rarity": "uncommon",
       "axis": "decree",
       "flagship": false,
-      "describe": "主动（0 吟唱，20tick CD）。向敌方同路队首颁布法令：10tick 内禁攻击（decree 既有违例惩罚：精神伤害 + 枷锁）；法理天平 +1 秩序；秩序极 ≥+5 时自身获得「法威」（伤害 +1，每回合重判）。",
+      "describe": "主动（0 吟唱，20tick CD）。向敌方同路队首颁布法令：10tick 内禁攻击（decree 既有违例惩罚：精神伤害 + 枷锁）；秩序度（order） +1 秩序；order ≥5 时自身获得「法威」（伤害 +1，每回合重判）。",
       "cost": {
         "energy": 3,
         "cooldown": 20,
@@ -214,7 +214,7 @@
         },
         {
           "type": "modify_resource",
-          "resource": "rule_balance",
+          "resource": "order",
           "value": 1,
           "mode": "delta",
           "target": "board",
@@ -224,7 +224,7 @@
           "op": "if",
           "condition": {
             "kind": "meter_compare",
-            "key": "rule_balance",
+            "key": "order",
             "cmp": ">=",
             "n": 5
           },
@@ -533,7 +533,7 @@
           ]
         }
       ],
-      "note": "立法卡的秩序极读层：rule_balance ≥+5 时每自身回合挂载。"
+      "note": "立法卡的秩序高读层：order ≥5 时每自身回合挂载。"
     }
   ],
   "unitDefs": [],

@@ -448,8 +448,7 @@
             "fate_value",
             "luminance",
             "death_tally",
-            "conflict",
-            "rule_balance"
+            "conflict"
           ],
           "description": "挂钩的战场维度：隐秘值 / 秩序度 / 命运值 / 光照度 / 死亡簿（死亡结算 +1、cap 10，见 源质维度与跨系枢纽.md §一点五）。光照度取值域 int[0,10]，官方档位 2 / 5 / 8（见 docs/ddd/params/战场参数.md §1.3b）。"
         },
@@ -1445,8 +1444,7 @@
             "secrecy",
             "order",
             "fate_value",
-            "conflict",
-            "rule_balance"
+            "conflict"
           ],
           "description": "资源标识。单位级 Pool：hp/energy/shield/armor/lust（下限截断 0）；迷失值 lost（界域租金/清零）；行动条 Gauge：gauge.current。战场级量表（值域截断见 源质维度与跨系枢纽.md §二–§四）：secrecy/order（[0,10]）、fate_value（[−10,+10]）、conflict（[0,10]，冲突计数：双方伤害事件/击杀/施法累计、tick 消退，登记见 SCHEMA.md §5）；战场量表写入仅限 ddd 登记写入方（fate_value 仅怪物、conflict 仅引擎自动+战祸派系卡）。加血请用 heal。"
         },
