@@ -42,9 +42,62 @@
         }
       ],
       "tentative": false
+    },
+    {
+      "id": "j08_observe",
+      "name": "观察",
+      "kind": "active",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "read",
+      "flagship": false,
+      "describe": "主动（0 吟唱，10tick CD）。读档：标记敌方单体为「已读」（25tick）——分析师的一切从这里开始。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 10,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "anchor": "enemy_front",
+          "scope": "whole_lane",
+          "sort": "index_asc",
+          "pickCount": 1
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "analyzed",
+          "duration": 25,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "观察：已读标记 25tick"
+        }
+      ],
+      "tentative": false
     }
   ],
-  "statusDefs": [],
+  "statusDefs": [
+    {
+      "id": "analyzed",
+      "name": "已读",
+      "category": [
+        "debuff"
+      ],
+      "dispelable": true,
+      "duration": 25,
+      "durationUnit": "tick",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "note": "情报资产账户（挂敌方身上）：读档卡产标记，分析师对被读目标增伤/追加；25tick 旧情报作废（家族红线「知识会过期」实体化）；被读目标死亡标记可转移（读档卡钩子）。"
+    }
+  ],
   "unitDefs": [],
   "zoneDefs": [],
   "domainDefs": []

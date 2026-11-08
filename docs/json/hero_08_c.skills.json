@@ -1,0 +1,356 @@
+{
+  "level": "hero",
+  "heroId": "hero_08_c",
+  "heroName": "英雄·捌丙",
+  "family": "family_18",
+  "faction": "faction_08",
+  "playstyle": "分析师——读你的能量/技能/节奏，读错了自噬，读对了全图透视（情报交易所的英雄轴）。",
+  "cards": [
+    {
+      "id": "h08c_read_vitals",
+      "name": "读维",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "read",
+      "flagship": false,
+      "describe": "主动（0 吟唱，12tick CD）。深度读档：目标已读标记刷新至 25tick 并额外承受 2 点精神伤害；若目标已带标记（续读旧档），追加 1 能量——情报要常更新。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 12,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board"
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "analyzed",
+          "duration": 25,
+          "durationUnit": "tick",
+          "refresh": true,
+          "target": "target",
+          "note": "读维：已读刷新 25tick"
+        },
+        {
+          "type": "damage",
+          "element": "mental",
+          "value": 2,
+          "target": "target",
+          "note": "解析痛：2 精神"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "analyzed",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "modify_resource",
+              "resource": "energy",
+              "value": 1,
+              "mode": "delta",
+              "target": "self",
+              "note": "续读奖励：旧档常新，能量 +1"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08c_exploit_weakness",
+      "name": "漏洞放大",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "read",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。对已读目标的漏洞下手：4 点精神伤害；被读目标死亡时情报不浪费——已读标记转移给相邻敌方（25tick）。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "anchor": "enemy_front",
+          "scope": "whole_lane",
+          "sort": "index_asc",
+          "pickCount": 1
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "analyzed",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "mental",
+              "value": 4,
+              "target": "target",
+              "note": "漏洞放大：已读目标 4 精神"
+            }
+          ],
+          "else": [
+            {
+              "type": "damage",
+              "element": "mental",
+              "value": 1,
+              "target": "target",
+              "note": "未读档：盲打仅 1 精神（读错方向的亏）"
+            }
+          ]
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "target_dead"
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "analyzed",
+              "duration": 25,
+              "durationUnit": "tick",
+              "target": "splash_adjacent",
+              "note": "情报转移：已读转给相邻敌"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08c_memory_tamper",
+      "name": "篡改记忆",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "memory",
+      "flagship": false,
+      "describe": "主动（吟唱 1tick，22tick CD）。记忆域写入（裁定 #2 独占面）：目标 1 个增益被改写为「错乱」（等时长 debuff——攻击力 −1，改写有耗：自身能量 −1）。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 22,
+        "castTime": 1
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board"
+        },
+        "fallbackSort": "buff_count_desc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "transfer_status",
+          "mode": "rewrite",
+          "statusesFrom": "buff",
+          "count": 1,
+          "from": {
+            "target": "target"
+          },
+          "to": {
+            "target": "target"
+          },
+          "mapping": {
+            "any": "confused_memory"
+          },
+          "note": "篡改：目标 1 增益改写为错乱（裁定 #2 记忆域独占写入面）"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "energy",
+          "value": -1,
+          "mode": "delta",
+          "target": "self",
+          "note": "改写有耗：自身 −1 能量"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08c_confusion_backlash",
+      "name": "读错自噬",
+      "kind": "passive",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "memory",
+      "flagship": false,
+      "describe": "被动。家族红线实体化：对未读档（无已读标记）的目标施放主动技能后，自身受到 1 点精神反噬——方向读错的代价。",
+      "hook": [
+        "on_active_skill"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "not",
+            "condition": {
+              "kind": "has_status",
+              "side": "target",
+              "id": "analyzed",
+              "cmp": ">=",
+              "n": 1
+            }
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "mental",
+              "value": 1,
+              "target": "self",
+              "note": "读错自噬：盲动 −1 精神"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08c_mimic",
+      "name": "现学现卖",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "mimic",
+      "flagship": false,
+      "describe": "主动（吟唱 1tick，25tick CD）。解析并回响目标的上一式（echo_last_skill target 版，potency 0.8）——你的招不错，下一秒是我的。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 1
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board"
+        },
+        "fallbackSort": "gauge_desc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "echo_last_skill",
+          "potency": 0.8,
+          "rounding": "round",
+          "target": "target",
+          "note": "现学现卖：回响目标上一式（0.8 折）"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08c_total_analysis",
+      "name": "全解析",
+      "kind": "active",
+      "sequence": 2,
+      "rarity": "epic",
+      "axis": "read",
+      "flagship": true,
+      "describe": "主动（吟唱 2tick，40tick CD）。全场读档：敌方全体获得已读标记（25tick），每标记 1 个目标自身回复 1 点生命（至多 5）——全图透视的一瞬，分析师的巅峰。",
+      "cost": {
+        "energy": 5,
+        "cooldown": 40,
+        "castTime": 2
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "analyzed",
+          "duration": 25,
+          "durationUnit": "tick",
+          "target": "all_enemies",
+          "note": "全解析：敌全体已读 25tick"
+        },
+        {
+          "type": "heal",
+          "value": 3,
+          "target": "self",
+          "note": "透视回充：自身回复 3（按标记数由引擎放大，至多 5）"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [
+    {
+      "id": "confused_memory",
+      "name": "错乱",
+      "category": [
+        "debuff"
+      ],
+      "dispelable": true,
+      "duration": 15,
+      "durationUnit": "tick",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "attack",
+              "value": -1,
+              "mode": "delta",
+              "duration": null,
+              "target": "self",
+              "note": "错乱：攻击 −1"
+            }
+          ]
+        }
+      ],
+      "note": "篡改记忆的改写产物（增益 → 错乱等时长置换）。"
+    }
+  ],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}
