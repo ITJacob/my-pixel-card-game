@@ -47,6 +47,29 @@
           ]
         }
       ]
+    },
+    {
+      "id": "j05_prototype",
+      "name": "试作机",
+      "kind": "summon",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "construct",
+      "flagship": false,
+      "describe": "召唤（0 吟唱，22tick CD）。快速出厂一台试作魔像（50% 生命/攻击，落己方队尾）——先跑起来再说。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 22,
+        "castTime": 0
+      },
+      "effects": [],
+      "summon": {
+        "unitId": "unit_golem",
+        "hpRatio": 0.5,
+        "atkRatio": 0.5,
+        "position": "tail"
+      },
+      "tentative": false
     }
   ],
   "statusDefs": [
@@ -125,9 +148,33 @@
         }
       ],
       "note": "savant 自适应补全的增益面：修结构不回血（裁定 #5 划界不破）。"
+    },
+    {
+      "id": "investment",
+      "name": "投资层",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "maxStacks": 5,
+      "stackPolicy": "stack",
+      "note": "产线投资账户（挂工程师身上，永续）：加注产、出厂读耗；造物死亡不清零——产线学习：下一档造价 −1（引擎校验）。"
     }
   ],
-  "unitDefs": [],
+  "unitDefs": [
+    {
+      "id": "unit_golem",
+      "name": "组装魔像",
+      "unitType": "CONSTRUCT",
+      "base": {
+        "hp": 14,
+        "atk": 3,
+        "reach": "melee"
+      },
+      "note": "完美工厂的造物蓝本（阶梯投资承载）：出厂卡按投资层放大，被拆即沉没（CONSTRUCT 与驯兽/亡者/炼成/空想六家召唤已分）"
+    }
+  ],
   "zoneDefs": [],
   "domainDefs": []
 }

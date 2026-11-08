@@ -1,0 +1,331 @@
+{
+  "level": "hero",
+  "heroId": "hero_05_b",
+  "heroName": "英雄·伍乙",
+  "family": "family_12",
+  "faction": "faction_05",
+  "playstyle": "总工程师——规律是图纸、造物是产品线、缺陷是质检清单（完美工厂的英雄轴）。",
+  "cards": [
+    {
+      "id": "h05b_invest",
+      "name": "加注",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "construct",
+      "flagship": false,
+      "describe": "主动（0 吟唱，10tick CD）。产线加注：投资层 +2（至多 5 层）——憋得越久，出厂越狠。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 10,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "investment",
+          "stacks": 2,
+          "stackMode": "add",
+          "target": "self",
+          "note": "加注：投资 +2 层"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h05b_roll_out",
+      "name": "正式出厂",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "construct",
+      "flagship": false,
+      "describe": "主动（吟唱 1tick，25tick CD）。产线开闸：一台满属性魔像落地（落己方队尾）；投资层 ≥3 时出厂的魔像攻击 +2（档位红利）；投资清零。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 1
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "summon"
+      },
+      "effects": [
+        {
+          "type": "spawn",
+          "unitId": "unit_golem",
+          "position": "tail",
+          "target": "self",
+          "note": "正式出厂：满属性魔像"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "self",
+            "id": "investment",
+            "cmp": ">=",
+            "n": 3
+          },
+          "then": [
+            {
+              "type": "modify_resource",
+              "resource": "lost",
+              "value": 1,
+              "mode": "delta",
+              "target": "self",
+              "note": "档位红利：投资 ≥3，出厂魔像攻击 +2（引擎校验）"
+            }
+          ],
+          "else": []
+        },
+        {
+          "type": "modify_status",
+          "statusId": "investment",
+          "stacksDelta": -99,
+          "target": "self",
+          "note": "产线清空：投资清零"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h05b_law_gravity",
+      "name": "规律·重力加倍",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "law",
+      "flagship": false,
+      "describe": "主动（吟唱 2tick，25tick CD）。改写物理规律 20tick：敌方全体行动速率 ×0.7（slow 母版承载）——重力不认人。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 2
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "slow",
+          "duration": 20,
+          "durationUnit": "tick",
+          "target": "all_enemies",
+          "note": "规律改写（物理侧）：重力加倍，敌全体 slow 20tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h05b_law_friction",
+      "name": "规律·零摩擦",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "law",
+      "flagship": false,
+      "describe": "主动（吟唱 2tick，25tick CD）。改写物理规律 20tick：己方全体行动条速率 +2（物理规律窗口内己方润滑）——我的车间我做主。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 2
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "ally",
+          "scope": "board"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "zero_friction",
+          "duration": 20,
+          "durationUnit": "tick",
+          "target": "all_allies",
+          "note": "规律改写（物理侧）：零摩擦，己全体速率 +2 20tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h05b_precision_fix",
+      "name": "精修",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "perfect",
+      "flagship": false,
+      "describe": "被动。自身回合开始时，若场上有魔像：魔像回复 2 点生命（修结构不回血——修的是造物，治疗划界 #5 不破）。",
+      "hook": [
+        "on_turn_start"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "caster_has_summon"
+          },
+          "then": [
+            {
+              "type": "heal",
+              "value": 2,
+              "target": "self",
+              "note": "精修：魔像回复 2（指向由引擎解析为最近造物）"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h05b_mass_produce",
+      "name": "量产爆发",
+      "kind": "active",
+      "sequence": 2,
+      "rarity": "epic",
+      "axis": "construct",
+      "flagship": true,
+      "describe": "主动（吟唱 2tick，40tick CD）。产线全开：两台满属性魔像落地，全体友方攻击 +1（10tick）；投资清零——完美工厂的全负荷一刻。",
+      "cost": {
+        "energy": 5,
+        "cooldown": 40,
+        "castTime": 2
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "summon"
+      },
+      "effects": [
+        {
+          "type": "spawn",
+          "unitId": "unit_golem",
+          "position": "tail",
+          "target": "self"
+        },
+        {
+          "type": "spawn",
+          "unitId": "unit_golem",
+          "position": "tail",
+          "target": "self",
+          "note": "量产：魔像 ×2"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "mass_vigor",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "all_allies",
+          "note": "全负荷：全体攻击 +1"
+        },
+        {
+          "type": "modify_status",
+          "statusId": "investment",
+          "stacksDelta": -99,
+          "target": "self",
+          "note": "产线清空：投资清零"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [
+    {
+      "id": "zero_friction",
+      "name": "零摩擦",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": 20,
+      "durationUnit": "tick",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "gauge.rate",
+              "value": 2,
+              "mode": "delta",
+              "duration": null,
+              "target": "self",
+              "note": "零摩擦：行动条速率 +2"
+            }
+          ]
+        }
+      ],
+      "note": "规律·零摩擦的窗口载体（物理规律改写 20tick）。"
+    },
+    {
+      "id": "mass_vigor",
+      "name": "全负荷",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": 10,
+      "durationUnit": "tick",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "attack",
+              "value": 1,
+              "mode": "delta",
+              "duration": null,
+              "target": "self",
+              "note": "全负荷：攻击 +1"
+            }
+          ]
+        }
+      ],
+      "note": "量产爆发的团队增益面。"
+    }
+  ],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}
