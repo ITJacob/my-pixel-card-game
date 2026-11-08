@@ -4,8 +4,310 @@
   "heroName": "英雄·壹乙",
   "family": "family_02",
   "faction": "faction_01",
-  "playstyle": "（层〇命题定稿后填写——死亡账房的第二条轴）",
-  "cards": [],
+  "playstyle": "账房先生——我不动手，我记账：谁死进账、谁该死、何时催命（死亡账房的英雄轴）。",
+  "cards": [
+    {
+      "id": "h01b_death_note",
+      "name": "死亡宣告",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "ledger",
+      "flagship": false,
+      "describe": "主动（吟唱 1tick，15tick CD）。向目标宣读死期：死账 +3 层；若目标死账 ≥6，立即预支催账——6 点暗属性伤害。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 15,
+        "castTime": 1
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "anchor": "enemy_front",
+          "scope": "whole_lane",
+          "sort": "index_asc",
+          "pickCount": 1
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "death_ledger",
+          "stacks": 3,
+          "duration": 20,
+          "stackMode": "add",
+          "target": "target",
+          "note": "宣读死期：死账 +3 层"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "death_ledger",
+            "cmp": ">=",
+            "n": 6
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "dark",
+              "value": 6,
+              "target": "target",
+              "note": "死期已至：死账 ≥6，预支催账 6 点暗伤"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h01b_due_collect",
+      "name": "摆渡·对视",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "ledger",
+      "flagship": false,
+      "describe": "主动（吟唱 1tick，20tick CD）。与目标对视催账：4 点暗伤 + 清其全部死账层；若因此致死，其死亡向相邻敌方 +1 死账（死会传染）。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 20,
+        "castTime": 1
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board"
+        },
+        "fallbackSort": "debuff_count_desc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "dark",
+          "value": 4,
+          "target": "target",
+          "note": "催账基准 4 点暗伤"
+        },
+        {
+          "type": "modify_status",
+          "statusId": "death_ledger",
+          "target": "target",
+          "note": "账清：死账全层结清",
+          "stacksDelta": -99
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "target_dead"
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "death_ledger",
+              "stacks": 1,
+              "duration": 20,
+              "target": "splash_adjacent",
+              "note": "死亡传染：相邻敌方 +1 死账"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h01b_ledger_merge",
+      "name": "权柄合并",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "ledger",
+      "flagship": true,
+      "describe": "主动（吟唱 2tick，40tick CD）。合拢全场的账：每个带死账的敌人受 3 + 其死账层数 点暗属性伤害，然后全部死账清零——账房先生亲手结算的一天。",
+      "cost": {
+        "energy": 5,
+        "cooldown": 40,
+        "castTime": 2
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "dark",
+          "value": 3,
+          "valueFrom": "death_ledger",
+          "target": "all_enemies",
+          "note": "权柄合并：3 + 各自死账层数 结算暗伤"
+        },
+        {
+          "type": "modify_status",
+          "statusId": "death_ledger",
+          "target": "all_enemies",
+          "note": "账清：全场死账清零",
+          "stacksDelta": -99
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h01b_corpse_wall",
+      "name": "尸墙",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "undead",
+      "flagship": false,
+      "describe": "主动（0 吟唱，22tick CD）。唤起两具活尸堵路（依次落地己方队尾，走召唤位与维持费规则）。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 22,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "summon"
+      },
+      "effects": [
+        {
+          "type": "spawn",
+          "unitId": "unit_zombie",
+          "position": "tail",
+          "target": "self"
+        },
+        {
+          "type": "spawn",
+          "unitId": "unit_zombie",
+          "position": "tail",
+          "target": "self",
+          "note": "尸墙：活尸 ×2"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h01b_wraith_swarm",
+      "name": "亡魂引路",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "undead",
+      "flagship": false,
+      "describe": "主动（吟唱 1tick，25tick CD）。引三只亡魂入场（依次落地己方队尾）——亡魂无形，替账房跑外勤。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 25,
+        "castTime": 1
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "summon"
+      },
+      "effects": [
+        {
+          "type": "spawn",
+          "unitId": "unit_wraith",
+          "position": "tail",
+          "target": "self"
+        },
+        {
+          "type": "spawn",
+          "unitId": "unit_wraith",
+          "position": "tail",
+          "target": "self"
+        },
+        {
+          "type": "spawn",
+          "unitId": "unit_wraith",
+          "position": "tail",
+          "target": "self",
+          "note": "亡魂 ×3"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h01b_spirit_gaze",
+      "name": "灵视",
+      "kind": "passive",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "sight",
+      "flagship": false,
+      "describe": "被动。自身造成伤害时给目标打上灵视（15tick，账房先记一笔）；对带灵视的目标伤害 +1——看破死亡的人先记账。",
+      "hook": [
+        "on_turn_start"
+      ],
+      "effects": [],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_deal_damage",
+          "effects": [
+            {
+              "type": "mount_status",
+              "statusId": "spirit_sight",
+              "duration": 15,
+              "durationUnit": "tick",
+              "target": "same_target",
+              "note": "灵视标记：打谁标谁"
+            },
+            {
+              "op": "if",
+              "condition": {
+                "kind": "has_status",
+                "side": "target",
+                "id": "spirit_sight",
+                "cmp": ">=",
+                "n": 1
+              },
+              "then": [
+                {
+                  "type": "damage",
+                  "element": "none",
+                  "value": 1,
+                  "target": "same_target",
+                  "note": "灵视克制：对带灵视目标伤害 +1"
+                }
+              ],
+              "else": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
   "statusDefs": [],
   "unitDefs": [],
   "zoneDefs": [],

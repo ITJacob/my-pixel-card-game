@@ -1,0 +1,48 @@
+# 全库基线 2026-11-08（三档重构后重存：位置标签 hNN_→jNN_ 随归位迁移；hero_01_b 链入 family_01，组内共享 j01_unstoppable R10——豁免理由同 hero_01，其余与 2026-11-01 豁免清单一一对应）
+== hero_01 ==
+  [R10] j01_unstoppable: modify_stat +4 跳档
+  -> 1 warns (R10×1)
+== hero_01_b ==
+  [R10] j01_unstoppable: modify_stat +4 跳档
+  -> 1 warns (R10×1)
+== hero_02 ==
+  [R6] family_04 sd witch_form: 常驻伤害乘区
+  [R6] family_04 sd form_shadow: 常驻伤害乘区
+  [R6] family_04 sd form_mist: 常驻伤害乘区
+  -> 3 warns (R6×3)
+== hero_03 ==
+  [R4] family_06 sd decree: duration 30tick 挂回合触发点
+  [R6] family_06 sd castigated: 常驻伤害乘区
+  [R6] family_06 sd rank_jurisdiction: 常驻伤害乘区
+  [R6] family_06 sd rank_decree: 常驻伤害乘区
+  [R11] h03_rank_decree: 被动写战场量表 order（须单独评审）
+  [R11] h03_legal_memory: 被动写战场量表 order（须单独评审）
+  [R11] j03_authority_shift: 被动写战场量表 order（须单独评审）
+  [R11] j03_rank_jurisdiction: 被动写战场量表 order（须单独评审）
+  -> 8 warns (R11×4 R4×1 R6×3)
+== hero_04 ==
+  [R6] family_08 sd power_refine: 常驻伤害乘区
+  -> 1 warns (R6×1)
+== hero_05 ==
+  [R6] family_11 sd edification: 常驻伤害乘区
+  [R6] family_11 sd concealment_authority: 常驻伤害乘区
+  [R11] j05_ego_constellation: 被动写战场量表 secrecy（须单独评审）
+  -> 3 warns (R11×1 R6×2)
+== hero_06 ==
+  [R4] family_13 sd tide_high: duration 30tick 挂回合触发点
+  [R11] j06_fate_revelation: 被动写战场量表 fate_value（须单独评审）
+  -> 2 warns (R11×1 R4×1)
+== hero_07 ==
+  -> 0 warns (0 warn)
+== hero_08 ==
+  [R6] family_16 sd scale_veil: 常驻伤害乘区
+  [R6] family_16 sd tide_call: 常驻伤害乘区
+  -> 2 warns (R6×2)
+== hero_09 ==
+  [R1] axis demon: 轴无读层卡
+  [R6] family_21 sd weapon_mastery: 常驻伤害乘区
+  [R6] family_21 sd lost_conscience: 常驻伤害乘区
+  [R6] family_21 sd mental_duelist: 常驻伤害乘区
+  -> 4 warns (R1×1 R6×3)
+--------------------------------------------------
+TOTAL warns: 25

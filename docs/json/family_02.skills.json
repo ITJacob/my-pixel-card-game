@@ -25,6 +25,67 @@
         }
       ],
       "tentative": false
+    },
+    {
+      "id": "j01_ledger_entry",
+      "name": "记账",
+      "kind": "active",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "ledger",
+      "flagship": false,
+      "describe": "主动（0 吟唱，10tick CD）。给敌方单体记上一笔死账：死账 +1 层（20tick，至多 10 层）——死账可净化拆账。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 10,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "anchor": "enemy_front",
+          "scope": "whole_lane",
+          "sort": "index_asc",
+          "pickCount": 1
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "death_ledger",
+          "stacks": 1,
+          "duration": 20,
+          "stackMode": "add",
+          "target": "target",
+          "note": "记账：死账 +1 层（拆账=净化）"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "j01_raise_dead",
+      "name": "招魂",
+      "kind": "summon",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "undead",
+      "flagship": false,
+      "describe": "召唤（0 吟唱，20tick CD）。从账上唤一具骷髅兵落地（满属性；维持费与折价见冥界折价）。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "effects": [],
+      "tentative": false,
+      "summon": {
+        "unitId": "unit_skeleton",
+        "position": "tail"
+      }
     }
   ],
   "statusDefs": [
@@ -101,9 +162,69 @@
         }
       ],
       "note": "召唤位上限 +1（modifiers.summon_cap_bonus）；维持费 0.3 生命/tick，黄昏/夜晚减半。"
+    },
+    {
+      "id": "death_ledger",
+      "name": "死账",
+      "category": [
+        "debuff"
+      ],
+      "dispelable": true,
+      "duration": 20,
+      "durationUnit": "tick",
+      "maxStacks": 10,
+      "stackPolicy": "stack",
+      "note": "死亡账簿的单位级账户（挂敌人身上）：死亡事件/铺账卡 +层，催账卡按层结算；可净化拆账（家族红线「账本必须可拆」实体化）。清层即免账。"
+    },
+    {
+      "id": "spirit_sight",
+      "name": "灵视",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": 15,
+      "durationUnit": "tick",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "note": "灵视克制面：持有者对隐匿/灵体目标的增伤标记（×1.5 读层挂卡在）；可识破驱散隐匿。"
     }
   ],
-  "unitDefs": [],
+  "unitDefs": [
+    {
+      "id": "unit_skeleton",
+      "name": "骷髅兵",
+      "unitType": "UNDEAD",
+      "base": {
+        "hp": 6,
+        "atk": 2,
+        "reach": "melee"
+      },
+      "note": "亡灵军团三蓝本之一（骨架前排）；unitType:UNDEAD 灵视/克制体系承载"
+    },
+    {
+      "id": "unit_zombie",
+      "name": "活尸",
+      "unitType": "UNDEAD",
+      "base": {
+        "hp": 12,
+        "atk": 1,
+        "reach": "melee"
+      },
+      "note": "亡灵军团三蓝本之一（血肉坦）；慢而硬"
+    },
+    {
+      "id": "unit_wraith",
+      "name": "亡魂",
+      "unitType": "UNDEAD",
+      "base": {
+        "hp": 4,
+        "atk": 3,
+        "reach": "spell"
+      },
+      "note": "亡灵军团三蓝本之一（灵体输出）；无形无质，法术射程"
+    }
+  ],
   "zoneDefs": [],
   "domainDefs": []
 }
