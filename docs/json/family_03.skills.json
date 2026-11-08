@@ -62,6 +62,44 @@
         }
       ],
       "tentative": false
+    },
+    {
+      "id": "j01_night_watch",
+      "name": "夜巡",
+      "kind": "passive",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "night",
+      "flagship": false,
+      "describe": "被动。相位处于黄昏或夜晚时，自身行动条速率 +1——值夜的人不打瞌睡。",
+      "hook": [
+        "on_turn_start"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "phase_is",
+            "phases": [
+              "dusk",
+              "night"
+            ]
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "night_watch_vigor",
+              "duration": 1,
+              "durationUnit": "self_turn",
+              "refresh": true,
+              "target": "self",
+              "note": "夜巡：夜暮档速率 +1"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
     }
   ],
   "statusDefs": [
@@ -233,6 +271,35 @@
         "apothecary",
         "pryer"
       ]
+    },
+    {
+      "id": "night_watch_vigor",
+      "name": "夜巡劲",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": 1,
+      "durationUnit": "self_turn",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "gauge.rate",
+              "value": 1,
+              "mode": "delta",
+              "duration": null,
+              "target": "self",
+              "note": "夜巡劲：行动条速率 +1"
+            }
+          ]
+        }
+      ],
+      "note": "夜巡的相位读层载体（夜暮档每自身回合挂载）。"
     }
   ],
   "unitDefs": [],

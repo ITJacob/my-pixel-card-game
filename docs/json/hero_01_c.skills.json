@@ -1,0 +1,357 @@
+{
+  "level": "hero",
+  "heroId": "hero_01_c",
+  "heroName": "英雄·壹丙",
+  "family": "family_03",
+  "faction": "faction_01",
+  "playstyle": "守夜人——拨时入夜是我的，梦魇封印是我的，长夜归我值守（长夜值守的英雄轴）。",
+  "cards": [
+    {
+      "id": "h01c_push_dusk",
+      "name": "拨暮",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "phase",
+      "flagship": false,
+      "describe": "主动（吟唱 1tick，20tick CD）。拨快战场时钟 9 tick 向暮推进；拨后相位落入黄昏/夜晚时，自身攻击 +2（10tick）——赶夜的人先起劲。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 1
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "advance_clock",
+          "ticks": 9,
+          "note": "拨暮：推进 9 tick 向夜"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "phase_is",
+            "phases": [
+              "dusk",
+              "night"
+            ]
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "dusk_vigor",
+              "duration": 10,
+              "durationUnit": "tick",
+              "target": "self",
+              "note": "入夜起劲：攻击 +2（10tick）"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h01c_midday_frailty",
+      "name": "正午弱项",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "phase",
+      "flagship": false,
+      "describe": "被动。家族红线实体化：相位处于白昼（day）时，自身攻击 −1——暗夜收益必有正午代价。",
+      "hook": [
+        "on_turn_start"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "phase_is",
+            "phases": [
+              "day"
+            ]
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "day_frail",
+              "duration": 1,
+              "durationUnit": "self_turn",
+              "refresh": true,
+              "target": "self",
+              "note": "正午弱项：白昼攻击 −1"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h01c_night_deposit",
+      "name": "存色",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "secrecy",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。夜里存色：board.secrecy +2（双方共享），自身能量 +1——夜色是存出来的。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "modify_resource",
+          "resource": "secrecy",
+          "value": 2,
+          "mode": "delta",
+          "target": "board",
+          "note": "存色：secrecy +2（共享）"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "energy",
+          "value": 1,
+          "mode": "delta",
+          "target": "self",
+          "note": "存色回能：能量 +1"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h01c_night_spend",
+      "name": "夜色消费",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "secrecy",
+      "flagship": false,
+      "describe": "主动（0 吟唱，18tick CD）。耗色出手：secrecy −3，敌方全体受 2 点精神伤害（梦魇压制面，#7 减益向）——存了的夜，花出去才是钱。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 18,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "secrecy",
+            "cmp": ">=",
+            "n": 3
+          },
+          "then": [
+            {
+              "type": "modify_resource",
+              "resource": "secrecy",
+              "value": -3,
+              "mode": "delta",
+              "target": "board",
+              "note": "耗色：secrecy −3"
+            },
+            {
+              "type": "damage",
+              "element": "mental",
+              "value": 2,
+              "target": "all_enemies",
+              "note": "梦魇压制：敌全体 2 精神"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h01c_nightmare_seal",
+      "name": "梦魇封印",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "dream",
+      "flagship": false,
+      "describe": "主动（吟唱 1tick，25tick CD）。梦魇入梦：目标敌方受 occult_seal 双向绝对封印 10tick（家族三蓝本既有 def）并沉默 5tick——安眠是强制的。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 1
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board"
+        },
+        "fallbackSort": "buff_count_desc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "occult_seal",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "梦魇封印：occult_seal 双向绝对封印 10tick（三蓝本读层）"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "silence",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "强制安眠：沉默 5tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h01c_long_night",
+      "name": "长夜",
+      "kind": "active",
+      "sequence": 2,
+      "rarity": "epic",
+      "axis": "phase",
+      "flagship": true,
+      "describe": "主动（吟唱 2tick，40tick CD）。长夜降临：拨快战场时钟 18 tick（直推入夜），敌方全体 slow 20tick，己方全体获得隐秘权柄 20tick（conceal_authority 三蓝本读层）——今夜归我值守。",
+      "cost": {
+        "energy": 5,
+        "cooldown": 40,
+        "castTime": 2
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "advance_clock",
+          "ticks": 18,
+          "note": "长夜降临：推进 18 tick 直推入夜"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "slow",
+          "duration": 20,
+          "durationUnit": "tick",
+          "target": "all_enemies",
+          "note": "长夜迟滞：敌全体 slow 20tick"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "conceal_authority",
+          "duration": 20,
+          "durationUnit": "tick",
+          "target": "all_allies",
+          "note": "隐秘权柄：己方全体 conceal 类不可驱散 20tick（三蓝本读层）"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [
+    {
+      "id": "dusk_vigor",
+      "name": "入夜劲",
+      "category": [
+        "buff"
+      ],
+      "dispelable": true,
+      "duration": 10,
+      "durationUnit": "tick",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "attack",
+              "value": 2,
+              "mode": "delta",
+              "duration": null,
+              "target": "self",
+              "note": "入夜劲：攻击 +2"
+            }
+          ]
+        }
+      ],
+      "note": "拨暮的入夜读层载体（10tick）。"
+    },
+    {
+      "id": "day_frail",
+      "name": "正午弱项",
+      "category": [
+        "debuff"
+      ],
+      "dispelable": false,
+      "duration": 1,
+      "durationUnit": "self_turn",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "attack",
+              "value": -1,
+              "mode": "delta",
+              "duration": null,
+              "target": "self",
+              "note": "正午弱项：白昼攻击 −1"
+            }
+          ]
+        }
+      ],
+      "note": "家族红线「暗夜收益必有正午代价」的自挂载体（白昼每自身回合挂载）。"
+    }
+  ],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}
