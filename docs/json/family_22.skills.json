@@ -47,6 +47,45 @@
         }
       ],
       "tentative": false
+    },
+    {
+      "id": "j09_shackle_toss",
+      "name": "掷链",
+      "kind": "active",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "lockdown",
+      "flagship": false,
+      "describe": "主动（0 吟唱，12tick CD）。锁链缚敌：敌方队首枷锁 10tick（行动条 ×0.7 + 禁位移）——第一道工序是限制行动。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 12,
+        "castTime": 0
+      },
+      "reach": "thrown",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "anchor": "enemy_front",
+          "scope": "whole_lane",
+          "sort": "index_asc",
+          "pickCount": 1
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "shackle",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "掷链：枷锁 10tick"
+        }
+      ],
+      "tentative": false
     }
   ],
   "statusDefs": [
@@ -75,6 +114,31 @@
         }
       ],
       "note": "prisoner 苦修卡的苦难经济面：受苦换减伤，苦难银行的个人账户。"
+    },
+    {
+      "id": "curse_chain",
+      "name": "咒链",
+      "category": [
+        "debuff"
+      ],
+      "dispelable": true,
+      "duration": 15,
+      "durationUnit": "tick",
+      "maxStacks": 5,
+      "stackPolicy": "stack",
+      "note": "诅咒链的单位级实体（敌我双挂，红线「诅咒必带反照/代价」）：铺咒卡产层；持有者每次造成伤害受反照（1 点暗伤/层，结算挂卡）；层数同时推进迷失谱系。"
+    },
+    {
+      "id": "lost_stack",
+      "name": "迷失层",
+      "category": [
+        "debuff"
+      ],
+      "dispelable": false,
+      "duration": null,
+      "maxStacks": 10,
+      "stackPolicy": "stack",
+      "note": "异类谱系栈（挂典狱长身上，单调不可逆——推栈不回头）：承苦/咒链累积；爆档（≥8）异类化：攻击 +4 但失控（自动打最近目标，引擎校验）。"
     }
   ],
   "unitDefs": [],

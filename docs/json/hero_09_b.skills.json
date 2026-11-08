@@ -1,0 +1,322 @@
+{
+  "level": "hero",
+  "heroId": "hero_09_b",
+  "heroName": "英雄·玖乙",
+  "family": "family_22",
+  "faction": "faction_09",
+  "playstyle": "典狱长——锁链带利息、苦难记账、囚犯越挣扎锁越紧（苦难银行的英雄轴）。",
+  "cards": [
+    {
+      "id": "h09b_spread_curse",
+      "name": "铺咒",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "chain",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。咒链缠身：目标敌方咒链 +2 层（15tick，反照随之）——锁链先上，利息后算。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board"
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "curse_chain",
+          "stacks": 2,
+          "duration": 15,
+          "stackMode": "add",
+          "target": "target",
+          "note": "铺咒：咒链 +2 层（反照挂卡读层）"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h09b_suffer_bank",
+      "name": "苦难承兑",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "chain",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。承兑苦难：自身生命 −2（钳 1），清自身全部咒链层，每层兑换 1 点能量 +1 迷失层——受的每一分苦都记账生息。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "modify_resource",
+          "resource": "hp",
+          "value": -2,
+          "mode": "delta",
+          "target": "self",
+          "note": "承兑本金：生命 −2（钳 1）"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "energy",
+          "value": 3,
+          "mode": "delta",
+          "target": "self",
+          "note": "承兑兑付：能量 +3（按咒链层数由引擎放大）"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "lost_stack",
+          "stacks": 2,
+          "stackMode": "add",
+          "target": "self",
+          "note": "苦难入账：迷失 +2"
+        },
+        {
+          "type": "modify_status",
+          "statusId": "curse_chain",
+          "stacksDelta": -99,
+          "target": "self",
+          "note": "咒链结清"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h09b_deep_lock",
+      "name": "重枷",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "lockdown",
+      "flagship": false,
+      "describe": "主动（吟唱 1tick，22tick CD）。重枷加身：目标敌方 immobilize 5tick（纯禁位移）+ 枷锁 10tick——双锁齐下，插翅难飞。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 22,
+        "castTime": 1
+      },
+      "reach": "thrown",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board"
+        },
+        "fallbackSort": "gauge_desc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "immobilize",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "重枷：immobilize 5tick（global 既有 def）"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "shackle",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "加重：枷锁 10tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h09b_lock_dividend",
+      "name": "锁息",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "lockdown",
+      "flagship": false,
+      "describe": "被动。对带枷锁/束缚（禁位移）的目标伤害 +2——锁里的人最脆，典狱长收息。",
+      "hook": [
+        "on_deal_damage"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "any_of",
+            "conditions": [
+              {
+                "kind": "has_status",
+                "side": "target",
+                "id": "shackle",
+                "cmp": ">=",
+                "n": 1
+              },
+              {
+                "kind": "has_status",
+                "side": "target",
+                "id": "immobilize",
+                "cmp": ">=",
+                "n": 1
+              }
+            ]
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 2,
+              "target": "same_target",
+              "note": "锁息：禁位移目标 +2"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h09b_embrace_pain",
+      "name": "拥抱苦难",
+      "kind": "passive",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "lineage",
+      "flagship": false,
+      "describe": "被动。受击即入账：自身每次受伤迷失层 +1（每 3tick 至多 1 层）——苦难银行的活期账户。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_take_damage",
+          "minIntervalTicks": 3,
+          "effects": [
+            {
+              "type": "mount_status",
+              "statusId": "lost_stack",
+              "stacks": 1,
+              "stackMode": "add",
+              "target": "self",
+              "note": "拥抱苦难：受伤迷失 +1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "h09b_aberration",
+      "name": "异类化",
+      "kind": "active",
+      "sequence": 2,
+      "rarity": "epic",
+      "axis": "lineage",
+      "flagship": true,
+      "describe": "主动（0 吟唱，40tick CD，本场限一次）。主动越线：迷失层 ≥5 时可发动——谱系推满（迷失 +5），获得「异类之躯」（攻击 +4、受到伤害 −2，20tick），结束后迷失不清零——推栈不回头，力量有代价。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 40,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "self",
+            "id": "lost_stack",
+            "cmp": ">=",
+            "n": 5
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "lost_stack",
+              "stacks": 5,
+              "stackMode": "add",
+              "target": "self",
+              "note": "主动越线：迷失 +5（不可逆）"
+            },
+            {
+              "type": "mount_status",
+              "statusId": "aberrant_body",
+              "duration": 20,
+              "durationUnit": "tick",
+              "target": "self",
+              "note": "异类之躯：攻击 +4 / 受伤 −2（20tick）"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [
+    {
+      "id": "aberrant_body",
+      "name": "异类之躯",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": 20,
+      "durationUnit": "tick",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "attack",
+              "value": 4,
+              "mode": "delta",
+              "duration": null,
+              "target": "self",
+              "note": "异类之躯：攻击 +4"
+            }
+          ]
+        }
+      ],
+      "note": "异类化的失控增益面（受到伤害 −2 由 modifiers 侧引擎按 note 校验）；结束后迷失层保留——谱系不可逆。"
+    }
+  ],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}
