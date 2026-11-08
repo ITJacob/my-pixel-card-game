@@ -32,10 +32,100 @@
           ]
         }
       ]
+    },
+    {
+      "id": "j08_script_change",
+      "name": "改剧本",
+      "kind": "active",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "intervene",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。剧情改写：目标敌方下次攻击强制落空（20tick，触发 1 次后失效）——这一幕我删了。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "anchor": "enemy_front",
+          "scope": "whole_lane",
+          "sort": "index_asc",
+          "pickCount": 1
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "plot_armor",
+          "duration": 20,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "改剧本：下一击落空"
+        }
+      ],
+      "tentative": false
     }
   ],
-  "statusDefs": [],
-  "unitDefs": [],
+  "statusDefs": [
+    {
+      "id": "intervened",
+      "name": "被干预",
+      "category": [
+        "debuff"
+      ],
+      "dispelable": true,
+      "duration": 15,
+      "durationUnit": "tick",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "note": "想象干预的标记（挂敌方身上，#3 归属实体化）：持有者的下一次伤害被改写——落点改为全场生命最高者且伤害 −2（触发 1 次后消耗）。"
+    },
+    {
+      "id": "plot_armor",
+      "name": "剧本落空",
+      "category": [
+        "debuff"
+      ],
+      "dispelable": true,
+      "duration": 20,
+      "durationUnit": "tick",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_attack",
+          "effects": [
+            {
+              "type": "target_override",
+              "anchor": "first_empty",
+              "note": "改剧本：该次攻击打空（R5 确定性落空，1 次后消耗）"
+            }
+          ]
+        }
+      ],
+      "note": "改剧本的落空载体（裁定 #3 想象干预面的入门款）。"
+    }
+  ],
+  "unitDefs": [
+    {
+      "id": "unit_fancy_construct",
+      "name": "空想造物",
+      "unitType": "ILLUSION",
+      "base": {
+        "hp": 5,
+        "atk": 4,
+        "reach": "melee"
+      },
+      "note": "空想具现蓝本（裁定 #3：spawn.template 身份分离 + 非真存缺陷——短寿/白板/消散三选二由卡面指定）；ILLUSION 短寿（出场自带 15tick 寿命上限）。"
+    }
+  ],
   "zoneDefs": [],
   "domainDefs": []
 }

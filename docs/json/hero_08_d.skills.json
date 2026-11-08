@@ -1,0 +1,312 @@
+{
+  "level": "hero",
+  "heroId": "hero_08_d",
+  "heroName": "英雄·捌丁",
+  "family": "family_19",
+  "faction": "faction_08",
+  "playstyle": "导演——位格是我的视力，幻想是我的编剧，剧终必须落幕（观众席的英雄轴）。",
+  "cards": [
+    {
+      "id": "h08d_rank_oppress",
+      "name": "位格压制",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "rank",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。以位格压人：目标敌方 vulnerable 10tick（受到伤害 +1）；若自身位格高于目标（rank 差引擎校验），额外枷锁 5tick——低阶在满阶面前抬不起头。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board"
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "vulnerable",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "位格压制：vulnerable 10tick"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "rank_gap",
+            "aUnit": "self",
+            "bUnit": "target",
+            "cmp": ">",
+            "n": 0
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "shackle",
+              "duration": 5,
+              "durationUnit": "tick",
+              "target": "target",
+              "note": "位格差成立：追加枷锁 5tick"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08d_stage_aura",
+      "name": "观众席",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "rank",
+      "flagship": false,
+      "describe": "被动。高地视野：自身对位格低于己的目标伤害 +2（结正面挂卡，rank 差引擎校验）——观众席永远看得最清。",
+      "hook": [
+        "on_deal_damage"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "rank_gap",
+            "aUnit": "self",
+            "bUnit": "target",
+            "cmp": ">",
+            "n": 0
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 2,
+              "target": "same_target",
+              "note": "观众席：位格低于己 +2"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08d_fancy_construct",
+      "name": "空想具现",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "fancy",
+      "flagship": false,
+      "describe": "主动（吟唱 1tick，20tick CD）。幻想成兵：空想造物落地（ILLUSION 短寿缺陷：出场 15tick 寿命、白板无技能——非真存实体化）；空想在场时自身伤害 +1。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 20,
+        "castTime": 1
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "summon"
+      },
+      "effects": [
+        {
+          "type": "spawn",
+          "unitId": "unit_fancy_construct",
+          "position": "tail",
+          "lifetime": 15,
+          "target": "self",
+          "note": "空想具现：ILLUSION 短寿+白板缺陷（裁定 #3）"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08d_encore",
+      "name": "加演",
+      "kind": "passive",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "fancy",
+      "flagship": false,
+      "describe": "被动。好戏不散：空想造物在场时，自身行动条速率 +2（演员们撑场，导演来劲）。",
+      "hook": [
+        "on_turn_start"
+      ],
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "caster_has_summon"
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "encore_boost",
+              "duration": 1,
+              "durationUnit": "self_turn",
+              "refresh": true,
+              "target": "self",
+              "note": "加演：造物在场速率 +2"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08d_plot_twist",
+      "name": "剧情反转",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "intervene",
+      "flagship": false,
+      "describe": "主动（吟唱 1tick，25tick CD）。想象干预（#3 归属）：目标下次伤害被改写——落点改为全场生命最高者且伤害 −2（15tick，触发 1 次后失效）；命中改写时自身能量 +1（好戏值得）。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 1
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board"
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "intervened",
+          "duration": 15,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "剧情反转：改写其下一次伤害走向（引擎结算改写+减 2）"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "energy",
+          "value": 1,
+          "mode": "delta",
+          "target": "self",
+          "note": "好戏值得：能量 +1"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08d_final_act",
+      "name": "终幕",
+      "kind": "active",
+      "sequence": 2,
+      "rarity": "epic",
+      "axis": "fancy",
+      "flagship": true,
+      "describe": "主动（吟唱 2tick，40tick CD）。剧终高潮：两台空想造物同时落地（15tick 短寿），敌全体 vulnerable 10tick——随后幕落：自身能量 −2（导演谢幕的代价）。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 40,
+        "castTime": 2
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "summon"
+      },
+      "effects": [
+        {
+          "type": "spawn",
+          "unitId": "unit_fancy_construct",
+          "position": "tail",
+          "lifetime": 15,
+          "target": "self"
+        },
+        {
+          "type": "spawn",
+          "unitId": "unit_fancy_construct",
+          "position": "tail",
+          "lifetime": 15,
+          "target": "self",
+          "note": "终幕：空想 ×2"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "vulnerable",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "all_enemies",
+          "note": "高潮：敌全体 vulnerable 10tick"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "energy",
+          "value": -2,
+          "mode": "delta",
+          "target": "self",
+          "note": "谢幕代价：能量 −2"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [
+    {
+      "id": "encore_boost",
+      "name": "加演劲",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": 1,
+      "durationUnit": "self_turn",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "gauge.rate",
+              "value": 2,
+              "mode": "delta",
+              "duration": null,
+              "target": "self",
+              "note": "加演劲：行动条速率 +2"
+            }
+          ]
+        }
+      ],
+      "note": "加演的造物在场读层载体。"
+    }
+  ],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}
