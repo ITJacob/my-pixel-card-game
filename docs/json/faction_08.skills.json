@@ -107,6 +107,80 @@
         }
       ],
       "tentative": false
+    },
+    {
+      "id": "f08_firstborn",
+      "name": "初生",
+      "kind": "passive",
+      "sequence": 9,
+      "rarity": "common",
+      "axis": "genesis",
+      "flagship": false,
+      "describe": "被动。战斗开始时，自身攻击 +1、生命上限 +3，持续整场——万物初生即带资粮。",
+      "hook": [
+        "on_battle_start"
+      ],
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "attack",
+          "value": 1,
+          "mode": "delta",
+          "duration": null,
+          "target": "self"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "hp_max",
+          "value": 3,
+          "mode": "delta",
+          "duration": null,
+          "target": "self"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f08_prime_surge",
+      "name": "原初洪流",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "genesis",
+      "flagship": false,
+      "describe": "主动（0 吟唱，25tick CD）。创世的第一道涌流：敌方全体受 2 点雷属性伤害，自身行动条速率 +2（5tick）。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "lightning",
+          "value": 2,
+          "target": "all_enemies"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "prime_momentum",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "涌流反冲：自身速率 +2"
+        }
+      ],
+      "tentative": false
     }
   ],
   "statusDefs": [
@@ -167,6 +241,35 @@
         }
       ],
       "note": "奇点爆发的创世高峰增益：luminance ≥8 时友方全体获得。"
+    },
+    {
+      "id": "prime_momentum",
+      "name": "涌流反冲",
+      "category": [
+        "buff"
+      ],
+      "dispelable": false,
+      "duration": 5,
+      "durationUnit": "tick",
+      "maxStacks": 1,
+      "stackPolicy": "refresh",
+      "triggers": [
+        {
+          "event": "on_apply",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "gauge.rate",
+              "value": 2,
+              "mode": "delta",
+              "duration": null,
+              "target": "self",
+              "note": "涌流反冲：行动条速率 +2"
+            }
+          ]
+        }
+      ],
+      "note": "原初洪流的自驱面。"
     }
   ],
   "unitDefs": [],
