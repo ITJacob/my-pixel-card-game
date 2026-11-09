@@ -72,7 +72,7 @@ blockquote{border-left:3px solid var(--ac);margin:1em 0;padding:.2em 1em;color:v
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin:1em 0}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
 .card h3{margin:0 0 6px;font-size:15px}
-.card .mut{color:var(--mut);font-size:12.5px}
+.mut{color:var(--mut);font-size:12.5px}
 footer{color:var(--mut);font-size:12px;margin-top:40px;border-top:1px solid var(--line);padding-top:12px}
 """
 
@@ -137,16 +137,22 @@ class Site:
         io.open(os.path.join(OUT, 'style.css'), 'w', encoding='utf-8').write(CSS)
 
     def shell(self, cur, title, body):
-        nav = [f'<a class="brand" href="{BASE}/index.html">{SITE_TITLE}</a>']
+        # 相对路径：file:// 本地打开和 GitHub Pages 项目子路径下都能工作
+        prefix = '../' * cur.count('/')
+
+        def rel(p):
+            return f'{BASE}/{p}' if BASE else prefix + p
+
+        nav = [f'<a class="brand" href="{rel("index.html")}">{SITE_TITLE}</a>']
         for g, items in self.nav:
             nav.append(f'<h4>{esc(g)}</h4>')
             for t, p in items:
                 style = ' style="color:var(--ac);background:var(--line)"' if p == cur else ''
-                nav.append(f'<a href="{BASE}/{p}"{style}>{esc(t)}</a>')
+                nav.append(f'<a href="{rel(p)}"{style}>{esc(t)}</a>')
         return ('<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">'
                 '<meta name="viewport" content="width=device-width,initial-scale=1">'
                 f'<title>{esc(title)} · {SITE_TITLE}</title>'
-                f'<link rel="stylesheet" href="{BASE}/style.css"></head><body>'
+                f'<link rel="stylesheet" href="{rel("style.css")}"></head><body>'
                 f'<aside>{"".join(nav)}</aside><main>{body}'
                 f'<footer>生成自仓库 docs/ 权威源 · push main 自动部署</footer>'
                 '</main></body></html>')
