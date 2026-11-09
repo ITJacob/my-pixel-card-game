@@ -95,6 +95,201 @@
         }
       ],
       "tentative": false
+    },
+    {
+      "id": "f09_chain_reap",
+      "name": "锁镰",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "abyss",
+      "flagship": false,
+      "describe": "主动（0 吟唱，12tick CD）。锁镰挥击：近战对敌方队首造成 2 点暗属性伤害，双方各附 2tick 束缚——锁人先锁己。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 12,
+        "castTime": 0
+      },
+      "reach": "melee",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "point",
+          "pickCount": 1,
+          "anchor": "enemy_front"
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "dark",
+          "value": 2,
+          "target": "target",
+          "note": "锁镰：2 点暗伤"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "immobilize",
+          "duration": 2,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "锁镰：目标束缚 2tick"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "immobilize",
+          "duration": 2,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "锁镰反照：自身同缚 2tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f09_debt_share",
+      "name": "分债",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "abyss",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。把债分你一半：敌方任意单个单位受到伤害 +1（10tick）；反照——自身同受该债 5tick。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "vulnerable",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "分债：目标易伤 10tick"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "vulnerable",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "分债反照：自身易伤 5tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f09_endurance",
+      "name": "苦韧",
+      "kind": "passive",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "abyss",
+      "flagship": false,
+      "describe": "被动。苦难换坚韧：自身生命不高于 50% 时，每个自身回合开始攻击 +1（5tick，每回合重判）——越扛越异类。",
+      "effects": [],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_turn_start",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "hp_percent",
+                "side": "self",
+                "cmp": "<=",
+                "n": 50
+              },
+              "then": [
+                {
+                  "type": "modify_stat",
+                  "stat": "attack",
+                  "value": 1,
+                  "mode": "delta",
+                  "duration": 5,
+                  "durationUnit": "tick",
+                  "target": "self",
+                  "note": "苦韧：苦难换攻击 +1"
+                }
+              ],
+              "else": []
+            }
+          ],
+          "note": "半血读层（每回合重判）"
+        }
+      ],
+      "hook": [
+        "on_turn_start"
+      ]
+    },
+    {
+      "id": "f09_ruin_tide",
+      "name": "沉沦潮",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "abyss",
+      "flagship": false,
+      "describe": "主动（0 吟唱，30tick CD）。血祭 2 点（钳 1 不致死），深渊回涌：敌方全体受 3 点暗属性伤害，自身沉溺加深（「沉溺」10tick）——力量都是债。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 2,
+          "target": "self",
+          "note": "血祭：自耗 2（钳 1 不致死）"
+        },
+        {
+          "type": "damage",
+          "element": "dark",
+          "value": 3,
+          "target": "all_enemies",
+          "note": "沉沦潮：全体 3 点暗伤"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "deep_dive",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "沉沦潮：沉溺加深"
+        }
+      ],
+      "tentative": false
     }
   ],
   "statusDefs": [

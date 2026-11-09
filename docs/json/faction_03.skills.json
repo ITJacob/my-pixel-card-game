@@ -136,6 +136,212 @@
         }
       ],
       "tentative": false
+    },
+    {
+      "id": "f03_solemn",
+      "name": "肃然",
+      "kind": "passive",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "rule",
+      "flagship": false,
+      "describe": "被动。法度肃然：order ≥7 时，每个自身回合开始自身护甲 +1（10tick，每回合重判）。",
+      "effects": [],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_turn_start",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "meter_compare",
+                "key": "order",
+                "cmp": ">=",
+                "n": 7
+              },
+              "then": [
+                {
+                  "type": "modify_stat",
+                  "stat": "armor",
+                  "value": 1,
+                  "mode": "delta",
+                  "duration": 10,
+                  "durationUnit": "tick",
+                  "target": "self",
+                  "note": "肃然：法律严明，护甲 +1"
+                }
+              ],
+              "else": []
+            }
+          ],
+          "note": "order 读层（只读，不推量表）"
+        }
+      ],
+      "hook": [
+        "on_turn_start"
+      ]
+    },
+    {
+      "id": "f03_contempt",
+      "name": "蔑视",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "rule",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。术法：对敌方任意单个单位造成 2 点精神伤害；order ≥5 时追加沉默 3tick（蔑视法庭罪，成文可审计）。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "mental",
+          "value": 2,
+          "target": "target",
+          "note": "蔑视：精神伤害 2"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "order",
+            "cmp": ">=",
+            "n": 5
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "silence",
+              "duration": 3,
+              "durationUnit": "tick",
+              "target": "same_target",
+              "note": "蔑视法庭：沉默 3tick"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f03_precedent",
+      "name": "判例",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "rule",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。援引判例：order +1（秩序抬升，成文可审计），自身回复 2 点生命——遵循先例者受庇。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "modify_resource",
+          "resource": "order",
+          "value": 1,
+          "mode": "delta",
+          "target": "board",
+          "note": "判例：援引成文，order +1"
+        },
+        {
+          "type": "heal",
+          "value": 2,
+          "target": "self",
+          "note": "判例庇佑：回复 2"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f03_collapse",
+      "name": "崩坏",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "rule",
+      "flagship": false,
+      "describe": "主动（0 吟唱，30tick CD）。熵极裁定：order ≤3（法纪废弛）时敌方全体受 3 点精神伤害且「荒芜」剥护（受到伤害 +1，10tick）；否则无罚可施，仅自保回复 1。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "order",
+            "cmp": "<=",
+            "n": 3
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "mental",
+              "value": 3,
+              "target": "all_enemies",
+              "note": "崩坏：废弛之罚 3 点精神"
+            },
+            {
+              "type": "mount_status",
+              "statusId": "vulnerable",
+              "duration": 10,
+              "durationUnit": "tick",
+              "target": "all_enemies",
+              "note": "崩坏：荒芜剥护"
+            }
+          ],
+          "else": [
+            {
+              "type": "heal",
+              "value": 1,
+              "target": "self",
+              "note": "崩坏·空裁：无罚可施，自保回复 1"
+            }
+          ]
+        }
+      ],
+      "tentative": false
     }
   ],
   "statusDefs": [

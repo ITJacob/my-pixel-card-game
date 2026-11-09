@@ -99,6 +99,220 @@
         "envRulesText": "域内暮河派系单位造成伤害 +1；黄昏/夜晚档 +2；白昼档增益归零（域不消散）"
       },
       "tentative": false
+    },
+    {
+      "id": "f01_last_light",
+      "name": "落幕",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "dusk",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。近战对敌方队首造成 3 点伤害；相位处于黄昏或夜晚时伤害 +2——落幕时分最重。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "melee",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "point",
+          "pickCount": 1,
+          "anchor": "enemy_front"
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 3,
+          "target": "target",
+          "note": "落幕·基础 3 点"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "phase_is",
+            "phases": [
+              "dusk",
+              "night"
+            ]
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 2,
+              "target": "same_target",
+              "note": "落幕·暮档 +2"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f01_night_watch",
+      "name": "守夜",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "dusk",
+      "flagship": false,
+      "describe": "被动。夜幕值守：相位处于黄昏或夜晚时，每个自身回合开始自身回复 1 点生命；白昼档无效果。",
+      "effects": [],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_turn_start",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "phase_is",
+                "phases": [
+                  "dusk",
+                  "night"
+                ]
+              },
+              "then": [
+                {
+                  "type": "heal",
+                  "value": 1,
+                  "target": "self",
+                  "note": "守夜：暮色回复 1"
+                }
+              ],
+              "else": []
+            }
+          ],
+          "note": "每个自身回合按当前相位重判值守回复"
+        }
+      ],
+      "hook": [
+        "on_turn_start"
+      ]
+    },
+    {
+      "id": "f01_final_account",
+      "name": "清算",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "dusk",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。近战对敌方队首造成 2 点伤害；目标生命不高于 50% 时兑现账目，伤害 +2——终末记账：有账必清算。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "melee",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "point",
+          "pickCount": 1,
+          "anchor": "enemy_front"
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 2,
+          "target": "target",
+          "note": "清算·基础 2 点"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "hp_percent",
+            "side": "target",
+            "cmp": "<=",
+            "n": 50
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 2,
+              "target": "same_target",
+              "note": "清算·账目兑现 +2"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f01_dark_bargain",
+      "name": "永暗典当",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "dusk",
+      "flagship": false,
+      "describe": "主动（0 吟唱，30tick CD）。向永暗典当：自身攻击 +2（2 个自身回合）；当前为白昼档时典当金额外收取 1 点血（光要还，钳 1 不致死）。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "attack",
+          "value": 2,
+          "mode": "delta",
+          "duration": 2,
+          "durationUnit": "self_turn",
+          "target": "self",
+          "note": "永暗典当：攻击 +2"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "phase_is",
+            "phases": [
+              "day"
+            ]
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 1,
+              "target": "self",
+              "note": "典当金：白昼典当加收 1 血"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
     }
   ],
   "statusDefs": [

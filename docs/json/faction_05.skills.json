@@ -111,6 +111,193 @@
         "envRulesText": "域内敌方持续迟滞（行动条速率按 slow 既有定义，每 tick 刷新）"
       },
       "tentative": false
+    },
+    {
+      "id": "f05_deep_gaze",
+      "name": "深视",
+      "kind": "passive",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "lore",
+      "flagship": false,
+      "describe": "被动。深视者：secrecy ≥8（秘幕最深时）自身攻击 +1（5tick，每回合重判）——知道得越多，离门槛越近。",
+      "effects": [],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_turn_start",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "meter_compare",
+                "key": "secrecy",
+                "cmp": ">=",
+                "n": 8
+              },
+              "then": [
+                {
+                  "type": "modify_stat",
+                  "stat": "attack",
+                  "value": 1,
+                  "mode": "delta",
+                  "duration": 5,
+                  "durationUnit": "tick",
+                  "target": "self",
+                  "note": "深视：秘幕深处的攻击 +1"
+                }
+              ],
+              "else": []
+            }
+          ],
+          "note": "secrecy 读层（只读）"
+        }
+      ],
+      "hook": [
+        "on_turn_start"
+      ]
+    },
+    {
+      "id": "f05_madness",
+      "name": "痴狂",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "lore",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。术法：对敌方任意单个单位造成 3 点精神伤害；知识反噬，自身同受 1 点灼伤（不可防，无元素）——知识税照收。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "mental",
+          "value": 3,
+          "target": "target",
+          "note": "痴狂：精神伤害 3"
+        },
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 1,
+          "target": "self",
+          "note": "知识税：灼伤 1（不可防）"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f05_transcribe",
+      "name": "注经",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "lore",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。为友方任意单个单位祛除一个减益；解读禁忌的代价：自身受 1 点知识灼伤（不可防）。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "self_or_ally",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "dispel",
+          "dispelTarget": "unit",
+          "category": [
+            "debuff"
+          ],
+          "target": "target",
+          "note": "注经：誊抄解法，祛除减益"
+        },
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 1,
+          "target": "self",
+          "note": "知识税：灼伤 1（不可防）"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f05_threshold",
+      "name": "登门槛",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "lore",
+      "flagship": false,
+      "describe": "主动（0 吟唱，30tick CD）。术法：对敌方任意单个单位造成 4 点精神伤害并沉默 5tick；越门槛的代价：自身受 2 点知识灼伤（不可防）。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "mental",
+          "value": 4,
+          "target": "target",
+          "note": "登门槛：精神伤害 4"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "silence",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "same_target",
+          "note": "登门槛：沉默 5tick"
+        },
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 2,
+          "target": "self",
+          "note": "知识税：灼伤 2（不可防）"
+        }
+      ],
+      "tentative": false
     }
   ],
   "statusDefs": [],

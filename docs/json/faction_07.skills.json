@@ -99,6 +99,184 @@
         "envRulesText": "域内友方持续再生（regen 每 tick 刷新，回血 1/tick）"
       },
       "tentative": false
+    },
+    {
+      "id": "f07_blood_bullet",
+      "name": "血弹",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "life",
+      "flagship": false,
+      "describe": "主动（0 吟唱，12tick CD）。自耗 1 血凝弹（钳 1 不致死），对敌方队首造成 3 点伤害——血就是弹药。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 12,
+        "castTime": 0
+      },
+      "reach": "thrown",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "point",
+          "pickCount": 1,
+          "anchor": "enemy_front"
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 1,
+          "target": "self",
+          "note": "取血凝弹：自耗 1 血（钳 1 不致死）"
+        },
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 3,
+          "target": "target",
+          "note": "血弹：3 点伤害"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f07_nourish",
+      "name": "灌溉",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "life",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。自耗 1 血（钳 1 不致死），为友方任意单个单位回复 3 点生命——血换命，以血养命。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "self_or_ally",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 1,
+          "target": "self",
+          "note": "取血浇灌：自耗 1 血（钳 1 不致死）"
+        },
+        {
+          "type": "heal",
+          "value": 3,
+          "target": "target",
+          "note": "灌溉：血换命，回复 3"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f07_cocoon",
+      "name": "结茧",
+      "kind": "passive",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "life",
+      "flagship": false,
+      "describe": "被动。死亡滋养：死亡簿 ≥4 时，每个自身回合开始自身获得「再生」（每 tick 回血 1，5tick，每回合重判）——死得越多，茧越厚。",
+      "effects": [],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_turn_start",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "meter_compare",
+                "key": "death_tally",
+                "cmp": ">=",
+                "n": 4
+              },
+              "then": [
+                {
+                  "type": "mount_status",
+                  "statusId": "regen",
+                  "duration": 5,
+                  "durationUnit": "tick",
+                  "target": "self",
+                  "note": "结茧：死亡滋养再生"
+                }
+              ],
+              "else": []
+            }
+          ],
+          "note": "death_tally 读层（只读，引擎自动计量）"
+        }
+      ],
+      "hook": [
+        "on_turn_start"
+      ]
+    },
+    {
+      "id": "f07_swell",
+      "name": "涨潮",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "life",
+      "flagship": false,
+      "describe": "主动（0 吟唱，30tick CD）。丰产期涨潮：自耗 1 血（钳 1 不致死），友方全体回复 2，自身额外回复 1。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 1,
+          "target": "self",
+          "note": "取血引潮：自耗 1 血（钳 1 不致死）"
+        },
+        {
+          "type": "heal",
+          "value": 2,
+          "target": "all_allies",
+          "note": "涨潮：丰产回灌 2"
+        },
+        {
+          "type": "heal",
+          "value": 1,
+          "target": "self",
+          "note": "涨潮：自身额外 1"
+        }
+      ],
+      "tentative": false
     }
   ],
   "statusDefs": [

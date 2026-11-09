@@ -110,6 +110,201 @@
         "envRulesText": "域内每次伤害事件冲突计数额外 +1；域内所有单位（不分敌我）造成伤害 +1"
       },
       "tentative": false
+    },
+    {
+      "id": "f02_brawl",
+      "name": "寻衅",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "war",
+      "flagship": false,
+      "describe": "主动（0 吟唱，12tick CD）。近战对敌方队首造成 2 点伤害；出手即挑事，冲突计数 +1（双方共享）。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 12,
+        "castTime": 0
+      },
+      "reach": "melee",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "point",
+          "pickCount": 1,
+          "anchor": "enemy_front"
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 2,
+          "target": "target",
+          "note": "寻衅：2 点伤害"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "conflict",
+          "value": 1,
+          "mode": "delta",
+          "target": "board",
+          "note": "寻衅：冲突计数 +1（挑事者口径）"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f02_blood_price",
+      "name": "血价",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "war",
+      "flagship": false,
+      "describe": "被动。血价兑现：冲突计数 ≥6 时，自身每次造成伤害（含对撞）回复 1 点生命——战越打越旺。",
+      "effects": [],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_deal_damage",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "meter_compare",
+                "key": "conflict",
+                "cmp": ">=",
+                "n": 6
+              },
+              "then": [
+                {
+                  "type": "heal",
+                  "value": 1,
+                  "target": "self",
+                  "note": "血价：冲突 ≥6，伤害回血 1"
+                }
+              ],
+              "else": []
+            }
+          ],
+          "note": "冲突读层（meter_compare 只读）"
+        }
+      ],
+      "hook": [
+        "on_deal_damage"
+      ]
+    },
+    {
+      "id": "f02_war_cry",
+      "name": "战吼",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "war",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。友方全体攻击 +1（10tick），冲突计数 +1；发起者自身受 1 点伤害（火上浇油，先烧自己）。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "attack",
+          "value": 1,
+          "mode": "delta",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "all_allies",
+          "note": "战吼：友方全体攻击 +1"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "conflict",
+          "value": 1,
+          "mode": "delta",
+          "target": "board",
+          "note": "战吼：冲突 +1"
+        },
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 1,
+          "target": "self",
+          "note": "战吼反照：先烧自己 1 点"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f02_aftershock",
+      "name": "余震",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "war",
+      "flagship": false,
+      "describe": "主动（0 吟唱，25tick CD）。冲突计数 ≥6：余震荡开，敌方全体受 3 点伤害；计数不足：只对敌方队首造成 5 点伤害。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "conflict",
+            "cmp": ">=",
+            "n": 6
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 3,
+              "target": "all_enemies",
+              "note": "余震·炽：冲突 ≥6 全体 3 点"
+            }
+          ],
+          "else": [
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 5,
+              "target": "enemy",
+              "note": "余震·仄：计数不足，敌方队首 5 点"
+            }
+          ]
+        }
+      ],
+      "tentative": false
     }
   ],
   "statusDefs": [

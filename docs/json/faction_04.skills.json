@@ -73,6 +73,186 @@
         }
       ],
       "tentative": false
+    },
+    {
+      "id": "f04_gap_step",
+      "name": "隙步",
+      "kind": "passive",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "gap",
+      "flagship": false,
+      "describe": "被动。万物有缝：secrecy ≥7 时，每个自身回合开始自身行动条速率 +1（5tick，每回合重判）。",
+      "effects": [],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_turn_start",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "meter_compare",
+                "key": "secrecy",
+                "cmp": ">=",
+                "n": 7
+              },
+              "then": [
+                {
+                  "type": "modify_stat",
+                  "stat": "gauge.rate",
+                  "value": 1,
+                  "mode": "delta",
+                  "duration": 5,
+                  "durationUnit": "tick",
+                  "target": "self",
+                  "note": "隙步：缝中穿行，速率 +1"
+                }
+              ],
+              "else": []
+            }
+          ],
+          "note": "secrecy 读层（只读）"
+        }
+      ],
+      "hook": [
+        "on_turn_start"
+      ]
+    },
+    {
+      "id": "f04_borrowed_cast",
+      "name": "赊咏",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "gap",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。向时间赊一次吟唱：10tick 窗口内自身下一次主动技免吟唱；窗口到期未用即归还（状态自然消失，能量不退）——赊账有当期。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "free_cast",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "赊咏：10tick 免吟唱窗口"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f04_repossess",
+      "name": "强还",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "gap",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。到期强还：祛除敌方任意单个单位的一个增益效果——不管它向谁借的，万物有当期。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "dispel",
+          "dispelTarget": "unit",
+          "category": [
+            "buff"
+          ],
+          "target": "target",
+          "note": "强还：到期收回增益"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f04_mass_slip",
+      "name": "群穿",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "gap",
+      "flagship": false,
+      "describe": "主动（0 吟唱，25tick CD）。全队在缝隙中穿行：友方全体行动条速率 +1（10tick）；secrecy ≥5 时缝隙够宽，额外再 +1（5tick）。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "gauge.rate",
+          "value": 1,
+          "mode": "delta",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "all_allies",
+          "note": "群穿：全体速率 +1"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "secrecy",
+            "cmp": ">=",
+            "n": 5
+          },
+          "then": [
+            {
+              "type": "modify_stat",
+              "stat": "gauge.rate",
+              "value": 1,
+              "mode": "delta",
+              "duration": 5,
+              "durationUnit": "tick",
+              "target": "all_allies",
+              "note": "群穿·宽缝：额外 +1"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
     }
   ],
   "statusDefs": [

@@ -112,7 +112,7 @@
       "id": "f08_firstborn",
       "name": "初生",
       "kind": "passive",
-      "sequence": 9,
+      "sequence": 8,
       "rarity": "common",
       "axis": "genesis",
       "flagship": false,
@@ -144,7 +144,7 @@
       "id": "f08_prime_surge",
       "name": "原初洪流",
       "kind": "active",
-      "sequence": 5,
+      "sequence": 4,
       "rarity": "rare",
       "axis": "genesis",
       "flagship": false,
@@ -181,6 +181,108 @@
         }
       ],
       "tentative": false
+    },
+    {
+      "id": "f08_second_birth",
+      "name": "次生",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "genesis",
+      "flagship": false,
+      "describe": "主动（0 吟唱，18tick CD）。对敌方队首造成 3 点伤害；光照度 ≥5（光足）时伤害 +1——光足则万物速生。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 18,
+        "castTime": 0
+      },
+      "reach": "melee",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "point",
+          "pickCount": 1,
+          "anchor": "enemy_front"
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 3,
+          "target": "target",
+          "note": "次生：基础 3 点"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "luminance",
+            "cmp": ">=",
+            "n": 5
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 1,
+              "target": "same_target",
+              "note": "次生·光足：+1"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f08_primal_skin",
+      "name": "原胎",
+      "kind": "passive",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "genesis",
+      "flagship": false,
+      "describe": "被动。原胎护体：光照度 ≥5 时，每个自身回合开始自身护甲 +1（10tick，每回合重判）。",
+      "effects": [],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_turn_start",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "meter_compare",
+                "key": "luminance",
+                "cmp": ">=",
+                "n": 5
+              },
+              "then": [
+                {
+                  "type": "modify_stat",
+                  "stat": "armor",
+                  "value": 1,
+                  "mode": "delta",
+                  "duration": 10,
+                  "durationUnit": "tick",
+                  "target": "self",
+                  "note": "原胎：光孕护甲 +1"
+                }
+              ],
+              "else": []
+            }
+          ],
+          "note": "luminance 读层（只读）"
+        }
+      ],
+      "hook": [
+        "on_turn_start"
+      ]
     }
   ],
   "statusDefs": [

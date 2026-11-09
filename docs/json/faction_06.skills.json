@@ -125,6 +125,242 @@
         }
       ],
       "tentative": false
+    },
+    {
+      "id": "f06_omen",
+      "name": "微兆",
+      "kind": "passive",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "star",
+      "flagship": false,
+      "describe": "被动。读取命运账户（只读，不推）：fate_value ≥+3 时自身行动条速率 +1（5tick，每回合重判）——高潮将至，脚步先快。",
+      "effects": [],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_turn_start",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "meter_compare",
+                "key": "fate_value",
+                "cmp": ">=",
+                "n": 3
+              },
+              "then": [
+                {
+                  "type": "modify_stat",
+                  "stat": "gauge.rate",
+                  "value": 1,
+                  "mode": "delta",
+                  "duration": 5,
+                  "durationUnit": "tick",
+                  "target": "self",
+                  "note": "微兆：正极顺风，速率 +1"
+                }
+              ],
+              "else": []
+            }
+          ],
+          "note": "fate_value 读层（只读，写入权仍 monster 独占）"
+        }
+      ],
+      "hook": [
+        "on_turn_start"
+      ]
+    },
+    {
+      "id": "f06_coin_pass",
+      "name": "递币",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "star",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。将一枚幸运币递予友方任意单个单位：10tick 窗口内受伤即被夺（归攻击者），无恙则转化为幸运层 +1——命运可以转赠。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "self_or_ally",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "lucky_coin",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "递币：派系通货转赠"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f06_side_door",
+      "name": "侧门",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "star",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。开一扇小门（只读 fate_value，不推账户）：≥+5 友方全体行动条速率 +1（10tick）；≤−5 敌方全体减速 5tick；窗口内（−5..+5）门不开，效果落空但行动已耗。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "fate_value",
+            "cmp": ">=",
+            "n": 5
+          },
+          "then": [
+            {
+              "type": "modify_stat",
+              "stat": "gauge.rate",
+              "value": 1,
+              "mode": "delta",
+              "duration": 10,
+              "durationUnit": "tick",
+              "target": "all_allies",
+              "note": "侧门·开：赐福之风"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "meter_compare",
+                "key": "fate_value",
+                "cmp": "<=",
+                "n": -5
+              },
+              "then": [
+                {
+                  "type": "mount_status",
+                  "statusId": "slow",
+                  "duration": 5,
+                  "durationUnit": "tick",
+                  "target": "all_enemies",
+                  "note": "侧门·阖：逆境迟滞"
+                }
+              ],
+              "else": []
+            }
+          ]
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "f06_jackpot",
+      "name": "押满",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "star",
+      "flagship": false,
+      "describe": "主动（0 吟唱，30tick CD）。全押一门（只读 fate_value）：≥+5 星坠兑现，敌方全体受 4 点雷属性伤害；≤−5 逆境星愈，自身回复 5 并获幸运币一枚；窗口内押空，自身受 1 点反噬。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "fate_value",
+            "cmp": ">=",
+            "n": 5
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "lightning",
+              "value": 4,
+              "target": "all_enemies",
+              "note": "押满·中：星坠 4 点雷伤"
+            }
+          ],
+          "else": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "meter_compare",
+                "key": "fate_value",
+                "cmp": "<=",
+                "n": -5
+              },
+              "then": [
+                {
+                  "type": "heal",
+                  "value": 5,
+                  "target": "self",
+                  "note": "押满·逆：星愈 5"
+                },
+                {
+                  "type": "mount_status",
+                  "statusId": "lucky_coin",
+                  "duration": 10,
+                  "durationUnit": "tick",
+                  "target": "self",
+                  "note": "押满·逆：赠币翻运"
+                }
+              ],
+              "else": [
+                {
+                  "type": "damage",
+                  "element": "none",
+                  "value": 1,
+                  "target": "self",
+                  "note": "押满·空：押空反噬 1"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tentative": false
     }
   ],
   "statusDefs": [
