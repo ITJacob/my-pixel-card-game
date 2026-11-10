@@ -1,0 +1,295 @@
+{
+  "level": "hero",
+  "heroId": "hero_04_e",
+  "heroName": "英雄·肆戊",
+  "family": "family_09",
+  "faction": "faction_04",
+  "playstyle": "门房——此门不通彼门通：穿梭收位移税，预排先记账（门径穿梭的英雄轴）。",
+  "cards": [
+    {
+      "id": "h04e_short_cut",
+      "name": "抄近门",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "gate",
+      "flagship": false,
+      "describe": "主动（0 吟唱，12tick CD）。开一扇小门：自身前移一格，行动条速率 +1（5tick）——门税照收（能量 1）。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 12,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "move",
+          "op": "pull_forward",
+          "target": "self",
+          "note": "抄近门：前移一格"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "gauge.rate",
+          "value": 1,
+          "mode": "delta",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "抄近门：提速"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h04e_gap_walk",
+      "name": "走缝的人",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "gate",
+      "flagship": false,
+      "describe": "被动。secrecy ≥5 时，每个自身回合开始自身行动条速率 +1（5tick，每回合重判）——缝够宽，路就近。",
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "secrecy",
+            "cmp": ">=",
+            "n": 5
+          },
+          "then": [
+            {
+              "type": "modify_stat",
+              "stat": "gauge.rate",
+              "value": 1,
+              "mode": "delta",
+              "duration": 5,
+              "durationUnit": "tick",
+              "target": "self",
+              "note": "走缝：提速"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_turn_start",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "meter_compare",
+                "key": "secrecy",
+                "cmp": ">=",
+                "n": 5
+              },
+              "then": [
+                {
+                  "type": "modify_stat",
+                  "stat": "gauge.rate",
+                  "value": 1,
+                  "mode": "delta",
+                  "duration": 5,
+                  "durationUnit": "tick",
+                  "target": "self",
+                  "note": "走缝：提速"
+                }
+              ],
+              "else": []
+            }
+          ],
+          "note": "secrecy 读层（只读）"
+        }
+      ],
+      "hook": [
+        "on_turn_start"
+      ]
+    },
+    {
+      "id": "h04e_blink",
+      "name": "遁走",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "gate",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。开门遁走：自身后撤一格，敌方队首减速 5tick——门在身后，不在眼前。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "move",
+          "op": "push_back",
+          "target": "self",
+          "note": "遁走：后撤一格"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "slow",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "enemy",
+          "note": "遁走：迟滞追兵"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h04e_replay",
+      "name": "回放",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "gate",
+      "flagship": false,
+      "describe": "主动（0 吟唱，30tick CD）。门里门外走两遍：按 50%  potency 重放自身上一张已结算的主动技——货可复读，税半价。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "echo_last_skill",
+          "potency": 0.5,
+          "rounding": "round",
+          "note": "回放：半价复读上一式"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h04e_anchor",
+      "name": "星界锚",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "gate",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。术法钉下星界锚：敌方任意单位「束缚」10tick——此门不通。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "immobilize",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "星界锚：锚定 10tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h04e_star_gate",
+      "name": "星门",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "gate",
+      "flagship": false,
+      "describe": "主动（0 吟唱，45tick CD）。推开星门：祛除自身全部减益，友方全体行动条速率 +2（5tick）；开门大税：自身「荒芜」剥护 10tick——时空的门，不白开。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 45,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "dispel",
+          "dispelTarget": "unit",
+          "category": [
+            "debuff"
+          ],
+          "target": "self",
+          "note": "星门：清场"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "gauge.rate",
+          "value": 2,
+          "mode": "delta",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "all_allies",
+          "note": "星门：全体提速"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "vulnerable",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "星门：开门大税"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

@@ -1,0 +1,242 @@
+{
+  "level": "hero",
+  "heroId": "hero_01_e",
+  "heroName": "英雄·壹戊",
+  "family": "family_02",
+  "faction": "faction_01",
+  "playstyle": "渡船人——上我的船要付船钱：亡灵是船队，死账是船票，灵视之内无人生还（亡灵摆渡的英雄轴）。",
+  "cards": [
+    {
+      "id": "h01e_raise_dead",
+      "name": "招魂",
+      "kind": "summon",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "ferry",
+      "flagship": false,
+      "describe": "召唤（0 吟唱，20tick CD）。从冥界唤一具骷髅兵上岸列队（维持费与折价见「冥界折价」）。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "effects": [],
+      "tentative": false,
+      "summon": {
+        "unitId": "unit_skeleton",
+        "position": "tail"
+      }
+    },
+    {
+      "id": "h01e_ferry_fee",
+      "name": "船钱",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "ferry",
+      "flagship": false,
+      "describe": "被动。每完成一次死亡清点（击杀），自身回复 2 点生命——上船容易下船难。",
+      "effects": [
+        {
+          "type": "heal",
+          "value": 2,
+          "target": "self",
+          "note": "船钱：死亡清点入账 2"
+        }
+      ],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_kill",
+          "effects": [
+            {
+              "type": "heal",
+              "value": 2,
+              "target": "self",
+              "note": "船钱：死亡清点入账 2"
+            }
+          ],
+          "note": "on_kill 语义：战果即船资"
+        }
+      ],
+      "hook": [
+        "on_kill"
+      ]
+    },
+    {
+      "id": "h01e_spirit_eyes",
+      "name": "开眼",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "ferry",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。睁开灵视 15tick：对隐匿与灵体的克制期间生效（×1.5 与识破见蓝本）——冥界引路人的眼睛。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "spirit_sight",
+          "duration": 15,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "开眼：灵视 15tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h01e_due_push",
+      "name": "催账",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "ferry",
+      "flagship": false,
+      "describe": "主动（0 吟唱，25tick CD）。术法对敌方任意单位催账：造成 3 点伤害；目标死账 ≥3 层时账期已到，伤害 +2。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 3,
+          "target": "target",
+          "note": "催账：基础 3 点"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "death_ledger",
+            "cmp": ">=",
+            "n": 3
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 2,
+              "target": "same_target",
+              "note": "催账：死账 ≥3，+2"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h01e_wraith_choir",
+      "name": "亡魂合唱",
+      "kind": "summon",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "ferry",
+      "flagship": false,
+      "describe": "召唤（0 吟唱，30tick CD）。召一缕亡魂上岸（维持费见「冥界折价」）——合唱队不缺人，缺的是观众。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "effects": [],
+      "tentative": false,
+      "summon": {
+        "unitId": "unit_wraith",
+        "position": "tail"
+      }
+    },
+    {
+      "id": "h01e_last_ferry",
+      "name": "末班船",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "ferry",
+      "flagship": false,
+      "describe": "主动（0 吟唱，40tick CD）。术法送渡敌方任意单位：造成 4 点暗属性伤害；目标死账 ≥5 层时账合拢一次结清，追加 3 点。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 40,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "dark",
+          "value": 4,
+          "target": "target",
+          "note": "末班船：渡资 4 点暗伤"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "death_ledger",
+            "cmp": ">=",
+            "n": 5
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "dark",
+              "value": 3,
+              "target": "same_target",
+              "note": "末班船：账合拢，+3"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

@@ -1,0 +1,281 @@
+{
+  "level": "hero",
+  "heroId": "hero_07_d",
+  "heroName": "英雄·柒丁",
+  "family": "family_15",
+  "faction": "faction_07",
+  "playstyle": "种田人——时间是肥料：作物慢慢长，丰收换一切，敢偷收试试（成长引擎的英雄轴）。",
+  "cards": [
+    {
+      "id": "h07d_sow",
+      "name": "播种",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "harvest",
+      "flagship": false,
+      "describe": "主动（0 吟唱，12tick CD）。把一粒种子种进地里：自身获得「再生」10tick（扎根滋养）——万物从这里开始。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 12,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "regen",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "播种：滋养扎根"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h07d_grow",
+      "name": "生长",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "harvest",
+      "flagship": false,
+      "describe": "被动。每个自身回合开始，自身「成长」+1 层——时间是肥料，急不得。",
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "growth_stack",
+          "duration": null,
+          "durationUnit": "tick",
+          "target": "self",
+          "stacks": 1,
+          "stackMode": "add",
+          "note": "生长：成长 +1"
+        }
+      ],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_turn_start",
+          "effects": [
+            {
+              "type": "mount_status",
+              "statusId": "growth_stack",
+              "duration": null,
+              "durationUnit": "tick",
+              "target": "self",
+              "stacks": 1,
+              "stackMode": "add",
+              "note": "生长：成长 +1"
+            }
+          ],
+          "note": "statPerStack 成长引擎（见蓝本）"
+        }
+      ],
+      "hook": [
+        "on_turn_start"
+      ]
+    },
+    {
+      "id": "h07d_ration",
+      "name": "口粮",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "harvest",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。大地分一口粮：友方任意单位回复 2 点生命并获「护盾」5tick——滋养治疗，大地管饱。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "self_or_ally",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "heal",
+          "value": 2,
+          "target": "target",
+          "note": "口粮：回复 2"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "shield",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "same_target",
+          "note": "口粮：土盾"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h07d_harvest",
+      "name": "收割",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "harvest",
+      "flagship": false,
+      "describe": "主动（0 吟唱，25tick CD）。开镰收割：自身「成长」≥3 层时丰收入仓——友方全体回复 3、攻击 +1（10tick）；未熟抢收只能回自身 2 点。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "self",
+            "id": "growth_stack",
+            "cmp": ">=",
+            "n": 3
+          },
+          "then": [
+            {
+              "type": "heal",
+              "value": 3,
+              "target": "all_allies",
+              "note": "收割：丰收入仓"
+            },
+            {
+              "type": "modify_stat",
+              "stat": "attack",
+              "value": 1,
+              "mode": "delta",
+              "duration": 10,
+              "durationUnit": "tick",
+              "target": "all_allies",
+              "note": "收割：攻 +1"
+            }
+          ],
+          "else": [
+            {
+              "type": "heal",
+              "value": 2,
+              "target": "self",
+              "note": "收割·早收：打折"
+            }
+          ]
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h07d_abundance_field",
+      "name": "丰饶",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "harvest",
+      "flagship": false,
+      "describe": "主动（0 吟唱，30tick CD）。展开丰饶领域：自身挂上「丰饶」20tick（枢纽主权，荒芜读层的对手盘）——这一季，颗粒归我。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "abundance",
+          "duration": 20,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "丰饶：领域 20tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h07d_blight_spread",
+      "name": "荒芜",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "harvest",
+      "flagship": false,
+      "describe": "主动（0 吟唱，40tick CD）。放一把荒芜：敌方全体「荒芜」剥护（受伤 +1，10tick）；双刃剑——自身同受 1 点代价。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 40,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "vulnerable",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "all_enemies",
+          "note": "荒芜：剥护"
+        },
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 1,
+          "target": "self",
+          "note": "荒芜：双刃剑"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

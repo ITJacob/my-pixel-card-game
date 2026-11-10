@@ -1,0 +1,271 @@
+{
+  "level": "hero",
+  "heroId": "hero_08_h",
+  "heroName": "英雄·捌辛",
+  "family": "family_18",
+  "faction": "faction_08",
+  "playstyle": "分析师——先读档再定价：你的能量、技能、节奏，读对了就是全图透视（读维解析的英雄轴）。",
+  "cards": [
+    {
+      "id": "h08h_scan",
+      "name": "读档",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "intel",
+      "flagship": false,
+      "describe": "主动（0 吟唱，12tick CD）。术法读档：敌方任意单位被「解析」15tick（已读标记，过期作废）——先解析，后放大。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 12,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "analyzed",
+          "duration": 15,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "读档：解析 15tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08h_exploit",
+      "name": "找破绽",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "intel",
+      "flagship": false,
+      "describe": "被动。自身对被「解析」的目标造成伤害时，读穿其防御：目标「易伤」5tick——档案越厚，破绽越多。",
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "analyzed",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "vulnerable",
+              "duration": 5,
+              "durationUnit": "tick",
+              "target": "same_target",
+              "note": "找破绽：易伤 5tick"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_deal_damage",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "has_status",
+                "side": "target",
+                "id": "analyzed",
+                "cmp": ">=",
+                "n": 1
+              },
+              "then": [
+                {
+                  "type": "mount_status",
+                  "statusId": "vulnerable",
+                  "duration": 5,
+                  "durationUnit": "tick",
+                  "target": "same_target",
+                  "note": "找破绽：易伤 5tick"
+                }
+              ],
+              "else": []
+            }
+          ],
+          "note": "解析读层"
+        }
+      ],
+      "hook": [
+        "on_deal_damage"
+      ]
+    },
+    {
+      "id": "h08h_decrypt",
+      "name": "解密",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "intel",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。术法解密：拆开敌方任意单位的构造，祛除一个增益——原理我看懂了，外挂没收。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "dispel",
+          "dispelTarget": "unit",
+          "category": [
+            "buff"
+          ],
+          "target": "target",
+          "note": "解密：拆构造"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08h_forecast",
+      "name": "推演",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "intel",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。逻辑推演：已算好下一步——自身 10tick 窗口内下一次主动技免吟唱。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "free_cast",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "推演：免吟唱窗口"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08h_reproduce",
+      "name": "复现",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "intel",
+      "flagship": false,
+      "describe": "主动（0 吟唱，30tick CD）。解析完毕，完美复现：完整重放自身上一张已结算的主动技（potency 1.0）——你的招，我学会了。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "echo_last_skill",
+          "potency": 1.0,
+          "rounding": "round",
+          "note": "复现：完整复读上一式"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08h_overread",
+      "name": "全图透视",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "intel",
+      "flagship": false,
+      "describe": "主动（0 吟唱，40tick CD）。全图读档：敌方全体被「解析」15tick 并沉默 3tick——这一刻，没有秘密。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 40,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "analyzed",
+          "duration": 15,
+          "durationUnit": "tick",
+          "target": "all_enemies",
+          "note": "全图透视：解析"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "silence",
+          "duration": 3,
+          "durationUnit": "tick",
+          "target": "all_enemies",
+          "note": "全图透视：静默"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

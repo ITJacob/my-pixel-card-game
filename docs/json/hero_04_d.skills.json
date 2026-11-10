@@ -1,0 +1,259 @@
+{
+  "level": "hero",
+  "heroId": "hero_04_d",
+  "heroName": "英雄·肆丁",
+  "family": "family_08",
+  "faction": "faction_04",
+  "playstyle": "纸扎匠——你打的是纸人：替身受死，意外奉还，真身永远在别处（诡诈替身的英雄轴）。",
+  "cards": [
+    {
+      "id": "h04d_paper_cut",
+      "name": "纸刀",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "paper",
+      "flagship": false,
+      "describe": "主动（0 吟唱，12tick CD）。纸刀也是刀：近战对敌方队首造成 2 点伤害——别小看裁纸的。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 12,
+        "castTime": 0
+      },
+      "reach": "melee",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "point",
+          "pickCount": 1,
+          "anchor": "enemy_front"
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 2,
+          "target": "target",
+          "note": "纸刀：2 点"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h04d_paper_double",
+      "name": "纸人替身",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "paper",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。扎一个纸人替身 15tick（致死保护，见蓝本）——你打的从来不是我。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "paper_substitute",
+          "duration": 15,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "纸人替身：替死 15tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h04d_return_luck",
+      "name": "意外奉还",
+      "kind": "passive",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "paper",
+      "flagship": false,
+      "describe": "被动。自身受击时，出手者被意外反咬 1 点伤害——打纸人，是要扎手的。",
+      "effects": [
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 1,
+          "target": "attacker",
+          "note": "意外奉还：反咬 1 点"
+        }
+      ],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_take_damage",
+          "effects": [
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 1,
+              "target": "attacker",
+              "note": "意外奉还：反咬 1 点"
+            }
+          ],
+          "note": "受击反噬（愚弄面）"
+        }
+      ],
+      "hook": [
+        "on_take_damage"
+      ]
+    },
+    {
+      "id": "h04d_escape",
+      "name": "遁入幻境",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "paper",
+      "flagship": false,
+      "describe": "主动（0 吟唱，18tick CD）。退入幻境：自身后撤一格，敌方队首减速 5tick——追进来试试。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 18,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "move",
+          "op": "push_back",
+          "target": "self",
+          "note": "遁入幻境：后撤一格"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "slow",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "enemy",
+          "note": "遁入幻境：拖住追兵"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h04d_fool",
+      "name": "愚弄",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "paper",
+      "flagship": false,
+      "describe": "主动（0 吟唱，25tick CD）。愚弄一刀：近战对敌方队首造成 0 点实伤（打空），目标反而被震慑（眩晕 2tick）并被剥除一个增益——砍空的代价。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "melee",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "point",
+          "pickCount": 1,
+          "anchor": "enemy_front"
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "stun",
+          "duration": 2,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "愚弄：震慑 2tick"
+        },
+        {
+          "type": "dispel",
+          "dispelTarget": "unit",
+          "category": [
+            "buff"
+          ],
+          "target": "same_target",
+          "note": "愚弄：顺手剥增益"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h04d_paper_army",
+      "name": "纸人大军",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "paper",
+      "flagship": false,
+      "describe": "主动（0 吟唱，40tick CD）。撒出满场纸人：敌方全体受 2 点伤害，自身再扎一个纸人替身（15tick）——千军万马，都是纸的。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 40,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 2,
+          "target": "all_enemies",
+          "note": "纸人大军：全体 2 点"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "paper_substitute",
+          "duration": 15,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "纸人大军：替身再扎"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

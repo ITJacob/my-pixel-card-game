@@ -1,0 +1,330 @@
+{
+  "level": "hero",
+  "heroId": "hero_01_f",
+  "heroName": "英雄·壹己",
+  "family": "family_03",
+  "faction": "faction_01",
+  "playstyle": "梦魇邮差——白天我睡，梦里你疼：入夜投递恐惧，失控者由我安抚安眠（梦魇压制的英雄轴）。",
+  "cards": [
+    {
+      "id": "h01f_sleep_dust",
+      "name": "睡尘",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "nightmare",
+      "flagship": false,
+      "describe": "主动（0 吟唱，12tick CD）。术法扬出睡尘：对敌方任意单位造成 1 点精神伤害并减速 5tick——包裹轻，睡意重。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 12,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "mental",
+          "value": 1,
+          "target": "target",
+          "note": "睡尘：精神 1 点"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "slow",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "same_target",
+          "note": "睡尘：迟滞 5tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h01f_lullaby",
+      "name": "摇篮曲",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "nightmare",
+      "flagship": false,
+      "describe": "被动。相位处于夜晚时，每个自身回合开始自身行动条速率 +1（5tick，每回合重判）——夜里我值班。",
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "phase_is",
+            "phases": [
+              "night"
+            ]
+          },
+          "then": [
+            {
+              "type": "modify_stat",
+              "stat": "gauge.rate",
+              "value": 1,
+              "mode": "delta",
+              "duration": 5,
+              "durationUnit": "tick",
+              "target": "self",
+              "note": "摇篮曲：夜幕提速"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_turn_start",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "phase_is",
+                "phases": [
+                  "night"
+                ]
+              },
+              "then": [
+                {
+                  "type": "modify_stat",
+                  "stat": "gauge.rate",
+                  "value": 1,
+                  "mode": "delta",
+                  "duration": 5,
+                  "durationUnit": "tick",
+                  "target": "self",
+                  "note": "摇篮曲：夜幕提速"
+                }
+              ],
+              "else": []
+            }
+          ],
+          "note": "相位读层（只读）"
+        }
+      ],
+      "hook": [
+        "on_turn_start"
+      ]
+    },
+    {
+      "id": "h01f_nightmare",
+      "name": "梦魇",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "nightmare",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。术法投递梦魇：对敌方任意单位造成 2 点精神伤害并沉默 3tick——梦里喊不出声。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "mental",
+          "value": 2,
+          "target": "target",
+          "note": "梦魇：精神 2 点"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "silence",
+          "duration": 3,
+          "durationUnit": "tick",
+          "target": "same_target",
+          "note": "梦魇：封声 3tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h01f_deep_sleep",
+      "name": "沉睡",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "nightmare",
+      "flagship": false,
+      "describe": "主动（0 吟唱，25tick CD）。术法按下沉眠：已被减速的目标直接眩晕 2tick，其余目标沉默 5tick，均附「荒芜」剥护（受伤 +1，5tick）。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "slow",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "stun",
+              "duration": 2,
+              "durationUnit": "tick",
+              "target": "target",
+              "note": "沉睡：迟滞者直接昏睡 2tick"
+            }
+          ],
+          "else": [
+            {
+              "type": "mount_status",
+              "statusId": "silence",
+              "duration": 5,
+              "durationUnit": "tick",
+              "target": "target",
+              "note": "沉睡：封声 5tick"
+            }
+          ]
+        },
+        {
+          "type": "mount_status",
+          "statusId": "vulnerable",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "same_target",
+          "note": "沉睡：剥护"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h01f_pacify",
+      "name": "安抚",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "nightmare",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。术法安抚躁动：祛除敌方任意单位的一个增益并沉默 5tick——失控者，安眠。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "dispel",
+          "dispelTarget": "unit",
+          "category": [
+            "buff"
+          ],
+          "target": "target",
+          "note": "安抚：剥除躁动增益"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "silence",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "same_target",
+          "note": "安抚：封声 5tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h01f_eternal_night",
+      "name": "永夜",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "nightmare",
+      "flagship": false,
+      "describe": "主动（0 吟唱，45tick CD）。拨时 9tick 赶夜入夜（相位推进一档，全队共享天时），自身行动条速率 +2（10tick）——长夜由我值守。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 45,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "advance_clock",
+          "ticks": 9,
+          "note": "永夜：拨时向夜"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "gauge.rate",
+          "value": 2,
+          "mode": "delta",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "永夜：值守提速"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

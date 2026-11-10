@@ -1,0 +1,308 @@
+{
+  "level": "hero",
+  "heroId": "hero_08_g",
+  "heroName": "英雄·捌庚",
+  "family": "family_17",
+  "faction": "faction_08",
+  "playstyle": "公证员——光是我的公章：契约双边成文，违例自动定罪，正午我最强（公证契约的英雄轴）。",
+  "cards": [
+    {
+      "id": "h08g_holy_bolt",
+      "name": "圣光弹",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "oath",
+      "flagship": false,
+      "describe": "主动（0 吟唱，12tick CD）。术法投出正午圣光：对敌方任意单位造成 2 点 holy 属性伤害——公章落下。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 12,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "holy",
+          "value": 2,
+          "target": "target",
+          "note": "圣光弹：holy 2 点"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08g_purify",
+      "name": "净化",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "oath",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。正午净化：为友方任意单位祛除一个减益并回复 2 点生命——净化是本职，不是兼职。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "self_or_ally",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "dispel",
+          "dispelTarget": "unit",
+          "category": [
+            "debuff"
+          ],
+          "target": "target",
+          "note": "净化：祛减益"
+        },
+        {
+          "type": "heal",
+          "value": 2,
+          "target": "same_target",
+          "note": "净化：回复 2"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08g_noon",
+      "name": "正午",
+      "kind": "passive",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "oath",
+      "flagship": false,
+      "describe": "被动。相位处于白昼时，每个自身回合开始自身攻击 +1（5tick，每回合重判）——正午我最强。",
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "phase_is",
+            "phases": [
+              "day"
+            ]
+          },
+          "then": [
+            {
+              "type": "modify_stat",
+              "stat": "attack",
+              "value": 1,
+              "mode": "delta",
+              "duration": 5,
+              "durationUnit": "tick",
+              "target": "self",
+              "note": "正午：攻 +1"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_turn_start",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "phase_is",
+                "phases": [
+                  "day"
+                ]
+              },
+              "then": [
+                {
+                  "type": "modify_stat",
+                  "stat": "attack",
+                  "value": 1,
+                  "mode": "delta",
+                  "duration": 5,
+                  "durationUnit": "tick",
+                  "target": "self",
+                  "note": "正午：攻 +1"
+                }
+              ],
+              "else": []
+            }
+          ],
+          "note": "白昼相位读层（只读）"
+        }
+      ],
+      "hook": [
+        "on_turn_start"
+      ]
+    },
+    {
+      "id": "h08g_oath_shield",
+      "name": "立约",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "oath",
+      "flagship": false,
+      "describe": "主动（0 吟唱，30tick CD）。双边成文：为友方任意单位授予「护盾」10tick（契约条款），公证费自身回复 1 点——一边受益，一边付酬。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "self_or_ally",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "shield",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "立约：契约护盾"
+        },
+        {
+          "type": "heal",
+          "value": 1,
+          "target": "self",
+          "note": "立约：公证费"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08g_exorcise",
+      "name": "驱邪",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "oath",
+      "flagship": false,
+      "describe": "主动（0 吟唱，25tick CD）。正午驱邪：祛除敌方任意单位的一个增益（净化亡灵/诅咒面），再降 3 点 holy 伤害——邪祟见不得光。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "dispel",
+          "dispelTarget": "unit",
+          "category": [
+            "buff"
+          ],
+          "target": "target",
+          "note": "驱邪：净邪"
+        },
+        {
+          "type": "damage",
+          "element": "holy",
+          "value": 3,
+          "target": "same_target",
+          "note": "驱邪：holy 3 点"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08g_judgment",
+      "name": "正午判决",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "oath",
+      "flagship": false,
+      "describe": "主动（0 吟唱，45tick CD）。正午终裁：敌方全体受 3 点 holy 伤害；相位处于白昼时判决加重 2 点——光最烈时，罪无处藏。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 45,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "holy",
+          "value": 3,
+          "target": "all_enemies",
+          "note": "正午判决：holy 3 点"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "phase_is",
+            "phases": [
+              "day"
+            ]
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "holy",
+              "value": 2,
+              "target": "all_enemies",
+              "note": "正午判决·白昼：+2"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

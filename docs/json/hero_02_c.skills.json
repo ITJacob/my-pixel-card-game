@@ -1,0 +1,289 @@
+{
+  "level": "hero",
+  "heroId": "hero_02_c",
+  "heroName": "英雄·贰丙",
+  "family": "family_04",
+  "faction": "faction_02",
+  "playstyle": "瘟疫信使——包裹已寄出：黑焰冰霜疾病三选一，签收即灾祸（灾祸投递的英雄轴）。",
+  "cards": [
+    {
+      "id": "h02c_black_flame",
+      "name": "黑焰",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "plague",
+      "flagship": false,
+      "describe": "主动（0 吟唱，12tick CD）。近战投递黑焰：对敌方队首造成 2 点伤害并附「灼烧」10tick——包裹已点燃。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 12,
+        "castTime": 0
+      },
+      "reach": "melee",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "point",
+          "pickCount": 1,
+          "anchor": "enemy_front"
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 2,
+          "target": "target",
+          "note": "黑焰：基础 2 点"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "burn",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "same_target",
+          "note": "黑焰：灼烧 10tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h02c_frost_parcel",
+      "name": "冰霜包裹",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "plague",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。近战投出冰霜包裹：对敌方队首造成 2 点冰属性伤害并减速 5tick——冷链配送。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "melee",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "point",
+          "pickCount": 1,
+          "anchor": "enemy_front"
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "ice",
+          "value": 2,
+          "target": "target",
+          "note": "冰霜包裹：冰伤 2 点"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "slow",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "same_target",
+          "note": "冰霜包裹：冻结迟滞 5tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h02c_plague_sign",
+      "name": "灾厄共鸣",
+      "kind": "passive",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "plague",
+      "flagship": false,
+      "describe": "被动。自身对携带「灼烧」的目标造成伤害时，灾祸共鸣追加 1 点——包裹之间会互相引燃。",
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "burn",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 1,
+              "target": "same_target",
+              "note": "灾厄共鸣：灼烧追加 1"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_deal_damage",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "has_status",
+                "side": "target",
+                "id": "burn",
+                "cmp": ">=",
+                "n": 1
+              },
+              "then": [
+                {
+                  "type": "damage",
+                  "element": "none",
+                  "value": 1,
+                  "target": "same_target",
+                  "note": "灾厄共鸣：灼烧追加 1"
+                }
+              ],
+              "else": []
+            }
+          ],
+          "note": "灼烧读层"
+        }
+      ],
+      "hook": [
+        "on_deal_damage"
+      ]
+    },
+    {
+      "id": "h02c_disease_mail",
+      "name": "疾病邮件",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "plague",
+      "flagship": false,
+      "describe": "主动（0 吟唱，25tick CD）。术法寄出疾病：目标感染「疾病」15tick（延时灾祸，到期结算见蓝本）——查收请趁早。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "disease",
+          "duration": 15,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "疾病邮件：感染 15tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h02c_sign_for_me",
+      "name": "签收",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "plague",
+      "flagship": false,
+      "describe": "主动（0 吟唱，25tick CD）。术法魅惑签收：敌方任意单位陷入「魅惑」5tick——把刀递向自己人，包裹即签收。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "charm",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "签收：魅惑 5tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h02c_plague_rain",
+      "name": "灾祸雨",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "plague",
+      "flagship": false,
+      "describe": "主动（0 吟唱，40tick CD）。泼天灾祸雨：敌方全体受 2 点伤害并附「灼烧」10tick——三灾齐发，概不退换。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 40,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 2,
+          "target": "all_enemies",
+          "note": "灾祸雨：全体 2 点"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "burn",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "all_enemies",
+          "note": "灾祸雨：灼烧"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

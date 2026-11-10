@@ -1,0 +1,298 @@
+{
+  "level": "hero",
+  "heroId": "hero_03_c",
+  "heroName": "英雄·叁丙",
+  "family": "family_06",
+  "faction": "faction_03",
+  "playstyle": "辖区巡警——我的地盘听我的：标记嫌疑人，违例自动开庭（执法空间的英雄轴）。",
+  "cards": [
+    {
+      "id": "h03c_patrol_beam",
+      "name": "巡逻光束",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "patrol",
+      "flagship": false,
+      "describe": "主动（0 吟唱，12tick CD）。术法巡逻光束：对敌方任意单位造成 2 点精神伤害——辖区无死角。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 12,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "mental",
+          "value": 2,
+          "target": "target",
+          "note": "巡逻光束：精神 2 点"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h03c_mark_suspect",
+      "name": "嫌疑人",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "patrol",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。术法立案：敌方任意单位被「标记」15tick（破绽标记，见蓝本）——立案之后自动开庭。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "marked",
+          "duration": 15,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "立案：标记 15tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h03c_fine",
+      "name": "罚款",
+      "kind": "passive",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "patrol",
+      "flagship": false,
+      "describe": "被动。自身对被「标记」的目标造成伤害时，罚款入账，自身回复 1 点生命——违例必罚。",
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "marked",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "heal",
+              "value": 1,
+              "target": "self",
+              "note": "罚款：执法回血 1"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_deal_damage",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "has_status",
+                "side": "target",
+                "id": "marked",
+                "cmp": ">=",
+                "n": 1
+              },
+              "then": [
+                {
+                  "type": "heal",
+                  "value": 1,
+                  "target": "self",
+                  "note": "罚款：执法回血 1"
+                }
+              ],
+              "else": []
+            }
+          ],
+          "note": "标记读层"
+        }
+      ],
+      "hook": [
+        "on_deal_damage"
+      ]
+    },
+    {
+      "id": "h03c_fortify",
+      "name": "辖区布防",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "patrol",
+      "flagship": false,
+      "describe": "主动（0 吟唱，30tick CD）。辖区布防：order +1（秩序抬升，成文可审计），友方全体护甲 +1（10tick）——法度即城墙。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "modify_resource",
+          "resource": "order",
+          "value": 1,
+          "mode": "delta",
+          "target": "board",
+          "note": "布防：order +1"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "armor",
+          "value": 1,
+          "mode": "delta",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "all_allies",
+          "note": "布防：全体护甲 +1"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h03c_arrest",
+      "name": "逮捕",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "patrol",
+      "flagship": false,
+      "describe": "主动（0 吟唱，25tick CD）。术法当场逮捕：敌方任意单位眩晕 2tick 并上「枷锁」5tick——拒捕罪加一等。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "stun",
+          "duration": 2,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "逮捕：眩晕 2tick"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "shackle",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "same_target",
+          "note": "逮捕：枷锁 5tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h03c_raid",
+      "name": "严打",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "patrol",
+      "flagship": false,
+      "describe": "主动（0 吟唱，40tick CD）。辖区严打：敌方全体受 3 点精神伤害；order ≥7（法律严明）时追加全体沉默 5tick——乱世用重典。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 40,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "mental",
+          "value": 3,
+          "target": "all_enemies",
+          "note": "严打：精神 3 点"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "order",
+            "cmp": ">=",
+            "n": 7
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "silence",
+              "duration": 5,
+              "durationUnit": "tick",
+              "target": "all_enemies",
+              "note": "严打·严明：全体沉默"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

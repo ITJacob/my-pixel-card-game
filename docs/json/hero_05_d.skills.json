@@ -1,0 +1,253 @@
+{
+  "level": "hero",
+  "heroId": "hero_05_d",
+  "heroName": "英雄·伍丁",
+  "family": "family_12",
+  "faction": "faction_05",
+  "playstyle": "质检科长——造物出厂即巅峰：憋档投资，补全缺陷，被拆全沉没（造物阶梯的英雄轴）。",
+  "cards": [
+    {
+      "id": "h05d_assemble",
+      "name": "组装",
+      "kind": "summon",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "forge",
+      "flagship": false,
+      "describe": "召唤（0 吟唱，20tick CD）。车间下线一具石魔（材质与阶梯见蓝本）——出厂即巅峰，巅峰别被拆。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "effects": [],
+      "tentative": false,
+      "summon": {
+        "unitId": "unit_golem",
+        "position": "tail"
+      }
+    },
+    {
+      "id": "h05d_completion",
+      "name": "自适应补全",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "forge",
+      "flagship": false,
+      "describe": "被动。每个自身回合开始，质检清单勾一项：自身护甲 +1（5tick，每回合重判）——缺陷越来越少。",
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "armor",
+          "value": 1,
+          "mode": "delta",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "补全：护甲 +1"
+        }
+      ],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_turn_start",
+          "effects": [
+            {
+              "type": "modify_stat",
+              "stat": "armor",
+              "value": 1,
+              "mode": "delta",
+              "duration": 5,
+              "durationUnit": "tick",
+              "target": "self",
+              "note": "补全：护甲 +1"
+            }
+          ],
+          "note": "补全自身（修结构不回血，裁定 #5）"
+        }
+      ],
+      "hook": [
+        "on_turn_start"
+      ]
+    },
+    {
+      "id": "h05d_overclock",
+      "name": "过载",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "forge",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。推满一档过载：自身攻击 +2（10tick）；质检代价：自耗 1 点结构（1 伤害，钳 1 不致死）。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "attack",
+          "value": 2,
+          "mode": "delta",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "过载：攻击 +2"
+        },
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 1,
+          "target": "self",
+          "note": "过载：结构损耗 1"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h05d_gravity",
+      "name": "重力微调",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "forge",
+      "flagship": false,
+      "describe": "主动（0 吟唱，30tick CD）。改写局部物理规律（重力 +1 档，成文可审计）：敌方全体减速 10tick——只是调了调重力。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "slow",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "all_enemies",
+          "note": "重力微调：迟滞 10tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h05d_reinforce",
+      "name": "结构补强",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "forge",
+      "flagship": false,
+      "describe": "主动（0 吟唱，25tick CD）。质检返修自身：祛除一个减益并授予「护盾」10tick——残次品不出厂。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "dispel",
+          "dispelTarget": "unit",
+          "category": [
+            "debuff"
+          ],
+          "target": "self",
+          "note": "补强：祛缺陷"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "shield",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "补强：护盾 10tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h05d_perfect",
+      "name": "绝对完美",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "forge",
+      "flagship": false,
+      "describe": "主动（0 吟唱，40tick CD）。补全到极致：自身攻击 +2、护甲 +2（15tick）——完美不是目标，是出厂标准。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 40,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "attack",
+          "value": 2,
+          "mode": "delta",
+          "duration": 15,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "绝对完美：攻击 +2"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "armor",
+          "value": 2,
+          "mode": "delta",
+          "duration": 15,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "绝对完美：护甲 +2"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

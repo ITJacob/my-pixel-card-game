@@ -1,0 +1,306 @@
+{
+  "level": "hero",
+  "heroId": "hero_03_d",
+  "heroName": "英雄·叁丁",
+  "family": "family_07",
+  "faction": "faction_03",
+  "playstyle": "漏洞掮客——你的法条我的缝：扭曲既有规则，援引我造的先例（规则扭曲的英雄轴）。",
+  "cards": [
+    {
+      "id": "h03d_loophole",
+      "name": "钻空子",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "twist",
+      "flagship": false,
+      "describe": "主动（0 吟唱，12tick CD）。钻一条现成的空子：order −1（法纪松动，成文可审计），自身能量 +1——省下的都是能量。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 12,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "modify_resource",
+          "resource": "order",
+          "value": -1,
+          "mode": "delta",
+          "target": "board",
+          "note": "钻空子：order −1"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "energy",
+          "value": 1,
+          "mode": "delta",
+          "target": "self",
+          "note": "钻空子：能量 +1"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h03d_make_precedent",
+      "name": "立先例",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "twist",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。制造先例：自身挂上「先例」15tick（判例经济起点，见蓝本）——从今往后援引我。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "precedent",
+          "duration": 15,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "立先例：判例 15tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h03d_bribe",
+      "name": "贿赂红利",
+      "kind": "passive",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "twist",
+      "flagship": false,
+      "describe": "被动。order ≤3（法纪废弛）时，每个自身回合开始自身能量 +1——越乱我的生意越好。",
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "order",
+            "cmp": "<=",
+            "n": 3
+          },
+          "then": [
+            {
+              "type": "modify_resource",
+              "resource": "energy",
+              "value": 1,
+              "mode": "delta",
+              "target": "self",
+              "note": "贿赂红利：废弛红利 +1"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_turn_start",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "meter_compare",
+                "key": "order",
+                "cmp": "<=",
+                "n": 3
+              },
+              "then": [
+                {
+                  "type": "modify_resource",
+                  "resource": "energy",
+                  "value": 1,
+                  "mode": "delta",
+                  "target": "self",
+                  "note": "贿赂红利：废弛红利 +1"
+                }
+              ],
+              "else": []
+            }
+          ],
+          "note": "order 读层（只读）"
+        }
+      ],
+      "hook": [
+        "on_turn_start"
+      ]
+    },
+    {
+      "id": "h03d_twist_injury",
+      "name": "扭曲解释",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "twist",
+      "flagship": false,
+      "describe": "主动（0 吟唱，25tick CD）。术法扭曲规则解释：祛除敌方任意单位的一个增益，并裁定其受伤 +1（易伤 10tick）——条文第二条，我说了算。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "dispel",
+          "dispelTarget": "unit",
+          "category": [
+            "buff"
+          ],
+          "target": "target",
+          "note": "扭曲解释：剥增益"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "vulnerable",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "same_target",
+          "note": "扭曲解释：易伤 10tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h03d_shelter",
+      "name": "漏洞庇护",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "twist",
+      "flagship": false,
+      "describe": "主动（0 吟唱，30tick CD）。为友方任意单位找个法律漏洞：祛除一个减益并授予「护盾」10tick——程序正义，结果另算。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "self_or_ally",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "dispel",
+          "dispelTarget": "unit",
+          "category": [
+            "debuff"
+          ],
+          "target": "target",
+          "note": "漏洞庇护：祛减益"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "shield",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "same_target",
+          "note": "漏洞庇护：护盾 10tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h03d_throne_gap",
+      "name": "王权真空",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "twist",
+      "flagship": false,
+      "describe": "主动（0 吟唱，45tick CD）。篡位窗口：order 直接压至 1（王权真空），敌方全体减速 10tick，自身攻击 +2（10tick）——规矩塌了，谁拳头大谁立法。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 45,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "modify_resource",
+          "resource": "order",
+          "value": 1,
+          "mode": "set",
+          "target": "board",
+          "note": "王权真空：order → 1"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "slow",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "all_enemies",
+          "note": "王权真空：迟滞"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "attack",
+          "value": 2,
+          "mode": "delta",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "王权真空：攻击 +2"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

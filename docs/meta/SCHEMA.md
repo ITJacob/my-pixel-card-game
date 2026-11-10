@@ -11,7 +11,7 @@ docs/json/
 ├─ global.skills.json       全域级（唯一）：跨派系复用内容
 ├─ faction_NN.skills.json   派系级 ×9（NN=01..09）：家族间共享蓝本池（当前为空）+ 派系公共卡 fNN_
 ├─ family_NN.skills.json    家族级 ×22（NN=01..22）：家族公共卡 + 家族私有蓝本池 + 家族元信息
-└─ hero_NN.skills.json      英雄级 ×9（+第二英雄 hero_NN_b 开放命名，2026-11-08）：英雄独自卡 + family 归属字段
+└─ hero_NN.skills.json      英雄级（+同派系多英雄开放命名 hero_NN_b/c/…，2026-11-09 每家族 2 英雄补齐）：英雄独自卡 + family 归属字段
 ```
 
 - 四个层级各一个文件根（schema 根 oneOf 按 `level` 字段分派到 fileRootGlobal / fileRootFaction / fileRootFamily / fileRootHero）。

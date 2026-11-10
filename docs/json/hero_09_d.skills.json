@@ -1,0 +1,321 @@
+{
+  "level": "hero",
+  "heroId": "hero_09_d",
+  "heroName": "英雄·玖丁",
+  "family": "family_22",
+  "faction": "faction_09",
+  "playstyle": "典狱长——锁链带利息：每道诅咒都有反照，每分苦难都记账，爆档即失控（苦难禁锢的英雄轴）。",
+  "cards": [
+    {
+      "id": "h09d_chain_throw",
+      "name": "掷链",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "chain",
+      "flagship": false,
+      "describe": "主动（0 吟唱，12tick CD）。近战掷出锁链：对敌方队首造成 2 点伤害并「束缚」5tick——入狱第一课。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 12,
+        "castTime": 0
+      },
+      "reach": "melee",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "point",
+          "pickCount": 1,
+          "anchor": "enemy_front"
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 2,
+          "target": "target",
+          "note": "掷链：2 点"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "immobilize",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "same_target",
+          "note": "掷链：束缚 5tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h09d_curse_back",
+      "name": "诅咒反照",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "chain",
+      "flagship": false,
+      "describe": "被动。自身受击时，锁链反咬：出手者被诅咒反照，「易伤」5tick——碰我者，蚀手。",
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "vulnerable",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "attacker",
+          "note": "诅咒反照：易伤 5tick"
+        }
+      ],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_take_damage",
+          "effects": [
+            {
+              "type": "mount_status",
+              "statusId": "vulnerable",
+              "duration": 5,
+              "durationUnit": "tick",
+              "target": "attacker",
+              "note": "诅咒反照：易伤 5tick"
+            }
+          ],
+          "note": "苦难反照（红线即机制）"
+        }
+      ],
+      "hook": [
+        "on_take_damage"
+      ]
+    },
+    {
+      "id": "h09d_hardiness",
+      "name": "苦韧",
+      "kind": "passive",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "chain",
+      "flagship": false,
+      "describe": "被动。自身生命不高于 50% 时，每个自身回合开始获「坚韧」5tick（苦难换坚韧，见蓝本）——每一分苦都记账。",
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "hp_percent",
+            "side": "self",
+            "cmp": "<=",
+            "n": 50
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "hardiness",
+              "duration": 5,
+              "durationUnit": "tick",
+              "target": "self",
+              "note": "苦韧：坚韧 5tick"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_turn_start",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "hp_percent",
+                "side": "self",
+                "cmp": "<=",
+                "n": 50
+              },
+              "then": [
+                {
+                  "type": "mount_status",
+                  "statusId": "hardiness",
+                  "duration": 5,
+                  "durationUnit": "tick",
+                  "target": "self",
+                  "note": "苦韧：坚韧 5tick"
+                }
+              ],
+              "else": []
+            }
+          ],
+          "note": "苦难账户读层"
+        }
+      ],
+      "hook": [
+        "on_turn_start"
+      ]
+    },
+    {
+      "id": "h09d_tight_bind",
+      "name": "紧缚咒",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "chain",
+      "flagship": false,
+      "describe": "主动（0 吟唱，25tick CD）。术法紧缚：敌方任意单位上「枷锁」10tick；已被束缚的目标锁上加锁，追加沉默 5tick。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "shackle",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "紧缚咒：枷锁 10tick"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "immobilize",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "silence",
+              "duration": 5,
+              "durationUnit": "tick",
+              "target": "same_target",
+              "note": "紧缚咒：锁上加锁"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h09d_suffer_invest",
+      "name": "苦难投资",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "chain",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。押上血肉换力：自耗 1 血（钳 1 不致死），自身攻击 +2（10tick）——债的方向我选。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 1,
+          "target": "self",
+          "note": "苦难投资：自耗 1"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "attack",
+          "value": 2,
+          "mode": "delta",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "苦难投资：攻 +2"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h09d_abyss_jail",
+      "name": "深渊牢狱",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "chain",
+      "flagship": false,
+      "describe": "主动（0 吟唱，40tick CD）。术法绝对禁锢：敌方任意单位眩晕 3tick 并「荒芜」剥护（受伤 +1，10tick）；反照：自身受 1 点代价——牢底坐穿，狱卒也耗命。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 40,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "stun",
+          "duration": 3,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "深渊牢狱：禁锢 3tick"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "vulnerable",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "same_target",
+          "note": "深渊牢狱：剥护"
+        },
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 1,
+          "target": "self",
+          "note": "深渊牢狱：反照 1"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

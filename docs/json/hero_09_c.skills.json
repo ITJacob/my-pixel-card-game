@@ -1,0 +1,312 @@
+{
+  "level": "hero",
+  "heroId": "hero_09_c",
+  "heroName": "英雄·玖丙",
+  "family": "family_21",
+  "faction": "faction_09",
+  "playstyle": "排污管——环境是我的下水道：秽土深耕，污秽放大，你的体系悄悄失效（污秽腐蚀的英雄轴）。",
+  "cards": [
+    {
+      "id": "h09c_foul_spit",
+      "name": "恶语",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "filth",
+      "flagship": false,
+      "describe": "主动（0 吟唱，12tick CD）。术法恶语成秽：对敌方任意单位造成 2 点暗属性伤害并泼上「污秽」10tick——出口成脏。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 12,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "dark",
+          "value": 2,
+          "target": "target",
+          "note": "恶语：暗伤 2 点"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "filth",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "same_target",
+          "note": "恶语：污秽 10tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h09c_corrode",
+      "name": "侵蚀",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "filth",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。术法腐蚀护甲：敌方任意单位「易伤」10tick——甲都锈穿了。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "vulnerable",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "侵蚀：易伤 10tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h09c_sulfur",
+      "name": "硫磺共鸣",
+      "kind": "passive",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "filth",
+      "flagship": false,
+      "describe": "被动。自身对带「污秽」的目标造成伤害时，硫磺共鸣追加 1 点——越脏的地方火越旺。",
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "filth",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 1,
+              "target": "same_target",
+              "note": "硫磺共鸣：追加 1"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_deal_damage",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "has_status",
+                "side": "target",
+                "id": "filth",
+                "cmp": ">=",
+                "n": 1
+              },
+              "then": [
+                {
+                  "type": "damage",
+                  "element": "none",
+                  "value": 1,
+                  "target": "same_target",
+                  "note": "硫磺共鸣：追加 1"
+                }
+              ],
+              "else": []
+            }
+          ],
+          "note": "污秽读层"
+        }
+      ],
+      "hook": [
+        "on_deal_damage"
+      ]
+    },
+    {
+      "id": "h09c_pollute",
+      "name": "排污",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "filth",
+      "flagship": false,
+      "describe": "主动（0 吟唱，30tick CD）。开闸排污：敌方全体泼上「污秽」10tick 并减速 5tick——下水道不挑住户。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "filth",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "all_enemies",
+          "note": "排污：全体污秽"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "slow",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "all_enemies",
+          "note": "排污：迟滞"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h09c_erode",
+      "name": "荒芜侵蚀",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "filth",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。术法荒芜侵蚀：拆敌方任意单位的一个增益（体系失效），再泼「污秽」10tick——丰饶的对面是我。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "dispel",
+          "dispelTarget": "unit",
+          "category": [
+            "buff"
+          ],
+          "target": "target",
+          "note": "荒芜侵蚀：拆体系"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "filth",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "same_target",
+          "note": "荒芜侵蚀：污秽"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h09c_filth_lord",
+      "name": "污秽之王",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "filth",
+      "flagship": false,
+      "describe": "主动（0 吟唱，40tick CD）。登污秽王座：自身攻击 +2（10tick）；死亡簿 ≥3（尸水肥田）时再加 1——死得越多，我越肥。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 40,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "attack",
+          "value": 2,
+          "mode": "delta",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "污秽之王：攻 +2"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "death_tally",
+            "cmp": ">=",
+            "n": 3
+          },
+          "then": [
+            {
+              "type": "modify_stat",
+              "stat": "attack",
+              "value": 1,
+              "mode": "delta",
+              "duration": 10,
+              "durationUnit": "tick",
+              "target": "self",
+              "note": "污秽之王·肥田：再 +1"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

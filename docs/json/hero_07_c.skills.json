@@ -1,0 +1,279 @@
+{
+  "level": "hero",
+  "heroId": "hero_07_c",
+  "heroName": "英雄·柒丙",
+  "family": "family_14",
+  "faction": "faction_07",
+  "playstyle": "驯兽药师——药剂喂兽，兽群听哨：野性一起，满场都是牙（兽群驯化的英雄轴）。",
+  "cards": [
+    {
+      "id": "h07c_release_beast",
+      "name": "放兽",
+      "kind": "summon",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "beast",
+      "flagship": false,
+      "describe": "召唤（0 吟唱，20tick CD）。放出驯服的药兽入场（兽群蓝本，维持见家族口径）——它今晚没吃饱。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "effects": [],
+      "tentative": false,
+      "summon": {
+        "unitId": "unit_beast",
+        "position": "tail"
+      }
+    },
+    {
+      "id": "h07c_draught",
+      "name": "预服",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "beast",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。为友方任意单位预服一剂：回复 3 点生命并挂「再生」5tick——药剂当场喝，效果打折扣。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "self_or_ally",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "heal",
+          "value": 3,
+          "target": "target",
+          "note": "预服：回复 3"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "regen",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "same_target",
+          "note": "预服：再生 5tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h07c_wild",
+      "name": "野性直觉",
+      "kind": "passive",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "beast",
+      "flagship": false,
+      "describe": "被动。自身生命不高于 50% 时，每个自身回合开始攻击 +1（5tick，每回合重判）——血味激发兽性。",
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "hp_percent",
+            "side": "self",
+            "cmp": "<=",
+            "n": 50
+          },
+          "then": [
+            {
+              "type": "modify_stat",
+              "stat": "attack",
+              "value": 1,
+              "mode": "delta",
+              "duration": 5,
+              "durationUnit": "tick",
+              "target": "self",
+              "note": "野性：攻击 +1"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_turn_start",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "hp_percent",
+                "side": "self",
+                "cmp": "<=",
+                "n": 50
+              },
+              "then": [
+                {
+                  "type": "modify_stat",
+                  "stat": "attack",
+                  "value": 1,
+                  "mode": "delta",
+                  "duration": 5,
+                  "durationUnit": "tick",
+                  "target": "self",
+                  "note": "野性：攻击 +1"
+                }
+              ],
+              "else": []
+            }
+          ],
+          "note": "半血读层"
+        }
+      ],
+      "hook": [
+        "on_turn_start"
+      ]
+    },
+    {
+      "id": "h07c_herd_dose",
+      "name": "兽群药剂",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "beast",
+      "flagship": false,
+      "describe": "主动（0 吟唱，25tick CD）。对带「再生」的目标药效化开：回复 4 点（否则 2 点），友方全体攻击 +1（10tick）——一针管一群。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "self_or_ally",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "regen",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "heal",
+              "value": 4,
+              "target": "target",
+              "note": "兽群药剂：再生化开 4"
+            }
+          ],
+          "else": [
+            {
+              "type": "heal",
+              "value": 2,
+              "target": "target",
+              "note": "兽群药剂：基础 2"
+            }
+          ]
+        },
+        {
+          "type": "modify_stat",
+          "stat": "attack",
+          "value": 1,
+          "mode": "delta",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "all_allies",
+          "note": "兽群药剂：全体攻 +1"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h07c_blood_moon_dose",
+      "name": "血月一针",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "beast",
+      "flagship": false,
+      "describe": "主动（0 吟唱，30tick CD）。血月催化的猛剂：自身攻击 +2（10tick）；代价：自耗 1 血（钳 1 不致死）——猛药苦口。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "modify_stat",
+          "stat": "attack",
+          "value": 2,
+          "mode": "delta",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "血月一针：攻击 +2"
+        },
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 1,
+          "target": "self",
+          "note": "血月一针：自耗 1 血"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h07c_elder",
+      "name": "古兽出栏",
+      "kind": "summon",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "beast",
+      "flagship": false,
+      "describe": "召唤（0 吟唱，40tick CD）。放出珍藏的古兽（elder_thing 蓝本）——这一针，喂了很多年。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 40,
+        "castTime": 0
+      },
+      "effects": [],
+      "tentative": false,
+      "summon": {
+        "unitId": "unit_elder_thing",
+        "position": "tail"
+      }
+    }
+  ],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

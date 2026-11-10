@@ -1,0 +1,291 @@
+{
+  "level": "hero",
+  "heroId": "hero_08_f",
+  "heroName": "英雄·捌己",
+  "family": "family_16",
+  "faction": "faction_08",
+  "playstyle": "深海牧者——海是牧场：深潜不可选，海兽出栏，风暴海是我的篱笆（海域权柄的英雄轴）。",
+  "cards": [
+    {
+      "id": "h08f_dive",
+      "name": "深潜",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "ocean",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。潜入深水 10tick：不可被选中（出手浮出，见蓝本）——海面相隔两个世界。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "submerge",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "深潜：下潜 10tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08f_sea_beast",
+      "name": "海兽出栏",
+      "kind": "summon",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "ocean",
+      "flagship": false,
+      "describe": "召唤（0 吟唱，30tick CD）。放一头海兽入场（海域蓝本）——牧场出栏，请注意避让。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "effects": [],
+      "tentative": false,
+      "summon": {
+        "unitId": "unit_sea_beast",
+        "position": "tail"
+      }
+    },
+    {
+      "id": "h08f_wave",
+      "name": "浪击",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "ocean",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。近战掀起浪头：对敌方队首造成 2 点冰属性伤害并减速 5tick；已被减速的目标吃满浪势，伤害 +1。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "melee",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "point",
+          "pickCount": 1,
+          "anchor": "enemy_front"
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "ice",
+          "value": 2,
+          "target": "target",
+          "note": "浪击：冰伤 2 点"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "slow",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "same_target",
+          "note": "浪击：迟滞"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "slow",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "ice",
+              "value": 1,
+              "target": "same_target",
+              "note": "浪击：浪势 +1"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08f_night_tide",
+      "name": "夜潮",
+      "kind": "passive",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "ocean",
+      "flagship": false,
+      "describe": "被动。光照度 ≤3（夜海）时，每个自身回合开始自身行动条速率 +1（5tick，每回合重判）——夜里涨潮。",
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "luminance",
+            "cmp": "<=",
+            "n": 3
+          },
+          "then": [
+            {
+              "type": "modify_stat",
+              "stat": "gauge.rate",
+              "value": 1,
+              "mode": "delta",
+              "duration": 5,
+              "durationUnit": "tick",
+              "target": "self",
+              "note": "夜潮：提速"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_turn_start",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "meter_compare",
+                "key": "luminance",
+                "cmp": "<=",
+                "n": 3
+              },
+              "then": [
+                {
+                  "type": "modify_stat",
+                  "stat": "gauge.rate",
+                  "value": 1,
+                  "mode": "delta",
+                  "duration": 5,
+                  "durationUnit": "tick",
+                  "target": "self",
+                  "note": "夜潮：提速"
+                }
+              ],
+              "else": []
+            }
+          ],
+          "note": "luminance 读层（只读）"
+        }
+      ],
+      "hook": [
+        "on_turn_start"
+      ]
+    },
+    {
+      "id": "h08f_thunder_wall",
+      "name": "雷幕",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "ocean",
+      "flagship": false,
+      "describe": "主动（0 吟唱，30tick CD）。立起一道雷幕：敌方全体受 2 点雷属性伤害，自身获「护盾」5tick——海上的篱笆带电。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "lightning",
+          "value": 2,
+          "target": "all_enemies",
+          "note": "雷幕：雷伤 2 点"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "shield",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "雷幕：护盾"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08f_tsunami",
+      "name": "海啸",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "ocean",
+      "flagship": false,
+      "describe": "主动（0 吟唱，40tick CD）。海啸上岸：敌方全体受 3 点冰属性伤害并减速 5tick——牧场换个方向开门。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 40,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "ice",
+          "value": 3,
+          "target": "all_enemies",
+          "note": "海啸：冰伤 3 点"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "slow",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "all_enemies",
+          "note": "海啸：迟滞"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

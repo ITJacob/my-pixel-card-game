@@ -1,0 +1,302 @@
+{
+  "level": "hero",
+  "heroId": "hero_02_d",
+  "heroName": "英雄·贰丁",
+  "family": "family_05",
+  "faction": "faction_02",
+  "playstyle": "围猎队长——标记即死刑：猎物标定，全队集火，越杀越凶（集众指挥的英雄轴）。",
+  "cards": [
+    {
+      "id": "h02d_mark_prey",
+      "name": "标定猎物",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "hunt",
+      "flagship": false,
+      "describe": "主动（0 吟唱，12tick CD）。术法标定猎物：敌方任意单位带上「猎物标记」15tick——剩下的交给队伍。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 12,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "prey_mark",
+          "duration": 15,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "标定：猎物标记 15tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h02d_rally",
+      "name": "集结",
+      "kind": "passive",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "hunt",
+      "flagship": false,
+      "describe": "被动。每个自身回合开始，自身「集众」+1 层——人到齐了才围猎。",
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "massing",
+          "duration": null,
+          "durationUnit": "tick",
+          "target": "self",
+          "stacks": 1,
+          "stackMode": "add",
+          "note": "集结：集众 +1"
+        }
+      ],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_turn_start",
+          "effects": [
+            {
+              "type": "mount_status",
+              "statusId": "massing",
+              "duration": null,
+              "durationUnit": "tick",
+              "target": "self",
+              "stacks": 1,
+              "stackMode": "add",
+              "note": "集结：集众 +1"
+            }
+          ],
+          "note": "集众层产速：按在场人数由蓝本缩放"
+        }
+      ],
+      "hook": [
+        "on_turn_start"
+      ]
+    },
+    {
+      "id": "h02d_focus_fire",
+      "name": "集火",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "hunt",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。近战对敌方队首造成 3 点伤害；被标定的猎物吃满集火，伤害 +2。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "melee",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "point",
+          "pickCount": 1,
+          "anchor": "enemy_front"
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 3,
+          "target": "target",
+          "note": "集火：基础 3 点"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "prey_mark",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 2,
+              "target": "same_target",
+              "note": "集火：猎物标记 +2"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h02d_net_close",
+      "name": "收网",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "hunt",
+      "flagship": false,
+      "describe": "主动（0 吟唱，25tick CD）。收网：敌方全体减速 5tick 且「荒芜」剥护（受伤 +1，5tick）——网已合拢。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "slow",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "all_enemies",
+          "note": "收网：迟滞"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "vulnerable",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "all_enemies",
+          "note": "收网：剥护"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h02d_kill_tally",
+      "name": "战果清点",
+      "kind": "passive",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "hunt",
+      "flagship": false,
+      "describe": "被动。每完成一次战果清点（击杀），自身「集众」+1 层——越杀越凶。",
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "massing",
+          "duration": null,
+          "durationUnit": "tick",
+          "target": "self",
+          "stacks": 1,
+          "stackMode": "add",
+          "note": "战果清点：集众 +1"
+        }
+      ],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_kill",
+          "effects": [
+            {
+              "type": "mount_status",
+              "statusId": "massing",
+              "duration": null,
+              "durationUnit": "tick",
+              "target": "self",
+              "stacks": 1,
+              "stackMode": "add",
+              "note": "战果清点：集众 +1"
+            }
+          ],
+          "note": "on_kill 语义：战果入账"
+        }
+      ],
+      "hook": [
+        "on_kill"
+      ]
+    },
+    {
+      "id": "h02d_grand_hunt",
+      "name": "大围猎",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "hunt",
+      "flagship": false,
+      "describe": "主动（0 吟唱，40tick CD）。发起总攻：敌方全体受 3 点伤害；冲突计数 ≥6（够乱）时再加 1 点，自身回复 3 点生命——乱仗是我的粮仓。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 40,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 3,
+          "target": "all_enemies",
+          "note": "大围猎：全体 3 点"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "conflict",
+            "cmp": ">=",
+            "n": 6
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 1,
+              "target": "all_enemies",
+              "note": "大围猎·乱战：+1"
+            },
+            {
+              "type": "heal",
+              "value": 3,
+              "target": "self",
+              "note": "大围猎：越乱越旺"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

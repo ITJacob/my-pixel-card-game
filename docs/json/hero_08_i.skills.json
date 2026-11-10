@@ -1,0 +1,245 @@
+{
+  "level": "hero",
+  "heroId": "hero_08_i",
+  "heroName": "英雄·捌壬",
+  "family": "family_19",
+  "faction": "faction_08",
+  "playstyle": "剧作家——我说什么是真的：位格是视力，空想是编剧，剧终必落幕（空想定义的英雄轴）。",
+  "cards": [
+    {
+      "id": "h08i_construct",
+      "name": "空想造物",
+      "kind": "summon",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "plot",
+      "flagship": false,
+      "describe": "召唤（0 吟唱，20tick CD）。捏造一个临时造物入场（带「非真存」缺陷：短寿，见蓝本）——世上没有免费的真实。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "effects": [],
+      "tentative": false,
+      "summon": {
+        "unitId": "unit_fancy_construct",
+        "position": "tail"
+      }
+    },
+    {
+      "id": "h08i_plot_armor",
+      "name": "主角光环",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "plot",
+      "flagship": false,
+      "describe": "主动（0 吟唱，18tick CD）。给剧情主角加戏：自身获「主角光环」10tick（剧情保护，见蓝本）——主角不能死，至少这一幕。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 18,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "plot_armor",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "主角光环：护体 10tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08i_revenge_plot",
+      "name": "剧情反杀",
+      "kind": "passive",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "plot",
+      "flagship": false,
+      "describe": "被动。自身受击时，剧情反转：出手者受 1 点伤害——动主角，要付编剧费。",
+      "effects": [
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 1,
+          "target": "attacker",
+          "note": "剧情反杀：反转 1 点"
+        }
+      ],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_take_damage",
+          "effects": [
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 1,
+              "target": "attacker",
+              "note": "剧情反杀：反转 1 点"
+            }
+          ],
+          "note": "想象干预伤害走向（受击面）"
+        }
+      ],
+      "hook": [
+        "on_take_damage"
+      ]
+    },
+    {
+      "id": "h08i_freeze_plot",
+      "name": "剧情定格",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "plot",
+      "flagship": false,
+      "describe": "主动（0 吟唱，25tick CD）。术法定格剧情：敌方任意单位眩晕 2tick，其随身增益被「改写剧本」剥除一处——这一幕，按我的剧本来。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "stun",
+          "duration": 2,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "剧情定格：定格 2tick"
+        },
+        {
+          "type": "dispel",
+          "dispelTarget": "unit",
+          "category": [
+            "buff"
+          ],
+          "target": "same_target",
+          "note": "剧情定格：改剧本"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08i_soon_end",
+      "name": "落幕前提",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "plot",
+      "flagship": false,
+      "describe": "主动（0 吟唱，30tick CD）。铺垫落幕：敌方全体「荒芜」剥护（受伤 +1，10tick），自身行动条速率 +2（5tick）——好戏要收场了。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 30,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "vulnerable",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "all_enemies",
+          "note": "落幕前提：剥护"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "gauge.rate",
+          "value": 2,
+          "mode": "delta",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "落幕前提：加速收场"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h08i_define_real",
+      "name": "定义现实",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "plot",
+      "flagship": false,
+      "describe": "主动（0 吟唱，45tick CD）。我说什么是真的：敌方全体受 3 点伤害并沉默 5tick（空想压过现实，非真存反噬已由落幕前提兑付）——剧终。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 45,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 3,
+          "target": "all_enemies",
+          "note": "定义现实：全体 3 点"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "silence",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "all_enemies",
+          "note": "定义现实：静默"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

@@ -1,0 +1,302 @@
+{
+  "level": "hero",
+  "heroId": "hero_05_c",
+  "heroName": "英雄·伍丙",
+  "family": "family_11",
+  "faction": "faction_05",
+  "playstyle": "守卷人——知识预存，施法省时：卷轴库存就是我的法术栏（卷轴预存的英雄轴）。",
+  "cards": [
+    {
+      "id": "h05c_frost_scroll",
+      "name": "冰冻卷轴",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "scroll",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。拆一卷冰冻卷轴：术法对敌方任意单位造成 3 点冰属性伤害并减速 5tick——预存的寒意。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "ice",
+          "value": 3,
+          "target": "target",
+          "note": "冰冻卷轴：冰伤 3 点"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "slow",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "same_target",
+          "note": "冰冻卷轴：迟滞"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h05c_paralyze_scroll",
+      "name": "麻痹卷轴",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "scroll",
+      "flagship": false,
+      "describe": "主动（0 吟唱，25tick CD）。拆一卷麻痹卷轴：已被减速的目标直接僵住（眩晕 2tick），其余目标僵直 1tick——知识对慢者最狠。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "slow",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "stun",
+              "duration": 2,
+              "durationUnit": "tick",
+              "target": "target",
+              "note": "麻痹卷轴：眩晕 2tick"
+            }
+          ],
+          "else": [
+            {
+              "type": "mount_status",
+              "statusId": "stun",
+              "duration": 1,
+              "durationUnit": "tick",
+              "target": "target",
+              "note": "麻痹卷轴：僵直 1tick"
+            }
+          ]
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h05c_lore_read",
+      "name": "秘识",
+      "kind": "passive",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "scroll",
+      "flagship": false,
+      "describe": "被动。secrecy ≥5 时，每个自身回合开始自身攻击 +1（5tick，每回合重判）——秘幕越深，知识越烫。",
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "meter_compare",
+            "key": "secrecy",
+            "cmp": ">=",
+            "n": 5
+          },
+          "then": [
+            {
+              "type": "modify_stat",
+              "stat": "attack",
+              "value": 1,
+              "mode": "delta",
+              "duration": 5,
+              "durationUnit": "tick",
+              "target": "self",
+              "note": "秘识：攻击 +1"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_turn_start",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "meter_compare",
+                "key": "secrecy",
+                "cmp": ">=",
+                "n": 5
+              },
+              "then": [
+                {
+                  "type": "modify_stat",
+                  "stat": "attack",
+                  "value": 1,
+                  "mode": "delta",
+                  "duration": 5,
+                  "durationUnit": "tick",
+                  "target": "self",
+                  "note": "秘识：攻击 +1"
+                }
+              ],
+              "else": []
+            }
+          ],
+          "note": "secrecy 读层（只读）"
+        }
+      ],
+      "hook": [
+        "on_turn_start"
+      ]
+    },
+    {
+      "id": "h05c_scrying",
+      "name": "窥秘之眼",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "scroll",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。睁开窥秘之眼 15tick（看破增益与隐匿，见蓝本）——卷轴上写的我都看得见。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "scrying_eye",
+          "duration": 15,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "窥秘之眼：解析 15tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h05c_unroll",
+      "name": "当场拆卷",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "scroll",
+      "flagship": false,
+      "describe": "主动（0 吟唱，18tick CD）。预存兑现：自身 10tick 窗口内下一次主动技免吟唱——卷轴省的是时间，不是步骤。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 18,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "free_cast",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "当场拆卷：免吟唱窗口"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h05c_apocalypse",
+      "name": "末日卷轴",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "scroll",
+      "flagship": false,
+      "describe": "主动（0 吟唱，45tick CD）。揭封被隐藏的真相：敌方全体受 4 点精神伤害并沉默 5tick——这份知识不适合所有人。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 45,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "mental",
+          "value": 4,
+          "target": "all_enemies",
+          "note": "末日卷轴：精神 4 点"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "silence",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "all_enemies",
+          "note": "末日卷轴：封声"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

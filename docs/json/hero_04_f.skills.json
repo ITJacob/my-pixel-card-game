@@ -1,0 +1,288 @@
+{
+  "level": "hero",
+  "heroId": "hero_04_f",
+  "heroName": "英雄·肆己",
+  "family": "family_10",
+  "faction": "faction_04",
+  "playstyle": "顺手牵羊——你的就是我的（临时的）：能量、增益、命运，万物有当期（窃取置换的英雄轴）。",
+  "cards": [
+    {
+      "id": "h04f_pickpocket",
+      "name": "顺手",
+      "kind": "active",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "steal",
+      "flagship": false,
+      "describe": "主动（0 吟唱，12tick CD）。术法顺手牵羊：窃取敌方任意单位 1 点能量——手法快过眼睛。",
+      "cost": {
+        "energy": 1,
+        "cooldown": 12,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "drain",
+          "resource": "energy",
+          "value": 1,
+          "target": "target",
+          "note": "顺手：窃取能量 1"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h04f_steal_buff",
+      "name": "偷增益",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "steal",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。术法偷取敌方任意单位的一个增益（驱散之），转手给自己套「护盾」5tick——只有持有中，没有拥有。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "dispel",
+          "dispelTarget": "unit",
+          "category": [
+            "buff"
+          ],
+          "target": "target",
+          "note": "偷增益：剥来"
+        },
+        {
+          "type": "mount_status",
+          "statusId": "shield",
+          "duration": 5,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "偷增益：转手成盾"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h04f_gap_attack",
+      "name": "趁隙",
+      "kind": "passive",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "steal",
+      "flagship": false,
+      "describe": "被动。自身对「易伤」目标造成伤害时，看准缝隙，自身攻击 +1（5tick）——破防的人最好偷。",
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "vulnerable",
+            "cmp": ">=",
+            "n": 1
+          },
+          "then": [
+            {
+              "type": "modify_stat",
+              "stat": "attack",
+              "value": 1,
+              "mode": "delta",
+              "duration": 5,
+              "durationUnit": "tick",
+              "target": "self",
+              "note": "趁隙：攻击 +1"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_deal_damage",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "has_status",
+                "side": "target",
+                "id": "vulnerable",
+                "cmp": ">=",
+                "n": 1
+              },
+              "then": [
+                {
+                  "type": "modify_stat",
+                  "stat": "attack",
+                  "value": 1,
+                  "mode": "delta",
+                  "duration": 5,
+                  "durationUnit": "tick",
+                  "target": "self",
+                  "note": "趁隙：攻击 +1"
+                }
+              ],
+              "else": []
+            }
+          ],
+          "note": "易伤读层"
+        }
+      ],
+      "hook": [
+        "on_deal_damage"
+      ]
+    },
+    {
+      "id": "h04f_due_note",
+      "name": "当票",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "steal",
+      "flagship": false,
+      "describe": "主动（0 吟唱，25tick CD）。术法开出当票：敌方任意单位被「当票」标记 15tick（归还窗口，见蓝本）——到期强还，规矩我定。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "due_note",
+          "duration": 15,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "当票：归还窗口 15tick"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h04f_scapegoat",
+      "name": "顶包",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "steal",
+      "flagship": false,
+      "describe": "主动（0 吟唱，25tick CD）。术法让敌方任意单位「魅惑」3tick 顶包背锅，自身后撤一格——李代桃僵，走为上。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "charm",
+          "duration": 3,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "顶包：魅惑 3tick"
+        },
+        {
+          "type": "move",
+          "op": "push_back",
+          "target": "self",
+          "note": "顶包：抽身"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h04f_grand_theft",
+      "name": "大盗",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "steal",
+      "flagship": false,
+      "describe": "主动（0 吟唱，40tick CD）。术法连锅端：窃取敌方任意单位 3 点能量并全额转化为自身回复——大盗不留空门。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 40,
+        "castTime": 0
+      },
+      "reach": "spell",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "drain",
+          "resource": "energy",
+          "value": 3,
+          "healRatio": 1.0,
+          "target": "target",
+          "note": "大盗：窃 3 能全额回血"
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}

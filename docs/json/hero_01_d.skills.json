@@ -1,0 +1,336 @@
+{
+  "level": "hero",
+  "heroId": "hero_01_d",
+  "heroName": "英雄·壹丁",
+  "family": "family_01",
+  "faction": "faction_01",
+  "playstyle": "送葬人——我不杀你，我送你老：交手即迟暮，崩解一到万物落幕（衰败引擎的英雄轴）。",
+  "cards": [
+    {
+      "id": "h01d_decay_touch",
+      "name": "迟暮之触",
+      "kind": "passive",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "twilight",
+      "flagship": false,
+      "describe": "被动。每次对敌方单位造成伤害时，目标叠加 1 层「老化」——交手即开始落幕。",
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "aging",
+          "duration": null,
+          "durationUnit": "tick",
+          "target": "target",
+          "stacks": 1,
+          "stackMode": "add",
+          "note": "迟暮之触：老化 +1 层"
+        }
+      ],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_deal_damage",
+          "effects": [
+            {
+              "type": "mount_status",
+              "statusId": "aging",
+              "duration": null,
+              "durationUnit": "tick",
+              "target": "target",
+              "stacks": 1,
+              "stackMode": "add",
+              "note": "迟暮之触：老化 +1 层"
+            }
+          ],
+          "note": "伤害路由到目标的衰败账上"
+        }
+      ],
+      "hook": [
+        "on_deal_damage"
+      ]
+    },
+    {
+      "id": "h01d_rush_hour",
+      "name": "崩解窗口",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "twilight",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。近战对敌方队首造成 3 点伤害；目标「老化」≥3 层时崩解窗口已开，伤害 +2。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "melee",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "point",
+          "pickCount": 1,
+          "anchor": "enemy_front"
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 3,
+          "target": "target",
+          "note": "崩解窗口：基础 3 点"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "aging",
+            "cmp": ">=",
+            "n": 3
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 2,
+              "target": "same_target",
+              "note": "崩解窗口：老化 ≥3，+2"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h01d_twilight_stance",
+      "name": "暮势",
+      "kind": "active",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "twilight",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。摆出暮势：自身获得「反击姿态」10tick——贴身的每一刀都要还。",
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "counter_stance",
+          "duration": 10,
+          "durationUnit": "tick",
+          "target": "self",
+          "note": "暮势：反击姿态"
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h01d_last_sunset",
+      "name": "迟暮重击",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "twilight",
+      "flagship": false,
+      "describe": "主动（0 吟唱，25tick CD）。近战对敌方队首造成 4 点伤害；相位处于黄昏或夜晚时加重 2 点并「荒芜」剥护（受伤 +1，10tick）——落幕时分最重。",
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "melee",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "point",
+          "pickCount": 1,
+          "anchor": "enemy_front"
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 4,
+          "target": "target",
+          "note": "迟暮重击：基础 4 点"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "phase_is",
+            "phases": [
+              "dusk",
+              "night"
+            ]
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 2,
+              "target": "same_target",
+              "note": "迟暮重击·暮档：+2"
+            },
+            {
+              "type": "mount_status",
+              "statusId": "vulnerable",
+              "duration": 10,
+              "durationUnit": "tick",
+              "target": "same_target",
+              "note": "迟暮重击：荒芜剥护"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    },
+    {
+      "id": "h01d_dusk_mend",
+      "name": "暮祷",
+      "kind": "passive",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "twilight",
+      "flagship": false,
+      "describe": "被动。相位处于夜晚时，每个自身回合开始自身回复 2 点生命；白昼无效果——落幕前的片刻安宁。",
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "phase_is",
+            "phases": [
+              "night"
+            ]
+          },
+          "then": [
+            {
+              "type": "heal",
+              "value": 2,
+              "target": "self",
+              "note": "暮祷：夜幕回复 2"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false,
+      "triggers": [
+        {
+          "event": "on_turn_start",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "phase_is",
+                "phases": [
+                  "night"
+                ]
+              },
+              "then": [
+                {
+                  "type": "heal",
+                  "value": 2,
+                  "target": "self",
+                  "note": "暮祷：夜幕回复 2"
+                }
+              ],
+              "else": []
+            }
+          ],
+          "note": "相位读层（只读）"
+        }
+      ],
+      "hook": [
+        "on_turn_start"
+      ]
+    },
+    {
+      "id": "h01d_final_collapse",
+      "name": "万物崩解",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "twilight",
+      "flagship": false,
+      "describe": "主动（0 吟唱，40tick CD）。近战对敌方队首造成 5 点伤害；目标「老化」≥5 层时崩解兑现，再受 5 点——万物皆有终点。",
+      "cost": {
+        "energy": 4,
+        "cooldown": 40,
+        "castTime": 0
+      },
+      "reach": "melee",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "point",
+          "pickCount": 1,
+          "anchor": "enemy_front"
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 5,
+          "target": "target",
+          "note": "万物崩解：基础 5 点"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "target",
+            "id": "aging",
+            "cmp": ">=",
+            "n": 5
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 5,
+              "target": "same_target",
+              "note": "万物崩解：老化 ≥5，兑现 5 点"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "tentative": false
+    }
+  ],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}
