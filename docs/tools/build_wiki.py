@@ -74,6 +74,21 @@ blockquote{border-left:3px solid var(--ac);margin:1em 0;padding:.2em 1em;color:v
 .card h3{margin:0 0 6px;font-size:15px}
 .mut{color:var(--mut);font-size:12.5px}
 footer{color:var(--mut);font-size:12px;margin-top:40px;border-top:1px solid var(--line);padding-top:12px}
+main{min-width:0}
+table{display:block;overflow-x:auto}
+@media (max-width:760px){
+body{display:block;font-size:14px}
+aside{position:static;width:auto;height:auto;flex:none;border-right:none;border-bottom:1px solid var(--line);padding:12px 12px 8px}
+aside .brand{display:inline-block;margin:0 12px 6px 0}
+aside h4{display:inline-block;margin:6px 10px 2px 0;vertical-align:baseline}
+aside a{display:inline-block;padding:3px 8px;margin:2px 2px;font-size:13px}
+main{padding:16px 14px;max-width:none}
+table{font-size:12.5px}
+.grid{grid-template-columns:1fr 1fr;gap:8px}
+.card{padding:10px 12px}
+main h1{font-size:22px}
+main h2{font-size:18px}
+}
 """
 
 
