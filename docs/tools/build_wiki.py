@@ -2,7 +2,7 @@
 """GitHub Pages wiki 静态生成器。
 
 输入：docs/ 下全部设计文档（md）+ docs/json/ 卡池数据。
-输出：_site/（纯静态 HTML，侧栏导航，无 JS 依赖）。
+输出：_site/（纯静态 HTML，侧栏导航；PWA 可安装：manifest + service worker 离线缓存）。
 用法：python docs/tools/build_wiki.py  （仓库根运行；wiki/ 为主题资源目录）
 """
 import io
@@ -126,6 +126,66 @@ def pool_table(items, cols, title=''):
     return h + '<table><tr>' + head + '</tr>' + ''.join(rows) + '</table>'
 
 
+SW_JS = """/* wiki 离线缓存： precache 骨架 + 运行时缓存同源自举 */
+const CACHE = 'wiki-v1';
+const CORE = ['index.html', 'style.css', 'manifest.webmanifest'];
+self.addEventListener('install', e => {
+  e.waitUntil(caches.open(CACHE)
+    .then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
+});
+self.addEventListener('activate', e => {
+  e.waitUntil(caches.keys()
+    .then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k))))
+    .then(() => self.clients.claim()));
+});
+self.addEventListener('fetch', e => {
+  const u = new URL(e.request.url);
+  if (e.request.method !== 'GET' || u.origin !== location.origin) return;
+  e.respondWith(
+    caches.match(e.request).then(hit => hit || fetch(e.request).then(res => {
+      if (res.ok) {
+        const copy = res.clone();
+        caches.open(CACHE).then(c => c.put(e.request, copy));
+      }
+      return res;
+    })));
+});
+"""
+
+SW_REGISTER = """<script>
+if ('serviceWorker' in navigator && location.protocol.startsWith('http'))
+  navigator.serviceWorker.register('%ssw.js');
+</script>"""
+
+
+def _png(size, path):
+    """纯 Python 生成图标：深底 + 琥珀圆环 + 蓝心（无第三方依赖）。"""
+    import struct
+    import zlib
+    bg, ring, core = (22, 24, 29), (224, 169, 78), (127, 180, 216)
+    cx = cy = size / 2
+    r_out, r_in = size * 0.36, size * 0.16
+    rows = []
+    for y in range(size):
+        row = bytearray([0])
+        for x in range(size):
+            d = ((x + .5 - cx) ** 2 + (y + .5 - cy) ** 2) ** .5
+            c = core if d < r_in else (ring if d < r_out else bg)
+            row += bytes(c)
+        rows.append(bytes(row))
+    raw = b''.join(rows)
+
+    def chunk(tag, data):
+        return (struct.pack('>I', len(data)) + tag + data
+                + struct.pack('>I', zlib.crc32(tag + data) & 0xffffffff))
+
+    png = (b'\x89PNG\r\n\x1a\n'
+           + chunk(b'IHDR', struct.pack('>IIBBBBB', size, size, 8, 2, 0, 0, 0))
+           + chunk(b'IDAT', zlib.compress(raw, 9))
+           + chunk(b'IEND', b''))
+    io.open(path, 'wb').write(png)
+
+
 class Site:
     def __init__(self):
         self.pages = {}   # path -> (title, body_html)
@@ -150,6 +210,25 @@ class Site:
             html = self.shell(path, title, body)
             io.open(full, 'w', encoding='utf-8').write(html)
         io.open(os.path.join(OUT, 'style.css'), 'w', encoding='utf-8').write(CSS)
+        # PWA：manifest + service worker + 图标
+        manifest = {
+            "name": SITE_TITLE,
+            "short_name": "设计Wiki",
+            "start_url": ".",
+            "scope": ".",
+            "display": "standalone",
+            "background_color": "#16181d",
+            "theme_color": "#16181d",
+            "icons": [
+                {"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
+                {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"},
+            ],
+        }
+        io.open(os.path.join(OUT, 'manifest.webmanifest'), 'w',
+                encoding='utf-8').write(json.dumps(manifest, ensure_ascii=False))
+        io.open(os.path.join(OUT, 'sw.js'), 'w', encoding='utf-8').write(SW_JS)
+        _png(192, os.path.join(OUT, 'icon-192.png'))
+        _png(512, os.path.join(OUT, 'icon-512.png'))
 
     def shell(self, cur, title, body):
         # 相对路径：file:// 本地打开和 GitHub Pages 项目子路径下都能工作
@@ -166,11 +245,15 @@ class Site:
                 nav.append(f'<a href="{rel(p)}"{style}>{esc(t)}</a>')
         return ('<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">'
                 '<meta name="viewport" content="width=device-width,initial-scale=1">'
+                '<meta name="theme-color" content="#16181d">'
                 f'<title>{esc(title)} · {SITE_TITLE}</title>'
-                f'<link rel="stylesheet" href="{rel("style.css")}"></head><body>'
+                f'<link rel="stylesheet" href="{rel("style.css")}">'
+                f'<link rel="manifest" href="{rel("manifest.webmanifest")}">'
+                f'<link rel="icon" type="image/png" href="{rel("icon-192.png")}">'
+                '</head><body>'
                 f'<aside>{"".join(nav)}</aside><main>{body}'
                 f'<footer>生成自仓库 docs/ 权威源 · push main 自动部署</footer>'
-                '</main></body></html>')
+                '</main>' + SW_REGISTER % prefix + '</body></html>')
 
 
 def load_md(path):
