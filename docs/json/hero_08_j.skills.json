@@ -1,0 +1,307 @@
+{
+  "level": "hero",
+  "heroId": "hero_08_j",
+  "heroName": "英雄·捌癸",
+  "family": "family_20",
+  "faction": "faction_08",
+  "playstyle": "讨债人——契约是围栏，灵魂是押金：放出去的都要连本带利收回来（契约制衡的英雄轴）。",
+  "cards": [
+    {
+      "id": "h08j_graze_out",
+      "name": "出栏",
+      "kind": "passive",
+      "sequence": 8,
+      "rarity": "common",
+      "axis": "pact",
+      "flagship": false,
+      "describe": "被动。每个自身回合开始，自身放牧灵魂 +1 层——放出去的，才是资产。",
+      "tentative": false,
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "soul_herd",
+          "stacks": 1,
+          "stackMode": "add",
+          "target": "self",
+          "note": "出栏：存栏 +1"
+        }
+      ],
+      "triggers": [
+        {
+          "event": "on_turn_start",
+          "effects": [
+            {
+              "type": "mount_status",
+              "statusId": "soul_herd",
+              "stacks": 1,
+              "stackMode": "add",
+              "target": "self",
+              "note": "出栏：存栏 +1"
+            }
+          ],
+          "note": "放牧槽写入（可追偿）"
+        }
+      ],
+      "hook": [
+        "on_turn_start"
+      ]
+    },
+    {
+      "id": "h08j_blood_deal",
+      "name": "血契",
+      "kind": "active",
+      "sequence": 7,
+      "rarity": "uncommon",
+      "axis": "pact",
+      "flagship": false,
+      "describe": "主动（0 吟唱，15tick CD）。押上血肉本金：自耗 1 血（钳 1 不致死），换 2 点能量——本金越薄，利息越狠。",
+      "tentative": false,
+      "cost": {
+        "energy": 0,
+        "cooldown": 15,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 1,
+          "target": "self",
+          "note": "血契：本金 1 血"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "energy",
+          "value": 2,
+          "mode": "delta",
+          "target": "self",
+          "note": "血契：换能 2"
+        }
+      ]
+    },
+    {
+      "id": "h08j_soul_tax",
+      "name": "魂税减免",
+      "kind": "passive",
+      "sequence": 6,
+      "rarity": "uncommon",
+      "axis": "pact",
+      "flagship": false,
+      "describe": "被动。自身存栏 ≥2 时，每个自身回合开始获「护盾」3tick——规模养殖有减免。",
+      "tentative": false,
+      "effects": [
+        {
+          "op": "if",
+          "condition": {
+            "kind": "has_status",
+            "side": "self",
+            "id": "soul_herd",
+            "cmp": ">=",
+            "n": 2
+          },
+          "then": [
+            {
+              "type": "mount_status",
+              "statusId": "shield",
+              "duration": 3,
+              "durationUnit": "tick",
+              "target": "self",
+              "note": "魂税减免：护盾 3tick"
+            }
+          ],
+          "else": []
+        }
+      ],
+      "triggers": [
+        {
+          "event": "on_turn_start",
+          "effects": [
+            {
+              "op": "if",
+              "condition": {
+                "kind": "has_status",
+                "side": "self",
+                "id": "soul_herd",
+                "cmp": ">=",
+                "n": 2
+              },
+              "then": [
+                {
+                  "type": "mount_status",
+                  "statusId": "shield",
+                  "duration": 3,
+                  "durationUnit": "tick",
+                  "target": "self",
+                  "note": "魂税减免：护盾 3tick"
+                }
+              ],
+              "else": []
+            }
+          ],
+          "note": "存栏读层"
+        }
+      ],
+      "hook": [
+        "on_turn_start"
+      ]
+    },
+    {
+      "id": "h08j_pact_bind",
+      "name": "立契",
+      "kind": "active",
+      "sequence": 5,
+      "rarity": "rare",
+      "axis": "pact",
+      "flagship": false,
+      "describe": "主动（0 吟唱，25tick CD）。与友方任意单位立契 15tick（血契蓝本：交换与束缚的双边账目）——契成，账起。",
+      "tentative": false,
+      "cost": {
+        "energy": 3,
+        "cooldown": 25,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "manual",
+        "request": {
+          "mode": "unit",
+          "faction": "self_or_ally",
+          "scope": "board",
+          "pickCount": 1
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "mount_status",
+          "statusId": "blood_pact",
+          "duration": 15,
+          "durationUnit": "tick",
+          "target": "target",
+          "note": "立契：血契 15tick"
+        }
+      ]
+    },
+    {
+      "id": "h08j_recall_due",
+      "name": "到期追偿",
+      "kind": "active",
+      "sequence": 4,
+      "rarity": "rare",
+      "axis": "pact",
+      "flagship": false,
+      "describe": "主动（0 吟唱，20tick CD）。牧场召回清算：自身放牧灵魂清零（可追偿，见蓝本），回复 4 点生命并返还 1 点能量——连本带利。",
+      "tentative": false,
+      "cost": {
+        "energy": 2,
+        "cooldown": 20,
+        "castTime": 0
+      },
+      "reach": "none",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "self",
+          "scope": "point"
+        },
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "heal",
+          "value": 4,
+          "target": "self",
+          "note": "到期追偿：回血 4"
+        },
+        {
+          "type": "modify_resource",
+          "resource": "energy",
+          "value": 1,
+          "mode": "delta",
+          "target": "self",
+          "note": "到期追偿：返息 1"
+        },
+        {
+          "type": "modify_status",
+          "statusId": "soul_herd",
+          "stacksDelta": -99,
+          "target": "self",
+          "note": "到期追偿：存栏清零"
+        }
+      ]
+    },
+    {
+      "id": "h08j_foreclose",
+      "name": "查封",
+      "kind": "active",
+      "sequence": 3,
+      "rarity": "epic",
+      "axis": "pact",
+      "flagship": false,
+      "describe": "主动（0 吟唱，40tick CD）。上门查封：近战对敌方队首造成 4 点伤害；自身本金不高于 50% 血线时六亲不认，伤害 +2。",
+      "tentative": false,
+      "cost": {
+        "energy": 4,
+        "cooldown": 40,
+        "castTime": 0
+      },
+      "reach": "melee",
+      "target": {
+        "selectionMode": "auto",
+        "request": {
+          "mode": "unit",
+          "faction": "enemy",
+          "scope": "point",
+          "pickCount": 1,
+          "anchor": "enemy_front"
+        },
+        "fallbackSort": "index_asc",
+        "consumption": "instant"
+      },
+      "effects": [
+        {
+          "type": "damage",
+          "element": "none",
+          "value": 4,
+          "target": "target",
+          "note": "查封：4 点"
+        },
+        {
+          "op": "if",
+          "condition": {
+            "kind": "hp_percent",
+            "side": "self",
+            "cmp": "<=",
+            "n": 50
+          },
+          "then": [
+            {
+              "type": "damage",
+              "element": "none",
+              "value": 2,
+              "target": "same_target",
+              "note": "查封·薄本：+2"
+            }
+          ],
+          "else": []
+        }
+      ]
+    }
+  ],
+  "statusDefs": [],
+  "unitDefs": [],
+  "zoneDefs": [],
+  "domainDefs": []
+}
