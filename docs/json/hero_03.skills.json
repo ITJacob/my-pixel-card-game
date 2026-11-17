@@ -440,5 +440,29 @@
   "statusDefs": [],
   "unitDefs": [],
   "zoneDefs": [],
-  "domainDefs": []
+  "domainDefs": [
+    {
+      "id": "order_bedrock",
+      "tier": "overlay",
+      "dispelable": true,
+      "duration": 40,
+      "durationUnit": "tick",
+      "triggers": [],
+      "rulePatches": [
+        {
+          "kind": "disable_effect",
+          "side": "both",
+          "effectType": "shield",
+          "note": "护盾段不吸收伤害（伤害链既定节点读取，敌我同改）"
+        }
+      ],
+      "envRules": [
+        "全场（双向）：治疗量 ×2",
+        "全场（双向）：护盾不再吸收伤害",
+        "全场（双向）：放逐与传送类效果封印"
+      ],
+      "extraRuleNote": "治疗量 ×2 与放逐/传送封印当前只以环境规则文本承接，未绑定机器可读节点；effectType 值域尚无文档正源，待登记后再补，属有意后置，不得读作已闭合。己方豁免、迷失值 +1 与战场秩序度 +2 由卡面 effects 承载。",
+      "note": "底层规则域定义态；承接卡面 domain.def 与 effects.steps[0].def。卡面 op=overlay，故 tier=overlay 而非 hero。"
+    }
+  ]
 }

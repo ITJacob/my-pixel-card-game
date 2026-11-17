@@ -13,7 +13,7 @@
 ```
 docs/
 ├─ ddd/            战斗内核 DDD 设计（权威正源，纯内容）
-│  ├─ README.md    总览 + 20 条核心不变量
+│  ├─ README.md    总览 + 29 条核心不变量
 │  ├─ contexts/    战斗/编队/效果/战场/编目 五上下文
 │  └─ params/      效果/执行/编队 参数取值域
 ├─ meta/           流程·规范·映射表（WORKFLOW / SCHEMA / 骨架重议 / 待办 / 迁移映射表 / glossary）

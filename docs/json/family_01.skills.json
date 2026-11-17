@@ -2367,7 +2367,7 @@
               "type": "modify_skill",
               "skillRef": {
                 "selector": "by_id",
-                "skillId": "skill_warrior_s6_dawn_blade"
+                "skillId": "j01_standard_blade"
               },
               "setOpportunity": 0,
               "note": "权柄特权：立即拔刀，本次行动机会不消耗且只能再执行一次普攻"
@@ -2376,7 +2376,7 @@
               "type": "modify_skill",
               "skillRef": {
                 "selector": "by_id",
-                "skillId": "skill_warrior_s3_silver_rapier"
+                "skillId": "j01_silver_rapier"
               },
               "setOpportunity": 0,
               "note": "权柄特权：立即拔刀，本次行动机会不消耗且只能再执行一次普攻"
@@ -2385,7 +2385,7 @@
               "type": "modify_skill",
               "skillRef": {
                 "selector": "by_id",
-                "skillId": "skill_warrior_s2_twilight_greatsword"
+                "skillId": "j01_twilight_greatsword"
               },
               "setOpportunity": 0,
               "note": "权柄特权：立即拔刀，本次行动机会不消耗且只能再执行一次普攻"

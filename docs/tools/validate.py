@@ -510,6 +510,36 @@ def main():
                     _refs["defs"].setdefault(_x["id"], _x)
     pre_errors, pre_warns = [], []
 
+    # 引用完整性（INV-C1）：任一以 id 指向定义态的字段不可解析即报错。
+    # 与 statusId 类校验并行，覆盖 domain/zone/unit 的 def 与 modify_skill.skillId；
+    # 在编目期一次性全量扫描，运行期不重解析。
+    _all_card_ids = set()
+    for _f in files:
+        try: _cd = json.load(io.open(_f, encoding="utf-8"))
+        except Exception: continue
+        for _c in _cd.get("cards") or []:
+            if isinstance(_c, dict) and _c.get("id"):
+                _all_card_ids.add(_c["id"])
+
+    def _walk_ref_ids(_o, _fid, _path):
+        if isinstance(_o, dict):
+            for _k, _v in _o.items():
+                _p = _path + "." + _k
+                if _k == "def" and isinstance(_v, str) and _v not in _refs["defs"]:
+                    pre_errors.append("%s %s: 悬空 def 引用 %s（unit/zone/domain 三池无此定义）" % (_fid, _p, _v))
+                if _k == "skillId" and isinstance(_v, str) and _v not in _all_card_ids:
+                    pre_errors.append("%s %s: 悬空 skillId 引用 %s（全库卡 id 无此条）" % (_fid, _p, _v))
+                _walk_ref_ids(_v, _fid, _p)
+        elif isinstance(_o, list):
+            for _i, _v in enumerate(_o):
+                _walk_ref_ids(_v, _fid, _path + "[%d]" % _i)
+
+    for _f in files:
+        _fid = os.path.basename(_f).replace(".skills.json", "")
+        try: _rd = json.load(io.open(_f, encoding="utf-8"))
+        except Exception: continue
+        _walk_ref_ids(_rd, _fid, "root")
+
     # 状态定义层校验：三层文件顶层 statusDefs[]（原始定义；$extends 物化检查在 validate_schema）
     for f in files:
         fid = os.path.basename(f).replace('.skills.json', '')

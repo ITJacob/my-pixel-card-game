@@ -1914,6 +1914,46 @@
         }
       ],
       "extraRuleNote": "交互规则「违背代价 +1 层」走 decree 状态触发器的 Repeat 段数（G3），非补丁"
+    },
+    {
+      "id": "reality_press",
+      "tier": "overlay",
+      "dispelable": true,
+      "duration": 40,
+      "durationUnit": "tick",
+      "triggers": [],
+      "rulePatches": [
+        {
+          "kind": "cost_mod",
+          "delta": 1,
+          "note": "现实沉重：全场敌我技能能量费用 +1（commit 成本校验读取；双刃，敌我同价）"
+        }
+      ],
+      "envRules": [
+        "全场（双向）：技能费用 +1（现实沉重，敌我同价）"
+      ],
+      "extraRuleNote": "敌方全体攻击 -3、己方全体护甲 +3、自身迷失值 +1 与战场秩序度 +1 由卡面 effects 承载，不在本定义内重复。",
+      "note": "现实增强律令域定义态；承接卡面 domain.def 与 effects.steps[0].def。"
+    },
+    {
+      "id": "edict_seal",
+      "tier": "overlay",
+      "dispelable": true,
+      "duration": 20,
+      "durationUnit": "tick",
+      "triggers": [],
+      "rulePatches": [
+        {
+          "kind": "seal_effect",
+          "effectType": "domain",
+          "note": "全场敌我封印界域操作：本域存续期间一切 consumption:domain 行为失效（I 节点候选池读取）"
+        }
+      ],
+      "envRules": [
+        "全场（敌我同禁）：本域存续期间一切 consumption: domain 行为失效——无人能再切换界域"
+      ],
+      "extraRuleNote": "驱散现存上层界域由卡面 effects.steps[0] 的 dispel 节点承载；自身迷失值 +1 由 steps[2] 承载，不在本定义内重复。",
+      "note": "废止域定义态；承接卡面 domain.def 与 effects.steps[1].def。"
     }
   ]
 }
