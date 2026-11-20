@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "pages": {
+    "docs/ddd/contexts/战场上下文.md": "design/ctx-战场.html",
+    "docs/ddd/contexts/战斗上下文.md": "design/ctx-战斗.html",
+    "docs/ddd/contexts/效果上下文.md": "design/ctx-效果.html",
+    "docs/ddd/contexts/编目上下文.md": "design/ctx-编目.html",
+    "docs/ddd/contexts/编队上下文.md": "design/ctx-编队.html",
+    "docs/ddd/params/共享内核参数.md": "design/params-共享内核.html",
+    "docs/ddd/params/执行参数.md": "design/params-执行.html",
+    "docs/ddd/params/效果参数.md": "design/params-效果.html",
+    "docs/ddd/params/编队参数.md": "design/params-编队.html",
+    "docs/ddd/params/召唤物参数.md": "design/params-召唤物.html"
+  },
+  "concepts": [
+    {
+      "heading": "场地",
+      "refs": [
+        {"doc": "docs/ddd/contexts/战场上下文.md", "section": "空间结构"},
+        {"doc": "docs/ddd/contexts/战场上下文.md", "section": "Placement"},
+        {"doc": "docs/ddd/contexts/战场上下文.md", "section": "默认主动移动"},
+        {"doc": "docs/ddd/contexts/战场上下文.md", "section": "Collapse"}
+      ]
+    },
+    {
+      "heading": "时间与机会",
+      "refs": [
+        {"doc": "docs/ddd/contexts/战斗上下文.md", "section": "回合模型"},
+        {"doc": "docs/ddd/params/执行参数.md", "section": "调度"},
+        {"doc": "docs/ddd/params/执行参数.md", "section": "触发点"},
+        {"doc": "docs/ddd/params/执行参数.md", "section": "计时口径"}
+      ]
+    },
+    {
+      "heading": "行为",
+      "refs": [
+        {"doc": "docs/ddd/contexts/战斗上下文.md", "section": "行为可用性过滤"},
+        {"doc": "docs/ddd/contexts/战斗上下文.md", "section": "目标选择"},
+        {"doc": "docs/ddd/contexts/战斗上下文.md", "section": "行为流水线"},
+        {"doc": "docs/ddd/params/共享内核参数.md", "section": "目标系统"}
+      ]
+    },
+    {
+      "heading": "伤害",
+      "refs": [
+        {"doc": "docs/ddd/contexts/战斗上下文.md", "section": "伤害链"},
+        {"doc": "docs/ddd/params/编队参数.md", "section": "伤害链门槛"},
+        {"doc": "docs/ddd/contexts/效果上下文.md", "section": "边界裁定"},
+        {"doc": "docs/ddd/contexts/战斗上下文.md", "section": "元素与抗性"}
+      ]
+    },
+    {
+      "heading": "单位",
+      "refs": [
+        {"doc": "docs/ddd/contexts/战斗上下文.md", "section": "资源池"},
+        {"doc": "docs/ddd/contexts/编队上下文.md", "section": "单位属性"},
+        {"doc": "docs/ddd/contexts/编队上下文.md", "section": "装备两槽"},
+        {"doc": "docs/ddd/contexts/编队上下文.md", "section": "Unit 状态机"},
+        {"doc": "docs/ddd/contexts/编队上下文.md", "section": "召唤"}
+      ]
+    },
+    {
+      "heading": "战场层",
+      "refs": [
+        {"doc": "docs/ddd/contexts/战场上下文.md", "section": "界域（Domain）"},
+        {"doc": "docs/ddd/contexts/战场上下文.md", "section": "规则槽"},
+        {"doc": "docs/ddd/contexts/战场上下文.md", "section": "区域（Zone）"},
+        {"doc": "docs/ddd/contexts/战场上下文.md", "section": "时钟 / 相位"},
+        {"doc": "docs/ddd/contexts/战场上下文.md", "section": "战场量表"}
+      ]
+    }
+  ]
+}

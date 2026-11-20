@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>战场玩法</title>
+<style>
+  :root{--ink:#2b2620;--muted:#6c6357;--line:#d8d0be;--paper:#faf7f0;--card:#f3eee3;--red:#8c2f2f;--brass:#a87c3c;--slate:#4c6070;--green:#3f6b52}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:"Noto Serif SC","Songti SC",Georgia,serif;line-height:1.75;-webkit-text-size-adjust:100%;overflow-wrap:anywhere}
+  .wrap{max-width:900px;margin:0 auto;padding:48px 28px 80px}
+  h1{font-size:30px;font-weight:500;letter-spacing:.12em;margin:0 0 6px}
+  .lead{color:var(--muted);font-size:14px;margin:0 0 36px}
+  h2{font-size:19px;font-weight:500;margin:44px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  ul{margin:0;padding-left:20px}
+  li{margin:5px 0;font-size:15px}
+  figure{margin:22px 0 8px;padding:16px 16px 10px;background:#fff;border:1px solid var(--line);border-radius:10px}
+  figcaption{font-size:12px;color:var(--muted);margin-top:6px;text-align:center;letter-spacing:.05em}
+  svg{display:block;width:100%;height:auto}
+  svg.tall{display:none}
+  .gap{border-left:3px solid var(--red);padding:2px 0 2px 16px}
+  .gap li{font-size:14px}
+  .foot{margin-top:48px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+  @media (max-width:760px){
+    .wrap{padding:24px calc(14px + env(safe-area-inset-right)) calc(40px + env(safe-area-inset-bottom)) calc(14px + env(safe-area-inset-left))}
+    h1{font-size:24px}
+    h2{font-size:17px;margin:32px 0 12px}
+    li{font-size:14px}
+    figure{padding:10px 10px 8px}
+    svg:not(.tall){display:none}
+    svg.tall{display:block}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>战场玩法</h1>
+<p class="lead">两方在定长队列里按行动条轮流出手。一切行为走同一条结算流水线。</p>
+
+<h2>一、场地</h2>
+<ul>
+  <li>坐标 = 阵营 + 路 + 序号。上下两路，每路 4 格，0 号靠中线，全场 16 格。</li>
+  <li>单位占格。区域占坐标。界域不占格。</li>
+  <li>占位只经 Placement。变更后同一步内紧凑，队首不留空。</li>
+  <li>移动 = 插入目标位，后缀顺移。满路拒绝。跨阵营禁止。换路只在上、下两路之间。</li>
+  <li>区域监听占用变化，不监听移动动作。</li>
+</ul>
+<figure>
+<svg viewBox="0 0 680 248" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>上下两路战场几何</title>
+<desc>战场分上下两路，每路两侧各四格，零号格靠近中线，全场共十六格；占位变更后队列立即紧凑。</desc>
+<rect x="20" y="16" width="640" height="216" rx="16" fill="#f3eee3" stroke="#d8d0be" stroke-width="1"/>
+<text x="40" y="40" font-size="13" fill="#6c6357">己方半场</text>
+<text x="340" y="40" font-size="13" fill="#8c2f2f" text-anchor="middle">中线</text>
+<text x="640" y="40" font-size="13" fill="#6c6357" text-anchor="end">敌方半场</text>
+<line x1="340" y1="48" x2="340" y2="216" stroke="#8c2f2f" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="46" y="82" font-size="13" fill="#3f6b52" text-anchor="middle">上路</text>
+<text x="46" y="150" font-size="13" fill="#3f6b52" text-anchor="middle">下路</text>
+<g fill="#fff" stroke="#b9ae97" stroke-width="1">
+  <rect x="72" y="58" width="56" height="40" rx="6"/><rect x="136" y="58" width="56" height="40" rx="6"/>
+  <rect x="200" y="58" width="56" height="40" rx="6"/><rect x="264" y="58" width="56" height="40" rx="6"/>
+  <rect x="360" y="58" width="56" height="40" rx="6"/><rect x="424" y="58" width="56" height="40" rx="6"/>
+  <rect x="488" y="58" width="56" height="40" rx="6"/><rect x="552" y="58" width="56" height="40" rx="6"/>
+  <rect x="72" y="126" width="56" height="40" rx="6"/><rect x="136" y="126" width="56" height="40" rx="6"/>
+  <rect x="200" y="126" width="56" height="40" rx="6"/><rect x="264" y="126" width="56" height="40" rx="6"/>
+  <rect x="360" y="126" width="56" height="40" rx="6"/><rect x="424" y="126" width="56" height="40" rx="6"/>
+  <rect x="488" y="126" width="56" height="40" rx="6"/><rect x="552" y="126" width="56" height="40" rx="6"/>
+</g>
+<rect x="264" y="58" width="56" height="40" rx="6" fill="#e5eff2" stroke="#4c6070" stroke-width="1.5"/>
+<circle cx="292" cy="78" r="12" fill="#4c6070"/>
+<text x="292" y="82" font-size="11" fill="#fff" text-anchor="middle">单位</text>
+<rect x="360" y="126" width="56" height="40" rx="6" fill="#f7eaea" stroke="#8c2f2f" stroke-width="1.5"/>
+<circle cx="388" cy="146" r="12" fill="#8c2f2f"/>
+<text x="388" y="150" font-size="11" fill="#fff" text-anchor="middle">单位</text>
+<g font-size="12" fill="#6c6357" text-anchor="middle">
+  <text x="100" y="112">3</text><text x="164" y="112">2</text><text x="228" y="112">1</text><text x="292" y="112">0</text>
+  <text x="388" y="112">0</text><text x="452" y="112">1</text><text x="516" y="112">2</text><text x="580" y="112">3</text>
+  <text x="100" y="180">3</text><text x="164" y="180">2</text><text x="228" y="180">1</text><text x="292" y="180">0</text>
+  <text x="388" y="180">0</text><text x="452" y="180">1</text><text x="516" y="180">2</text><text x="580" y="180">3</text>
+</g>
+<path d="M100 202 L288 202" fill="none" stroke="#a87c3c" stroke-width="1.5" marker-end="url(#ar)"/>
+<text x="196" y="222" font-size="12" fill="#a87c3c" text-anchor="middle">坍缩：非空保序前移</text>
+<text x="500" y="222" font-size="12" fill="#8c2f2f" text-anchor="middle">换路 = 上 ↔ 下，不跨中线</text>
+<defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="#a87c3c" stroke-width="1.5"/></marker></defs>
+</svg>
+<svg class="tall" viewBox="0 0 340 232" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>上下两路战场几何（竖版）</title>
+<desc>上下两路，每路左右各四格，零号格靠近中线，全场十六格。</desc>
+<rect x="6" y="6" width="328" height="220" rx="12" fill="#f3eee3" stroke="#d8d0be" stroke-width="1"/>
+<text x="18" y="26" font-size="11" fill="#6c6357">己方半场</text>
+<text x="170" y="26" font-size="11" fill="#8c2f2f" text-anchor="middle">中线</text>
+<text x="322" y="26" font-size="11" fill="#6c6357" text-anchor="end">敌方半场</text>
+<line x1="170" y1="34" x2="170" y2="178" stroke="#8c2f2f" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="18" y="48" font-size="12" fill="#3f6b52">上路</text>
+<g fill="#fff" stroke="#b9ae97" stroke-width="1">
+  <rect x="18" y="54" width="32" height="32" rx="5"/><rect x="54" y="54" width="32" height="32" rx="5"/>
+  <rect x="90" y="54" width="32" height="32" rx="5"/><rect x="126" y="54" width="32" height="32" rx="5"/>
+  <rect x="182" y="54" width="32" height="32" rx="5"/><rect x="218" y="54" width="32" height="32" rx="5"/>
+  <rect x="254" y="54" width="32" height="32" rx="5"/><rect x="290" y="54" width="32" height="32" rx="5"/>
+  <rect x="18" y="124" width="32" height="32" rx="5"/><rect x="54" y="124" width="32" height="32" rx="5"/>
+  <rect x="90" y="124" width="32" height="32" rx="5"/><rect x="126" y="124" width="32" height="32" rx="5"/>
+  <rect x="182" y="124" width="32" height="32" rx="5"/><rect x="218" y="124" width="32" height="32" rx="5"/>
+  <rect x="254" y="124" width="32" height="32" rx="5"/><rect x="290" y="124" width="32" height="32" rx="5"/>
+</g>
+<rect x="126" y="54" width="32" height="32" rx="5" fill="#e5eff2" stroke="#4c6070" stroke-width="1.5"/>
+<circle cx="142" cy="70" r="11" fill="#4c6070"/>
+<text x="142" y="74" font-size="10" fill="#fff" text-anchor="middle">己</text>
+<rect x="182" y="124" width="32" height="32" rx="5" fill="#f7eaea" stroke="#8c2f2f" stroke-width="1.5"/>
+<circle cx="198" cy="140" r="11" fill="#8c2f2f"/>
+<text x="198" y="144" font-size="10" fill="#fff" text-anchor="middle">敌</text>
+<g font-size="11" fill="#6c6357" text-anchor="middle">
+  <text x="34" y="100">3</text><text x="70" y="100">2</text><text x="106" y="100">1</text><text x="142" y="100">0</text>
+  <text x="198" y="100">0</text><text x="234" y="100">1</text><text x="270" y="100">2</text><text x="306" y="100">3</text>
+  <text x="34" y="170">3</text><text x="70" y="170">2</text><text x="106" y="170">1</text><text x="142" y="170">0</text>
+  <text x="198" y="170">0</text><text x="234" y="170">1</text><text x="270" y="170">2</text><text x="306" y="170">3</text>
+</g>
+<text x="18" y="118" font-size="12" fill="#3f6b52">下路</text>
+<text x="170" y="196" font-size="11" fill="#a87c3c" text-anchor="middle">坍缩：非空保序前移 · 队首不留空</text>
+<text x="170" y="216" font-size="11" fill="#8c2f2f" text-anchor="middle">换路 = 上 ↔ 下，不跨中线</text>
+</svg>
+<figcaption>上下两路 · 每路 4 格 · 全场 16 格 · 0 号靠中线</figcaption>
+</figure>
+
+<h2>二、时间与机会</h2>
+<ul>
+  <li>tick 先推进世界：回复、冷却、吟唱、状态与区域计时、界域计时。推进完才授予机会。</li>
+  <li>行动条按速率增长，严格越过阈值得一次机会。同 tick 每单位至多一次。</li>
+  <li>先手 = 双方各自排序后交替合并。</li>
+  <li>一次机会内可连续行为，直到无可用行为或主动结束。</li>
+  <li>机会获得与结束都触发；机会作废也触发。</li>
+</ul>
+<figure>
+<svg viewBox="0 0 680 176" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>推进到机会再到行为闭合</title>
+<desc>tick 推进、越阈、先手合并、授予机会、行为流水线、机会闭合六个顺序阶段。</desc>
+<defs><marker id="b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="#a87c3c" stroke-width="1.5"/></marker></defs>
+<g font-size="13" text-anchor="middle" fill="#2b2620">
+  <rect x="24" y="44" width="100" height="58" rx="8" fill="#f3eee3" stroke="#d8d0be"/><text x="74" y="68">tick 推进</text><text x="74" y="88" font-size="11" fill="#6c6357">七项计时</text>
+  <rect x="140" y="44" width="100" height="58" rx="8" fill="#f3eee3" stroke="#d8d0be"/><text x="190" y="68">越阈</text><text x="190" y="88" font-size="11" fill="#6c6357">严格大于</text>
+  <rect x="256" y="44" width="100" height="58" rx="8" fill="#f3eee3" stroke="#d8d0be"/><text x="306" y="68">先手合并</text><text x="306" y="88" font-size="11" fill="#6c6357">双方交替</text>
+  <rect x="372" y="44" width="100" height="58" rx="8" fill="#e5eff2" stroke="#4c6070"/><text x="422" y="68">一次机会</text><text x="422" y="88" font-size="11" fill="#4c6070">至多一次</text>
+  <rect x="488" y="44" width="100" height="58" rx="8" fill="#e5eff2" stroke="#4c6070"/><text x="538" y="68">行为结算</text><text x="538" y="88" font-size="11" fill="#4c6070">可连续</text>
+</g>
+<g fill="none" stroke="#a87c3c" stroke-width="1.5" marker-end="url(#b)">
+  <path d="M126 73 L138 73"/><path d="M242 73 L254 73"/><path d="M358 73 L370 73"/><path d="M474 73 L486 73"/>
+</g>
+<text x="74" y="126" font-size="11" fill="#6c6357" text-anchor="middle">推进期</text>
+<text x="306" y="126" font-size="11" fill="#6c6357" text-anchor="middle">授予期</text>
+<line x1="24" y1="140" x2="366" y2="140" stroke="#d8d0be" stroke-width="1"/>
+<text x="195" y="158" font-size="12" fill="#8c2f2f" text-anchor="middle">推进与授予严格分离</text>
+<text x="538" y="158" font-size="12" fill="#8c2f2f" text-anchor="middle">闭合：作废也触发</text>
+</svg>
+<svg class="tall" viewBox="0 0 340 294" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>推进到机会再到行为闭合（竖版）</title>
+<desc>tick 推进、越阈、先手合并、授予机会、行为结算五个顺序阶段，推进与授予严格分离。</desc>
+<defs><marker id="v2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="#a87c3c" stroke-width="1.5"/></marker></defs>
+<g font-size="13" fill="#2b2620">
+  <rect x="24" y="8" width="292" height="40" rx="8" fill="#f3eee3" stroke="#d8d0be"/><text x="40" y="33">tick 推进</text><text x="300" y="33" font-size="11" fill="#6c6357" text-anchor="end">七项计时</text>
+  <rect x="24" y="62" width="292" height="40" rx="8" fill="#f3eee3" stroke="#d8d0be"/><text x="40" y="87">越阈</text><text x="300" y="87" font-size="11" fill="#6c6357" text-anchor="end">严格大于</text>
+  <rect x="24" y="116" width="292" height="40" rx="8" fill="#f3eee3" stroke="#d8d0be"/><text x="40" y="141">先手合并</text><text x="300" y="141" font-size="11" fill="#6c6357" text-anchor="end">双方交替</text>
+  <rect x="24" y="170" width="292" height="40" rx="8" fill="#e5eff2" stroke="#4c6070"/><text x="40" y="195">一次机会</text><text x="300" y="195" font-size="11" fill="#4c6070" text-anchor="end">至多一次</text>
+  <rect x="24" y="224" width="292" height="40" rx="8" fill="#e5eff2" stroke="#4c6070"/><text x="40" y="249">行为结算</text><text x="300" y="249" font-size="11" fill="#4c6070" text-anchor="end">可连续</text>
+</g>
+<g fill="none" stroke="#a87c3c" stroke-width="1.5" marker-end="url(#v2)">
+  <path d="M170 49 L170 60"/><path d="M170 103 L170 114"/><path d="M170 157 L170 168"/><path d="M170 211 L170 222"/>
+</g>
+<text x="170" y="284" font-size="11" fill="#8c2f2f" text-anchor="middle">推进与授予严格分离 · 机会作废也触发</text>
+</svg>
+<figcaption>一次 tick 的推进期与授予期</figcaption>
+</figure>
+
+<h2>三、行为</h2>
+<ul>
+  <li>可选底集 = 槽内技能 + 普攻 + 移动 + 跳过。</li>
+  <li>过滤顺序固定：冷却 → 在线装备 → 强制白名单 → 吟唱 → 能量 → 行动条。</li>
+  <li>选靶：候选池先过滤，再收缩。手动候选过多时等待玩家；无玩家按兜底排序。</li>
+  <li>转向单跳、防环。伤害随转向，状态类效果留原目标。</li>
+  <li>分流五路：直接结算 / 注册区域 / 召唤落位 / 注册界域 / 放逐。</li>
+  <li>群攻 = 每个目标一条独立结算链。近战必定对撞，两条结果同时应用。</li>
+</ul>
+<figure>
+<svg viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>行为流水线 I R M O</title>
+<desc>目标解释、动作期干预、消费分流、结果应用四阶段，决策期与动作期隔离。</desc>
+<defs><marker id="c" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="#a87c3c" stroke-width="1.5"/></marker></defs>
+<g font-size="14" text-anchor="middle" fill="#2b2620">
+  <rect x="30" y="40" width="140" height="66" rx="8" fill="#f3eee3" stroke="#d8d0be"/><text x="100" y="66">I 目标解释</text><text x="100" y="88" font-size="11" fill="#6c6357">候选池 → 冻结快照</text>
+  <rect x="194" y="40" width="140" height="66" rx="8" fill="#f3eee3" stroke="#d8d0be"/><text x="264" y="66">R 转向</text><text x="264" y="88" font-size="11" fill="#6c6357">单跳 · 防环</text>
+  <rect x="358" y="40" width="140" height="66" rx="8" fill="#e5eff2" stroke="#4c6070"/><text x="428" y="66">M 消费分流</text><text x="428" y="88" font-size="11" fill="#4c6070">五种落点</text>
+  <rect x="522" y="40" width="128" height="66" rx="8" fill="#e5eff2" stroke="#4c6070"/><text x="586" y="66">O 结果应用</text><text x="586" y="88" font-size="11" fill="#4c6070">逐目标判定</text>
+</g>
+<g fill="none" stroke="#a87c3c" stroke-width="1.5" marker-end="url(#c)">
+  <path d="M172 73 L192 73"/><path d="M336 73 L356 73"/><path d="M500 73 L520 73"/>
+</g>
+<line x1="30" y1="128" x2="334" y2="128" stroke="#4c6070" stroke-width="1"/>
+<line x1="358" y1="128" x2="650" y2="128" stroke="#8c2f2f" stroke-width="1"/>
+<text x="182" y="146" font-size="12" fill="#4c6070" text-anchor="middle">决策期：只读，不写状态</text>
+<text x="504" y="146" font-size="12" fill="#8c2f2f" text-anchor="middle">动作期：增量改写，不回写</text>
+<g font-size="11" fill="#6c6357" text-anchor="middle">
+  <text x="428" y="174">区域 / 召唤 / 界域 / 放逐 / 直接结算</text>
+</g>
+</svg>
+<svg class="tall" viewBox="0 0 340 268" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>行为流水线 I R M O（竖版）</title>
+<desc>目标解释、转向、消费分流、结果应用四阶段，决策期只读、动作期增量改写。</desc>
+<defs><marker id="v3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="#a87c3c" stroke-width="1.5"/></marker></defs>
+<g font-size="13" fill="#2b2620">
+  <rect x="24" y="8" width="292" height="44" rx="8" fill="#f3eee3" stroke="#d8d0be"/><text x="40" y="35">I 目标解释</text><text x="300" y="35" font-size="11" fill="#6c6357" text-anchor="end">候选池 → 冻结快照</text>
+  <rect x="24" y="66" width="292" height="44" rx="8" fill="#f3eee3" stroke="#d8d0be"/><text x="40" y="93">R 转向</text><text x="300" y="93" font-size="11" fill="#6c6357" text-anchor="end">单跳 · 防环</text>
+  <rect x="24" y="124" width="292" height="44" rx="8" fill="#e5eff2" stroke="#4c6070"/><text x="40" y="151">M 消费分流</text><text x="300" y="151" font-size="11" fill="#4c6070" text-anchor="end">五种落点</text>
+  <rect x="24" y="182" width="292" height="44" rx="8" fill="#e5eff2" stroke="#4c6070"/><text x="40" y="209">O 结果应用</text><text x="300" y="209" font-size="11" fill="#4c6070" text-anchor="end">逐目标判定</text>
+</g>
+<g fill="none" stroke="#a87c3c" stroke-width="1.5" marker-end="url(#v3)">
+  <path d="M170 53 L170 64"/><path d="M170 111 L170 122"/><path d="M170 169 L170 180"/>
+</g>
+<text x="170" y="252" font-size="11" fill="#8c2f2f" text-anchor="middle">决策期只读不写 · 动作期增量改写不回写</text>
+</svg>
+<figcaption>决策期与动作期物理隔离</figcaption>
+</figure>
+
+<h2>四、伤害</h2>
+<ul>
+  <li>五段固定：护盾 → 护甲 → 抗性 → 防御 → 乘区。次序不可改。</li>
+  <li>护甲只挡有形伤害。DoT 只过抗性与乘区。致死直连跳过全部减伤。</li>
+  <li>抗性钳制在 −50% 到 +75%。</li>
+  <li>链内只读不写；结果交既定节点落地。</li>
+</ul>
+<figure>
+<svg viewBox="0 0 680 166" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>伤害链五段与旁路</title>
+<desc>护盾、护甲、抗性、防御、乘区五段顺序固定，DoT 与致死直连各有旁路。</desc>
+<defs><marker id="d" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="#a87c3c" stroke-width="1.5"/></marker></defs>
+<g font-size="13" text-anchor="middle" fill="#2b2620">
+  <rect x="24" y="36" width="106" height="52" rx="8" fill="#f3eee3" stroke="#d8d0be"/><text x="77" y="66">① 护盾</text>
+  <rect x="150" y="36" width="106" height="52" rx="8" fill="#f3eee3" stroke="#d8d0be"/><text x="203" y="66">② 护甲</text>
+  <rect x="276" y="36" width="106" height="52" rx="8" fill="#f3eee3" stroke="#d8d0be"/><text x="329" y="66">③ 抗性</text>
+  <rect x="402" y="36" width="106" height="52" rx="8" fill="#f3eee3" stroke="#d8d0be"/><text x="455" y="66">④ 防御</text>
+  <rect x="528" y="36" width="106" height="52" rx="8" fill="#e5eff2" stroke="#4c6070"/><text x="581" y="66">⑤ 乘区</text>
+</g>
+<g fill="none" stroke="#a87c3c" stroke-width="1.5" marker-end="url(#d)">
+  <path d="M132 62 L148 62"/><path d="M258 62 L274 62"/><path d="M384 62 L400 62"/><path d="M510 62 L526 62"/>
+</g>
+<path d="M77 100 L77 118 L329 118 L329 100" fill="none" stroke="#3f6b52" stroke-width="1.2" stroke-dasharray="4 3"/>
+<text x="203" y="136" font-size="12" fill="#3f6b52" text-anchor="middle">DoT 旁路：只过 ③ 与 ⑤</text>
+<text x="500" y="136" font-size="12" fill="#8c2f2f" text-anchor="middle">致死直连：跳过全部减伤</text>
+</svg>
+<svg class="tall" viewBox="0 0 340 296" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>伤害链五段与旁路（竖版）</title>
+<desc>护盾、护甲、抗性、防御、乘区五段顺序固定，DoT 与致死直连各有旁路。</desc>
+<defs><marker id="v4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="#a87c3c" stroke-width="1.5"/></marker></defs>
+<g font-size="13" fill="#2b2620" text-anchor="middle">
+  <rect x="24" y="8" width="292" height="36" rx="8" fill="#f3eee3" stroke="#d8d0be"/><text x="170" y="31">① 护盾</text>
+  <rect x="24" y="58" width="292" height="36" rx="8" fill="#f3eee3" stroke="#d8d0be"/><text x="170" y="81">② 护甲</text>
+  <rect x="24" y="108" width="292" height="36" rx="8" fill="#f3eee3" stroke="#d8d0be"/><text x="170" y="131">③ 抗性</text>
+  <rect x="24" y="158" width="292" height="36" rx="8" fill="#f3eee3" stroke="#d8d0be"/><text x="170" y="181">④ 防御</text>
+  <rect x="24" y="208" width="292" height="36" rx="8" fill="#e5eff2" stroke="#4c6070"/><text x="170" y="231">⑤ 乘区</text>
+</g>
+<g fill="none" stroke="#a87c3c" stroke-width="1.5" marker-end="url(#v4)">
+  <path d="M170 45 L170 56"/><path d="M170 95 L170 106"/><path d="M170 145 L170 156"/><path d="M170 195 L170 206"/>
+</g>
+<text x="170" y="266" font-size="11" fill="#3f6b52" text-anchor="middle">DoT 旁路：只过 ③ 与 ⑤</text>
+<text x="170" y="286" font-size="11" fill="#8c2f2f" text-anchor="middle">致死直连：跳过全部减伤</text>
+</svg>
+<figcaption>阶段固定，旁路另行登记</figcaption>
+</figure>
+
+<h2>五、单位</h2>
+<ul>
+  <li>六池：生命、能量、护盾、护甲、迷失、恶欲。</li>
+  <li>属性四项：力量、敏捷、智力、位格。修正按实例记账，撤销回到写入前的值。</li>
+  <li>状态 = 定义 → 授予 → 实例。类别只有正向与负向。驱散只清实例。</li>
+  <li>死亡链：禁复活 → 替身 → 致死保护 → 亡语，命中即停。</li>
+  <li>装备两槽：武器给攻击加值与耐久，护具给护甲池。同槽顶替，下线才起共用冷却。</li>
+  <li>召唤物占格、有血量、可被攻击。超上限时最早在场者消散。</li>
+</ul>
+
+<h2>六、战场层</h2>
+<ul>
+  <li>界域压制栈：底层不可驱散，英雄层常驻，覆盖层压栈。只有栈顶生效，解除后下层恢复。</li>
+  <li>规则槽 3 条：触发 + 违约惩罚 + 豁免。双方同受，豁免靠购买。</li>
+  <li>区域：坐标陷阱，占用变化触发，次数确定。</li>
+  <li>量表：隐秘、秩序、命运、光照、冲突。秩序初始 5。</li>
+  <li>时钟跨相位派发触发；光照覆写等同跨边界。</li>
+</ul>
+<figure>
+<svg viewBox="0 0 680 226" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>战场级实体</title>
+<desc>界域压制栈、三条规则槽、区域与量表三块并列，均不依附具体单位。</desc>
+<rect x="20" y="16" width="206" height="194" rx="12" fill="#f3eee3" stroke="#d8d0be"/>
+<rect x="240" y="16" width="200" height="194" rx="12" fill="#f3eee3" stroke="#d8d0be"/>
+<rect x="454" y="16" width="206" height="194" rx="12" fill="#f3eee3" stroke="#d8d0be"/>
+<text x="123" y="40" font-size="13" fill="#2b2620" text-anchor="middle">界域压制栈</text>
+<text x="340" y="40" font-size="13" fill="#2b2620" text-anchor="middle">规则槽 3 条</text>
+<text x="557" y="40" font-size="13" fill="#2b2620" text-anchor="middle">区域与量表</text>
+<rect x="40" y="54" width="166" height="34" rx="6" fill="#e5eff2" stroke="#4c6070"/>
+<text x="123" y="75" font-size="12" fill="#2b2620" text-anchor="middle">覆盖层 · 栈顶生效</text>
+<rect x="40" y="94" width="166" height="34" rx="6" fill="#fff" stroke="#d8d0be"/>
+<text x="123" y="115" font-size="12" fill="#6c6357" text-anchor="middle">英雄层 · 常驻</text>
+<rect x="40" y="134" width="166" height="34" rx="6" fill="#fff" stroke="#d8d0be"/>
+<text x="123" y="155" font-size="12" fill="#6c6357" text-anchor="middle">底层 · 不可驱散</text>
+<text x="123" y="192" font-size="11" fill="#8c2f2f" text-anchor="middle">压栈后下层计时暂停</text>
+<g font-size="11" fill="#2b2620" text-anchor="middle">
+  <rect x="258" y="54" width="164" height="34" rx="6" fill="#fff" stroke="#d8d0be"/><text x="340" y="75">槽 1　触发 → 惩罚</text>
+  <rect x="258" y="94" width="164" height="34" rx="6" fill="#fff" stroke="#d8d0be"/><text x="340" y="115">槽 2　触发 → 惩罚</text>
+  <rect x="258" y="134" width="164" height="34" rx="6" fill="#fff" stroke="#d8d0be"/><text x="340" y="155">槽 3　触发 → 惩罚</text>
+</g>
+<text x="340" y="192" font-size="11" fill="#8c2f2f" text-anchor="middle">豁免名单由资源购买</text>
+<rect x="474" y="54" width="166" height="34" rx="6" fill="#fff" stroke="#d8d0be"/>
+<text x="557" y="75" font-size="12" fill="#2b2620" text-anchor="middle">区域 = 坐标 + 触发 + 次数</text>
+<g font-size="11" fill="#6c6357" text-anchor="middle">
+  <text x="557" y="112">隐秘 · 秩序 · 命运</text>
+  <text x="557" y="134">光照 · 冲突</text>
+</g>
+<line x1="486" y1="148" x2="628" y2="148" stroke="#d8d0be" stroke-width="1"/>
+<text x="557" y="172" font-size="11" fill="#3f6b52" text-anchor="middle">占用变化触发区域</text>
+<text x="557" y="192" font-size="11" fill="#8c2f2f" text-anchor="middle">量表为双方共享通道</text>
+</svg>
+<svg class="tall" viewBox="0 0 340 322" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>战场级实体（竖版）</title>
+<desc>界域压制栈、三条规则槽、区域与量表三块纵向排列，均不依附具体单位。</desc>
+<rect x="12" y="8" width="316" height="98" rx="10" fill="#f3eee3" stroke="#d8d0be"/>
+<text x="170" y="28" font-size="13" fill="#2b2620" text-anchor="middle">界域压制栈</text>
+<g font-size="11" fill="#2b2620" text-anchor="middle">
+  <rect x="24" y="36" width="292" height="20" rx="5" fill="#e5eff2" stroke="#4c6070"/><text x="170" y="50">覆盖层 · 栈顶生效</text>
+  <rect x="24" y="60" width="292" height="20" rx="5" fill="#fff" stroke="#d8d0be"/><text x="170" y="74" fill="#6c6357">英雄层 · 常驻</text>
+  <rect x="24" y="84" width="292" height="20" rx="5" fill="#fff" stroke="#d8d0be"/><text x="170" y="98" fill="#6c6357">底层 · 不可驱散</text>
+</g>
+<rect x="12" y="114" width="316" height="98" rx="10" fill="#f3eee3" stroke="#d8d0be"/>
+<text x="170" y="134" font-size="13" fill="#2b2620" text-anchor="middle">规则槽 3 条</text>
+<g font-size="11" fill="#2b2620" text-anchor="middle">
+  <rect x="24" y="142" width="292" height="20" rx="5" fill="#fff" stroke="#d8d0be"/><text x="170" y="156">槽 1　触发 → 惩罚</text>
+  <rect x="24" y="166" width="292" height="20" rx="5" fill="#fff" stroke="#d8d0be"/><text x="170" y="180">槽 2　触发 → 惩罚</text>
+  <rect x="24" y="190" width="292" height="20" rx="5" fill="#fff" stroke="#d8d0be"/><text x="170" y="204">槽 3　触发 → 惩罚</text>
+</g>
+<rect x="12" y="220" width="316" height="94" rx="10" fill="#f3eee3" stroke="#d8d0be"/>
+<text x="170" y="240" font-size="13" fill="#2b2620" text-anchor="middle">区域与量表</text>
+<g font-size="11" text-anchor="middle">
+  <text x="170" y="260" fill="#2b2620">区域 = 坐标 + 触发 + 次数</text>
+  <text x="170" y="280" fill="#6c6357">隐秘 · 秩序 · 命运 · 光照 · 冲突</text>
+  <text x="170" y="300" fill="#8c2f2f">秩序初始 5 · 量表双方共享</text>
+</g>
+</svg>
+<figcaption>战场级实体无宿主，规则作用于全场</figcaption>
+</figure>
+
+<h2>七、未定</h2>
+<ul class="gap">
+  <li>胜负、平局、超时、战斗结束触发点。</li>
+  <li>开局配置：队伍人数、站位、槽位装入、初始界域、随机种子。</li>
+  <li>两路的路序：跨路回退取第一条非空路时，上路还是下路优先。</li>
+  <li>能量上限与回复档；召唤位基数；装备下线系数；迷失档位。</li>
+  <li>敌方行为与目标选择的输入来源；手动选靶超时规则。</li>
+  <li>数值标定全缺，无法试玩。</li>
+  <li>状态类别文档写二元、数据用十二值；战场量表取值有 4／5／6 三种。</li>
+  <li>基层界域无数据载体；护具槽 0 张卡；缴械、装备回收、装备触发点、机会结束触发均无卡可验证。</li>
+  <li>部分卡面有机制描述而载荷为空；秩序量表存在恒不成立的条件分支。</li>
+</ul>
+
+<p class="foot">本页只写规则本身，不含过程、版本与备注。</p>
+
+</div>
+</body>
+</html>
