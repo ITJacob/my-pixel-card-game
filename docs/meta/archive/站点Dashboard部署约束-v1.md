@@ -23,7 +23,7 @@
 | `concept_map.py:20` | `MAP_PATH` | 已指向 `site/concept-map.json`；`load_map(path=MAP_PATH)` 允许调用方注入，无硬编码 prefix |
 | `pages.yml:4`／`build_wiki.py:4,8` | 「输入 docs/」「site/ 下三份玩法页专属源」注释 | 生成器文件头已同步；`pages.yml:4` 注释已改为「docs/ddd + docs/json + site/ 三份玩法页源」 |
 | `CLAUDE.md:30–37` | 「站点发布契约」整节 | **已同步（2026-11-20）**：旧路径全改指 `site/dashboard.md` / `site/figures.html` / `site/concept-map.json`，并补唯一链路 + 单页抽屉红线；L32 原 `_site/` 禁令保留 |
-| `pages.yml:42`／`.gitignore:4`／`站点融合规划-v1.md` | upload `path:_site`／`_site/`／历史旧路径 | **不改**；v1 为历史留痕，本文登记替代关系 |
+| `pages.yml:42`／`.gitignore:4`／`archive/站点融合规划-v1.md` | upload `path:_site`／`_site/`／历史旧路径 | **不改**；v1 为历史留痕，本文登记替代关系 |
 ## 四、单页就地展开 → sw.js 与离线（现行，已落地）
 **架构变更**：6 个概念详情页已撤销，6 抽屉 + 5 图解 + 26 处正源全部内联在 `rules/战场玩法.html` 一页。因此 `CORE` 里不再有 6 条详情页 URL，也不再有「dashboard ↔ 详情页」互链。
 
