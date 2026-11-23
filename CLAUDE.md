@@ -4,7 +4,7 @@
 
 ## 铁律
 
-1. **CardGame 仓库（`C:\Projects\self\CardGame`）是只读参考源**——旧里程碑含诡秘之主 IP 与 22 途径全量；取数对照可以，**绝不写入**。
+1. **CardGame 仓库（`D:/Projects/CardGame`）是只读参考源**——旧里程碑含旧 IP 与 22 条旧职业轴全量；取数对照可以，**绝不写入**。
 2. IP 占位符期：派系「派系·壹…玖」、英雄「英雄·壹…玖」、卡 id 用 code name；**全库禁出现旧 IP 专名**（诡秘/源堡/序列/愚者/魔药/教会/塔罗等）。
 3. `docs/ddd/` 保持纯内容：只描述最终模型，不写拍板过程、不写实现细节（无代码类型名）、不写数值锚点（随英雄迁移登记）。
 4. 改 JSON 结构先改 `docs/json/schema/skills.schema.json` 再改数据；改完跑四个校验脚本全绿才算合规。
@@ -21,9 +21,9 @@
 ## 文档地图
 
 ```
-docs/ddd/    战斗内核设计（权威正源；contexts/ 五上下文 + params/ 三参数 + README 不变量）
+docs/ddd/    战斗内核设计（权威正源；contexts/ 六上下文 + params/ 七参数 + README 不变量）
 docs/meta/   WORKFLOW（五环节+环节⑥）/ 生成工作流（分层产卡层〇–层四）/ SCHEMA（JSON 结构规范）/ 派系基调（基准总表+通则索引）+ 派系/faction_NN ×9（一系一档）/ 骨架重议 / 待办 / 迁移映射表 / glossary
-docs/json/   卡池唯一权威源：manifest.json + global.skills.json + faction_NN.skills.json ×9 + family_NN.skills.json ×22 + hero_NN.skills.json ×9 + schema/
+docs/json/   卡池唯一权威源：manifest.json + global.skills.json + faction_NN.skills.json ×9 + family_NN.skills.json ×22 + hero_NN.skills.json（9 主体 + 变体共 44）+ schema/
 docs/tools/  validate（语义）/ validate_schema（结构）/ check_enum_sync（枚举对账）/ check_glossary（词典）/ review_scan（机制层机筛 warn 级）/ build_wiki（站点生成）/ concept_map（概念地图锚点）
 ```
 

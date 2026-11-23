@@ -1903,8 +1903,8 @@
     },
     "zoneKind": {
       "label": "区域类型",
-      "desc": "区域的两种性质：危害型对占据者不利，祝福型对占据者有利。区域是坐标版的状态——占格、有载荷、可被拆除。",
-      "source": "SCHEMA.md §7 zoneDef",
+      "desc": "区域的两种性质：危害型对占据者不利，祝福型对占据者有利。区域是坐标版的状态——不占格、有载荷、可被拆除。",
+      "source": "skills.schema.json zoneDef",
       "terms": {
         "hazard": {
           "zh": "危害区域",

@@ -640,16 +640,28 @@ def main():
         ('docs/ddd/contexts/战场上下文.md', 'design/ctx-战场.html', '战场上下文'),
         ('docs/ddd/contexts/战斗上下文.md', 'design/ctx-战斗.html', '战斗上下文'),
         ('docs/ddd/contexts/效果上下文.md', 'design/ctx-效果.html', '效果上下文'),
+        ('docs/ddd/contexts/随机性治理.md', 'design/ctx-随机性治理.html', '随机性治理'),
         ('docs/ddd/params/共享内核参数.md', 'design/params-共享内核.html', '共享内核参数'),
         ('docs/ddd/params/效果参数.md', 'design/params-效果.html', '效果参数'),
         ('docs/ddd/params/编队参数.md', 'design/params-编队.html', '编队参数'),
+        ('docs/ddd/params/编目参数.md', 'design/params-编目.html', '编目参数'),
         ('docs/ddd/params/召唤物参数.md', 'design/params-召唤物.html', '召唤物参数'),
         ('docs/ddd/params/执行参数.md', 'design/params-执行.html', '执行参数'),
+        ('docs/ddd/params/战场参数.md', 'design/params-战场.html', '战场参数'),
     ]
     for rel, out_path, title in md_pages:
         src = os.path.join(ROOT, rel)
         if os.path.exists(src):
             site.add(out_path, title, md_html(load_md(src)), '机制文档')
+
+    # 反向自检：白名单里的 DDD 正源必须全部在 concept-map pages 登记。
+    # check_pages 只校「pages → 站点页」，单向校验会放过「加了白名单却漏登记指针」。
+    ddd_in_wiki = {rel for rel, _, _ in md_pages if rel.startswith('docs/ddd/')}
+    unlisted = sorted(ddd_in_wiki - set(cmap['pages']))
+    if unlisted:
+        raise concept_map.ConceptMapError(
+            'DDD 正源已入 md_pages 白名单但未登记 concept-map.json pages：\n  - %s'
+            % '\n  - '.join(unlisted))
 
     # 指针指向的站点页必须真的生成，否则展开区会出现死链
     concept_map.check_pages(cmap, site.pages)

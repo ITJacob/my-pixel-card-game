@@ -1,12 +1,16 @@
 {
   "version": 1,
   "pages": {
+    "docs/ddd/README.md": "design/ddd-README.html",
     "docs/ddd/contexts/战场上下文.md": "design/ctx-战场.html",
     "docs/ddd/contexts/战斗上下文.md": "design/ctx-战斗.html",
     "docs/ddd/contexts/效果上下文.md": "design/ctx-效果.html",
+    "docs/ddd/contexts/随机性治理.md": "design/ctx-随机性治理.html",
     "docs/ddd/contexts/编目上下文.md": "design/ctx-编目.html",
     "docs/ddd/contexts/编队上下文.md": "design/ctx-编队.html",
     "docs/ddd/params/共享内核参数.md": "design/params-共享内核.html",
+    "docs/ddd/params/编目参数.md": "design/params-编目.html",
+    "docs/ddd/params/战场参数.md": "design/params-战场.html",
     "docs/ddd/params/执行参数.md": "design/params-执行.html",
     "docs/ddd/params/效果参数.md": "design/params-效果.html",
     "docs/ddd/params/编队参数.md": "design/params-编队.html",
