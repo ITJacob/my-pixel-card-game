@@ -12,7 +12,7 @@ ddd 参数篇文本侧与机器正源的漂移由 check_enum_sync.py 对账。
   - 卡无 scope/heroId 字段（归属由所在文件定）；$extends 物化由 status_loader 负责
   - 状态/单位/界域/区域引用解析链：本文件 → family → 同派系 faction → global
 """
-import json, io, sys, glob, os, re
+import json, io, sys, glob, os, re, ast
 
 HERE = os.path.dirname(os.path.abspath(__file__))          # docs/tools/
 JSON_DIR = os.path.join(os.path.dirname(HERE), "json")      # docs/json/
@@ -85,6 +85,95 @@ DIM_RANGES = {
 # 枚举三方一致，由 check_enum_sync.py 对账。
 PHASES = {"midnight","dawn","day","dusk","night"}
 EVENTS = {"on_apply","on_remove","on_tick","on_turn_start","on_turn_end","on_battle_start","on_spawn","on_death","on_kill","on_attack","on_equipment_equip","on_take_damage","on_deal_damage","on_active_skill","on_phase_change","on_status_gain"}
+
+# 动态取值（ddd/params/效果参数.md §动态取值）：schema $defs 为机器正源，此处只做派生与编目期语义校验
+METER_KEYS = _enum("meterKey")
+SOURCE_REFS = _enum("effModifyStat", "properties", "sourceRef")
+
+def _value_from_kinds():
+    """从 $defs/valueFrom.oneOf 推导对象形态封闭集；formula 形态无 kind 字段，由必填字段判别。"""
+    out = set()
+    for branch in DEFS["valueFrom"]["oneOf"]:
+        if "$ref" not in branch:
+            continue
+        d = DEFS[branch["$ref"].split("/")[-1]]
+        k = d.get("properties", {}).get("kind", {}).get("const")
+        if k:
+            out.add(k)
+        elif "formula" in d.get("required", []):
+            out.add("formula")
+    return out
+VALUE_FROM_KINDS = _value_from_kinds()
+
+_FORMULA_CHARS = re.compile(r"^[0-9+\-*/().\sstacks]+$")
+_FORMULA_NODES = (ast.Expression, ast.BinOp, ast.UnaryOp, ast.Constant, ast.Name,
+                  ast.Add, ast.Sub, ast.Mult, ast.Div, ast.UAdd, ast.USub, ast.Load)
+
+def valid_formula(f):
+    """公式只许四则 / 括号 / stacks，禁函数调用与副作用。"""
+    if not isinstance(f, str) or not _FORMULA_CHARS.match(f):
+        return False
+    for tok in re.findall(r"[A-Za-z_]+", f):
+        if tok != "stacks":
+            return False
+    try:
+        tree = ast.parse(f.strip(), mode="eval")
+    except (SyntaxError, ValueError):
+        return False
+    for n in ast.walk(tree):
+        if not isinstance(n, _FORMULA_NODES):
+            return False
+        if isinstance(n, ast.Name) and n.id != "stacks":
+            return False
+    return True
+
+def check_value_from(root, cid, status_ids, errors):
+    """动态取值封闭集 + 参照源的编目期校验。递归整棵文件，覆盖规则槽 punish 等嵌套载荷，
+    不依赖 walk() 的「会执行」路径——参数载荷里的非法 valueFrom 同样要拦。"""
+
+    def bad(p, msg):
+        errors.append("%s %s: %s" % (cid, p, msg))
+
+    def check_vf(vf, p):
+        if isinstance(vf, str):
+            if not vf or (vf not in METER_KEYS and vf not in status_ids):
+                bad(p, "unknown valueFrom %r（须为 meterKey 或已定义 statusId）" % vf)
+            return
+        if not isinstance(vf, dict):
+            bad(p, "bad valueFrom type %s（只许 string 或封闭对象形态）" % type(vf).__name__)
+            return
+        k = vf.get("kind")
+        if k is not None and k not in VALUE_FROM_KINDS:
+            bad(p, "unknown valueFrom kind %r（封闭集 %s）" % (k, sorted(VALUE_FROM_KINDS)))
+            return
+        if k == "ramp":
+            extra = set(vf) - {"kind", "note"}
+            if extra: bad(p, "ramp 形态多出字段 %s" % sorted(extra))
+        elif k == "target_stat":
+            if vf.get("stat") not in STATS:
+                bad(p, "bad target_stat.stat %r" % vf.get("stat"))
+            extra = set(vf) - {"kind", "stat", "note"}
+            if extra: bad(p, "target_stat 形态多出字段 %s" % sorted(extra))
+        elif "formula" in vf:
+            if not valid_formula(vf.get("formula")):
+                bad(p, "bad formula %r（只许四则 / 括号 / stacks）" % vf.get("formula"))
+            if vf.get("statusStacks") not in status_ids:
+                bad(p, "unknown statusStacks %r" % vf.get("statusStacks"))
+            extra = set(vf) - {"statusStacks", "formula", "note"}
+            if extra: bad(p, "formula 形态多出字段 %s" % sorted(extra))
+        else:
+            bad(p, "unknown valueFrom shape %r（封闭集 %s）" % (vf, sorted(VALUE_FROM_KINDS)))
+
+    def visit(o, p):
+        if isinstance(o, dict):
+            if "valueFrom" in o: check_vf(o["valueFrom"], p + ".valueFrom")
+            if "sourceRef" in o and o["sourceRef"] not in SOURCE_REFS:
+                bad(p + ".sourceRef", "bad sourceRef %r（封闭集 %s）" % (o["sourceRef"], sorted(SOURCE_REFS)))
+            for k, v in o.items(): visit(v, p + "." + k)
+        elif isinstance(o, list):
+            for i, v in enumerate(o): visit(v, "%s[%d]" % (p, i))
+
+    visit(root, "root")
 
 # 命名治理：modifiers 为开放结构，同义异写严重。别名 -> 规范拼写（非阻断，仅告警引导收敛）
 MODIFIER_ALIASES = {
@@ -509,6 +598,15 @@ def main():
                 if isinstance(_x, dict) and _x.get("id"):
                     _refs["defs"].setdefault(_x["id"], _x)
     pre_errors, pre_warns = [], []
+
+    # 动态取值与参照源：整棵文件扫描一次（嵌套 punish 载荷也在此列），不是逐卡 walk 的执行路径
+    for f in files:
+        _fid = os.path.basename(f).replace('.skills.json', '')
+        try:
+            _vd = json.load(io.open(f, encoding='utf-8'))
+        except Exception:
+            continue
+        check_value_from(_vd, _fid, ALLSTATUS, pre_errors)
 
     # 引用完整性（INV-C1）：任一以 id 指向定义态的字段不可解析即报错。
     # 与 statusId 类校验并行，覆盖 domain/zone/unit 的 def 与 modify_skill.skillId；

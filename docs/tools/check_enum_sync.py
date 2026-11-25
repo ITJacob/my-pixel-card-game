@@ -9,6 +9,8 @@ v2 对账组（按 ddd/ 实际篇幅裁剪）：
   - primitive  ：ddd/params/效果参数.md 原语表 ↔ schema effect.oneOf（validate.PRIMS）
   - cardKind   ：ddd/params/编队参数.md 卡型表 ↔ schema card.kind
   - equipSlot  ：ddd/params/编队参数.md 装备槽表 ↔ schema equipmentSpec.slot / condition.slot
+  - valueFromKind：ddd/params/效果参数.md 对象形态封闭集 ↔ schema $defs/valueFrom.oneOf
+  - meterKey     ：ddd/params/共享内核参数.md meter_compare.key ↔ schema meterKey
 
 用法: python docs/tools/check_enum_sync.py   （只读；存在未登记漂移时 exit 1）
 """
@@ -67,6 +69,17 @@ def ddd_card_kinds():
 def ddd_equip_slots():
     return table_first_col(read("ddd/params/编队参数.md"), "## 装备槽")
 
+def ddd_value_from_kinds():
+    return table_first_col(read("ddd/params/效果参数.md"), "**对象形态封闭集**")
+
+def ddd_meter_keys():
+    """从 meter_compare 行说明列冒号后的「a / b / ...」读出量表键。"""
+    for ln in read("ddd/params/共享内核参数.md").splitlines():
+        if ln.strip().startswith("| meter_compare "):
+            tail = ln.split("|")[3].split("：", 1)[-1]
+            return {t.strip().replace("**", "") for t in tail.split("/") if t.strip()}
+    return set()
+
 def compare(name, text_side, machine_side, text_label, machine_label, errors):
     only_text = sorted(text_side - machine_side)
     only_machine = sorted(machine_side - text_side)
@@ -99,6 +112,10 @@ def main():
             "ddd 编队参数 装备槽表", "schema equipmentSpec.slot", errors)
     compare("equipSlot", slots, set(validate.DEFS["condition"]["properties"]["slot"]["enum"]),
             "ddd 编队参数 装备槽表", "schema condition.slot", errors)
+    compare("valueFromKind", ddd_value_from_kinds(), validate.VALUE_FROM_KINDS,
+            "ddd 效果参数 §动态取值 封闭集", "schema valueFrom.oneOf", errors)
+    compare("meterKey", ddd_meter_keys(), validate.METER_KEYS,
+            "ddd 共享内核参数 §三 meter_compare.key", "schema meterKey", errors)
 
     print("-" * 60)
     if errors:

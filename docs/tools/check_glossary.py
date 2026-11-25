@@ -148,6 +148,8 @@ ENUM_TO_CAT = {
     "sortKey": "sortKey",
     "statusCategory": "statusCategory",
     "triggerEvent": "triggerEvent",
+    # 动态取值 string 简写的战场量表键，与 dimHook.dim 同域、共用词条
+    "meterKey": "dim",
 }
 
 # ③ schema 未用 enum 约束（自由字符串）、但站点会渲染的字段 → 只能按数据实扫。

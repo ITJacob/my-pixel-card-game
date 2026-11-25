@@ -18,6 +18,93 @@
     }
   ],
   "$defs": {
+    "meterKey": {
+      "type": "string",
+      "enum": [
+        "secrecy",
+        "order",
+        "fate_value",
+        "luminance",
+        "conflict"
+      ],
+      "description": "战场量表键封闭集；与 ddd/params/共享内核参数.md §三 meter_compare.key 一致，由 check_enum_sync 对账。"
+    },
+    "valueFrom": {
+      "description": "动态取值规格；取值域与求值口径见 ddd/params/效果参数.md §动态取值。string = 战场量表键或账本类 statusId（引用完整性由 validate.py 校验）；object 只允许下列三个封闭形态。",
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "$ref": "#/$defs/valueFromRamp"
+        },
+        {
+          "$ref": "#/$defs/valueFromTargetStat"
+        },
+        {
+          "$ref": "#/$defs/valueFromFormula"
+        }
+      ]
+    },
+    "valueFromRamp": {
+      "type": "object",
+      "description": "状态递进档位：读状态实例自带 ramp 数组，按触发器 fire 序号取值；超出长度取末值。",
+      "required": [
+        "kind"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "ramp"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "valueFromTargetStat": {
+      "type": "object",
+      "description": "目标属性现值；stat 取值域由 validate.py 按 effModifyStat.stat 校验。",
+      "required": [
+        "kind",
+        "stat"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "target_stat"
+        },
+        "stat": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "valueFromFormula": {
+      "type": "object",
+      "description": "状态层数公式；只允许四则、括号与 stacks 变量，编目期由 validate.py 校语法与 statusStacks 引用。数据侧无显式 kind 字段，以必填字段判别。",
+      "required": [
+        "statusStacks",
+        "formula"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "statusStacks": {
+          "type": "string",
+          "minLength": 1
+        },
+        "formula": {
+          "type": "string",
+          "pattern": "^[0-9+\\-*/().\\sstacks]+$"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
     "axis": {
       "type": "string",
       "description": "轴标签（每英雄一条轴；取值随迁移登记）。"
@@ -1113,14 +1200,8 @@
           "description": "伤害乘区系数。"
         },
         "valueFrom": {
-          "oneOf": [
-            {
-              "type": "object"
-            },
-            {
-              "type": "string"
-            }
-          ]
+          "$ref": "#/$defs/valueFrom",
+          "description": "动态取值；取值域与求值口径见 ddd/params/效果参数.md §动态取值。"
         },
         "target": {
           "$ref": "#/$defs/effectTarget"
@@ -1393,14 +1474,8 @@
           "description": "取值参照源。"
         },
         "valueFrom": {
-          "oneOf": [
-            {
-              "type": "object"
-            },
-            {
-              "type": "string"
-            }
-          ]
+          "$ref": "#/$defs/valueFrom",
+          "description": "动态取值；取值域与求值口径见 ddd/params/效果参数.md §动态取值。"
         },
         "target": {
           "$ref": "#/$defs/effectTarget"
@@ -3326,14 +3401,8 @@
           "type": "number"
         },
         "valueFrom": {
-          "oneOf": [
-            {
-              "type": "object"
-            },
-            {
-              "type": "string"
-            }
-          ]
+          "$ref": "#/$defs/valueFrom",
+          "description": "动态取值；取值域与求值口径见 ddd/params/效果参数.md §动态取值。"
         },
         "metric": {
           "type": "string"
