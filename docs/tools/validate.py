@@ -86,6 +86,10 @@ DIM_RANGES = {
 PHASES = {"midnight","dawn","day","dusk","night"}
 EVENTS = {"on_apply","on_remove","on_tick","on_turn_start","on_turn_end","on_battle_start","on_spawn","on_death","on_kill","on_attack","on_equipment_equip","on_take_damage","on_deal_damage","on_active_skill","on_phase_change","on_status_gain"}
 
+# 历史稿章节编号封闭集（ddd/params/编目参数.md §五）：note 是人工注记，只冻结编号集合、防新编号扩散
+LEGACY_SECTION_REFS = {"1.1", "1.1b", "1.2b", "1.4", "2.1", "2.2", "2.4", "12"}
+_LEGACY_REF_RE = re.compile(r"§\s*([0-9]+(?:\.[0-9]+)*[a-z]?)")
+
 # 动态取值（ddd/params/效果参数.md §动态取值）：schema $defs 为机器正源，此处只做派生与编目期语义校验
 METER_KEYS = _enum("meterKey")
 SOURCE_REFS = _enum("effModifyStat", "properties", "sourceRef")
@@ -172,6 +176,25 @@ def check_value_from(root, cid, status_ids, errors):
             for k, v in o.items(): visit(v, p + "." + k)
         elif isinstance(o, list):
             for i, v in enumerate(o): visit(v, "%s[%d]" % (p, i))
+
+    visit(root, "root")
+
+def check_note_refs(root, cid, errors):
+    """设计注记的历史稿编号封闭集：只冻结编号集合、防新编号扩散。
+    中文分节编号（§一 / §三 等）按现行 params 中文标题人工核对，机器侧不解析。"""
+
+    def visit(o, p):
+        if isinstance(o, dict):
+            for k, v in o.items():
+                if k == "note" and isinstance(v, str):
+                    for ref in _LEGACY_REF_RE.findall(v):
+                        if ref not in LEGACY_SECTION_REFS:
+                            errors.append("%s %s.note: 未登记的历史稿章节编号 §%s（封闭集 %s；新写注记不得带 § 数字编号）"
+                                          % (cid, p, ref, sorted(LEGACY_SECTION_REFS)))
+                visit(v, p + "." + k)
+        elif isinstance(o, list):
+            for i, v in enumerate(o):
+                visit(v, "%s[%d]" % (p, i))
 
     visit(root, "root")
 
@@ -599,7 +622,7 @@ def main():
                     _refs["defs"].setdefault(_x["id"], _x)
     pre_errors, pre_warns = [], []
 
-    # 动态取值与参照源：整棵文件扫描一次（嵌套 punish 载荷也在此列），不是逐卡 walk 的执行路径
+    # 动态取值与参照源、设计注记编号：整棵文件扫描一次（嵌套 punish 载荷也在此列），不是逐卡 walk 的执行路径
     for f in files:
         _fid = os.path.basename(f).replace('.skills.json', '')
         try:
@@ -607,6 +630,7 @@ def main():
         except Exception:
             continue
         check_value_from(_vd, _fid, ALLSTATUS, pre_errors)
+        check_note_refs(_vd, _fid, pre_errors)
 
     # 引用完整性（INV-C1）：任一以 id 指向定义态的字段不可解析即报错。
     # 与 statusId 类校验并行，覆盖 domain/zone/unit 的 def 与 modify_skill.skillId；

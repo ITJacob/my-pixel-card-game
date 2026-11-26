@@ -11,6 +11,7 @@ v2 对账组（按 ddd/ 实际篇幅裁剪）：
   - equipSlot  ：ddd/params/编队参数.md 装备槽表 ↔ schema equipmentSpec.slot / condition.slot
   - valueFromKind：ddd/params/效果参数.md 对象形态封闭集 ↔ schema $defs/valueFrom.oneOf
   - meterKey     ：ddd/params/共享内核参数.md meter_compare.key ↔ schema meterKey
+  - legacySectionRef：ddd/params/编目参数.md §五 历史编号封闭集 ↔ validate.LEGACY_SECTION_REFS
 
 用法: python docs/tools/check_enum_sync.py   （只读；存在未登记漂移时 exit 1）
 """
@@ -80,6 +81,15 @@ def ddd_meter_keys():
             return {t.strip().replace("**", "") for t in tail.split("/") if t.strip()}
     return set()
 
+def ddd_legacy_refs():
+    """从「设计注记溯源口径」历史编号表第一列读出封闭集；中文分节编号不入此表。"""
+    out = set()
+    for ln in section(read("ddd/params/编目参数.md"), "## 五、设计注记").splitlines():
+        s = ln.strip()
+        if s.startswith("| `") and s.endswith("|"):
+            out.add(s.split("|")[1].strip().strip("`"))
+    return out
+
 def compare(name, text_side, machine_side, text_label, machine_label, errors):
     only_text = sorted(text_side - machine_side)
     only_machine = sorted(machine_side - text_side)
@@ -116,6 +126,8 @@ def main():
             "ddd 效果参数 §动态取值 封闭集", "schema valueFrom.oneOf", errors)
     compare("meterKey", ddd_meter_keys(), validate.METER_KEYS,
             "ddd 共享内核参数 §三 meter_compare.key", "schema meterKey", errors)
+    compare("legacySectionRef", ddd_legacy_refs(), validate.LEGACY_SECTION_REFS,
+            "ddd 编目参数 §五 历史编号封闭集", "validate.LEGACY_SECTION_REFS", errors)
 
     print("-" * 60)
     if errors:
